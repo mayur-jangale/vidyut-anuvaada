@@ -147,10 +147,11 @@ class SanskritPipeline:
 	def analyze(self, word):
 		"""Full morphological analysis of a single word.
 
-		Returns dict with keys: lemma, features, sutra_path, translation.
+		Returns dict with keys: word, lemma, features, sutra_path, translation, source.
 		"""
 		features = {}
 		sutra_path = []
+		source = "fallback"
 
 		lemma, feats = self.lemmatizer.lemmatize(word, pos="")
 		features.update(feats)
@@ -164,8 +165,10 @@ class SanskritPipeline:
 					lemma = dict_lemma
 				translation = gloss
 				features["pos"] = dict_pos
+				source = "dictionary"
 			else:
 				translation = lemma
+				source = "lemmatizer"
 		except ImportError:
 			translation = lemma
 
@@ -181,6 +184,7 @@ class SanskritPipeline:
 			"features": features,
 			"sutra_path": sutra_path,
 			"translation": translation,
+			"source": source,
 		}
 
 	def batch_translate(self, texts):
@@ -303,6 +307,11 @@ class SanskritPipeline:
 			}
 		except ImportError:
 			raise ImportError("NLTK is required for corpus_summary. Install with: pip install nltk")
+
+def _analyse_token(token):
+	"""Analyse a single token and return a result dict (internal helper)."""
+	pipeline = SanskritPipeline()
+	return pipeline.analyze(token)
 
 
 def translate(text):

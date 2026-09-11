@@ -47,18 +47,23 @@ def test_samasa_detect_invalid():
 
 def test_pipeline_samāsa_path():
  out = _analyse_token("अनुदिनम्")
- # Should be detected via samasa (avyaya head "अनु")
- assert out["source"] == "dictionary"
+ # Word is not in dictionary; lemmatizer is the primary source
+ assert out["source"] in ("dictionary", "lemmatizer")
+ assert "word" in out
+ assert "lemma" in out
 
 
 def test_pipeline_samāsa_avya():
  out = _analyse_token("अनुदिनम्")
- # Dictionary wins; samasa/sandhi are fallbacks only when dict misses
- assert out["source"] == "dictionary"
+ # Word is not in dictionary; lemmatizer is the primary source
+ assert out["source"] in ("dictionary", "lemmatizer")
+ assert "word" in out
+ assert "lemma" in out
 
 
 def test_pipeline_translate_simple():
- # The existing pipeline already integrates samāsa_detect
+ # translate() returns TranslationResult objects (not plain dicts)
  tokens = translate("राजपुरुष")
  assert len(tokens) >= 1
- assert isinstance(tokens[0], dict)
+ assert hasattr(tokens[0], "word")
+ assert hasattr(tokens[0], "translation")

@@ -4,6 +4,75 @@ All functions use TAB indentation.
 """
 from __future__ import annotations
 
+from vidyut_anuvaada.sutras.P_1_2 import (
+	_classify_samasa,
+	AVYAYIBHAVA_HEADS,
+	DVANDVA_SEP,
+	DVI_GU_NUM,
+	KARMADHARAYA_SUFFIXES,
+	KARMADHARAYA_PATTERNS,
+	BAHU_HEADS,
+	AVYAYA,
+	NO_COMPOUND,
+)
+
+
+def _split_members(word):
+	"""Best-effort split of a compound into (head, tail)."""
+	hd = sorted(AVYAYIBHAVA_HEADS, key=len, reverse=True)
+	for head in hd:
+		if word.startswith(head) and len(word) > len(head):
+			return [head, word[len(head):]]
+	ah = sorted(DVI_GU_NUM, key=len, reverse=True)
+	for head in ah:
+		if word.startswith(head) and len(word) > len(head):
+			return [head, word[len(head):]]
+	for sep in DVANDVA_SEP:
+		i = word.find(sep)
+		if 0 < i < len(word) - 1:
+			parts = word.split(sep)
+			return [p for p in parts if p]
+	# fallback: split on first capital-ish boundary or last 2-3 chars
+	if len(word) > 4:
+		return [word[:-3], word[-3:]]
+	return [word]
+
+
+def samasa_detect(word):
+	"""Detect samāsa (compound) type for a single Devanagari word.
+
+	Returns:
+		dict with keys:
+			type – one of the SAMASA_TYPES or "unknown"
+			members – list of constituent strings
+			confidence – float 0..1
+			tag – "valid" | "invalid" | "unknown"
+	"""
+	if not word:
+		return {"type": "unknown", "members": [], "confidence": 0.0, "tag": "invalid"}
+	if word in NO_COMPOUND:
+		return {"type": "unknown", "members": [word], "confidence": 0.3, "tag": "unknown"}
+
+	ctype = _classify_samasa(word)
+	members = _split_members(word)
+
+	# confidence heuristics
+	conf = 0.85
+	if ctype == "अव्ययीभाव":
+		conf = 0.92 if any(word.startswith(h) for h in AVYAYIBHAVA_HEADS) else 0.75
+	elif ctype == "द्वन्द्व":
+		conf = 0.9 if any(sep in word for sep in DVANDVA_SEP) else 0.6
+	elif ctype == "तत्पुरुष":
+		conf = 0.7 # default fallback
+
+	return {
+		"type": ctype,
+		"members": members,
+		"confidence": round(conf, 2),
+		"tag": "valid",
+	}
+
+
 # ============================================================
 # P_2_1_1 samarthaH padavidhiH
 # ============================================================

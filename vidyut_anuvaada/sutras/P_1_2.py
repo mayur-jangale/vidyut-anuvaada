@@ -109,7 +109,7 @@ def _classify_samasa(word):
 	for tail in BAHU_HEADS:
 		if tail in word and len(word) > len(tail):
 			i = word.find(tail)
-			if 0 < i < len(word) - len(tail):
+			if 0 <= i < len(word) - len(tail):
 				return "बहुव्रीहि"
 	# default tatpurusha
 	return "तत्पुरुष"
