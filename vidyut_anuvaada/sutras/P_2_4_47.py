@@ -1,0 +1,20 @@
+# Sutra प.2.4.47: सनि च
+# (Samasa (compound formation)) — sani ca
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.2.4.47"
+SUTRA_TEXT = "सनि च"
+SUTRA_DESC = "(Samasa (compound formation)) — sani ca"
+
+
+class Sutra2447:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'samāsa: अग्निः'),
+		('रामः', '', 'samāsa: रामः'),
+		('सीता', '', 'samāsa: सीता'),
+	]
+

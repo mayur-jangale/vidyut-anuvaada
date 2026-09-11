@@ -1,0 +1,20 @@
+# Sutra प.5.4.69: न पूजनात्
+# (Strī-pratyaya and taddhita (feminine and secondary derivations)) — na pUjanAt
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.5.4.69"
+SUTRA_TEXT = "न पूजनात्"
+SUTRA_DESC = "(Strī-pratyaya and taddhita (feminine and secondary derivations)) — na pUjanAt"
+
+
+class Sutra5469:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'प.5.4.69: अग्निः'),
+		('रामः', '', 'प.5.4.69: रामः'),
+		('सीता', '', 'प.5.4.69: सीता'),
+	]
+

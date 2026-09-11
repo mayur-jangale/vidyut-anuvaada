@@ -1,0 +1,20 @@
+# Sutra प.8.4.33: वा निंसनिक्षनिन्दाम्
+# final transformations — continued
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.8.4.33"
+SUTRA_TEXT = "वा निंसनिक्षनिन्दाम्"
+SUTRA_DESC = "final transformations — continued"
+
+
+class Sutra8433:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'प.8.4.33: अग्निः'),
+		('रामः', '', 'प.8.4.33: रामः'),
+		('सीता', '', 'प.8.4.33: सीता'),
+	]
+

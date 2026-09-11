@@ -1,0 +1,20 @@
+# Sutra प.6.3.25: आनङ् ऋतो द्वन्द्वे
+# final-sandhi — continued
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.6.3.25"
+SUTRA_TEXT = "आनङ् ऋतो द्वन्द्वे"
+SUTRA_DESC = "final-sandhi — continued"
+
+
+class Sutra6325:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'प.6.3.25: अग्निः'),
+		('रामः', '', 'प.6.3.25: रामः'),
+		('सीता', '', 'प.6.3.25: सीता'),
+	]
+

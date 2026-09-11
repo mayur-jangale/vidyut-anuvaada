@@ -1,0 +1,20 @@
+# Sutra प.2.2.20: अमैवाव्ययेन
+# (Samasa (compound formation)) — amEvAvyayena
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.2.2.20"
+SUTRA_TEXT = "अमैवाव्ययेन"
+SUTRA_DESC = "(Samasa (compound formation)) — amEvAvyayena"
+
+
+class Sutra2220:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'samāsa: अग्निः'),
+		('रामः', '', 'samāsa: रामः'),
+		('सीता', '', 'samāsa: सीता'),
+	]
+

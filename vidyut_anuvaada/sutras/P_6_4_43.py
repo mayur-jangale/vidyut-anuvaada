@@ -1,0 +1,20 @@
+# Sutra प.6.4.43: ये विभाषा
+# samprasāraṇa — continued
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.6.4.43"
+SUTRA_TEXT = "ये विभाषा"
+SUTRA_DESC = "samprasāraṇa — continued"
+
+
+class Sutra6443:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'प.6.4.43: अग्निः'),
+		('रामः', '', 'प.6.4.43: रामः'),
+		('सीता', '', 'प.6.4.43: सीता'),
+	]
+

@@ -1,0 +1,20 @@
+# Sutra प.5.2.126: स्वामिन्नैश्वर्ये
+# (Strī-pratyaya and taddhita (feminine and secondary derivations)) — svAminnESvarye
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.5.2.126"
+SUTRA_TEXT = "स्वामिन्नैश्वर्ये"
+SUTRA_DESC = "(Strī-pratyaya and taddhita (feminine and secondary derivations)) — svAminnESvarye"
+
+
+class Sutra52126:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'प.5.2.126: अग्निः'),
+		('रामः', '', 'प.5.2.126: रामः'),
+		('सीता', '', 'प.5.2.126: सीता'),
+	]
+

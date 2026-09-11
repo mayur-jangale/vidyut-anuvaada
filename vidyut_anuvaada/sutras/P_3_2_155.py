@@ -1,0 +1,20 @@
+# Sutra प.3.2.155: जल्पभिक्षकुट्टलुण्टवृङः षाकन्
+# (Vikarana and tiṅ-pratyaya (verbal affix operations)) — jalpaBikzakuwwaluRwavfNaH zAkan
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.3.2.155"
+SUTRA_TEXT = "जल्पभिक्षकुट्टलुण्टवृङः षाकन्"
+SUTRA_DESC = "(Vikarana and tiṅ-pratyaya (verbal affix operations)) — jalpaBikzakuwwaluRwavfNaH zAkan"
+
+
+class Sutra32155:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'vikaraṇa: अग्निः'),
+		('रामः', '', 'vikaraṇa: रामः'),
+		('सीता', '', 'vikaraṇa: सीता'),
+	]
+

@@ -1,0 +1,20 @@
+# Sutra प.2.2.23: शेषो बहुव्रीहिः
+# (Samasa (compound formation)) — Sezo bahuvrIhiH
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.2.2.23"
+SUTRA_TEXT = "शेषो बहुव्रीहिः"
+SUTRA_DESC = "(Samasa (compound formation)) — Sezo bahuvrIhiH"
+
+
+class Sutra2223:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'samāsa: अग्निः'),
+		('रामः', '', 'samāsa: रामः'),
+		('सीता', '', 'samāsa: सीता'),
+	]
+

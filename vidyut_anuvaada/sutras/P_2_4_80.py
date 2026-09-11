@@ -1,0 +1,20 @@
+# Sutra प.2.4.80: मन्त्रे घसह्वरणशवृदहाद्वृच्कृगमिजनिभ्यो लेः
+# (Samasa (compound formation)) — mantre GasahvaraRaSavfdahAdvfckfgamijaniByo leH
+
+from sutra_engines import apply_general
+
+SUTRA_CODE = "प.2.4.80"
+SUTRA_TEXT = "मन्त्रे घसह्वरणशवृदहाद्वृच्कृगमिजनिभ्यो लेः"
+SUTRA_DESC = "(Samasa (compound formation)) — mantre GasahvaraRaSavfdahAdvfckfgamijaniByo leH"
+
+
+class Sutra2480:
+	def apply(self, word, pos):
+		return apply_general(word, pos, SUTRA_CODE)
+
+	EXAMPLES = [
+	('अग्निः', '', 'samāsa: अग्निः'),
+		('रामः', '', 'samāsa: रामः'),
+		('सीता', '', 'samāsa: सीता'),
+	]
+
