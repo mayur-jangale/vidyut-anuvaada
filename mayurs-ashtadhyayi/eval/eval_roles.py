@@ -4,6 +4,13 @@
     python eval/eval_roles.py --claude eval/review/claude/<file>.json [--limit N] [--json out.json]
     python eval/eval_roles.py --gold eval/review/gold_roles.json        (human corrections)
     python eval/eval_roles.py --agreement fileA.json fileB.json         (two annotators, no pipeline run)
+    python eval/eval_roles.py --claude <file> --gold-words [--verses 21-40] [--matrix]
+
+``--gold-words`` isolates the sentence layer: the Reading is built from the reference file's own words
+(gold split and lemma; each word gets the lexicon analysis matching the gold feats, else a Morph built
+from the feats: eval/gold_words.py) and only compounds.annotate -> shabdabodha.resolve -> anvaya.order
+run. Without it the whole pipeline runs on the raw text (split and tagging errors included).
+``--matrix`` prints the gold-role x predicted-role confusion matrix and the 40 most frequent wrong links.
 
 For each gold sentence the pipeline (``mayur.pipeline.analyze_verse``) is run on its Devanagari text
 (exceptions are caught and counted); our words are aligned to the gold words with the lemma-tolerant
@@ -15,6 +22,9 @@ alignment of eval/eval_dcs.py. Everything is reported on ALIGNED words that are 
     (mayur/treebank.py documents the mapping; unmapped labels are counted, not forced);
   * anvaya agreement where the gold has a prose order: share of word pairs in the same relative order
     (and Kendall tau = 2*share - 1).
+  * a LENIENT role accuracy in which विशेषण and विधेय count as one class: annotators disagree on a word
+    qualifying an unexpressed subject (विशेषण>verb, विधेय>verb or विधेय>none), so it is printed next to
+    the strict number, never instead of it.
 Every number is printed as n/N. Metric functions are pure and unit-tested (tests/test_eval_roles.py).
 """
 
@@ -72,14 +82,21 @@ def pairwise_agreement(order_a: Sequence[Any], order_b: Sequence[Any]) -> tuple[
     return agree, total
 
 
-def score_sentence(ours: dict[str, Any], gold: dict[str, Any]) -> dict[str, Any]:
+LENIENT = {"विधेय": "विशेषण"}
+
+
+def score_sentence(ours: dict[str, Any], gold: dict[str, Any], sid: str = "") -> dict[str, Any]:
     """Counts of one sentence. ``ours`` as from ``our_view``; ``gold`` a sentence of mayur.treebank."""
     gw = gold["words"]
     mapping = align(ours["words"], gw)
     gold_final = {i: max(c["members"]) for c in gold.get("compounds", []) for i in c["members"]}
     c: dict[str, Any] = {"gold_words": len(gw), "aligned": len(mapping), "unaligned_gold": len(gw) - len(mapping),
                          "members_skipped": 0, "evaluated": 0, "head_ok": 0, "role_eval": 0, "role_ok": 0,
-                         "unmapped_gold_role": 0, "roles": {}}
+                         "unmapped_gold_role": 0, "role_ok_lenient": 0, "roles": {}, "confusion": {}, "wrong": {}}
+    inv = {v: k for k, v in mapping.items()}
+
+    def form_of(gi: Optional[int]) -> str:
+        return gw[gi]["form"] if gi is not None and 0 <= gi < len(gw) else "-"
     for o, g in mapping.items():
         gwd, owd = gw[g], ours["words"][o]
         if gwd["compound_member"] or owd["in_compound"]:
@@ -88,12 +105,20 @@ def score_sentence(ours: dict[str, Any], gold: dict[str, Any]) -> dict[str, Any]
         c["evaluated"] += 1
         h, gh = owd["head"], gwd["head_index"]
         gh = gold_final.get(gh, gh)
-        c["head_ok"] += (h is None and gh is None) or (h is not None and gh is not None and mapping.get(h) == gh)
+        head_ok = (h is None and gh is None) or (h is not None and gh is not None and mapping.get(h) == gh)
+        c["head_ok"] += head_ok
+        if not head_ok or owd["role"] != gwd["role"]:
+            ours_head = ours["words"][h]["form"] if h is not None else "-"
+            key = f"{gwd['role'] or '?'}>{form_of(gh)} | ours {owd['role'] or '-'}>{ours_head}"
+            c["wrong"][f"{sid}: {gwd['form']}: {key}"] = 1
         if not gwd["role"]:
             c["unmapped_gold_role"] += 1
             continue
         c["role_eval"] += 1
         c["role_ok"] += owd["role"] == gwd["role"]
+        c["role_ok_lenient"] += LENIENT.get(owd["role"], owd["role"]) == LENIENT.get(gwd["role"], gwd["role"])
+        pair = f"{gwd['role']}|{owd['role'] or '-'}"
+        c["confusion"][pair] = c["confusion"].get(pair, 0) + 1
         for role, key in ((gwd["role"], "gold"), (owd["role"], "pred")):
             if role:
                 c["roles"].setdefault(role, {"gold": 0, "pred": 0, "tp": 0})[key] += 1
@@ -108,7 +133,12 @@ def score_sentence(ours: dict[str, Any], gold: dict[str, Any]) -> dict[str, Any]
 def add_counts(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
     out = dict(a)
     for k, v in b.items():
-        if k == "roles":
+        if k in ("confusion", "wrong"):
+            merged = dict(a.get(k, {}))
+            for key, n in v.items():
+                merged[key] = merged.get(key, 0) + n
+            out[k] = merged
+        elif k == "roles":
             roles = {r: dict(d) for r, d in a.get("roles", {}).items()}
             for r, d in v.items():
                 cur = roles.setdefault(r, {"gold": 0, "pred": 0, "tp": 0})
@@ -140,7 +170,8 @@ def report(total: dict[str, Any], sentences: int, errors: int, label: str) -> st
              f" not aligned {total.get('unaligned_gold', 0)}; compound members skipped {total.get('members_skipped', 0)}",
              f"head attachment: {frac(total.get('head_ok', 0), total.get('evaluated', 0))}",
              f"role accuracy: {frac(total.get('role_ok', 0), total.get('role_eval', 0))}"
-             f" (gold label unmapped: {total.get('unmapped_gold_role', 0)})"]
+             f" (gold label unmapped: {total.get('unmapped_gold_role', 0)});"
+             f" lenient (विशेषण = विधेय): {frac(total.get('role_ok_lenient', 0), total.get('role_eval', 0))}"]
     if total.get("anvaya_pairs"):
         a, n = total["anvaya_agree"], total["anvaya_pairs"]
         lines.append(f"anvaya pair order: {frac(a, n)}; Kendall tau {2 * a / n - 1:.3f}")
@@ -148,6 +179,50 @@ def report(total: dict[str, Any], sentences: int, errors: int, label: str) -> st
     lines += [f"{r['role']:<14}{r['gold']:>6}{r['pred']:>6}{r['tp']:>6}{r['precision']:>11.3f}{r['recall']:>8.3f}"
               for r in per_role(total.get("roles", {}))]
     return "\n".join(lines)
+
+
+def matrix(total: dict[str, Any], top: int = 40) -> str:
+    """Gold-role x predicted-role counts, then the most frequent wrong links (role or head)."""
+    conf = total.get("confusion", {})
+    golds = sorted({k.split("|")[0] for k in conf}, key=lambda r: -sum(n for k, n in conf.items() if k.startswith(r + "|")))
+    preds = sorted({k.split("|")[1] for k in conf})
+    head = "gold \\ pred".ljust(16) + "".join(p[:7].rjust(8) for p in preds)
+    rows = [head] + [g[:15].ljust(16) + "".join(str(conf.get(f"{g}|{p}", "")).rjust(8) for p in preds) for g in golds]
+    wrong = total.get("wrong", {})
+    pattern: dict[str, list[str]] = {}
+    for key in wrong:
+        sid, rest = key.split(": ", 1)
+        form, link = rest.split(": ", 1)
+        kind = link.split(" | ours ")
+        pat = f"{kind[0].split('>')[0]} -> {kind[1].split('>')[0]}{'' if kind[0].split('>')[0] != kind[1].split('>')[0] else ' (head)'}"
+        pattern.setdefault(pat, []).append(f"{sid} {form} [{link}]")
+    rows.append(f"wrong links by pattern (gold role -> ours), {len(wrong)} words:")
+    for pat, items in sorted(pattern.items(), key=lambda kv: -len(kv[1]))[:top]:
+        rows.append(f"{len(items):>4}  {pat}:  " + "; ".join(items[:3]))
+    return "\n".join(rows)
+
+
+def run_gold_words(verses: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    """Sentence layer alone on the reference words (see eval/gold_words.py)."""
+    import gold_words
+    from mayur import anvaya, compounds, shabdabodha
+
+    total: dict[str, Any] = {}
+    n = errors = built = 0
+    for v in verses:
+        n += 1
+        try:
+            r, k = gold_words.reading_of(v)
+            built += k
+            r = anvaya.order(shabdabodha.resolve(compounds.annotate(r)))
+            s = treebank.verse_to_sentence(v, "reference")
+            total = add_counts(total, score_sentence(our_view(r), s, s["id"]))
+        except Exception:
+            errors += 1
+            if errors <= 3:
+                traceback.print_exc(file=sys.stderr)
+    total["morphs_from_feats"] = built
+    return {"sentences": n, "exceptions": errors, "failures": [], "counts": total}
 
 
 def run(sentences: Iterable[dict[str, Any]], analyze: Callable[..., Any], limit: Optional[int] = None) -> dict[str, Any]:
@@ -160,7 +235,7 @@ def run(sentences: Iterable[dict[str, Any]], analyze: Callable[..., Any], limit:
         n += 1
         try:
             analysis = analyze(s["text"], verse_id=str(s["id"]))
-            total = add_counts(total, score_sentence(our_view(analysis.readings[0]), s))
+            total = add_counts(total, score_sentence(our_view(analysis.readings[0]), s, str(s["id"])))
         except BaseException as exc:  # counted (a Rust panic in vidyut is a BaseException)
             if isinstance(exc, (KeyboardInterrupt, SystemExit)):
                 raise
@@ -208,6 +283,13 @@ def _take(it: Iterable[dict], limit: Optional[int]) -> Iterable[dict]:
         yield s
 
 
+def _wanted(verses: list[dict[str, Any]], spec: Optional[str]) -> list[dict[str, Any]]:
+    if not spec:
+        return verses
+    lo, _, hi = spec.partition("-")
+    return [v for v in verses if int(lo) <= int(v.get("number", 0)) <= int(hi or lo)]
+
+
 def main(argv: Optional[list[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--source", choices=("ufal", "dcs", "vedic"), default="dcs")
@@ -216,16 +298,31 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--agreement", nargs=2, metavar=("A", "B"), default=None)
     ap.add_argument("--limit", type=int, default=None)
     ap.add_argument("--json", default=None)
+    ap.add_argument("--gold-words", action="store_true", help="sentence layer alone on the reference words")
+    ap.add_argument("--verses", default=None, help="verse numbers of a --claude file, e.g. 21-40")
+    ap.add_argument("--matrix", action="store_true", help="confusion matrix and most frequent wrong links")
     args = ap.parse_args(argv)
+    sys.path.insert(0, str(ROOT / "eval"))
     if args.agreement:
         a, b = (treebank.read_claude(p) for p in args.agreement)
         result, label = agreement(a, b), f"agreement {Path(args.agreement[0]).name} vs {Path(args.agreement[1]).name}"
+    elif args.gold_words:
+        verses = _wanted(json.loads(Path(args.claude).read_text(encoding="utf-8"))["verses"], args.verses)
+        result = run_gold_words(verses[: args.limit])
+        label = f"reference {Path(args.claude).name}, gold words ({result['counts'].get('morphs_from_feats', 0)}"\
+                " Morphs built from feats)"
     else:
         from mayur.pipeline import analyze_verse
 
         sentences, label = load_sentences(args)
+        if args.verses and args.claude:
+            keep = {str(v["id"]) for v in _wanted(json.loads(Path(args.claude).read_text(encoding="utf-8"))["verses"],
+                                                  args.verses)}
+            sentences = [s for s in sentences if str(s["id"]) in keep]
         result = run(sentences, analyze_verse, args.limit)
     print(report(result["counts"], result["sentences"], result["exceptions"], label))
+    if args.matrix:
+        print(matrix(result["counts"]))
     if args.json:
         result["per_role"] = per_role(result["counts"].get("roles", {}))
         Path(args.json).write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")

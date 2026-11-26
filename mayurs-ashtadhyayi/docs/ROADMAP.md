@@ -6,13 +6,16 @@ derivation reproduces the text. Each layer below rests on a section of Pāṇini
 sources outside the grammar (dictionary, corpus statistics, trained rankers) only choose
 among readings the rules already allow.
 
+**Production runs offline: no language model and no API key.** Claude is used only during
+development, as a checker and as an annotator of reference sets (labelled as such, not human-verified).
+
 | # | Milestone | Rules it rests on | Done when | State |
 |---|---|---|---|---|
 | 1 | Reliable analysis: split, lemma, grammar on any book | Sandhi 6.1, 8.2–8.4; word formation 3.1–7.4 (via vidyut) | ≥ 95% word-level on fresh sealed samples; no genre below 90% | In progress |
-| 2 | Sentence structure: roles, clauses, anvaya | Kāraka definitions 1.4.23–55; case assignment 2.3.1–73; 3.4.69; 1.4.105–108 | ≥ 90% of role links correct on a checked set; each link cites its rules | Rule engine in progress; gold data being located |
-| 3 | Meaning of words: derived sense by rule, sense in context, compounds by rule | Suffix-sense rules in 3.x, 4.x, 5.x; compounds 2.1–2.2 | ≥ 85% sense agreement with corpus sense tags; compound types scored on a checked set | In progress |
+| 2 | Sentence structure: roles, clauses, anvaya | Kāraka definitions 1.4.23–55; case assignment 2.3.1–73; 3.4.69; 1.4.105–108 | ≥ 90% of roles and ≥ 85% of heads correct on a reference set; each link cites its rules | Rule engine built (49 rules, every link cited and forward-checked). Measured on Claude-annotated dev sets: roles 70–75%, heads 49–59%. Second round in progress |
+| 3 | Meaning of words: derived sense by rule, sense in context, compounds by rule | Suffix-sense rules in 3.x, 4.x, 5.x; compounds 2.1–2.2 | ≥ 85% sense agreement with corpus sense tags; compound types scored on a reference set | Derived meaning from the trace: built (82 suffix-sense rules). Sense in context: 72.8% on ambiguous words. Compound type: 45–60% on the reference sets; second round in progress |
 | 4 | Choosing the intended reading | Outside the grammar: compatibility of meanings, reference of तद्/यद्, supplied words | Intended reading ranked first on a set of known ambiguous verses | Not started (needs 2 and 3) |
-| 5 | Faithful, readable English | — (constrained rewording of the verified analysis) | Code checks that grammar and alignment are unchanged; human rating of a sample | Rewording step in progress; needs an API key to run |
+| 5 | Faithful, readable English | — (fixed rewriting rules over the literal rendering; no language model) | Code checks that words, number, tense, negation and alignment are unchanged; rating of a sample | Rule-based rewriting built and checked in code; quality not yet rated |
 | 6 | Hard genres: court poetry, technical prose | Same rules; long compounds, deliberate double meanings shown as two readings | Per-genre scores at milestone-1 level | Not started |
 | 7 | Vedic | Vedic rules (छन्दसि), accent | Split agrees with the traditional padapāṭha on a held-out sample | Not started |
 
@@ -27,10 +30,19 @@ among readings the rules already allow.
   lemma, and all grammar features. Comparison conventions are documented and tested in
   `mayur/ud.py` and `eval/eval_dcs.py`.
 
+## Reference sets for sentence structure
+
+No open treebank with kāraka roles and compound types could be used (the Hyderabad set forbids
+redistribution). So 139 verses were annotated by Claude on top of the corpus's word split
+(`eval/review/claude/`, tool: `scripts/annotate_tool.py`): Rāmāyaṇa Bāla 1.1–79 and 60 verses
+from 13 other books; 30 of them were annotated a second time for an agreement check (roles
+agree on 98% and 89% of words; both annotators are the same model, so this overstates
+independence). These files say "Claude (LLM), not human-verified" in their header.
+
 ## What needs a person
 
-- A Sanskrit reader to correct role and compound sheets (`scripts/export_review.py`)
-  so milestones 2–4 can be measured against human judgement.
-- A decision on whether words that vidyut lists but cannot derive (enclitics such as मे)
-  may count as verified when our own sūtra-cited derivation is shown.
-- An API key for the optional rewording step.
+- A Sanskrit reader to correct the role and compound reference files, so milestones 2–4 are
+  measured against human judgement and not only against Claude's.
+- A decision on whether words that vidyut lists but cannot derive (enclitics such as मे, the
+  in-compound form महा) may count as verified when our own sūtra-cited derivation is shown.
+  Today they do not.
