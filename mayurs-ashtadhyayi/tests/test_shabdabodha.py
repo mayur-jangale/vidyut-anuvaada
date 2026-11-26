@@ -162,3 +162,18 @@ def test_named_subject_kept_verse8():
     r = _gold(8)
     assert _r(r, "रामस्") == ("", None)
     assert _r(r, "वशी") == ("विधेय", "रामस्")
+
+
+def test_relative_clause_yad_tad():
+    from syntax_fixtures import hand, nom, verb
+    r = _resolve(hand([("यस्", False, [nom("यस्", "यद्", "प्रथमा")]),
+                       ("पठति", False, [verb("पठति", "पठ्", "लट्")]),
+                       ("सस्", False, [nom("सस्", "तद्", "प्रथमा")]),
+                       ("जानाति", False, [verb("जानाति", "ज्ञा", "लट्")])]))
+    assert _r(r, "यस्") == ("कर्ता", "पठति")
+    assert _r(r, "सस्") == ("कर्ता", "जानाति")
+
+
+def test_question_keeps_its_clause():
+    r = _resolve(verse2())
+    assert r.words[0].role == "" and all(w.head != 0 or w.line == 0 for w in r.words)

@@ -28,10 +28,18 @@ def _visarga_is_r(unsandhied: str, lemma: str, feats: dict[str, str]) -> bool:
     -उः (पितुर्, 6.1.111 with 8.2.24) and the vocative singular (पितर्)."""
     if lemma.endswith("र्") or lemma in _R_LEMMAS:
         return True
-    if lemma.endswith(("ऋ", "ृ")):
-        vocative = feats.get("Case") == "Voc" and feats.get("Number") == "Sing"
-        return unsandhied.endswith("ु" + _VISARGA) or vocative
+    if lemma.endswith(("ऋ", "ृ")) and feats.get("Number") == "Sing":  # nominal forms only
+        case = feats.get("Case")
+        return case == "Voc" or (case in ("Gen", "Abl") and unsandhied.endswith("ु" + _VISARGA))
     return False
+
+
+def _repair_vocative(unsandhied: str, lemma: str, feats: dict[str, str]) -> str:
+    """The corpus' machine-reconstructed form of an अ-stem vocative singular is wrong
+    (रावणैः for रावण); the vocative singular of an अ-stem is the stem itself."""
+    if feats.get("Case") == "Voc" and feats.get("Number") == "Sing" and unsandhied == lemma + "ै" + _VISARGA:
+        return lemma
+    return unsandhied
 
 
 def pada_form(unsandhied: str, lemma: str, feats: dict[str, str] | None = None) -> str:
@@ -83,7 +91,7 @@ def _parse_token(cols: list[str]) -> dict:
     misc = _parse_feats(cols[9]) if len(cols) > 9 else {}
     feats = _parse_feats(cols[5])
     lemma = _deva(cols[2])
-    unsandhied = _deva(misc.get("Unsandhied", "")) or _deva(cols[1])
+    unsandhied = _repair_vocative(_deva(misc.get("Unsandhied", "")) or _deva(cols[1]), lemma, feats)
     return {
         "form": pada_form(unsandhied, lemma, feats),
         "lemma": lemma,

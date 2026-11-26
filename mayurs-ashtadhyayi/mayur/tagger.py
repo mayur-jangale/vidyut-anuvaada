@@ -202,3 +202,26 @@ def choose(words: list[Word], candidates) -> Optional[list[int]]:
         for i, k in zip(pos, path):
             chosen[i] = idx[i][k]
     return chosen
+
+
+def enforce(words: list[Word], chosen: list[int]) -> list[int]:
+    """Hard constraints on a learned choice: a तृच् noun over an equally likely लुट् verb, and
+    a finite verb without an agreeing nominative takes the nearest word that has one."""
+    from mayur.shabdabodha import PRATHAMA, _agent_noun_preferred, candidates, is_case, is_finite, karta_agrees
+    out = list(chosen)
+    for i, w in enumerate(words):
+        if w.analyses and _agent_noun_preferred(w, w.analyses[out[i]]):
+            out[i] = next(j for j, a in enumerate(w.analyses) if a.krt == "तृच्" and is_case(a, PRATHAMA))
+    for v, wv in enumerate(words):
+        vm = wv.analyses[out[v]] if wv.analyses else None
+        if not is_finite(vm):
+            continue
+        line = [i for i, w in enumerate(words) if w.line == wv.line and w.analyses and not w.in_compound]
+        if any(karta_agrees(words[i].analyses[out[i]], vm) for i in line):
+            continue
+        options = [(abs(i - v), i, j) for i in line if i != v for j in candidates(words[i])
+                   if karta_agrees(words[i].analyses[j], vm) and not is_finite(words[i].analyses[out[i]])]
+        if options:
+            _, i, j = min(options)
+            out[i] = j
+    return out

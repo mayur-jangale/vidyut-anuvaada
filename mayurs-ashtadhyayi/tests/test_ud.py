@@ -72,3 +72,9 @@ def test_citation_conventions():
     assert ud.same_feats(adverb, "ADV", {})
     assert not ud.same_feats(adverb, "NOUN", {"Case": "Nom", "Gender": "Neut", "Number": "Sing"})
     assert ud.compared_features("ADV", {"Case": "Voc"}) == ()
+
+
+def test_features_the_gold_omits_are_not_scored():
+    pronoun = Morph(form="अहम्", lemma="अस्मद्", kind="subanta", linga="पुंलिङ्ग", vibhakti="प्रथमा", vacana="एकवचन")
+    assert ud.same_feats(pronoun, "PRON", {"Case": "Nom", "Number": "Sing"})
+    assert not ud.same_feats(pronoun, "PRON", {"Case": "Acc", "Number": "Sing"})

@@ -185,6 +185,7 @@ def main() -> None:
     ap.add_argument("--max-train", type=int, default=12000)
     ap.add_argument("--epochs", type=int, default=5)
     ap.add_argument("--per-text", type=int, default=1500)
+    ap.add_argument("--eval-only", action="store_true", help="re-evaluate the saved weights")
     args = ap.parse_args()
     t0 = time.time()
     tr, dev, test = load_sets(args.max_train, args.per_text)
@@ -199,14 +200,20 @@ def main() -> None:
         if keep:
             cc, tt = [c[i] for i in keep], [t[i] for i in keep]
             data.append((cc, [g[i] for i in keep], leave_one_out(cc, tt)))
-    w = train(data, args.epochs)
+    model = ROOT / "mayur/models/tagger.json"
+    if args.eval_only and model.exists():
+        w = json.loads(model.read_text(encoding="utf-8"))["weights"]
+    else:
+        w = train(data, args.epochs)
 
     def learned(words, cands):
         keep = [i for i, x in enumerate(cands) if x]
         out = [0] * len(cands)
         for i, k in zip(keep, tagger.decode([cands[i] for i in keep], w)):
             out[i] = k
-        return out
+        idx = [shabdabodha.candidates(x) if x.analyses else [] for x in words]
+        chosen = tagger.enforce(words, [ix[k] if ix else 0 for ix, k in zip(idx, out)])
+        return [ix.index(c) if c in ix else 0 for ix, c in zip(idx, chosen)]
 
     def baseline(words, cands):
         chosen = shabdabodha.choose_rules(words)
@@ -220,13 +227,16 @@ def main() -> None:
     report = {name: {"before": evaluate(items, baseline), "after": evaluate(items, learned)}
               for name, items in (("dev", dev_items), ("test", test_items))}
     before, after = report["dev"]["before"], report["dev"]["after"]
-    enabled = sum(after[b]["all"] for b in after) > sum(before[b]["all"] for b in before)
+    micro = lambda r: sum(x["all"] * x["n"] for x in r.values()) / max(1, sum(x["n"] for x in r.values()))
+    enabled = micro(after) > micro(before)  # enabled only when better on DEV (all features, micro)
     out = {"source": "trained on Digital Corpus of Sanskrit annotations (Oliver Hellwig), CC BY 4.0",
            "command": "python scripts/train_tagger.py " + " ".join(sys.argv[1:]),
            "train_half_verses": len(data), "epochs": args.epochs, "enabled": enabled,
            "report": report, "weights": w}
-    (ROOT / "mayur/models").mkdir(exist_ok=True)
-    (ROOT / "mayur/models/tagger.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+    if not args.eval_only:  # --eval-only never overwrites the trained model's record
+        (ROOT / "mayur/models").mkdir(exist_ok=True)
+        (ROOT / "mayur/models/tagger.json").write_text(json.dumps(out, ensure_ascii=False, indent=1),
+                                                       encoding="utf-8")
     for split, r in report.items():
         for book in r["before"]:
             b, a = r["before"][book], r["after"][book]

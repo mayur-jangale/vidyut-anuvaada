@@ -49,7 +49,6 @@ def _freq(fn: str, arg) -> float:
     except Exception:  # tables or module not available
         return 0.0
 
-
 def lemma_class(lemma: str) -> str:
     try:
         from mayur import freq
@@ -162,7 +161,7 @@ def choose(words: list[Word]) -> list[int]:
     """Chosen analysis indices: the learned tagger when its model is present, else the rules."""
     from mayur import tagger
     learned = tagger.choose(words, lambda w: candidates(w) if w.analyses else [])
-    return learned if learned is not None else choose_rules(words)
+    return tagger.enforce(words, learned) if learned is not None else choose_rules(words)
 
 
 def choose_rules(words: list[Word]) -> list[int]:
@@ -216,7 +215,8 @@ def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> li
         if not w.in_compound and not w.role and m is not None and m.kind == "subanta" and m.vibhakti:
             clause = w.line if w.line in governed else region[w.line]
             personal = m.lemma in FIRST_PERSON | SECOND_PERSON and m.vibhakti == PRATHAMA
-            groups.setdefault((m.vibhakti, m.vacana, m.linga, clause, i if personal else -1), []).append(i)
+            relative = m.lemma == "यद्" and sum(is_finite(x.morph) for x in words if x.line == w.line) > 1
+            groups.setdefault((m.vibhakti, m.vacana, m.linga, clause, i if personal or relative else -1), []).append(i)
     order = lambda g: (words[g[0]].morph.vibhakti != PRATHAMA, words[g[0]].morph.lemma not in FIRST_PERSON | SECOND_PERSON)
     return sorted(groups.values(), key=order)
 

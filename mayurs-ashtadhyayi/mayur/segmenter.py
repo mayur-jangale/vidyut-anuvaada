@@ -68,7 +68,7 @@ class _Jn:
 def _contexts() -> list[tuple[Varnas, str]]:
     ctx: list[tuple[Varnas, str]] = [((v,), "") for v in sd.VOWELS]
     for c in sd.CONSONANTS:
-        if c in sd.STOPS and sd.VARGA_OF[c][1] != 0:
+        if c in sd.STOPS and sd.VARGA_OF[c][1] != 0 and c not in sd.PALATAL_FINAL:
             continue  # a pada-final stop is indexed in its unvoiced form; 8.2.39 voices it as needed
         if c in ("स्", "र्", "न्"):
             ctx.extend(((p, c), "") for p in sd.VOWELS)
@@ -105,7 +105,7 @@ def junction_index() -> dict[Varnas, tuple[_Jn, ...]]:
                     continue
                 for seq, sutras in sd._outcomes_v(ctx, right, whole, samasa):
                     out = seq[:-1] if not sd.is_vowel(r) and seq[-1:] == ("अ",) else seq
-                    out = sd.canon_varnas(from_varnas(out) + "क") [:-2] if out else out
+                    out = sd.canon_varnas(from_varnas(out) + "य")[:-2] if out else out  # sentinel: not a stop
                     tail, head, surf = _strip(ctx, out, (r,))
                     key = (ctx, tail, head, surf, samasa, whole, sutras)
                     acc.setdefault(key, {}).setdefault(r, sutras)
@@ -180,7 +180,14 @@ def _form_count(form: str) -> int:
 def _analyses(form: str, stem: bool) -> tuple:
     from mayur import lexicon
 
-    return lexicon.stems(form) if stem else lexicon.padas(form)
+    found = lexicon.stems(form) if stem else lexicon.padas(form)
+    v = sd.varnas(form)
+    if not found and v and v[-1] in sd.STOPS and sd.VARGA_OF[v[-1]][1] == 0:
+        # pada-final stops are indexed unvoiced; the kosha may list the voiced spelling (युगपद्)
+        g = sd.VARGA_OF[v[-1]][0]
+        voiced = from_varnas(v[:-1] + (sd.VARGAS[g][2],))
+        found = lexicon.stems(voiced) if stem else lexicon.padas(voiced)
+    return found
 
 
 @lru_cache(maxsize=1)

@@ -235,6 +235,8 @@ def _outcomes_v(left: Varnas, right: Varnas, word: str, samasa: bool) -> tuple[t
         raw = _final_s_or_r(left, right, word)
     elif a == "म्":
         raw = [(left + right, ())] if is_vowel(b) else [(left[:-1] + (ANUSVARA,) + right, ("८.३.२३",))]
+    elif a == "न्" and samasa and is_vowel(b):
+        raw = [(left + right, ("६.३.७४",))]  # नञ् as अन् before a vowel: no doubling (8.3.32 is pada-final)
     elif a == "न्":
         raw = _final_n(left, right)
     elif a in STOPS:
@@ -345,7 +347,8 @@ def canon(text: str) -> str:
 
     1. Spaces are removed.
     2. Anusvara before a stop is written as the homorganic nasal (पुंगव = पुङ्गव, 8.4.58/59).
-    3. A line-final ं is written म् (final म् ≡ ं, 8.3.23 is optional in pausa).
+    3. A line-final ं is written म् (final म् ≡ ं, 8.3.23 is optional in pausa); a म् written
+       unassimilated before a non-labial stop counts as the homorganic nasal (8.3.23 + 8.4.59).
     Avagraha is not normalised: sandhi outcomes are produced with and without it.
     """
     return from_varnas(canon_varnas(text))
@@ -364,6 +367,8 @@ def canon_varnas(text: str, keep_spaces: bool = False) -> Varnas:
                 j += 1
             nasal = _stop_nasal(raw[j]) if j < len(raw) else None
             if v == ANUSVARA and nasal:
+                v = nasal
+            elif v == "म्" and nasal and nasal != "म्":  # unassimilated म् before a stop (युक्तम्गुणैः)
                 v = nasal
             elif j >= len(raw):
                 v = "म्"

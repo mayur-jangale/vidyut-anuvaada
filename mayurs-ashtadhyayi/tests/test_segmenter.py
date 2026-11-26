@@ -65,3 +65,11 @@ def test_sa_drops_s_before_consonant_in_lattice():  # 6.1.132
 
 def test_word_made_only_of_merged_vowel():  # च + अ (नञ्) → चा, 6.1.101
     assert segmenter.contains("चानृशंसा", ["च", "अ", "नृशंसा"], [False, True, False])
+
+
+def test_voiced_final_listed_form():  # 8.2.39: युगपद् / युगपत्
+    assert segmenter.contains("दैवाद्युगपदेतौ च", ["दैवात्", "युगपद्", "एतौ", "च"], [False] * 4)
+
+
+def test_nan_an_before_vowel():  # 6.3.74
+    assert segmenter.contains("तथानभ्यर्च्य", ["तथा", "अन्", "अभ्यर्च्य"], [False, True, False])

@@ -75,11 +75,15 @@ def compared_features(gold_upos: str, gold_feats: dict[str, str]) -> tuple[str, 
 
 
 def same_feats(m: Morph, gold_upos: str, gold_feats: dict[str, str]) -> bool:
-    """All scored features agree; for indeclinable gold words there is nothing to score."""
+    """Every feature the gold annotates for this word agrees with ours.
+
+    Features the gold leaves out cannot be scored (it gives the personal pronouns no gender);
+    for indeclinable gold words there is nothing to score.
+    """
     if gold_upos in INDECLINABLE_UPOS:
         return True
     ours = feats(m)
-    return all(ours.get(k) == gold_feats.get(k) for k in TAG_FEATS)
+    return all(ours.get(k) == v for k, v in gold_feats.items() if k in TAG_FEATS)
 
 
 def feats(m: Morph) -> dict[str, str]:

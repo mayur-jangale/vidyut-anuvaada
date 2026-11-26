@@ -28,6 +28,7 @@ from mayur.segmenter import segment_line  # noqa: E402
 
 FILES = ROOT / "data/dcs/sanskrit/dcs/data/conllu/files"
 CACHE = ROOT / "data/derived/ranker_cache"
+MAX_CHARS = 90  # longer (prose) lines blow up the lattice; they are skipped
 SOURCE = "trained on Digital Corpus of Sanskrit annotations (CC BY 4.0)"
 
 
@@ -44,7 +45,7 @@ def _text_of(entry: dict) -> str:
 def _lines(entries: list[dict], limit: int | None = None, seed: int = 0) -> list[tuple[str, list[dict]]]:
     return [(g["compact"], [{"form": w["form"], "lemma": w["lemma"], "compound_member": w["compound_member"]}
                             for w in g["words"]])
-            for g in dcs.gold_lines(entries, limit=limit, seed=seed) if g["words"]]
+            for g in dcs.gold_lines(entries, limit=limit, seed=seed) if g["words"] and len(g["compact"]) <= MAX_CHARS]
 
 
 def held_sets(per_pool_text: int = 60) -> dict[str, list[tuple[str, list[dict]]]]:
@@ -80,7 +81,7 @@ def _cand(item: tuple[str, list[dict], int]) -> list | None:
     try:
         seg = segment_line(line, k)
         splits = list(seg.splits)[:k]
-    except Exception:  # noqa: BLE001 - a line the segmenter cannot handle is skipped
+    except (Exception, MemoryError):  # noqa: BLE001 - a line the segmenter cannot handle is skipped
         return None
     rows = []
     for s in splits:

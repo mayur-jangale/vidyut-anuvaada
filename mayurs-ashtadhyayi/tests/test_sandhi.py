@@ -100,3 +100,19 @@ def test_pada_hiatus_needs_space():
     from mayur import segmenter
     assert segmenter.contains("चैव आर्जवम्", ["च", "एव", "आर्जवम्"], [False] * 3)
     assert not segmenter.contains("चैवआर्जवम्", ["च", "एव", "आर्जवम्"], [False] * 3)
+
+
+def test_nan_before_vowel_in_compound():  # 6.3.74
+    assert "अनसूयुस्" in texts("अन्", "असूयुस्", True)
+
+
+def test_canon_unassimilated_m():
+    assert sandhi.canon("युक्तम्गुणैः") == sandhi.canon("युक्तं गुणैः")
+
+
+def test_raj_final_j_to_d():  # 8.2.36, 8.2.39
+    assert "शैलराडिव" in texts("शैलराज्", "इव")
+
+
+def test_optional_samhita_keeps_visarga():  # 1.4.109 kārikā
+    assert sandhi.rejoin_matching(["युधिष्ठिरस्", "उवाच"], [False, False], "युधिष्ठिरः उवाच") is not None
