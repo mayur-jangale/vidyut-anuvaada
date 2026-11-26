@@ -37,32 +37,41 @@ def _held_out(path: Path) -> bool:
             or "MBh, 6, 23-" in n or "MBh, 6, 24-" in n)
 
 
-def _lines(path: Path, lo: int = 0, hi: int = 10 ** 9) -> list[tuple[str, list[dict]]]:
-    out = []
-    for s in dcs.iter_sentences(path):
-        if lo <= s["sent_counter"] <= hi and s["tokens"]:
-            words = [{"form": t["form"], "lemma": t["lemma"], "compound_member": t["compound_member"]}
-                     for t in s["tokens"]]
-            out.append((dcs.compact(s["text"]), words))
+def _text_of(entry: dict) -> str:
+    return Path(entry["file"]).parent.name
+
+
+def _lines(entries: list[dict], limit: int | None = None, seed: int = 0) -> list[tuple[str, list[dict]]]:
+    entries = [e for e in entries if "sealed" not in e["file"] and not (_held_out(Path(e["file"])) and e.get("_train"))]
+    return [(g["compact"], [{"form": w["form"], "lemma": w["lemma"], "compound_member": w["compound_member"]}
+                            for w in g["words"]])
+            for g in dcs.gold_lines(entries, limit=limit, seed=seed) if g["words"]]
+
+
+def held_sets(per_pool_text: int = 60) -> dict[str, list[tuple[str, list[dict]]]]:
+    """DEV per text (old DEV sets + dev_pool sample) and TEST per text. Never touches sealed_test."""
+    out: dict[str, list] = {}
+    for split, prefix, limit in (("dev", "dev", None), ("dev_pool", "dev", per_pool_text), ("test", "test", None)):
+        by_text: dict[str, list[dict]] = {}
+        for e in dcs.split_files(split):
+            by_text.setdefault(_text_of(e), []).append(e)
+        for text, es in sorted(by_text.items()):
+            out.setdefault(f"{prefix}_{text}", []).extend(_lines(es, limit))
     return out
 
 
-def held_sets() -> dict[str, list[tuple[str, list[dict]]]]:
-    ram = next(FILES.glob("Rāmāyaṇa/Rāmāyaṇa-0000-*"))
-    kum = next(FILES.glob("Kumārasaṃbhava/Kumārasaṃbhava-0000-*"))
-    bhg = sorted(p for p in FILES.glob("Mahābhārata/*") if "MBh, 6, 23-" in p.name or "MBh, 6, 24-" in p.name)
-    return {"dev_ram": _lines(ram, 21, 79), "dev_kum": _lines(kum, 21, 60),
-            "test_ram": _lines(ram, 1, 20), "test_kum": _lines(kum, 1, 20),
-            "test_bhg": [x for p in bhg for x in _lines(p)]}
-
-
 def train_lines(n: int, seed: int = 0) -> list[tuple[str, list[dict]]]:
-    files = sorted(p for p in FILES.glob("*/*.conllu") if not _held_out(p))
+    """``n`` TRAIN half-verses stratified by text (equal share per text, sampled across its chapters)."""
+    by_text: dict[str, list[dict]] = {}
+    for e in dcs.split_files("train"):
+        if not _held_out(Path(e["file"])):
+            by_text.setdefault(_text_of(e), []).append(e)
     rng = random.Random(seed)
-    rng.shuffle(files)
+    share = max(1, n // max(1, len(by_text)))
     pool: list = []
-    for p in files[: max(40, n // 15)]:
-        pool.extend(rng.sample(ls, min(len(ls), 30)) if (ls := _lines(p)) else [])
+    for text, es in sorted(by_text.items()):
+        rng.shuffle(es)
+        pool.extend(_lines(es[: max(3, share // 20)], limit=share, seed=seed))
     rng.shuffle(pool)
     return pool[:n]
 
@@ -76,14 +85,16 @@ def _cand(item: tuple[str, list[dict], int]) -> list | None:
         return None
     rows = []
     for s in splits:
-        ours = [(w.form, w.in_compound) for w in s.words]
+        ours = [(w.form, w.in_compound, ranker.lemma_of(w.form, w.in_compound)) for w in s.words]
         f1 = prf(len(align_words(ours, gold)), len(ours), len(gold))["f1"]
         rows.append((s, split_equal(ours, gold), f1))
     return [line, gold, rows]
 
 
 def candidates(name: str, data: list, k: int, workers: int) -> list:
-    path = CACHE / f"{name}_{len(data)}_{k}.pkl"
+    import hashlib
+    key = hashlib.sha1(repr([l for l, _ in data]).encode()).hexdigest()[:10]
+    path = CACHE / f"{name}_{len(data)}_{k}_{key}.pkl"
     if path.exists():
         return pickle.loads(path.read_bytes())
     with Pool(workers) as pool:
@@ -125,7 +136,7 @@ def scaling(lists: list) -> tuple[dict, dict]:
 
 
 def metrics(lists: list, model: dict | None) -> dict[str, float]:
-    exact = f1 = oracle = 0.0
+    exact = f1 = oracle = oracle_f1 = 0.0
     for rows in lists:
         if not rows:
             continue
@@ -133,8 +144,9 @@ def metrics(lists: list, model: dict | None) -> dict[str, float]:
         exact += rows[idx][1]
         f1 += rows[idx][2]
         oracle += any(r[1] for r in rows)
+        oracle_f1 += max(r[2] for r in rows)
     n = max(1, len(lists))
-    return {"exact": exact / n, "f1": f1 / n, "oracle": oracle / n, "n": len(lists)}
+    return {"exact": exact / n, "f1": f1 / n, "oracle": oracle / n, "oracle_f1": oracle_f1 / n, "n": len(lists)}
 
 
 def perceptron(train: list, dev: list, mean: dict, std: dict, epochs: int) -> tuple[dict, float]:
@@ -142,7 +154,7 @@ def perceptron(train: list, dev: list, mean: dict, std: dict, epochs: int) -> tu
     model = {"weights": w, "mean": mean, "std": std}
     best, best_w = -1.0, {}
     norm = [[{k: (v - mean[k]) / std[k] for k, v in f.items()} for f, _, _ in rows] for rows in train]
-    targets = [max(range(len(rows)), key=lambda i: (rows[i][1], rows[i][2], -i)) if rows else 0 for rows in train]
+    targets = [max(range(len(rows)), key=lambda i: (rows[i][2], rows[i][1], -i)) if rows else 0 for rows in train]
     order = list(range(len(train)))
     rng = random.Random(1)
     for _ in range(epochs):
@@ -160,8 +172,9 @@ def perceptron(train: list, dev: list, mean: dict, std: dict, epochs: int) -> tu
                     stamp[k] = t
                     w[k] += rows[gold].get(k, 0.0) - rows[pred].get(k, 0.0)
         avg = {k: (total[k] + (t - stamp[k]) * w[k]) / max(t, 1) for k in w}
-        score = metrics(dev, {"weights": avg, "mean": mean, "std": std})["exact"]
-        print(f"  epoch dev exact {score:.3f}")
+        dm = metrics(dev, {"weights": avg, "mean": mean, "std": std})
+        score = dm["f1"]
+        print(f"  epoch dev F1 {score:.4f} exact {dm['exact']:.3f}")
         if score > best:
             best, best_w = score, avg
     model["weights"] = best_w
@@ -181,20 +194,21 @@ def main(argv: list[str] | None = None) -> int:
     train_f = featurize(train_c, table)
     held_f = {n: featurize(c, table) for n, c in held.items()}
     for kk in (1, 5, 10, 20, a.k):
-        cov = metrics([rows[:kk] for rows in train_f], None)["oracle"]
-        print(f"oracle coverage TRAIN @K={kk}: {cov:.3f}")
+        cov = metrics([rows[:kk] for rows in train_f], None)
+        print(f"oracle TRAIN @K={kk}: exact {cov['oracle']:.3f}  best-F1 {cov['oracle_f1']:.4f}")
     mean, std = scaling(train_f)
-    dev = held_f["dev_ram"] + held_f["dev_kum"]
+    dev = [r for n, rows in held_f.items() if n.startswith("dev_") for r in rows]
     weights, _ = perceptron(train_f, dev, mean, std, a.epochs)
     model = {"source": SOURCE, "k": a.k, "train_lines": len(train_f), "weights": weights,
              "mean": mean, "std": std, "tag_bigram": table}
     base_dev, new_dev = metrics(dev, None), metrics(dev, model)
-    model["enabled"] = new_dev["exact"] > base_dev["exact"]
+    model["enabled"] = new_dev["f1"] > base_dev["f1"]
     for n, rows in held_f.items():
         b, r = metrics(rows, None), metrics(rows, model)
-        print(f"{n:9s} n={b['n']:4d} exact {b['exact']:.3f} -> {r['exact']:.3f}  "
-              f"F1 {b['f1']:.3f} -> {r['f1']:.3f}  oracle@{a.k} {b['oracle']:.3f}")
-    print(f"DEV overall exact {base_dev['exact']:.3f} -> {new_dev['exact']:.3f}; enabled={model['enabled']}")
+        print(f"{n[:28]:28s} n={b['n']:4d} exact {b['exact']:.3f} -> {r['exact']:.3f}  "
+              f"F1 {b['f1']:.4f} -> {r['f1']:.4f}  oracle@{a.k} exact {b['oracle']:.3f} F1 {b['oracle_f1']:.4f}")
+    print(f"DEV overall exact {base_dev['exact']:.3f} -> {new_dev['exact']:.3f}  F1 {base_dev['f1']:.4f} -> "
+          f"{new_dev['f1']:.4f}  oracle F1 {base_dev['oracle_f1']:.4f}; enabled={model['enabled']}")
     ranker.MODEL_FILE.parent.mkdir(exist_ok=True)
     ranker.MODEL_FILE.write_text(json.dumps(model, ensure_ascii=False, sort_keys=True, indent=0), encoding="utf-8")
     return 0

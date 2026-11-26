@@ -291,8 +291,8 @@ def vigraha(reading: Reading, comp: Compound) -> str:
     if final is None or not final.vibhakti or len(words) != 2:
         return ""
     first, last = _lemma(words[0]), _lemma(words[1])
-    if words[0].morph is not None and words[0].morph.kind == "avyaya":
-        return ""
+    if words[0].morph is not None and words[0].morph.kind == "avyaya" or first in _EPITHET_PREFIX - {"महा", "महत्"}:
+        return ""  # indeclinable first member: no forward-generated vigraha
     if comp.samasa == TATPURUSHA:
         rel = relation(last)
         a = _inflected(first, _own_gender(words[0]), rel, "बहुवचन" if last == "पुंगव" else "एकवचन")

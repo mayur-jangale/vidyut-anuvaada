@@ -14,7 +14,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Optional, Sequence
 
-from mayur import freq, lexicon
+from mayur import freq, lexicon, ud
 from mayur.segmenter import Split, _prepare
 
 MODEL_FILE = Path(__file__).with_name("models") / "split_ranker.json"
@@ -45,6 +45,11 @@ def _best(form: str, in_compound: bool) -> Optional[Any]:
     if not ms and in_compound:
         ms = lexicon.padas(form)
     return ms[0] if ms else None
+
+
+def lemma_of(form: str, in_compound: bool) -> str:
+    m = _best(form, in_compound)
+    return ud.lemma(m) if m is not None else ""
 
 
 @lru_cache(maxsize=200_000)

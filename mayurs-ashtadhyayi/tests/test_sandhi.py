@@ -72,3 +72,31 @@ def test_canon():
     assert sandhi.canon("मुनिपुंगव") == sandhi.canon("मुनिपुङ्गव")
     assert sandhi.canon("निरतं तपस्वी") == "निरतन्तपस्वी"
     assert sandhi.canon("वरं") == sandhi.canon("वरम्")
+
+
+def test_palatal_final_becomes_velar():  # 8.2.30
+    found = texts("प्राच्", "मुखास्", True)
+    assert "प्राङ्मुखास्" in found and "८.२.३०" in found["प्राङ्मुखास्"]
+    assert "वाक्" in sandhi.pausa_forms("वाच्")
+
+
+def test_sh_final_becomes_retroflex():  # 8.2.36
+    assert "प्रावृट्काले" in texts("प्रावृष्", "काले", True) or "प्रावृट्काले" in texts("प्रावृश्", "काले", True)
+
+
+def test_n_before_l_with_anusvara():  # 8.4.60, 8.3.4
+    assert "तांल्लोकान्" in texts("तान्", "लोकान्")
+
+
+def test_pragrhya_stays_unjoined():  # 1.1.11, 6.1.125
+    assert "१.१.११" in texts("ते", "आसने").get("तेआसने", ())
+
+
+def test_pada_hiatus_only_marked():
+    assert sandhi.PADA_HIATUS in texts("एव", "आर्जवम्")["एवआर्जवम्"]
+
+
+def test_pada_hiatus_needs_space():
+    from mayur import segmenter
+    assert segmenter.contains("चैव आर्जवम्", ["च", "एव", "आर्जवम्"], [False] * 3)
+    assert not segmenter.contains("चैवआर्जवम्", ["च", "एव", "आर्जवम्"], [False] * 3)

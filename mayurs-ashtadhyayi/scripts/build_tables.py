@@ -11,6 +11,7 @@ import argparse
 import csv
 import json
 import os
+import random
 import sys
 from collections import Counter, defaultdict
 from pathlib import Path
@@ -22,8 +23,10 @@ from mayur.lipi import devanagari  # noqa: E402
 
 # DCS chapter_ids that are never counted: Ramayana Balakanda 1, Kumarasambhava 1, Bhagavad Gita 1 and 2
 # (= Mahabharata 6 BhaGi 1, 2).
-HELD_OUT_IDS = ("1067", "7305", "7242", "7243")
+HELD_OUT_IDS = frozenset({"1067", "7305", "7242", "7243"})
 MIN_BIGRAM = 2
+POOL_SEED, POOL_SHARE, POOL_MIN_CHAPTERS = 20261126, 0.06, 5
+POOLS_FILE = Path(__file__).resolve().parent.parent / "mayur" / "gold" / "pools.json"
 # (split, chapter_id, verse range): Ramayana Bala 1 and Kumarasambhava 1 are split 1-20 test / rest dev.
 HELD_OUT_SPLITS = (("test", "1067", (1, 20)), ("dev", "1067", (21, 79)), ("test", "7305", (1, 20)),
                    ("dev", "7305", (21, 60)), ("test", "7242", None), ("test", "7243", None))
@@ -110,13 +113,47 @@ def chapter_files(root: Path) -> list[Path]:
     return sorted((root / "files").glob("*/*.conllu"))  # not the *.conllu_parsed files
 
 
-def splits(root: Path, files: list[Path]) -> dict[str, list[dict]]:
+def chapter_id(path: Path) -> str:
+    return path.stem.rsplit("-", 1)[-1]
+
+
+def is_presplit(sentences: list[dict], threshold: float = 0.5) -> bool:
+    """True when the ``# text`` lines are the plain space-join of the unsandhied forms (no real sandhi)."""
+    usable = [s for s in sentences if len(s["tokens"]) >= 3]
+    if not usable:
+        return True
+    same = sum(" ".join(t["unsandhied"] for t in s["tokens"]) == s["text"] for s in usable)
+    return same / len(usable) > threshold
+
+
+def draw_pools(by_text: dict[str, list[Path]], presplit: set[str], exclude: set[str]) -> dict[str, list[dict]]:
+    """Seeded, stratified random chapter pools ("sealed_test", "dev_pool"), disjoint, about 6% of each
+    text's chapters each (at least one for a text with 5 or more chapters)."""
+    rng = random.Random(POOL_SEED)
+    pools: dict[str, list[dict]] = {"sealed_test": [], "dev_pool": []}
+    for text in sorted(by_text):
+        files = by_text[text]
+        if text in presplit or len(files) < POOL_MIN_CHAPTERS:
+            continue
+        k = max(1, round(POOL_SHARE * len(files)))
+        candidates = sorted(chapter_id(f) for f in files if chapter_id(f) not in exclude)
+        picked = rng.sample(candidates, min(2 * k, len(candidates)))
+        for pool, ids in (("sealed_test", picked[:k]), ("dev_pool", picked[k:2 * k])):
+            pools[pool] += [{"text": text, "chapter_id": cid} for cid in sorted(ids, key=int)]
+    return pools
+
+
+def splits(root: Path, files: list[Path], pools: dict[str, list[dict]] | None = None) -> dict[str, list[dict]]:
     """Train = every counted chapter; dev/test = parts of the held-out chapters (see HELD_OUT_SPLITS)."""
     rel = lambda f: str(f.relative_to(root))  # noqa: E731
-    by_id = {f.stem.rsplit("-", 1)[-1]: f for f in files}
+    by_id = {chapter_id(f): f for f in files}
+    pools = pools or {}
+    pooled = {e["chapter_id"] for rows in pools.values() for e in rows}
     out: dict[str, list[dict]] = {"train": [{"file": rel(f), "verses": None}
-                                            for cid, f in by_id.items() if cid not in HELD_OUT_IDS],
+                                            for cid, f in by_id.items() if cid not in HELD_OUT_IDS | pooled],
                                   "dev": [], "test": []}
+    for pool, rows in pools.items():
+        out[pool] = [{"file": rel(by_id[e["chapter_id"]]), "verses": None} for e in rows]
     for name, cid, span in HELD_OUT_SPLITS:
         if cid in by_id:
             out[name].append({"file": rel(by_id[cid]), "verses": list(span) if span else None})
@@ -128,15 +165,24 @@ def build(data_dir: Path) -> dict[str, int]:
     files = chapter_files(root)
     if not files:
         raise FileNotFoundError(f"no DCS files under {root}; run scripts/fetch_data.py")
+    by_text: dict[str, list[Path]] = defaultdict(list)
+    for f in files:
+        by_text[f.parent.name].append(f)
+    presplit = {t: is_presplit([x for f in fs[:3] for x in dcs.iter_sentences(f)]) for t, fs in by_text.items()}
+    pools = draw_pools(by_text, {t for t, v in presplit.items() if v}, set(HELD_OUT_IDS))
+    excluded = set(HELD_OUT_IDS) | {e["chapter_id"] for rows in pools.values() for e in rows}
     sentences = (s for f in files for s in dcs.iter_sentences(f))
-    counted = count_sentences(sentences)
+    counted = count_sentences(sentences, held_out=excluded)
     out = tables(counted, sense_labels(root / "lookup" / "word-senses.csv"), dictionary(root / "lookup" / "dictionary.csv"))
-    out["splits.json"] = splits(root, files)
+    out["splits.json"] = splits(root, files, pools)
+    POOLS_FILE.write_text(json.dumps({"seed": POOL_SEED, "presplit_texts_excluded": sorted(t for t, v in presplit.items() if v),
+                                      **pools}, ensure_ascii=False, indent=1), encoding="utf-8")
     dest = data_dir / "derived"
     dest.mkdir(parents=True, exist_ok=True)
     for name, obj in out.items():
         (dest / name).write_text(json.dumps(obj, ensure_ascii=False, sort_keys=True), encoding="utf-8")
-    return {"files": len(files), "tokens": counted["tokens"], **{n: len(o) for n, o in out.items()}}
+    return {"files": len(files), "tokens": counted["tokens"], "presplit": sorted(t for t, v in presplit.items() if v),
+            "pools": {k: len(v) for k, v in pools.items()}, **{n: len(o) for n, o in out.items()}}
 
 
 def main(argv: list[str] | None = None) -> int:
