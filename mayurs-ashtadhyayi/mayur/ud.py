@@ -90,5 +90,9 @@ def parse_tag_key(key: str) -> tuple[str, str, dict[str, str]]:
 
 
 def feats_agree(ours: dict[str, str], theirs: dict[str, str]) -> bool:
-    """Every feature we assert is the corpus value (features we do not assert are ignored)."""
-    return all(theirs.get(k) == v for k, v in ours.items() if k in TAG_FEATS)
+    """Every feature we assert is the corpus value.
+
+    Features we do not assert are ignored, and so are features the corpus leaves out
+    (it tags the personal pronouns without gender).
+    """
+    return all(theirs.get(k, v) == v for k, v in ours.items() if k in TAG_FEATS)

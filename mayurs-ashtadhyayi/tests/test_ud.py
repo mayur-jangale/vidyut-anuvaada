@@ -56,3 +56,9 @@ def test_tag_key_roundtrip():
 def test_feats_agree_ignores_unasserted():
     assert ud.feats_agree({"Case": "Nom"}, {"Case": "Nom", "Number": "Sing"})
     assert not ud.feats_agree({"Case": "Acc"}, {"Case": "Nom"})
+
+
+def test_feats_agree_ignores_features_the_corpus_omits():
+    ours = {"Case": "Nom", "Gender": "Masc", "Number": "Sing"}
+    assert ud.feats_agree(ours, {"Case": "Nom", "Number": "Sing"})
+    assert not ud.feats_agree(ours, {"Case": "Acc", "Number": "Sing"})

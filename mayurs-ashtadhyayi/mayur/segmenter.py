@@ -129,7 +129,10 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 # ---------------------------------------------------------------- word scoring
 
 # Weights tuned on Bala-kanda 1.21-79 (see module docstring); log-probability units.
-W = {"lemma_w": 0.08, "lemma_w_stem": 0.08, "q0": 9.0, "q1": 5.0, "word": 1.0, "stem": 0.6, "samasa": 0.4}
+# Seen corpus counts dominate: an unseen whole form gets only a tiny lemma pseudo-count, while
+# compound members back off generously to their lemma counts (which include member uses).
+W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -0.5, "stem": 0.0, "samasa": 0.0,
+     "elide": 3.0, "vocative": 1.5}
 
 @lru_cache(maxsize=300_000)
 def _analyses(form: str, stem: bool) -> tuple:
@@ -169,10 +172,17 @@ def word_score(form: str, stem: bool, tier_used: int = 0) -> Optional[tuple[floa
         s = math.log((W["lemma_w_stem" if stem else "lemma_w"] * lc + 0.05) / n)
     if best <= 1:
         s -= W["q0"] if best == 0 else W["q1"]
+    good = [m for m in ms if m.quality >= 2]
+    if not stem and good and all(m.vibhakti == "सम्बोधन" for m in good):
+        s -= W["vocative"]
     return s - W["word"] + penalty - (W["stem"] if stem else 0.0), best >= 2
 
 
 # ---------------------------------------------------------------- lattice
+
+def _unmarked_elision(jn: _Jn) -> bool:
+    """ए/ओ + अ with the अ elided (6.1.109) but no avagraha written: legal, but rare in our texts."""
+    return jn.right_head == ("अ",) and sd.AVAGRAHA not in jn.surface and "६.१.१०९" in jn.sutras
 
 class _Lattice:
     def __init__(self, text: Varnas, spaces: frozenset, tier: int):
@@ -228,7 +238,8 @@ class _Lattice:
                 if sc is None:
                     continue
                 nxt = _END if j < 0 else (j, jn.right_head)
-                res.append((form, k, jn, sc[0] - (W["samasa"] if jn.samasa else 0.0), sc[1], nxt))
+                pen = (W["samasa"] if jn.samasa else 0.0) + (W["elide"] if _unmarked_elision(jn) else 0.0)
+                res.append((form, k, jn, sc[0] - pen, sc[1], nxt))
         if self.tier >= 2:
             res.extend(self._chunk_edges(i, head))
         self._edges[state] = res
