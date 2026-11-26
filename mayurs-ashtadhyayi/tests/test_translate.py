@@ -177,3 +177,67 @@ def test_participle_takes_by_agent():
 
 def pr_noun(form):
     return noun(form, "युष्मद्", "कर्ता", 0, "x", vib="तृतीया")
+
+
+def _c(form, lemma, role, head, g, **kw):
+    return noun(form, lemma, role, head, g, **kw)
+
+
+def test_epithet_list_without_subject():
+    words = [
+        _c("सदृशस्", "सदृश", "विधेय", None, "like"),
+        _c("विष्णुना", "विष्णु", "करण", 0, "Viṣṇu", vib="तृतीया"),
+        _c("वीर्ये", "वीर्य", "अधिकरण", 0, "valour", vib="सप्तमी", linga="नपुंसकलिङ्ग"),
+        _c("समस्", "सम", "विधेय", None, "equal"),
+        _c("क्षमया", "क्षमा", "करण", 3, "patience", vib="तृतीया", linga="स्त्रीलिङ्ग"),
+    ]
+    out = translate.render(Reading(words=words, anvaya=[0, 1, 2, 3, 4]))
+    assert out.translation == "[He is] like Viṣṇu in valour, equal to patience."
+    check(out)
+    assert sorted(a.word for a in out.alignment) == [0, 1, 2, 3, 4]
+
+
+def test_iva_like():
+    words = [_c("समुद्रस्", "समुद्र", "विधेय", None, "sea"), W("इव", "इव", "avyaya", "अव्यय", 0, "like"),
+             _c("गाम्भीर्ये", "गाम्भीर्य", "अधिकरण", 0, "depth", vib="सप्तमी", linga="नपुंसकलिङ्ग")]
+    out = translate.render(Reading(words=words, anvaya=[1, 0, 2]))
+    assert out.translation == "[He is] like sea in depth."
+
+
+def test_bahuvrihi_of_phrase():
+    words = [_c("महा", "महत्", "समासपूर्वपद", None, "great"),
+             _c("बाहुस्", "बाहु", "विशेषण", 2, "arm"), _c("रामस्", "राम", "विधेय", None, "Rāma")]
+    words[0].in_compound = True
+    words[0].compound = words[1].compound = 0
+    out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="bahuvrihi")],
+                                   anvaya=[2, 0, 1]))
+    assert out.translation == "[He is] Rāma of great arms."
+    check(out)
+
+
+def test_agent_noun_participle_and_people():
+    from mayur import english
+    assert english.agent("protect") == "protector" and english.agent("teach") == "teacher"
+    assert english.plural("people") == "people"
+    assert english.participle("seeing") == "seen" and english.past("going") == "went"
+    assert english.participle("increasing") == "increased" and english.past("begging") == "begged"
+    assert english.participle("hide") == "hidden" and english.past("bind") == "bound"
+    r = Reading(words=[_c("गोप्ता", "गोप्तृ", "कर्ता", 1, "protect", krt="तृच्", src="dcs-sense"),
+                       verb("अस्ति", "अस्", "be")], anvaya=[0, 1])
+    assert translate.render(r).translation == "Protector is."
+    r = Reading(words=[_c("श्रुतस्", "श्रु", "विधेय", None, "hear", krt="क्त", src="dcs-sense"),
+                       _c("जनैस्", "जन", "कर्ता", 0, "people", vib="तृतीया", vac="बहुवचन", src="dcs-sense")],
+                anvaya=[0, 1])
+    assert translate.render(r).translation == "[He is] heard by people."
+
+
+def test_no_dangling_conjunction_and_semicolon_and():
+    r = Reading(words=[W("च", "च", "avyaya", "अव्यय", 2, "and"),
+                       noun("देवास्", "देव", "कर्ता", 2, "god", vac="बहुवचन"),
+                       verb("बिभ्यति", "भी", "fear", vac="बहुवचन"),
+                       W("च", "च", "avyaya", "अव्यय", 4, "and"),
+                       verb("नमन्ति", "नम्", "bow", vac="बहुवचन")], anvaya=[0, 1, 2, 3, 4])
+    out = translate.render(r)
+    assert not out.translation.startswith("And")
+    assert out.translation == "Gods fear; and [they] bow."
+    check(out)

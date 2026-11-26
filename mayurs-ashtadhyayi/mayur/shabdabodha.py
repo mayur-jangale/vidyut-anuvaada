@@ -341,8 +341,9 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
 def can_be_subject(words: list[Word], i: int) -> bool:
     """Pronoun, or a noun that is not a participle, possessive (-वत्/-मत्/-इन्) or compound final."""
     m = words[i].morph
-    if m.lemma in PRONOUNS:
-        return True
+    same = [a for a in words[i].analyses if (a.vibhakti, a.vacana, a.linga) == (m.vibhakti, m.vacana, m.linga)]
+    if any(a.lemma in PRONOUNS or lemma_class(a.lemma) == "pronoun" for a in same):
+        return True  # also when the chosen lemma is a variant stem (क for किम्)
     if m.krt or m.lemma.endswith(POSSESSIVE) or (i > 0 and words[i - 1].in_compound):
         return False
     return lemma_class(m.lemma) == "noun"

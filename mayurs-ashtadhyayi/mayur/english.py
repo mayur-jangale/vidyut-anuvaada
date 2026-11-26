@@ -61,7 +61,7 @@ def base(verb: str) -> str:
     if not v.endswith("ing") or len(v) < 5 or v in _ING_KEEP or v in _IRREGULAR:
         return verb
     stem = v[:-3]
-    if len(stem) > 2 and stem[-1] == stem[-2] and stem[-1] not in "lsfz":
+    if len(stem) > 2 and stem[-1] == stem[-2] and stem[-1] not in "lsfz" + _VOWELS:
         stem = stem[:-1]
     elif stem[-1] in "vcz" or (stem[-1] == "s" and not stem.endswith("ss")) or \
             (stem.endswith("ng") and stem not in _IRREGULAR):
