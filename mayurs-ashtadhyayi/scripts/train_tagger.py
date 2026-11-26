@@ -34,7 +34,7 @@ def phi(v: tagger.Verse, path: Sequence[int]) -> dict[tuple[str, str], float]:
     for i, k in enumerate(path):
         if k < 0:
             continue
-        ks = keys(v.cands[i][k])
+        ks = tagger.keys(v.cands[i][k])
         for o in v.static[i][k] + v.history(i, k, path):
             for key in ks:
                 out[(o, key)] = out.get((o, key), 0.0) + 1.0

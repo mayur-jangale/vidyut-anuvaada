@@ -87,3 +87,11 @@ def test_past_participle_tense_is_optional_in_the_gold():
     assert ud.same_feats(ppp, "VERB", gold)
     assert ud.same_feats(ppp, "VERB", {**gold, "Tense": "Past"})
     assert not ud.same_feats(ppp, "VERB", {**gold, "Tense": "Pres"})
+
+
+def test_feminine_stem_counts_as_the_cited_base_stem():
+    fem = Morph(form="सुमुखी", lemma="सुमुखी", kind="subanta", linga="स्त्रीलिङ्ग", vibhakti="प्रथमा", vacana="एकवचन")
+    assert ud.same_lemma(fem, "सुमुख", "ADJ")
+    assert not ud.same_lemma(fem, "सुमुखि", "ADJ")
+    ika = Morph(form="आत्मिकाम्", lemma="आत्मिका", kind="subanta", linga="स्त्रीलिङ्ग", vibhakti="द्वितीया", vacana="एकवचन")
+    assert ud.same_lemma(ika, "आत्मक", "ADJ")

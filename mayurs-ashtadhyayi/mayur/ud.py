@@ -60,10 +60,18 @@ def canonical_lemma(text: str) -> str:
     return text
 
 
+def _feminine_of(ours: str, gold: str) -> bool:
+    """Our lemma is the feminine stem (सुमुखी, आत्मिका) of the stem the corpus cites (सुमुख, आत्मक)."""
+    if len(ours) < 2 or ours[-1] not in ("ी", "ा"):
+        return False
+    base = ours[:-1]
+    return gold == base or (ours[-1] == "ा" and len(base) > 2 and base[-2] == "ि" and gold == base[:-2] + base[-1])
+
+
 def same_lemma(m: Morph, gold_lemma: str, gold_upos: str = "") -> bool:
     """Our analysis names the same lexeme as the gold lemma, under the conventions above."""
-    want = canonical_lemma(gold_lemma)
-    if canonical_lemma(lemma(m)) == want:
+    want, ours = canonical_lemma(gold_lemma), canonical_lemma(lemma(m))
+    if ours == want or _feminine_of(ours, want):
         return True
     return gold_upos in INDECLINABLE_UPOS and canonical_lemma(m.form) == want
 

@@ -8,14 +8,13 @@ import re
 from dataclasses import replace
 from typing import Iterator, Sequence
 
-from mayur import anvaya, compounds, gloss, lexicon, lipi, metre, proof, segmenter, shabdabodha, translate
+from mayur import anvaya, compounds, decoder, gloss, lexicon, lipi, metre, proof, segmenter, shabdabodha, translate
 from mayur.model import UNVERIFIED, VERIFIED, Junction, Reading, VerseAnalysis, Word
 
 LINE_BREAK = re.compile(r"[।॥|/\n]+")
 NOISE = re.compile(r"[0-9०-९.,;:!?\"“”‘’()\[\]-]+")
 SPLITS_PER_LINE = 12
-RERANK_POOL = 60  # valid splits per line handed to the trained ranker
-MAX_CANDIDATES = 16
+MAX_CANDIDATES = 24
 FREQUENCY_TEMPERATURE = 5.0
 
 
@@ -44,13 +43,18 @@ def _combinations(per_line: Sequence[Sequence[segmenter.Split]], limit: int) -> 
                 heapq.heappush(heap, (-total(nxt), nxt))
 
 
-def _reranked(seg: segmenter.Segmentation) -> list[segmenter.Split]:
-    """The best valid splits of a line, reordered by the trained ranker when one is installed."""
-    try:
-        from mayur import ranker
-    except ImportError:
-        return list(seg.splits[:SPLITS_PER_LINE])
-    return list(ranker.rerank(seg.line, seg.splits))[:SPLITS_PER_LINE]
+def _best_splits(seg: segmenter.Segmentation) -> list[segmenter.Split]:
+    """The best valid splits of a line: the trained lattice decoder's choices first, then the
+    rule-based ranking's own best ones, so that neither system's readings are dropped."""
+    ruled = list(seg.splits[:SPLITS_PER_LINE])
+    if seg.tier != 0 or not decoder.enabled():
+        return ruled
+    decoded = list(decoder.decode(seg.line, top_k=SPLITS_PER_LINE))
+    seen = {tuple((w.form, w.in_compound) for w in split.words) for split in decoded}
+    floor = min((split.score for split in decoded), default=0.0)
+    extra = [replace(split, score=floor - rank - 1.0) for rank, split in enumerate(ruled)
+             if tuple((w.form, w.in_compound) for w in split.words) not in seen]
+    return decoded + extra
 
 
 def _analyses(seg: segmenter.SegWord) -> list:
@@ -107,10 +111,10 @@ def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
     lines = to_lines(text, script)
     if not lines:
         return VerseAnalysis(id=verse_id, input=text, notes=["empty input"])
-    segmentations = [segmenter.segment_line(line, top_k=RERANK_POOL) for line in lines]
+    segmentations = [segmenter.segment_line(line, top_k=SPLITS_PER_LINE) for line in lines]
     notes = [f"line {i + 1}: no dictionary-only split; fallback tier {seg.tier} used"
              for i, seg in enumerate(segmentations) if seg.tier]
-    per_line = [_reranked(seg) for seg in segmentations]
+    per_line = [_best_splits(seg) for seg in segmentations]
     best = sum(splits[0].score for splits in per_line)
 
     candidates = []
