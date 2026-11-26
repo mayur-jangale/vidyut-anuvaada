@@ -33,10 +33,19 @@ def _text_of(entry: dict) -> str:
     return Path(entry["file"]).parent.name
 
 
-def gold_of(entries: list[dict], limit: int | None = None, seed: int = 0) -> list[Line]:
+INDECLINABLE_UPOS = frozenset({"ADV", "PART", "CONJ", "CCONJ", "SCONJ", "ADP", "INTJ"})
+
+
+def _words(ws: list[dict]) -> list[dict]:
+    """Gold words; ``either`` marks an indeclinable followed by another word, which the corpus tags
+    as a free word even when it is a glued prefix (स-, सु-, अन्-): member or free both match it."""
     keep = ("form", "lemma", "compound_member", "upos")
-    return [(g["compact"], [{k: w.get(k, "") for k in keep} for w in g["words"]])
-            for g in dcs.gold_lines(entries, limit=limit, seed=seed)
+    return [{**{k: w.get(k, "") for k in keep}, "either": w.get("upos") in INDECLINABLE_UPOS and n + 1 < len(ws)}
+            for n, w in enumerate(ws)]
+
+
+def gold_of(entries: list[dict], limit: int | None = None, seed: int = 0) -> list[Line]:
+    return [(g["compact"], _words(g["words"])) for g in dcs.gold_lines(entries, limit=limit, seed=seed)
             if g["words"] and len(g["compact"]) <= MAX_CHARS]
 
 

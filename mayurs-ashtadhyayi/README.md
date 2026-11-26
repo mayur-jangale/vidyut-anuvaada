@@ -60,23 +60,37 @@ training, tuning or audit code may read (`mayur/dcs.py` refuses it); a final tes
 random verses from the sealed pool and logs them in `eval/sealed_ledger.json`, so no verse is
 tested twice.
 
-### Word level (development sample: 300 random verses from 13 books, `eval/samples/dev300b.json`)
+### The formula part: do the rules produce the right reading at all?
+
+`python scripts/coverage_rules.py` — no ranking involved. On 1,500 random development lines, taking
+the lines whose corpus words re-join to the text by sandhi (85.7%; in the rest the corpus has
+reconstructed a form the text does not have, e.g. ते for तव):
+
+| Measure | Result |
+|---|---|
+| The corpus's split is one of the splits the rules produce | 1279/1286 lines = 99.5% |
+| The corpus's lemma and features are among the analyses the lexicon produces | 8871/8938 words = 99.3% |
+
+The 7 lines left: 3 are printed with a space inside a compound, 1 is a corpus artefact, 3 have an
+epic or variant form (अतिक्रमेत्, सप्तविंशत्). This is the part that is "all formula", and the target
+for it is 100%. Which of several valid readings is meant is not decided by the rules.
+
+### Word level, first choice (development sample: 300 random verses from 13 books)
 
 `python eval/eval_dcs.py --sample eval/samples/dev300b.json` — full output in `eval/results/`.
 
 | Measure | Result |
 |---|---|
-| Padas identified (a compound is one pada, compared as written) | F1 0.966 (P 97.0%, R 96.2%) |
-| Words identified, compound members counted separately | F1 0.947 |
-| Half-verses with every pada right | 559/683 = 81.8% |
-| Lemma (aligned words) | 3740/3804 = 98.3% |
-| All grammar features | 3548/3804 = 93.3% (case 95.3%, gender 95.4%, number 98.1%) |
-| Full analysis: lemma and every feature | 3525/3804 = 92.7% |
-| Words proof-verified by vidyut-prakriya | 4598/4717 = 97.5% |
-| Verses with status `verified` | 206/300 = 68.7% |
+| Padas identified (a compound is one pada, compared as written) | F1 0.970 |
+| Words identified, compound members counted separately | F1 0.954 |
+| Lemma (aligned words) | 3762/3823 = 98.4% |
+| All grammar features | 3574/3823 = 93.5% |
+| Full analysis: lemma and every feature | 3551/3823 = 92.9% |
+| Words proof-verified by vidyut-prakriya | 4573/4696 = 97.4% |
+| Verses with status `verified` | 203/300 = 67.7% |
 
 **Sealed test:** not yet run for the current models. The target is 95% for padas identified and for full
-analysis; the development numbers above say the first is met and the second is not yet.
+analysis; the development numbers above say the first is met and the second is not yet (92.9%).
 
 The comparison conventions are documented and tested in `eval/eval_match.py` and `mayur/ud.py`
 (for example: the corpus tags glued prefixes such as स-, सु-, अ- as free words, and reconstructs

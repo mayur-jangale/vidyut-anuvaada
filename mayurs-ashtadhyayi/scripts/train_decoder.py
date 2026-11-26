@@ -42,9 +42,10 @@ def _morphs(form: str, samasa: bool) -> tuple:
 
 def matches(form: str, samasa: bool, g: dict, lenient: bool) -> bool:
     """Same compound-member flag, and forms agree after ``normalize`` (strict), or (lenient) any
-    analysis has the gold lemma. The flag matters: the corpus writes indeclinables (तथा, स, सु)
-    as free words, never as members, so a member edge for them is not the gold path."""
-    if samasa != bool(g["compound_member"]):
+    analysis has the gold lemma. The flag matters (a member edge for तथा is not the corpus's free
+    तथा), except for an indeclinable followed by another word (``either``: glued prefixes स-, सु-,
+    अन्- are free words in the corpus but members in our lattice)."""
+    if samasa != bool(g["compound_member"]) and not g.get("either"):
         return False
     lemma = dw.lemma_of(form, samasa)
     if word_matches(form, g["form"], g["lemma"], g["compound_member"], lemma, False):

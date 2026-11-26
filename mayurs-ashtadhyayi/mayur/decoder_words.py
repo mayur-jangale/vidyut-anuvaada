@@ -95,6 +95,10 @@ def word_features(form: str, in_compound: bool) -> Feats:
         lemma = ud.lemma(m)
         out["w_loglemma"] = math.log1p(freq.lemma_count(m.lemma))
         out[f"w_q{m.quality}"] = 1.0
+        out[f"w_src_{m.source}"] = 1.0  # kosha | dictionary | arsha | generated | special
+        out[f"w_src_{m.source}_q{m.quality}"] = 1.0
+        if m.source != "kosha" and any(x.source == "kosha" for x in ms):
+            out["w_kosha_reading_too"] = 1.0
         out[f"w_kind_{m.kind}"] = 1.0
         out["w_lemma_in_corpus" if freq.lemma_count(lemma) > 0 else "w_lemma_not_in_corpus"] = 1.0
         if lemma in derived("dcs_dict.json"):
