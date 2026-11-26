@@ -118,6 +118,18 @@ def _join(parts: Sequence[str], forms: Sequence[str], surface: str) -> tuple[str
     return acc, steps, ok and sandhi.canon(acc) == target
 
 
+def _expected(stem: str, final: Morph) -> str:
+    """The whole compound pada as the text shows it: the compound stem with the final's ending."""
+    fs = _stem_of(final)
+    head = fs[:-1] if fs.endswith("्") else fs
+    common = 0
+    while common < min(len(head), len(final.form)) and head[common] == final.form[common]:
+        common += 1
+    if not stem.endswith(fs):
+        return ""
+    return stem[: len(stem) - len(fs)] + final.form
+
+
 def _inflect(stem: str, final: Morph) -> tuple[str, list[SutraStep], bool, str]:
     """RUN vidyut on the compound stem in the final word's gender/case/number."""
     if not (final.linga and final.vibhakti and final.vacana):
@@ -130,11 +142,13 @@ def _inflect(stem: str, final: Morph) -> tuple[str, list[SutraStep], bool, str]:
     ders = bridge.derive(match[0]) if match else ()
     if not ders:
         return "", [], False, "vidyut derived nothing for the compound stem; step d not run"
-    targets = {sandhi.canon(final.form)}
+    from mayur.lexicon import nasal_variants
+    expected = _expected(stem, final)
+    targets = {sandhi.canon(v) for v in nasal_variants(expected)} if expected else set()
     for d in ders:
         if sandhi.canon(d.text) in targets:
             return d.text, list(d.trace), True, ""
-    return ders[0].text, list(ders[0].trace), False, f"vidyut derived {ders[0].text}, not {final.form}"
+    return ders[0].text, list(ders[0].trace), False, f"vidyut derived {ders[0].text}, not {expected or final.form}"
 
 
 def derive(members: Sequence[Morph], final: Morph, samasa: str, relation: str = "",
