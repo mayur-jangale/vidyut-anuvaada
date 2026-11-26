@@ -23,6 +23,8 @@ UNKNOWN = "अज्ञात"
 _KTA = {"क्त", "क्तवतु"}
 _AGENT_KRT = {"क", "क्विप्", "अण्", "ण्वुल्", "तृच्", "तृन्", "अच्", "ड", "खश्", "टक्", "णिनि"}
 _AGENT_ENDINGS = ("ज्ञ", "विद्", "कृत्", "कर", "ग", "द", "प", "स्थ", "हन्", "जित्")
+_SAMA_LIKE = {"सम", "सदृश", "प्रिय", "उपेत", "सम्पन्न", "युक्त"}
+_EPITHET_PREFIX = {"सु", "दुस्", "दुर्", "महा", "महत्"}
 _NAN_FORMS = {"अ", "अन्", "न", "नञ्"}
 _ADJ_CLASSES = {"adjective"}
 _VIRAMA = "्"
@@ -125,6 +127,14 @@ def classify(reading: Reading, members: list[int]) -> tuple[str, str, str]:
         if _external_head(reading, members[-1]):
             return NAN_BAHUVRIHI, hyphen, "heuristic: नञ् first member; whole qualifies an external head (2.2.24, 2.2.6)"
         return NAN_TATPURUSHA, hyphen, "heuristic: नञ् first member (2.2.6)"
+    final_stem = _lemma(words[-1])
+    if final_stem in _SAMA_LIKE:
+        rel = "षष्ठी" if final_stem == "प्रिय" else "तृतीया"
+        return TATPURUSHA, hyphen, f"heuristic: noun + {final_stem}, {rel} relation (2.1.31 / 2.2.8)"
+    classes = [_lemma_class(_lemma(w)) for w in words]
+    if first.form in _EPITHET_PREFIX and classes[-1] in ("noun", "") and _external_head(reading, members[-1]):
+        vig = _bahuvrihi_vigraha(words) or hyphen
+        return BAHUVRIHI, vig, "heuristic: सु/दुस्/महा + noun used as an epithet of an external head (2.2.24)"
     governs = _final_governs(final)
     if governs == "kta":
         rel = "सप्तमी or तृतीया" if len(words) > 2 else "तृतीया/सप्तमी"
@@ -137,15 +147,15 @@ def classify(reading: Reading, members: list[int]) -> tuple[str, str, str]:
             vig = _bahuvrihi_vigraha(words) or hyphen
             return BAHUVRIHI, vig, "heuristic: adjective + noun whose whole qualifies an external head (2.2.24)"
         return KARMADHARAYA, hyphen, "heuristic: adjective + noun, same referent (2.1.57)"
-    classes = [_lemma_class(_lemma(w)) for w in words]
     if len(words) >= 2 and all(c == "noun" for c in classes) and final is not None and final.vacana in ("द्विवचन", "बहुवचन"):
         return DVANDVA, " ".join(f"{_lemma(w)} च" for w in words), "heuristic: coordinated nouns, non-singular final (2.2.29)"
     if classes[-1] == "noun" and classes[0] not in ("noun", "") and _external_head(reading, members[-1]):
         return BAHUVRIHI, hyphen, "heuristic: noun-final compound qualifying an external head (2.2.24)"
     if _gender_shift(words[-1]) and _external_head(reading, members[-1]):
         return BAHUVRIHI, hyphen, "heuristic: final noun in a gender not its own, agreeing with an external head (2.2.24)"
-    if classes[0] == "noun" and classes[-1] == "noun":
-        return TATPURUSHA, hyphen, "heuristic: noun + noun, षष्ठी relation assumed (2.2.8)"
+    if all(c in ("noun", "") for c in classes) and "noun" in classes and final is not None \
+            and final.vacana in (None, "एकवचन"):
+        return TATPURUSHA, hyphen, "heuristic: chain of nouns ending in a singular, each qualifying the next (षष्ठी, 2.2.8)"
     return UNKNOWN, hyphen, "heuristic: no pattern matched"
 
 
