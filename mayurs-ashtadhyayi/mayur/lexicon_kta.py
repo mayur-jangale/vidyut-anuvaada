@@ -30,7 +30,7 @@ def _analyses(stem: str) -> tuple[tuple[tuple[str, ...], object, object], ...]:
         cands.extend(((u1, u2), rem2) for u2, rem2 in _splits(rem1))
     out = []
     for ups, rem in cands:
-        for de in bridge.kta_candidates(rem):
+        for de in bridge.kta_index().get(rem, ()):
             prati = bridge.kta_pratipadika(de, ups)
             if prati is not None and stem in bridge.derived_texts(prati):
                 out.append((ups, de, prati))

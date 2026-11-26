@@ -8,7 +8,8 @@
   analysis is "special" (not derivable as a free word). Quality 2: the pronoun stays first for त्वम्.
 * kaṇḍvādi dhātus (3.1.27 कण्ड्वादिभ्यो यक्): महीयते, which the kosha lacks.
 
-Every analysis is an exact match of a vidyut forward derivation. All strings Devanagari.
+Apart from the त्व member (source "special"), every analysis is an exact match of a vidyut forward
+derivation. All strings Devanagari.
 """
 
 from __future__ import annotations
@@ -35,11 +36,12 @@ def _nominal_table() -> dict[str, tuple[Morph, ...]]:
         for pada, template in bridge.subanta_paradigm(stem, linga):
             for text in bridge.derived_texts(pada):
                 table.setdefault(text, []).append(replace(template, form=text, lemma=lemma, quality=3))
-    for text, template in bridge.taddhita_paradigm("भव", "त्व", "नपुंसकलिङ्ग"):
-        if text.startswith("भवत्"):
-            member = text[len("भव"):]
-            table.setdefault(member, []).append(replace(
-                template, form=member, lemma="त्व", source="special", quality=2, handle=("special", _TVA_NOTE)))
+    for pada, template in bridge.subanta_paradigm("भव", "नपुंसकलिङ्ग", taddhita="त्व"):
+        for text in bridge.derived_texts(pada):
+            if text.startswith("भवत्"):
+                member = text[len("भव"):]
+                table.setdefault(member, []).append(replace(
+                    template, form=member, lemma="त्व", source="special", quality=2, handle=("special", _TVA_NOTE)))
     return {k: tuple(dict.fromkeys(v)) for k, v in table.items()}
 
 

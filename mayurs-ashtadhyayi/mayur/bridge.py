@@ -238,15 +238,18 @@ _VIB_ENUM = ("Prathama", "Dvitiya", "Trtiya", "Caturthi", "Panchami", "Sasthi", 
 _VAC_ENUM = ("Eka", "Dvi", "Bahu")
 
 
-def subanta_paradigm(stem: str, linga: str, nyap: bool = False) -> tuple[tuple[Any, Morph], ...]:
+def subanta_paradigm(stem: str, linga: str, nyap: bool = False, taddhita: str = "") -> tuple[tuple[Any, Morph], ...]:
     """Every (handle, Morph-template) of ``stem`` (Devanagari) in ``linga`` (Devanagari term);
-    with ``nyap`` the stem is a feminine in ङी/आप् (सुमुखी, शिष्या: 4.1.4, 4.1.41ff.)."""
-    from vidyut.prakriya import Linga, Pada, Pratipadika, Vacana, Vibhakti
+    with ``nyap`` the stem is a feminine in ङी/आप् (सुमुखी, शिष्या: 4.1.4, 4.1.41ff.); with
+    ``taddhita`` (its Devanagari name without markers, e.g. त्व) the stem is ``stem`` + that suffix."""
+    from vidyut.prakriya import Linga, Pada, Pratipadika, Taddhita, Vacana, Vibhakti
 
     lmap = {"पुंलिङ्ग": Linga.Pum, "स्त्रीलिङ्ग": Linga.Stri, "नपुंसकलिङ्ग": Linga.Napumsaka}
     try:
         prati = (Pratipadika.nyap if nyap else Pratipadika.basic)(lipi.to_code(stem))
-    except ValueError:  # a sound vidyut's code cannot spell
+        if taddhita:
+            prati = Pratipadika.taddhitanta(prati, getattr(Taddhita, lipi.to_code(taddhita)))
+    except (ValueError, AttributeError):  # a sound vidyut's code cannot spell, an unknown suffix
         return ()
     out = []
     for vib in Vibhakti.choices():
@@ -315,12 +318,8 @@ def ktva_of_verb(entry: Entry, upasargas: tuple[str, ...]) -> Any:
         return None
 
 
-_TIN_LAKARAS = ("Lat", "Lot", "Lan", "VidhiLin", "Lit", "Lrt", "Lut", "AshirLin")
-
-
 def kandvadi_paradigm(aupadeshika: str) -> tuple[tuple[str, Morph], ...]:
-    """(text, Morph) for every kartari tiṅanta of a kaṇḍvādi dhātu (``aupadeshika`` Devanagari,
-    e.g. महीङ्), forward-derived: यक् by 3.1.27 कण्ड्वादिभ्यो यक्. The Morph's handle is the Pada."""
+    """(text, Morph-with-Pada-handle) for every kartari tiṅanta of a kaṇḍvādi dhātu such as महीङ् (3.1.27)."""
     from vidyut.prakriya import Dhatu, Gana, Lakara, Pada, Prayoga, Purusha, Vacana
 
     try:
@@ -329,16 +328,14 @@ def kandvadi_paradigm(aupadeshika: str) -> tuple[tuple[str, Morph], ...]:
         return ()
     root = lipi.from_code(_root_code(dhatu))
     out = []
-    for lak in _TIN_LAKARAS:
-        for pur in Purusha.choices():
-            for vac in Vacana.choices():
-                pada = Pada.Tinanta(dhatu=dhatu, prayoga=Prayoga.Kartari, lakara=getattr(Lakara, lak),
-                                    purusha=pur, vacana=vac)
-                m = Morph(form="", lemma=root, kind="tinanta", purusha=_term(_PURUSHA, pur),
-                          vacana=_term(_VACANA, vac), lakara=_term(_LAKARA, getattr(Lakara, lak)),
-                          prayoga="कर्तरि", root=root, dhatu=aupadeshika, gana="कण्ड्वादि",
-                          source="generated", quality=3, handle=pada)
-                out.extend((t, m) for t in derived_texts(pada))
+    lakaras = (Lakara.Lat, Lakara.Lot, Lakara.Lan, Lakara.VidhiLin, Lakara.Lit, Lakara.Lrt, Lakara.Lut)
+    cells = [(lak, pur, vac) for lak in lakaras + (Lakara.AshirLin,) for pur in Purusha.choices() for vac in Vacana.choices()]
+    for lak, pur, vac in cells:
+        pada = Pada.Tinanta(dhatu=dhatu, prayoga=Prayoga.Kartari, lakara=lak, purusha=pur, vacana=vac)
+        m = Morph(form="", lemma=root, kind="tinanta", purusha=_term(_PURUSHA, pur), vacana=_term(_VACANA, vac),
+                  lakara=_term(_LAKARA, lak), prayoga="कर्तरि", root=root, dhatu=aupadeshika, gana="कण्ड्वादि",
+                  source="generated", quality=3, handle=pada)
+        out.extend((t, m) for t in derived_texts(pada))
     return tuple(out)
 
 
@@ -358,30 +355,9 @@ def tasi_pada(stem: str) -> Any:
         return None
 
 
-def taddhita_paradigm(base: str, taddhita: str, linga: str) -> tuple[tuple[str, Morph], ...]:
-    """(text, Morph template) for every case/number of the taddhitānta ``base`` + ``taddhita``
-    (Devanagari; the suffix by its Devanagari name without markers, e.g. त्व) in ``linga``."""
-    from vidyut.prakriya import Linga, Pada, Pratipadika, Taddhita, Vacana, Vibhakti
-
-    lmap = {"पुंलिङ्ग": Linga.Pum, "स्त्रीलिङ्ग": Linga.Stri, "नपुंसकलिङ्ग": Linga.Napumsaka}
-    try:
-        prati = Pratipadika.taddhitanta(Pratipadika.basic(lipi.to_code(base)), getattr(Taddhita, lipi.to_code(taddhita)))
-    except Exception:  # noqa: BLE001
-        return ()
-    out = []
-    for vib in Vibhakti.choices():
-        for vac in Vacana.choices():
-            pada = Pada.Subanta(pratipadika=prati, linga=lmap[linga], vibhakti=vib, vacana=vac)
-            m = Morph(form="", lemma=base, kind="subanta", linga=linga, vibhakti=_term(_VIBHAKTI, vib),
-                      vacana=_term(_VACANA, vac), source="generated", quality=1, handle=pada)
-            out.extend((t, m) for t in derived_texts(pada))
-    return tuple(out)
-
-
 @lru_cache(maxsize=1)
-def _kta_index() -> dict[str, tuple[Any, ...]]:
-    """क्त stem (Devanagari) -> kosha DhatuEntries (no prefixes; plain or ṇic) whose forward क्त
-    derivation yields it. Built once (≈ 4000 derivations)."""
+def kta_index() -> dict[str, tuple[Any, ...]]:
+    """क्त stem -> kosha DhatuEntries (unprefixed, plain or ṇic) whose क्त derivation yields it (built once)."""
     from vidyut.prakriya import Krt, Pratipadika, Sanadi
 
     v = resources.vyakarana()
@@ -390,23 +366,19 @@ def _kta_index() -> dict[str, tuple[Any, ...]]:
         d = de.dhatu
         if d.prefixes or (d.sanadi and list(d.sanadi) != [Sanadi.Ric]):
             continue
-        try:
-            texts = {p.text for p in v.derive(Pratipadika.krdanta(d, Krt.kta))}
-        except Exception:  # noqa: BLE001
-            continue
-        for t in texts:
+        for t in {p.text for p in derive_quiet(v, Pratipadika.krdanta(d, Krt.kta))}:
             table.setdefault(lipi.from_code(t), []).append(de)
-    return {k: tuple(v_) for k, v_ in table.items()}
+    return {k: tuple(x) for k, x in table.items()}
 
 
-def kta_candidates(stem: str) -> tuple[Any, ...]:
-    """Opaque dhātu entries whose bare क्त stem is ``stem`` (Devanagari)."""
-    return _kta_index().get(stem, ())
+def derive_quiet(v: Any, handle: Any) -> list[Any]:
+    try:
+        return v.derive(handle)
+    except Exception:  # noqa: BLE001
+        return []
 
 
-def kta_fields(dhatu_entry: Any) -> dict[str, Any]:
-    """Devanagari lemma/root/dhatu/gana/root_gloss of an opaque dhātu entry."""
-    return _dhatu_fields(dhatu_entry)
+kta_fields = _dhatu_fields  # Devanagari lemma/root/dhatu/gana/root_gloss of an opaque dhātu entry
 
 
 def kta_pratipadika(dhatu_entry: Any, upasargas: tuple[str, ...]) -> Any:
@@ -425,7 +397,4 @@ def subanta_like(pratipadika: Any, entry: Entry) -> Any:
     from vidyut.prakriya import Pada
 
     e = entry.morph.handle
-    try:
-        return Pada.Subanta(pratipadika=pratipadika, linga=e.linga, vibhakti=e.vibhakti, vacana=e.vacana)
-    except Exception:  # noqa: BLE001
-        return None
+    return Pada.Subanta(pratipadika=pratipadika, linga=e.linga, vibhakti=e.vibhakti, vacana=e.vacana)

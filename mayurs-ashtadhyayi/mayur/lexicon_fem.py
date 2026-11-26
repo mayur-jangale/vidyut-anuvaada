@@ -36,22 +36,24 @@ def _paradigm(fem: str) -> dict[str, tuple[Morph, ...]]:
     return {k: tuple(v) for k, v in table.items()}
 
 
-def _candidates(form: str) -> list[str]:
+def _candidates(form: str) -> list[tuple[str, str]]:
+    """(feminine stem, lemma): the lemma is the feminine stem, except for u-stems, where the corpus'
+    masculine base is kept (``mayur.ud`` relates only ई/आ feminines to a-stems)."""
     out = []
     for endings, fem_end in ((_E_I, "ी"), (_E_A, "ा")):
         for ending in endings:
             if form.endswith(ending) and len(form) - len(ending) >= _MIN_BASE:
                 base = form[: -len(ending)]
                 if "क" <= base[-1] <= "ह" and _known_base(base):
-                    out.append(base + fem_end)
+                    out.append((base + fem_end, base + fem_end))
                 if fem_end == "ी" and base.endswith("्व") and _known_base(base[:-2] + "ु"):
-                    out.append(base + "ी")  # साधु -> साध्वी (4.1.44 वोतो गुणवचनात्)
+                    out.append((base + "ी", base[:-2] + "ु"))  # साधु -> साध्वी (4.1.44 वोतो गुणवचनात्)
     return list(dict.fromkeys(out))
 
 
 def feminine_padas(form: str) -> tuple[Morph, ...]:
     """Forward-derived feminine analyses of ``form`` (quality 2)."""
     out: list[Morph] = []
-    for fem in _candidates(form):
-        out.extend(_paradigm(fem).get(form, ()))
+    for fem, lemma in _candidates(form):
+        out.extend(replace(m, lemma=lemma) for m in _paradigm(fem).get(form, ()))
     return tuple(out)

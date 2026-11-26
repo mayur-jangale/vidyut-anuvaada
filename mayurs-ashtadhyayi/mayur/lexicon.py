@@ -126,7 +126,7 @@ def feminine_stem(stem: str, form: str) -> str:
 
 
 # stems the corpus cites under another name (it has 593 अहर्, no अहन्); the handle is unchanged
-_LEMMA_ALIAS = {"अहन्": "अहर्"}
+_LEMMA_ALIAS = {"अहन्": "अहर्", "ओम्": "ॐ"}
 
 
 # participles the corpus also cites as adjectives under their own stem (समन्वित, शक्य, उचित)
@@ -187,6 +187,13 @@ _SPECIAL_STEMS = {
     "मत्": ("अस्मद्", ""), "त्वत्": ("युष्मद्", ""), "अस्मत्": ("अस्मद्", ""), "युष्मत्": ("युष्मद्", ""),
     "तत्": ("तद्", ""), "यत्": ("यद्", ""), "एतत्": ("एतद्", ""), "किम्": ("किम्", ""),
     "दुस्": ("दुस्", ""), "कु": ("कु", ""),
+    # अञ्च् stems (3.2.59 ऋत्विग्...अञ्चु...; weak stem by 6.4.30 नाञ्चेः पूजायाम्, 6.4.138 अचः, 6.3.138 चौ)
+    "प्राञ्च्": ("प्राञ्च्", ""), "प्राच्": ("प्राञ्च्", ""), "प्राक्": ("प्राञ्च्", ""),
+    "तिर्यञ्च्": ("तिर्यञ्च्", ""), "तिरश्च्": ("तिर्यञ्च्", ""), "तिर्यक्": ("तिर्यञ्च्", ""),
+    "प्रत्यञ्च्": ("प्रत्यञ्च्", ""), "प्रतीच्": ("प्रत्यञ्च्", ""), "प्रत्यक्": ("प्रत्यञ्च्", ""),
+    "उदञ्च्": ("उदञ्च्", ""), "उदीच्": ("उदञ्च्", ""), "उदक्": ("उदञ्च्", ""),
+    "अवाञ्च्": ("अवाञ्च्", ""), "अवाच्": ("अवाञ्च्", ""), "अवाक्": ("अवाञ्च्", ""),
+    "सम्यञ्च्": ("सम्यञ्च्", ""), "सम्यच्": ("सम्यञ्च्", ""), "सम्यक्": ("सम्यञ्च्", ""),
 }
 
 
@@ -217,6 +224,7 @@ def _as_stem(entry: bridge.Entry, form: str) -> Morph:
 def stems(form: str) -> tuple[Morph, ...]:
     """Analyses of ``form`` as a non-final compound member (kind "stem"), best first."""
     out: list[Morph] = []
+    spellings = set(nasal_variants(form))  # the kosha may spell the stem with ं (भुजंग for भुजङ्ग)
     for variant in nasal_variants(form):
         for entry in bridge.lookup(variant):
             if _stem_entry_ok(entry, variant):
@@ -224,7 +232,7 @@ def stems(form: str) -> tuple[Morph, ...]:
         # a stem cited as such: वाच् (pada वाक्), वधू (pada वधूस्)
         for key in final_variants(variant)[1:] + (variant + "स्",):
             for entry in bridge.lookup(key):
-                if entry.entry == "basic" and entry.pratipadika == variant:
+                if entry.entry == "basic" and entry.pratipadika in spellings:
                     out.append(_as_stem(entry, form))
     known = set(out)
     out.extend(m for m in _prefixed_stems(form) if m not in known)

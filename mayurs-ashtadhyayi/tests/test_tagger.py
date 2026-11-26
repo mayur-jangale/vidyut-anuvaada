@@ -71,3 +71,18 @@ def test_tiny_training_beats_frequency_baseline():
 
     freq = lambda it: [tagger.Verse(*tt.verse_args(it)).top[i] if c else 0 for i, c in enumerate(it["cands"])]
     assert acc(lambda it: tt.learned_choice(it, w, False)) > acc(freq)
+
+
+def test_structural_features_use_tables():
+    phala = nom("फलम्", "फल", "द्वितीया", "नपुंसकलिङ्ग")
+    phala_m = nom("फलम्", "फल", "द्वितीया", "पुंलिङ्ग")
+    tables = {"g": {"फल": {"नपुंसकलिङ्ग": 0.9, "पुंलिङ्ग": 0.1}}, "acc": {}, "dat": {}}
+    v = tagger.Verse([[phala, phala_m]], [0], [False], ["फलम्"], tables=tables)
+    assert "gpTop=1" in v.static[0][0] and "gpTop=0" in v.static[0][1]
+
+
+def test_agent_noun_with_adjacent_genitive_feature():
+    agent = nom("रक्षिता", "रक्षितृ", "प्रथमा", krt="तृच्")
+    gen = nom("धर्मस्य", "धर्म", "षष्ठी")
+    v = tagger.Verse([[agent], [gen]], [0, 0], [False, False], ["रक्षिता", "धर्मस्य"], tables={})
+    assert "trcGen" in v.static[0][0]
