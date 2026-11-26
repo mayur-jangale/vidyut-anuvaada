@@ -24,7 +24,7 @@ class CompoundMixin:
         return bool(w.morph and w.morph.kind == "subanta" and not w.morph.krt and w.role not in ("विशेषण", "विधेय")
                     and not english.is_pronoun(w.morph.lemma))
 
-    def compound_pieces(self, i: int, mem: list[int], ctype: str) -> list[Piece]:
+    def compound_pieces(self, i: int, mem: list[int], ctype: str, inner=None) -> list[Piece]:
         """A compound read off its type: determinative 'Y of X', descriptive 'X Y' (adjective first),
         copulative 'X, Y and Z'. Empty when the type does not fit, so the hyphen form stays."""
         texts = [(j, self.text(j)) for j in mem]

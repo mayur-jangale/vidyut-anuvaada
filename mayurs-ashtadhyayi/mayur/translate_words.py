@@ -35,6 +35,12 @@ TO_OBJECT = frozenset({"say", "speak", "bow", "talk"})  # take their person with
 WITH_LEMMAS = frozenset({"सह", "सार्धम्", "साकम्", "विना", "समम्"})
 ADJ_SENSE = {"Krishna": "black", "Kṛṣṇa": "black"}  # a name-gloss that is the colour when it is a predicate of a common noun
 
+TITLE_NOUNS = frozenset({"king", "sage", "hero", "monkey", "demon", "vulture", "lord", "brahmin", "ascetic", "son",
+                         "bull", "tiger", "elephant", "bird", "prince", "warrior", "god", "queen", "daughter", "brother",
+                         "friend", "wife", "husband", "rākṣasa", "emperor", "chief", "leader", "ruler", "deity", "child"})
+PERSON_NOUNS = frozenset({"father", "mother", "son", "daughter", "brother", "sister", "wife", "husband", "friend", "king",
+                          "sage", "teacher", "master", "lord", "queen", "prince", "grandfather", "uncle", "elder", "guru",
+                          "brahmin", "hero", "enemy", "ancestor", "people", "man", "woman", "boy", "girl", "child"})
 ON_NOUNS = frozenset({"bank", "shore", "top", "surface", "peak", "summit", "ground", "roof", "hill", "mountain"})
 NOMINAL_SUFFIXES = {"ness": "ness", "hood": "hood", "ship": "ship"}  # तद्धित -ता / -त्व / -त्वम्
 

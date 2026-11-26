@@ -8,6 +8,7 @@ from typing import Optional
 from . import english, lipi
 from .translate_clause import ClauseMixin
 from .translate_compound import CompoundMixin
+from .translate_np import NounPhraseMixin
 from .translate_words import ADJ_FIRST as _ADJ_FIRST, ADJ_SENSE, ON_NOUNS, WITH_LEMMAS, FINAL as _FINAL, PAIRED as _PAIRED, WITH_WORDS, is_latin_binomial, is_motion, is_question_lemma, name_plural
 from .model import Alignment, Reading
 
@@ -28,7 +29,7 @@ def _p(text: str, idx: Optional[int] = None, sep: str = " ") -> Piece:
     return (text, idx, sep)
 
 
-class _Renderer(CompoundMixin, ClauseMixin):
+class _Renderer(NounPhraseMixin, CompoundMixin, ClauseMixin):
     def __init__(self, reading: Reading) -> None:
         self.reading = reading
         self.words = reading.words
@@ -119,110 +120,6 @@ class _Renderer(CompoundMixin, ClauseMixin):
                 or m.vacana not in ("बहुवचन", "द्विवचन") or (g.endswith("s") and not g.endswith("ss"))):
             return g
         return ("two " if m.vacana == "द्विवचन" else "") + english.plural(g)
-
-    # ---- noun phrases --------------------------------------------------------------
-    def np(self, i: int, kids: Optional[list[int]] = None) -> list[Piece]:
-        if i in self.used:
-            return []
-        self.used.add(i)
-        mem = self.members(i)
-        poss: list[Piece] = []
-        adjs: list[Piece] = []
-        after: list[Piece] = []
-        im = self.words[i].morph
-        pron_head = im is not None and english.is_pronoun(im.lemma)
-        participle = im is not None and im.krt in ("क्त", "क्तवतु")
-        std: list[Piece] = []
-        kidlist = self.children.get(i, []) if kids is None else kids
-        quals = [k for k in kidlist if self.role(k) == "विशेषण" and k not in self.used]
-        appose = len(quals) > 2 and not pron_head
-        for k in kidlist:
-            r = self.role(k)
-            km = self.words[k].morph
-            if k in self.used:
-                continue
-            if r == "विशेषण" and appose:
-                after += [_p(",", None, "")] + self.np(k)
-                continue
-            if r == "विशेषण" and pron_head:
-                after += [_p(",", None, "")] + self.np(k)
-                continue
-            if km is not None and km.lemma == "नाम" and r == "अव्यय":
-                self.used.add(k)
-                after.append(_p("by name", k))
-                continue
-            if r == "विशेषण" and self.bahuvrihi(k):
-                after += self.np(k)
-                continue
-            if r == "विशेषण" and self.words[k].gloss[:1].isupper() and any(
-                    self.role(c) == "अव्यय" and self.text(c) == "and" for c in self.children.get(k, [])):
-                after += self.np(k)  # "X and Y": a coordinated name follows its partner
-                continue
-            if r == "अव्यय" and km is not None and km.lemma == "एव":
-                self.used.add(k)
-                after.append(_p("indeed", k))
-                continue
-            if im is not None and im.lemma in WITH_LEMMAS and r in ("सम्बन्ध", "करण", "कर्म"):
-                std += self.np(k)  # "with Sītā": the dependent of सह / विना takes no preposition of its own
-                continue
-            if im is not None and im.lemma in _LIKE and r in ("करण", "सम्बन्ध", "सम्प्रदान", "कर्म"):
-                if self.members(i):
-                    std += [_p("in")] + self.np(k)
-                else:
-                    std += ([_p("to")] if im.lemma in _TO else []) + self.np(k)
-                continue
-            if r == "कर्ता" and participle:
-                after += [_p("by")] + self.np(k)
-                continue
-            if r == "सम्बन्ध" and km is not None and english.is_pronoun(km.lemma):
-                self.used.add(k)
-                poss.append(_p(english.pronoun(km.lemma, km.linga, km.vacana, "षष्ठी") or self.text(k), k))
-            elif r in ("विशेषण", "अव्यय"):
-                adjs += self.np(k)
-            else:
-                after += self.case_phrase(k)
-        core: list[Piece] = []
-        pat = self.final_pattern(i)
-        if pat is not None:
-            head_text, joiner, plur = pat
-            core.append(_p(head_text, i))
-            for n_, j in enumerate(mem):
-                self.used.add(j)
-                t = self.text(j)
-                if plur and n_ == len(mem) - 1 and not t[:1].isupper():
-                    t = english.plural(t)
-                core.append(_p(t, j, " " if n_ == 0 else joiner if joiner != "-" else "-"))
-            return poss + adjs + core + std + after
-        bv = self.bahuvrihi(i)
-        if bv and mem and self.words[mem[0]].morph and self.words[mem[0]].morph.lemma in ("स", "सह") \
-                and self.text(mem[0]) == "with":
-            self.used.add(mem[0])  # "together with X": the first member is a preposition
-            core.append(_p("with", mem[0]))
-            for j in mem[1:]:
-                self.used.add(j)
-                core.append(_p(self.text(j), j))
-            core.append(_p(self.noun_text(i), i))
-            return poss + adjs + core + std + after
-        ctype = self.samasa(i)
-        if mem and not bv and ctype in ("तत्पुरुष", "कर्मधारय", "द्वन्द्व", "तद्धित") and self.nominal(i):
-            made = self.compound_pieces(i, mem, ctype)
-            if made:
-                return poss + adjs + made + std + after
-        glue = " " if bv else "-"
-        ed = bv and self.noun_text(i) in _PAIRED
-        if bv and not ed:
-            core.append(_p("of"))
-        for j in mem:
-            self.used.add(j)
-            core.append(_p(self.text(j), j, glue if core and not (bv and len(core) == 1) else " "))
-        last = self.noun_text(i)
-        if ed:
-            last = english.past(last)
-            glue = "-"
-        if ed and len(core) == 0:
-            pass
-        core.append(_p(last, i, glue if core and not (bv and not ed and len(core) == 1) else " "))
-        return poss + adjs + core + std + after
 
     def case_phrase(self, i: int) -> list[Piece]:
         r = self.role(i)
