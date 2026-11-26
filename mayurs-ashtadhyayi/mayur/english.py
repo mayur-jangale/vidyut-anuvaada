@@ -81,3 +81,72 @@ def plural(noun: str) -> str:
     if n.endswith("y") and len(n) > 1 and n[-2] not in _VOWELS:
         return pre + n[:-1] + "ies"
     return pre + n + "s"
+
+
+def present_participle(verb: str) -> str:
+    pre, v = _head(verb)
+    if v.endswith("ie"):
+        return pre + v[:-2] + "ying"
+    if v.endswith("e") and not v.endswith(("ee", "ye")):
+        return pre + v[:-1] + "ing"
+    return pre + (v + v[-1] if _doubles(v) else v) + "ing"
+
+
+# pronouns: lemma -> (singular forms, plural forms), each (nominative, accusative, genitive)
+_PRON = {
+    "अस्मद्": (("I", "me", "my"), ("we", "us", "our")),
+    "युष्मद्": (("you", "you", "your"), ("you", "you", "your")),
+    "किम्": (("who", "whom", "whose"), ("who", "whom", "whose")),
+    "क": (("who", "whom", "whose"), ("who", "whom", "whose")),
+    "यद्": (("who", "whom", "whose"), ("who", "whom", "whose")),
+}
+_THIRD = {
+    "पुंलिङ्ग": ("he", "him", "his"), "स्त्रीलिङ्ग": ("she", "her", "her"),
+    "नपुंसकलिङ्ग": ("it", "it", "its"),
+}
+_DEMONSTRATIVE = {"तद्": ("that", "those"), "एतद्": ("this", "these"), "इदम्": ("this", "these"),
+                  "अदस्": ("that", "those"), "किम्": ("which", "which"), "क": ("which", "which"),
+                  "यद्": ("which", "which")}
+_CASES = {"प्रथमा": 0, "सम्बोधन": 0, "षष्ठी": 2}
+
+
+def is_pronoun(lemma: str) -> bool:
+    return lemma in _PRON or lemma in _THIRD_LEMMAS or lemma in _DEMONSTRATIVE
+
+
+_THIRD_LEMMAS = {"तद्", "एतद्", "इदम्", "अदस्"}
+
+
+def pronoun(lemma: str, linga: str | None, vacana: str | None, vibhakti: str | None,
+            demonstrative: bool = False, force_acc: bool = False) -> str | None:
+    """English pronoun for a Sanskrit pronoun form, or None when the lemma is not a pronoun."""
+    plural_ = vacana == "बहुवचन"
+    dual = vacana == "द्विवचन"
+    if demonstrative and lemma in _DEMONSTRATIVE:
+        return _DEMONSTRATIVE[lemma][1 if plural_ else 0]
+    idx = 1 if force_acc else _CASES.get(vibhakti or "", 1)
+    if lemma in _PRON and not (lemma in ("किम्", "क", "यद्") and linga == "नपुंसकलिङ्ग" and idx == 0):
+        forms = _PRON[lemma][1 if (plural_ or dual) else 0]
+        text = forms[idx]
+        return text + " two" if dual and idx != 2 else text
+    if lemma in ("किम्", "क", "यद्"):
+        return "what" if lemma != "यद्" else "which"
+    if lemma in ("तद्",):
+        if plural_ or dual:
+            return ("they", "them", "their")[idx]
+        return _THIRD.get(linga or "", _THIRD["पुंलिङ्ग"])[idx]
+    if lemma in ("एतद्", "इदम्", "अदस्"):
+        return _DEMONSTRATIVE[lemma][1 if plural_ else 0]
+    return None
+
+
+def supplied_subject(purusha: str | None, vacana: str | None, accusative: bool = False) -> str:
+    """Bracketed subject pronoun for a verb with no expressed agent."""
+    plural_ = vacana in ("बहुवचन", "द्विवचन")
+    if purusha == "उत्तमपुरुष":
+        w = ("us" if accusative else "we") if plural_ else ("me" if accusative else "I")
+    elif purusha == "मध्यमपुरुष":
+        w = "you"
+    else:
+        w = ("them" if accusative else "they") if plural_ else ("him" if accusative else "he")
+    return f"[{w}]"

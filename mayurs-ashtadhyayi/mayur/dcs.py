@@ -55,6 +55,11 @@ def compact(text: str) -> str:
     return out
 
 
+def _int(text: str) -> int:
+    text = text.strip()
+    return int(text) if text.isdigit() else 0
+
+
 def _parse_feats(raw: str) -> dict[str, str]:
     if not raw or raw == "_":
         return {}
@@ -79,22 +84,24 @@ def _parse_token(cols: list[str]) -> dict:
 
 def parse_sentences(lines: Iterator[str] | list[str]) -> Iterator[dict]:
     """Sentences (half-verses) of CoNLL-U ``lines``."""
-    chapter, chapter_id = "", ""
+    chapter, chapter_id, text_id = "", "", ""
     cur: dict | None = None
     for raw in list(lines) + [""]:
         line = raw.rstrip("\n")
         if line.startswith("## chapter_id:"):
             chapter_id = line.split(":", 1)[1].strip()
+        elif line.startswith("## text_id:"):
+            text_id = line.split(":", 1)[1].strip()
         elif line.startswith("## chapter:"):
             chapter = line.split(":", 1)[1].strip()
         elif line.startswith("# text ="):
-            cur = {"iast": line.split("=", 1)[1].strip(), "chapter": _deva(chapter.lower()), "chapter_id": chapter_id,
+            cur = {"iast": line.split("=", 1)[1].strip(), "chapter": _deva(chapter.lower()), "chapter_id": chapter_id, "text_id": text_id,
                    "sent_counter": 0, "sent_subcounter": 0, "tokens": []}
             cur["text"] = _deva(cur["iast"])
         elif cur is not None and line.startswith("# sent_counter ="):
-            cur["sent_counter"] = int(line.split("=", 1)[1])
+            cur["sent_counter"] = _int(line.split("=", 1)[1])
         elif cur is not None and line.startswith("# sent_subcounter ="):
-            cur["sent_subcounter"] = int(line.split("=", 1)[1])
+            cur["sent_subcounter"] = _int(line.split("=", 1)[1])
         elif cur is not None and line and not line.startswith("#"):
             cols = line.split("\t")
             if len(cols) >= 4 and cols[0].isdigit():
