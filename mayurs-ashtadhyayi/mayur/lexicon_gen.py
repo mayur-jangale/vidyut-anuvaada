@@ -154,7 +154,8 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             continue
         if entry.entry == "tinanta":
             pada = bridge.prefixed_tinanta(entry, upasargas)
-        elif entry.entry == "krdanta" and (m.krt in _GOOD_KRT or m.krt == "तृच्"):  # विच्छेदितृ (3.1.133)
+        elif entry.entry == "krdanta" and (m.krt in _GOOD_KRT or m.krt in ("तृच्", "चानश्")):
+            # विच्छेदितृ (3.1.133); निश्वसमान (3.2.129: चानश् on a परस्मैपद root)
             pada = bridge.prefixed_krdanta(entry, upasargas)
             if m.krt in ("यत्", "ण्यत्", "क्यप्") and form.endswith("्य"):
                 # the same remainder may be the ल्यप् absolutive of the prefixed root (7.1.37)
@@ -201,7 +202,9 @@ def looks_verbal(form: str) -> bool:
     if any(s in _VERBAL_ENDING_SOUNDS for s in sounds[-5:-1]):
         return True
     # परिरक्ष, विजहि: what follows the upasarga is itself a finite verb in the kosha (a dictionary probe)
-    return any(e.entry == "tinanta" for _, rest in _splits(form) for e in bridge.lookup(rest))
+    # ... or a participle (उल्लसत्: उद् + लसत्)
+    return any(e.entry == "tinanta" or (e.entry == "krdanta" and e.morph.krt in _GOOD_KRT)
+               for _, rest in _splits(form) for e in bridge.lookup(rest))
 
 
 # (ending of form, ending of stem, genders to try)

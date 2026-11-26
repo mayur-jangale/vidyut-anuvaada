@@ -87,7 +87,7 @@ def _dcs_root(m: Morph) -> str:
 
 # How the corpus cites roots that vidyut names by their Dhatupatha form (ध्यै -> ध्या, 6.1.45)
 _CITED_ROOT = {"स्वञ्ज्": "स्वज्", "ऋच्छ्": "ऋछ्", "पूर्": "पृ", "क्षी": "क्षि",  # the corpus has no पूर्, क्षी
-               "तॄ": "तृ", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
+               "तॄ": "तृ", "ध्मा": "धम्", "वेप्": "विप्", "सिव्": "सीव्", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
                "दै": "दा", "वे": "वा", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
 # 3.1.31 आयादय आर्धधातुके वा: without आय the corpus cites the bare root (गुप्त -> गुप्)
 _AYA_ROOT = {"गोपाय": "गुप्", "धूपाय": "धूप्", "पणाय": "पण्", "पनाय": "पन्", "विच्छाय": "विच्छ्"}
@@ -128,7 +128,8 @@ def _gati_join(gati: str, rest: str) -> str:
 def _verbal_lemma(prefixes: tuple[str, ...], root: str) -> str:
     out = root
     for p in reversed(prefixes):
-        out = _gati_join(p, out) if len(p) > 3 and p.endswith(_GATI_FINAL) else _join(p, out)
+        gati = len(p) > 3 and p.endswith(_GATI_FINAL) and p not in _R_PREFIX and p not in ("दुस्", "निस्")
+        out = _gati_join(p, out) if gati else _join(p, out)  # (निर् + नी is an upasarga join: निर्णी, 8.4.14)
     return out
 
 

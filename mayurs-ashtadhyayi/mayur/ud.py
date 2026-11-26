@@ -39,7 +39,7 @@ _PERFECT_ENDING_PRESENT = (("विद्", ("वेद", "वेत्थ", "�
                            ("अह्", ("आह", "आहतुस्", "आहुस्", "आत्थ", "आहथुस्")))
 _CLASS_NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ्", "च": "ञ्", "छ": "ञ्", "ज": "ञ्", "झ": "ञ्",
                 "ट": "ण्", "ठ": "ण्", "ड": "ण्", "ढ": "ण्", "त": "न्", "थ": "न्", "द": "न्", "ध": "न्",
-                "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्"}
+                "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्", "म": "म्"}  # (संमन् = सम्मन्: the corpus has both)
 
 
 def is_verbal_noun(m: Morph) -> bool:
@@ -68,6 +68,7 @@ def canonical_lemma(text: str) -> str:
     if "ं" in text[:-1]:  # 8.4.59 वा पदान्तस्य: anusvara before a stop is also written as the class nasal
         text = "".join(_CLASS_NASAL.get(text[i + 1], ch) if ch == "ं" and i + 1 < len(text) else ch
                        for i, ch in enumerate(text))
+    text = text.replace("ॄ", "ृ")  # the corpus cites most roots in long ॠ with the short vowel (तृ, कृ), a few not
     if text.endswith("न्त्"):
         return text[: -len("न्त्")] + "त्"
     if text.endswith("क्षण्"):  # the corpus cites क्षणु हिंसायाम् (क्षत, विक्षत) as क्षन्
