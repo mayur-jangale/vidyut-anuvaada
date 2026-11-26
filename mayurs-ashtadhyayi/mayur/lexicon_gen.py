@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import time
 from dataclasses import replace
+from functools import lru_cache
 
 from mayur import bridge, lipi
 from mayur.model import Morph
@@ -17,6 +18,13 @@ _GOOD_KRT = frozenset(PARTICIPLE_KRT) | frozenset(NONFINITE_KRT)
 
 _VOWEL_SIGNS = {"ा": "आ", "ि": "इ", "ी": "ई", "ु": "उ", "ू": "ऊ", "ृ": "ऋ", "े": "ए", "ै": "ऐ", "ो": "ओ", "ौ": "औ"}
 _STOP_FINALS = ("स्", "ष्", "र्", "ः", "द्", "त्", "न्", "ण्", "ञ्", "ङ्", "म्", "ं", "ज्", "च्", "ल्", "ब्", "भ्")
+
+
+@lru_cache(maxsize=None)
+def _surface_varnas() -> tuple[tuple[str, tuple[str, ...], tuple[tuple[str, ...], ...]], ...]:
+    """(upasarga, written prefix varnas, remainder-start varnas) for all upasargas, computed once."""
+    return tuple((u, lipi.varnas(w), tuple(lipi.varnas(s) for s in starts))
+                 for u in bridge.UPASARGA_CODE for w, starts in _surfaces(u))
 
 
 def _surfaces(upasarga: str) -> tuple[tuple[str, tuple[str, ...]], ...]:
@@ -47,19 +55,17 @@ def _surfaces(upasarga: str) -> tuple[tuple[str, tuple[str, ...]], ...]:
     return tuple((lipi.from_varnas(p), tuple(lipi.from_varnas(s) for s in starts)) for p, starts in out)
 
 
-def _splits(form: str) -> list[tuple[str, str]]:
+@lru_cache(maxsize=100_000)
+def _splits(form: str) -> tuple[tuple[str, str], ...]:
     """(upasarga, remainder) candidates for ``form``."""
     sounds = lipi.varnas(form)
     out = []
-    for u in bridge.UPASARGA_CODE:
-        for written, starts in _surfaces(u):
-            wv = lipi.varnas(written)
-            if len(wv) < len(sounds) and sounds[:len(wv)] == wv:
-                rest = sounds[len(wv):]
-                for s in starts:
-                    rem = lipi.from_varnas(lipi.varnas(s) + rest) if s else lipi.from_varnas(rest)
-                    out.append((u, rem))
-    return list(dict.fromkeys(out))
+    for u, wv, starts in _surface_varnas():
+        if len(wv) < len(sounds) and sounds[:len(wv)] == wv:
+            rest = sounds[len(wv):]
+            for s in starts:
+                out.append((u, lipi.from_varnas(s + rest)))
+    return tuple(dict.fromkeys(out))
 
 
 def _lemma(upasargas: tuple[str, ...], root: str) -> str:
@@ -80,7 +86,8 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             continue
         if any(d.text == form for d in bridge.derive(pada)):
             prefixes = upasargas + m.prefixes
-            out.append(replace(m, form=form, lemma=_lemma(prefixes, m.root or m.lemma), prefixes=prefixes,
+            krt = "ल्यप्" if m.krt == "क्त्वा" else m.krt
+            out.append(replace(m, form=form, lemma=_lemma(prefixes, m.root or m.lemma), prefixes=prefixes, krt=krt,
                                source="generated", quality=3, handle=pada))
     return out
 

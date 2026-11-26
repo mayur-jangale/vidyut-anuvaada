@@ -39,11 +39,15 @@ def _quality(entry: bridge.Entry) -> int:
     return 2
 
 
+_ENCLITIC = frozenset({"मे", "ते", "नौ", "वाम्", "नस्", "वस्", "मा", "त्वा"})
+_FREQ_ALIAS = {"अस्मद्": "मद्", "युष्मद्": "त्वद्"}  # the corpus cites these pronouns by these stems
+
+
 def _freq(lemma: str) -> int:
     try:
         from mayur.freq import lemma_count
 
-        return int(lemma_count(lemma))
+        return int(lemma_count(_FREQ_ALIAS.get(lemma, lemma)))
     except Exception:  # noqa: BLE001 - freq is optional and written elsewhere
         return 0
 
@@ -221,4 +225,7 @@ def prove(m: Morph) -> WordProof:
         note = f"derived spelling {text}; {m.form} differs only in writing the nasal"
     if not ok:
         note = f"vidyut derived {text or 'nothing'}, not {m.form}"
+        if m.lemma in ("अस्मद्", "युष्मद्") and m.form in _ENCLITIC:
+            note += ("; listed in the kosha: the enclitic substitute (8.1.20-8.1.24) depends on the "
+                     "sentence and is not applied by vidyut-prakriya")
     return WordProof(derivable=ok, method="vidyut-prakriya", derived_form=text, trace=trace, note=note)

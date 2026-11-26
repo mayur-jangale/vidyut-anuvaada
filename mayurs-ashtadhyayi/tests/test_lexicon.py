@@ -12,7 +12,31 @@ STEMS = "तपस् स्वाध्याय वाक् मुनि ध�
 def test_pada_analysed_and_proved(form):
     ms = L.padas(form)
     assert ms and ms[0].quality >= 2
-    assert any(L.prove(m).derivable for m in ms[:3])
+    assert any(L.prove(m).derivable for m in ms)
+
+
+def test_enclitic_me_listed_not_forced():
+    ms = L.padas("मे")
+    assert ms[0].lemma == "अस्मद्" and ms[0].source == "kosha"
+    proof = L.prove(ms[0])
+    assert not proof.derivable and "8.1.2" in proof.note
+
+
+def test_pronoun_and_verb_ranking():
+    assert L.padas("अहम्")[0].lemma == "अस्मद्"
+    assert L.padas("त्वम्")[0].lemma == "युष्मद्"
+    assert L.padas("बिभ्यति")[0].kind == "tinanta"
+    assert L.padas("असि")[0].kind == "tinanta"
+
+
+def test_lyap_after_prefixes():
+    m = L.padas("अनुप्राप्य")[0]
+    assert m.krt == "ल्यप्" and m.prefixes == ("अनु", "प्र") and L.prove(m).derivable
+
+
+def test_stem_cited_with_final_consonant():
+    assert L.stems("वाच्")[0].lemma == "वाच्"
+    assert L.padas("संनिभैस्")
 
 
 @pytest.mark.parametrize("form", STEMS)

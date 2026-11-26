@@ -68,7 +68,11 @@ def split_rule(ref: str) -> tuple[str, str]:
     return (m.group(1).strip() or ASHTADHYAYI), m.group(2)
 
 
+_DIGITS = str.maketrans("०१२३४५६७८९", "0123456789")
+
+
 def rule_text(source: str, code: str) -> str:
+    code = code.translate(_DIGITS)
     table = rule_texts()
     hit = table.get((source, code))
     if hit is None:

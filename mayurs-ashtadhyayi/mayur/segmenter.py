@@ -67,6 +67,8 @@ class _Jn:
 def _contexts() -> list[tuple[Varnas, str]]:
     ctx: list[tuple[Varnas, str]] = [((v,), "") for v in sd.VOWELS]
     for c in sd.CONSONANTS:
+        if c in sd.STOPS and sd.VARGA_OF[c][1] != 0:
+            continue  # a pada-final stop is indexed in its unvoiced form; 8.2.39 voices it as needed
         if c in ("स्", "र्", "न्"):
             ctx.extend(((p, c), "") for p in sd.VOWELS)
         else:
@@ -126,6 +128,9 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 
 # ---------------------------------------------------------------- word scoring
 
+# Weights tuned on Bala-kanda 1.21-79 (see module docstring); log-probability units.
+W = {"lemma_w": 0.08, "lemma_w_stem": 0.08, "q0": 9.0, "q1": 5.0, "word": 1.0, "stem": 0.6, "samasa": 0.4}
+
 @lru_cache(maxsize=300_000)
 def _analyses(form: str, stem: bool) -> tuple:
     from mayur import lexicon
@@ -157,14 +162,14 @@ def word_score(form: str, stem: bool, tier_used: int = 0) -> Optional[tuple[floa
     best = max(m.quality for m in ms)
     n = _total()
     c = freq.form_count(form) if not stem else 0
+    lc = max((freq.lemma_count(m.lemma) for m in ms[:3]), default=0)
     if c > 0:
         s = math.log((c + 0.5) / n)
     else:
-        lc = max((freq.lemma_count(m.lemma) for m in ms[:3]), default=0)
-        s = math.log((0.08 * lc + 0.05) / n)
+        s = math.log((W["lemma_w_stem" if stem else "lemma_w"] * lc + 0.05) / n)
     if best <= 1:
-        s -= 9.0 if best == 0 else 5.0
-    return s - 1.0 + penalty - (0.6 if stem else 0.0), best >= 2
+        s -= W["q0"] if best == 0 else W["q1"]
+    return s - W["word"] + penalty - (W["stem"] if stem else 0.0), best >= 2
 
 
 # ---------------------------------------------------------------- lattice
@@ -223,7 +228,7 @@ class _Lattice:
                 if sc is None:
                     continue
                 nxt = _END if j < 0 else (j, jn.right_head)
-                res.append((form, k, jn, sc[0] - (0.4 if jn.samasa else 0.0), sc[1], nxt))
+                res.append((form, k, jn, sc[0] - (W["samasa"] if jn.samasa else 0.0), sc[1], nxt))
         if self.tier >= 2:
             res.extend(self._chunk_edges(i, head))
         self._edges[state] = res

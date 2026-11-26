@@ -21,12 +21,14 @@ FIRST_PERSON = {"अस्मद्"}
 SECOND_PERSON = {"युष्मद्"}
 PRONOUNS = {"किम्", "तद्", "यद्", "इदम्", "एतद्", "अदस्", "अस्मद्", "युष्मद्"}
 
-# Weights (tuned by hand against gold morphology of Bala-kanda 1.21-79 where available).
+# Weights grid-searched on gold morphology of Bala-kanda 1.21-79 (never 1-20): case+number+gender
+# accuracy 0.903 vs 0.872 for unary scores alone, 0.967 oracle over the pruned candidates.
 W_LEMMA = 0.3
-W_PHRASE = 1.0  # same case+number+gender nominals, divided by distance
+W_PHRASE = 2.0  # same case+number+gender nominals, divided by distance
 W_KARTA = 2.5  # nominative agreeing with a कर्तरि finite verb
 W_KARMA = 0.6  # per accusative when a verb or verbal is present
-W_STRAY = 0.5  # nominative not agreeing with any karta of a कर्तरि verb
+W_STRAY = 0.25  # nominative not agreeing with any karta of a कर्तरि verb
+W_VERBLESS = 1.5  # verbless: nominative outside the subject group, or ungoverned accusative
 SWEEPS = 4
 # total = 0.35·akanksha + 0.2·yogyata + 0.15·sannidhi + 0.3·frequency (frequency: incoming
 # score in 0..1, else the mean normalised unary score of the chosen analyses).
@@ -125,6 +127,11 @@ def objective(words: list[Word], chosen: list[int], active: list[int]) -> float:
         total -= W_STRAY * len(stray)
     if verbal:
         total += W_KARMA * sum(1 for m in ms.values() if is_case(m, DVITIYA))
+    else:  # verbless sentence: one subject group; other nominatives do not connect
+        noms = [(m.vacana, m.linga) for m in ms.values() if is_case(m, PRATHAMA)]
+        if noms:
+            total -= W_VERBLESS * (len(noms) - max(noms.count(k) for k in set(noms)))
+        total -= W_VERBLESS * sum(1 for m in ms.values() if is_case(m, DVITIYA))  # no verb to govern it
     return total
 
 
@@ -254,6 +261,11 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
             _set(words, i, "अव्यय", head)
     subjects = [i for i, w in enumerate(words) if w.role == "" and is_case(w.morph, PRATHAMA)]
     if not verbs and subjects:  # verbless sentence: other karakas attach to its subject
+        main = max(subjects, key=lambda i: (_head_priority(words, i, verbs), -i))
+        for i in subjects:
+            if i != main:
+                _set(words, i, "विधेय", main)
+        subjects = [main]
         for i, w in enumerate(words):
             if w.role and w.head is None and i not in subjects:
                 _set(words, i, w.role, _nearest(subjects, i))

@@ -63,6 +63,11 @@ def _krt(value: Any) -> Optional[str]:
     return None if value is None else lipi.from_code(str(value).replace("~", ""))
 
 
+def _lyap(krt: Optional[str], prefixes: tuple[str, ...]) -> Optional[str]:
+    """क्त्वा after an upasarga is replaced by ल्यप् (7.1.37); record what the form contains."""
+    return "ल्यप्" if krt == "क्त्वा" and prefixes else krt
+
+
 def _kind_of(obj: Any) -> str:
     return type(obj).__name__.rsplit("_", 1)[-1].lower()
 
@@ -117,7 +122,7 @@ def _convert(code_form: str, form: str, e: Any) -> Optional[Entry]:
         m = Morph(form=form, lemma=f["lemma"], kind="avyaya" if avyaya else "subanta", stem=stem,
                   linga=None if avyaya else linga, vibhakti=None if avyaya else vib,
                   vacana=None if avyaya else vac, root=f["root"], dhatu=f["dhatu"], gana=f["gana"],
-                  prefixes=f["prefixes"], krt=_krt(pe.krt), root_gloss=f["root_gloss"], handle=e)
+                  prefixes=f["prefixes"], krt=_lyap(_krt(pe.krt), f["prefixes"]), root_gloss=f["root_gloss"], handle=e)
         return Entry(morph=m, entry="krdanta", is_avyaya=avyaya)
     prati = pe.pratipadika
     text = lipi.from_code(prati.text)
@@ -253,8 +258,9 @@ def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...]) -> Any:
 
     e = entry.morph.handle
     pe = e.pratipadika_entry
-    if getattr(pe, "prayoga", None) is not None:
-        return None  # the Python API cannot pass a krdanta's prayoga
+    prayoga = getattr(pe, "prayoga", None)
+    if prayoga is not None and str(prayoga) != "kartari":
+        return None  # the Python API cannot pass a krdanta's karmani/bhave prayoga
     dhatu = pe.dhatu_entry.dhatu
     codes = [UPASARGA_CODE[u] for u in upasargas] + list(getattr(dhatu, "prefixes", None) or [])
     try:
