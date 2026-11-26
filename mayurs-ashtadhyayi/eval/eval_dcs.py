@@ -124,6 +124,35 @@ def add_counts(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
     return {k: a.get(k, 0) + b.get(k, 0) for k in {*a, *b}}
 
 
+def pada_units(words: Sequence[Sequence[Any]]) -> list[tuple[str, str]]:
+    """Group (form, in_compound[, lemma]) words into padas: a run of compound members plus its final
+    word is ONE unit ``(joined form, lemma of the final word)``."""
+    units, run = [], ""
+    for w in words:
+        run += w[0]
+        if not w[1]:
+            units.append((run, w[2] if len(w) > 2 else ""))
+            run = ""
+    if run:
+        units.append((run, ""))
+    return units
+
+
+def gold_pada_units(gold_words: Sequence[dict]) -> list[tuple[str, str]]:
+    return pada_units([(w["form"], w["compound_member"], w["lemma"]) for w in gold_words])
+
+
+def pada_match(ours: tuple[str, str], gold_unit: tuple[str, str]) -> bool:
+    """Same joined form, or failing that the same lemma of the final member."""
+    return normalize(ours[0]) == normalize(gold_unit[0]) or bool(
+        ours[1] and gold_unit[1] and normalize(ours[1]) == normalize(gold_unit[1]))
+
+
+def pada_line_equal(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict]) -> bool:
+    a, b = pada_units(ours), gold_pada_units(gold_words)
+    return len(a) == len(b) and all(pada_match(x, y) for x, y in zip(a, b))
+
+
 def line_words(reading: Any, line: int) -> list[Any]:
     return [w for w in reading.words if w.line == line]
 
@@ -143,6 +172,11 @@ def evaluate_verse(g: dict[str, Any], analyze: Callable[..., Any]) -> dict[str, 
     res["lines_exact"] = [split_equal(o, gl) for o, gl in zip(ours_lines, gold_lines)]
     res["verse_exact"] = all(res["lines_exact"])
     res["lines_same_words"] = [split_equal(o, gl, lenient=True) for o, gl in zip(ours_lines, gold_lines)]
+    res["pada_lines_exact"] = [pada_line_equal(o, gl) for o, gl in zip(ours_lines, gold_lines)]
+    res["pada_gold"] = sum(len(gold_pada_units(gl)) for gl in gold_lines)
+    res["pada_ours"] = sum(len(pada_units(o)) for o in ours_lines)
+    res["pada_matched"] = sum(len(lcs_pairs(pada_units(o), gold_pada_units(gl), pada_match))
+                              for o, gl in zip(ours_lines, gold_lines))
     res["gold_in_readings"] = any(
         all(split_equal([our_word(w) for w in line_words(r, i)], gl) for i, gl in enumerate(gold_lines))
         for r in analysis.readings)
@@ -187,10 +221,16 @@ def summarize(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
         "verses": n, "failures": sum(1 for r in results if r["error"]),
         "lines": lines, "lines_exact": sum(sum(r["lines_exact"]) for r in results),
         "lines_same_words": sum(sum(r.get("lines_same_words", [])) for r in results),
+        "pada_lines_exact": sum(sum(r.get("pada_lines_exact", [])) for r in results),
+        "pada_gold": sum(r.get("pada_gold", 0) for r in results),
+        "pada_ours": sum(r.get("pada_ours", 0) for r in results),
+        "pada_matched": sum(r.get("pada_matched", 0) for r in results),
         "verses_exact": sum(r["verse_exact"] for r in results),
         "gold_in_readings": sum(r["gold_in_readings"] for r in results),
         "verses_verified": sum(r["verified"] for r in results),
         "gold_words": gw, "our_words": ow, "matched_words": mt, **prf(mt, ow, gw),
+        "pada": prf(sum(r.get("pada_matched", 0) for r in results), sum(r.get("pada_ours", 0) for r in results),
+                    sum(r.get("pada_gold", 0) for r in results)),
         "proof_words": pw, "proof_verified": pv, "morphology": mc,
     }
 
@@ -201,6 +241,10 @@ def _frac(a: int, b: int) -> str:
 
 def report(results: Sequence[dict[str, Any]], s: dict[str, Any]) -> str:
     out = [f"verses evaluated: {s['verses']}  (exceptions: {s['failures']})",
+           f"PADA level (compound = one unit): half-verses exact {_frac(s['pada_lines_exact'], s['lines'])}; "
+           f"padas P {_frac(s['pada_matched'], s['pada_ours'])}, R {_frac(s['pada_matched'], s['pada_gold'])}, "
+           f"F1 {s['pada']['f1']:.3f}",
+           "MEMBER level (compound members separate):",
            f"split exact, half-verses: {_frac(s['lines_exact'], s['lines'])}",
            f"split exact, verses:      {_frac(s['verses_exact'], s['verses'])}",
            f"same words (lemma match), half-verses: {_frac(s['lines_same_words'], s['lines'])}",
@@ -227,6 +271,57 @@ def report(results: Sequence[dict[str, Any]], s: dict[str, Any]) -> str:
     return "\n".join(out)
 
 
+TEST_LABELS = {"1067": "रामायण १.१", "7305": "कुमारसम्भव १", "7242": "गीता १", "7243": "गीता २"}
+
+
+def test_set_docs() -> list[tuple[str, dict[str, Any]]]:
+    """(label, gold document restricted to the test verse range) for each entry of splits.json["test"]."""
+    from mayur import dcs
+
+    docs = []
+    for e in dcs.split_files("test"):
+        cid = Path(e["file"]).stem.rsplit("-", 1)[-1]
+        label = TEST_LABELS.get(cid, cid)
+        doc = gold.from_conllu(Path(e["file"]), label)
+        if e["verses"]:
+            doc["verses"] = [v for v in doc["verses"] if e["verses"][0] <= v["number"] <= e["verses"][1]]
+        docs.append((label, doc))
+    return docs
+
+
+def run_verses(docs: Sequence[dict[str, Any]], analyze: Callable[..., Any]) -> list[dict[str, Any]]:
+    results = []
+    for g in docs:
+        try:
+            results.append(evaluate_verse(g, analyze))
+        except Exception as exc:  # noqa: BLE001 - counted as a failure and printed, never hidden
+            results.append(failed_result(g, exc))
+            print(f"verse {g['id']}: FAILED {exc!r}", file=sys.stderr)
+    return results
+
+
+def table_row(label: str, s: dict[str, Any]) -> str:
+    m = s["morphology"]
+    return (f"{label:<14}{s['verses']:>7}{s['failures']:>6}  {_frac(s['pada_lines_exact'], s['lines']):<18}"
+            f"{_frac(s['lines_exact'], s['lines']):<18}{_frac(s['lines_same_words'], s['lines']):<18}"
+            f"{s['pada']['f1']:.3f}  {s['f1']:.3f}  {_frac(m.get('lemma', 0), m.get('words', 0))}")
+
+
+def all_tests(analyze: Callable[..., Any]) -> tuple[str, dict[str, Any]]:
+    """Run the test sets of splits.json; one summary table (and the numbers as a dict)."""
+    head = (f"{'test set':<14}{'verses':>7}{'fail':>6}  {'pada half-verse':<18}{'member half-verse':<18}"
+            f"{'same words':<18}padaF1  memF1  lemma")
+    rows, per_set, everything = [head], {}, []
+    for label, doc in test_set_docs():
+        res = run_verses(doc["verses"], analyze)
+        per_set[label] = summarize(res)
+        everything += res
+        rows.append(table_row(label, per_set[label]))
+    per_set["all"] = summarize(everything)
+    rows.append(table_row("all", per_set["all"]))
+    return "\n".join(rows), per_set
+
+
 def parse_range(spec: Optional[str], last: int) -> list[int]:
     if not spec:
         return list(range(1, last + 1))
@@ -240,20 +335,21 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--json", default=None, help="write the numbers to this file")
     ap.add_argument("--conllu", default=None, help="evaluate on this DCS chapter file instead (any book)")
     ap.add_argument("--label", default="ग्रन्थ", help="verse id prefix used with --conllu")
+    ap.add_argument("--all-tests", action="store_true", help="run the test sets of data/derived/splits.json")
     args = ap.parse_args(argv)
     from mayur.pipeline import analyze_verse
 
+    if args.all_tests:
+        table, per_set = all_tests(analyze_verse)
+        print(table)
+        if args.json:
+            Path(args.json).write_text(json.dumps(per_set, ensure_ascii=False, indent=1), encoding="utf-8")
+        return 0
     doc = gold.from_conllu(Path(args.conllu), args.label) if args.conllu else gold.load()
     by_number = {v["number"]: v for v in doc["verses"]}
     wanted = parse_range(args.verses, max(by_number))
     print(f"gold: {doc['source']}")
-    results = []
-    for g in (by_number[n] for n in wanted if n in by_number):
-        try:
-            results.append(evaluate_verse(g, analyze_verse))
-        except Exception as exc:  # noqa: BLE001 - counted as a failure and printed, never hidden
-            results.append(failed_result(g, exc))
-            print(f"verse {g['number']}: FAILED {exc!r}", file=sys.stderr)
+    results = run_verses([by_number[n] for n in wanted if n in by_number], analyze_verse)
     summary = summarize(results)
     print(report(results, summary))
     if args.json:

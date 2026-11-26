@@ -23,6 +23,16 @@ _TO = {"सम", "तुल्य"}
 _AGENT_KRT = {"तृच्", "तृन्", "तृ"}
 _ADJ_FIRST = {"great", "good", "firm", "long", "big", "small", "excellent", "best", "white", "black",
               "red", "very", "many", "beautiful", "noble", "mighty", "strong", "high", "broad", "large"}
+# final member of a compound -> (English head placed before its members, joiner, plural members)
+_FINAL = {
+    "निरत": ("devoted to", " and ", False), "रत": ("delighted in", " and ", False),
+    "वर": ("best of", " and ", True), "पुंगव": ("best of", " and ", True), "श्रेष्ठ": ("best of", " and ", True),
+    "उत्तम": ("best of", " and ", True), "सम्पन्न": ("endowed with", " and ", False),
+    "संपन्न": ("endowed with", " and ", False), "युक्त": ("endowed with", " and ", False),
+    "उपेत": ("endowed with", " and ", False), "वर्धन": ("increaser of", " and ", False),
+    "सदृश": ("like", " and ", False), "सम": ("equal to", " and ", False),
+    "प्रभव": ("born of", "-", False), "तुल्य": ("equal to", " and ", False),
+}
 _PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thigh", "cheek"}
 
 
@@ -89,6 +99,12 @@ class _Renderer:
                 return bool(f.morph and (f.morph.kind == "avyaya" or f.gloss in _ADJ_FIRST))
         return False
 
+    def final_pattern(self, i: int):
+        m = self.words[i].morph
+        if m is None or not self.members(i):
+            return None
+        return _FINAL.get(m.stem) or _FINAL.get(m.lemma) or _FINAL.get(m.lemma.rstrip("म्"))
+
     def noun_text(self, i: int) -> str:
         w = self.words[i]
         m = w.morph
@@ -106,7 +122,7 @@ class _Renderer:
             if m.krt not in _AGENT_KRT:
                 return g
         if (w.role in ("विशेषण", "विधेय") or g[:1].isupper() or g in _NO_PLURAL or " of " in g
-                or m.vacana not in ("बहुवचन", "द्विवचन")):
+                or m.vacana not in ("बहुवचन", "द्विवचन") or (g.endswith("s") and not g.endswith("ss"))):
             return g
         return ("two " if m.vacana == "द्विवचन" else "") + english.plural(g)
 
@@ -123,10 +139,16 @@ class _Renderer:
         pron_head = im is not None and english.is_pronoun(im.lemma)
         participle = im is not None and im.krt in ("क्त", "क्तवतु")
         std: list[Piece] = []
-        for k in (self.children.get(i, []) if kids is None else kids):
+        kidlist = self.children.get(i, []) if kids is None else kids
+        quals = [k for k in kidlist if self.role(k) == "विशेषण" and k not in self.used]
+        appose = len(quals) > 2 and not pron_head
+        for k in kidlist:
             r = self.role(k)
             km = self.words[k].morph
             if k in self.used:
+                continue
+            if r == "विशेषण" and appose:
+                after += [_p(",", None, "")] + self.np(k)
                 continue
             if r == "विशेषण" and pron_head:
                 after += [_p(",", None, "")] + self.np(k)
@@ -139,7 +161,10 @@ class _Renderer:
                 after += self.np(k)
                 continue
             if im is not None and im.lemma in _LIKE and r in ("करण", "सम्बन्ध", "सम्प्रदान", "कर्म"):
-                std += ([_p("to")] if im.lemma in _TO else []) + self.np(k)
+                if self.members(i):
+                    std += [_p("in")] + self.np(k)
+                else:
+                    std += ([_p("to")] if im.lemma in _TO else []) + self.np(k)
                 continue
             if r == "कर्ता" and participle:
                 after += [_p("by")] + self.np(k)
@@ -152,6 +177,17 @@ class _Renderer:
             else:
                 after += self.case_phrase(k)
         core: list[Piece] = []
+        pat = self.final_pattern(i)
+        if pat is not None:
+            head_text, joiner, plur = pat
+            core.append(_p(head_text, i))
+            for n_, j in enumerate(mem):
+                self.used.add(j)
+                t = self.text(j)
+                if plur and n_ == len(mem) - 1 and not t[:1].isupper():
+                    t = english.plural(t)
+                core.append(_p(t, j, " " if n_ == 0 else joiner if joiner != "-" else "-"))
+            return poss + adjs + core + std + after
         bv = self.bahuvrihi(i)
         glue = " " if bv else "-"
         ed = bv and self.noun_text(i) in _PAIRED

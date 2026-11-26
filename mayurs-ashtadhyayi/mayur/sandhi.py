@@ -35,6 +35,19 @@ CONSONANTS = tuple(c for row in VARGAS for c in row) + SEMIVOWELS + SIBILANTS + 
 VOICED = frozenset(c for row in VARGAS for c in row[2:]) | frozenset(SEMIVOWELS) | {"ह्"}
 SPECIAL_PRONOUNS = ("सस्", "एषस्")  # 6.1.132 एतत्तदोः सुलोपोऽकोरनञ्समासे हलि
 ANUSVARA, VISARGA, AVAGRAHA, CHANDRABINDU = "ं", "ः", "ऽ", "ँ"
+PRAGRHYA = ("ई", "ऊ", "ए")  # 1.1.11 ईदूदेद्द्विवचनं प्रगृह्यम् (only dual forms; the form alone cannot tell)
+# Hiatus left across a pāda boundary (metrical licence in epic verse; no sūtra). The segmenter
+# accepts it only where the text writes a space.
+PADA_HIATUS = "पादान्त-विराम"
+# Pada-final palatals and ह् become stops before sandhi: 8.2.30 चोः कुः, 8.2.36 व्रश्च... (श्/ष्, and
+# राज्-type ज्), 8.2.31 हो ढः.
+PALATAL_FINAL = {
+    "च्": (("क्", "८.२.३०"),),
+    "ज्": (("क्", "८.२.३०"), ("ट्", "८.२.३६")),
+    "श्": (("ट्", "८.२.३६"), ("क्", "८.२.६२")),
+    "ष्": (("ट्", "८.२.३९"),),
+    "ह्": (("ट्", "८.२.३१"), ("क्", "८.२.३२")),
+}
 
 
 @dataclass(frozen=True)
@@ -144,7 +157,8 @@ def _final_n(left: Varnas, right: Varnas) -> list:
     if b in ("ड्", "ढ्"):
         return [_o(stem + ("ण्",) + right, "८.४.४१")]
     if b == "ल्":
-        return [_o(stem + (CHANDRABINDU, "ल्") + right, "८.४.६०")]
+        return [_o(stem + (CHANDRABINDU, "ल्") + right, "८.४.६०"),
+                _o(stem + (ANUSVARA, "ल्") + right, "८.४.६०", "८.३.४")]
     return [_o(left + right)]
 
 
@@ -184,9 +198,17 @@ def _outcomes_v(left: Varnas, right: Varnas, word: str, samasa: bool) -> tuple[t
         return ((left + right, ()),)
     a, b = left[-1], right[0]
     extra = ("१.४.१४", "२.४.७१") if samasa else ()
+    if a in PALATAL_FINAL:
+        raw = []
+        for stop, rule in PALATAL_FINAL[a]:
+            raw.extend((seq, (rule,) + s) for seq, s in _outcomes_v(left[:-1] + (stop,), right, word, False))
+        return tuple((seq, tuple(dict.fromkeys(extra + s))) for seq, s in raw)
     if is_vowel(a):
         if is_vowel(b):
             raw = [(left[:-1] + seq + right[1:], s) for seq, s in _vowel_vowel(a, b)]
+            if a in PRAGRHYA:  # dual ई ऊ ए are pragṛhya and stay unjoined
+                raw.append((left + right, ("१.१.११", "६.१.१२५")))
+            raw.append((left + right, (PADA_HIATUS,)))
         elif b == "छ्":
             raw = [(left + ("च्",) + right, ("६.१.७३",) if a in SHORT else ("६.१.७६",))]
             if a not in SHORT:
@@ -225,6 +247,11 @@ def pausa_forms(pada: str) -> tuple[str, ...]:
         return (from_varnas(v[:-1] + (VISARGA,)),)
     if fin == "म्":
         return (pada, from_varnas(v[:-1] + (ANUSVARA,)))
+    if fin in PALATAL_FINAL:
+        out: list[str] = []
+        for stop, _ in PALATAL_FINAL[fin]:
+            out.extend(pausa_forms(from_varnas(v[:-1] + (stop,))))
+        return tuple(dict.fromkeys(out))
     if fin in STOPS:
         g, _ = VARGA_OF[fin]
         return tuple(dict.fromkeys(from_varnas(v[:-1] + (VARGAS[g][i],)) for i in (0, 2)))

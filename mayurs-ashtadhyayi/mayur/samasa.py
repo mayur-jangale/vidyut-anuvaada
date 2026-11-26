@@ -119,15 +119,14 @@ def _join(parts: Sequence[str], forms: Sequence[str], surface: str) -> tuple[str
 
 
 def _expected(stem: str, final: Morph) -> str:
-    """The whole compound pada as the text shows it: the compound stem with the final's ending."""
+    """The whole compound pada as the text shows it: the final member's ending put on the
+    compound stem (the part of the final stem the pada keeps is replaced by the pada)."""
     fs = _stem_of(final)
-    head = fs[:-1] if fs.endswith("्") else fs
     common = 0
-    while common < min(len(head), len(final.form)) and head[common] == final.form[common]:
+    while common < min(len(fs), len(final.form)) and fs[common] == final.form[common]:
         common += 1
-    if not stem.endswith(fs):
-        return ""
-    return stem[: len(stem) - len(fs)] + final.form
+    cut = len(fs) - common
+    return (stem[: len(stem) - cut] if cut else stem) + final.form[common:]
 
 
 def _inflect(stem: str, final: Morph) -> tuple[str, list[SutraStep], bool, str]:

@@ -227,7 +227,10 @@ def subanta_paradigm(stem: str, linga: str) -> tuple[tuple[Any, Morph], ...]:
     from vidyut.prakriya import Linga, Pada, Pratipadika, Vacana, Vibhakti
 
     lmap = {"पुंलिङ्ग": Linga.Pum, "स्त्रीलिङ्ग": Linga.Stri, "नपुंसकलिङ्ग": Linga.Napumsaka}
-    prati = Pratipadika.basic(lipi.to_code(stem))
+    try:
+        prati = Pratipadika.basic(lipi.to_code(stem))
+    except ValueError:  # a sound vidyut's code cannot spell
+        return ()
     out = []
     for vib in Vibhakti.choices():
         for vac in Vacana.choices():
@@ -254,10 +257,10 @@ def matup_subanta(handle: Any) -> Any:
     return Pada.Subanta(pratipadika=stem, linga=handle.linga, vibhakti=handle.vibhakti, vacana=handle.vacana)
 
 
-def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...]) -> Any:
+def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...], as_ktva: bool = False) -> Any:
     """A Pada.Subanta for ``entry``'s krdanta with ``upasargas`` (Devanagari) put before the
     prefixes its dhatu already has; vidyut then applies e.g. 7.1.37 (क्त्वा -> ल्यप्)."""
-    from vidyut.prakriya import Pada, Pratipadika
+    from vidyut.prakriya import Krt, Pada, Pratipadika
 
     e = entry.morph.handle
     pe = e.pratipadika_entry
@@ -267,7 +270,7 @@ def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...]) -> Any:
     dhatu = pe.dhatu_entry.dhatu
     codes = [UPASARGA_CODE[u] for u in upasargas] + list(getattr(dhatu, "prefixes", None) or [])
     try:
-        stem = Pratipadika.krdanta(dhatu.with_prefixes(codes), pe.krt)
+        stem = Pratipadika.krdanta(dhatu.with_prefixes(codes), Krt.ktvA if as_ktva else pe.krt)
         return Pada.Subanta(pratipadika=stem, linga=e.linga, vibhakti=e.vibhakti, vacana=e.vacana)
     except Exception:  # noqa: BLE001
         return None

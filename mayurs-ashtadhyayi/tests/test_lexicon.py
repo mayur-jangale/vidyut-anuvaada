@@ -118,3 +118,25 @@ def test_more_stems_and_participles():
     m = L.padas("उद्वहन्त्यास्")[0]
     assert m.krt == "शतृ" and L.prove(m).derivable
     assert L.prove(L.padas("विवस्वान्")[0]).derivable
+
+
+def test_upasarga_aa_written_as_aa():
+    m = [m for m in L.padas("आनय") if m.kind == "tinanta"][0]
+    assert "आ" in m.prefixes and "आङ्" not in m.prefixes
+
+
+def test_maha_stem_lemma():
+    m = L.stems("महा")[0]
+    assert m.lemma == "महत्" and m.stem == ""
+
+
+def test_sa_esha_special():
+    m = [m for m in L.padas("एष") if m.source == "special"][0]
+    assert (m.lemma, m.vibhakti, m.source) == ("एतद्", "प्रथमा", "special")
+    proof = L.prove(m)
+    assert not proof.derivable and "6.1.132" in proof.note
+    assert L.padas("स")[0].lemma == "तद्"
+
+
+def test_ena_dcs_lemma_present():
+    assert "एनद्" in {m.lemma for m in L.padas("एनम्")}

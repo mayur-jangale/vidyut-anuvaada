@@ -103,11 +103,10 @@ def junction_index() -> dict[Varnas, tuple[_Jn, ...]]:
                     out = seq[:-1] if not sd.is_vowel(r) and seq[-1:] == ("अ",) else seq
                     out = sd.canon_varnas(from_varnas(out) + "क") [:-2] if out else out
                     tail, head, surf = _strip(ctx, out, (r,))
-                    key = (ctx, tail, head, surf, samasa, whole)
+                    key = (ctx, tail, head, surf, samasa, whole, sutras)
                     acc.setdefault(key, {}).setdefault(r, sutras)
     index: dict[Varnas, list[_Jn]] = {}
-    for (ctx, tail, head, surf, samasa, whole), rs in acc.items():
-        sutras = next(iter(rs.values()))
+    for (ctx, tail, head, surf, samasa, whole, sutras), rs in acc.items():
         index.setdefault(surf, []).append(_Jn(ctx, tail, head, surf, frozenset(rs), sutras, samasa, whole))
     return {k: tuple(v) for k, v in index.items()}
 
@@ -259,6 +258,8 @@ class _Lattice:
                 inner = [s for s in self.sp if k <= s <= j]
                 if jn.samasa and inner:
                     continue
+                if sd.PADA_HIATUS in jn.sutras and (jn.samasa or not inner):
+                    continue
                 out.append((jn, j))
         return out
 
@@ -391,3 +392,25 @@ def segment_line(line: str, top_k: int = 12) -> Segmentation:
     splits = list(itertools.islice(lat.iter_paths(), top_k))
     return Segmentation(line=line, count=lat.count(start, False), count_plain=lat.count(start, True),
                         splits=splits, tier=tier, _iter=lat.iter_paths)
+
+
+def contains(line: str, forms, flags) -> bool:
+    """Whether the split ``forms`` (with compound flags) is a path of the line's lattice, at any tier ≤ 1."""
+    text, spaces = _prepare(line)
+    forms, flags = list(forms), list(flags)
+    for tier in (0, 1):
+        lat = _Lattice(text, spaces, tier)
+        frontier = {_START}
+        for n, form in enumerate(forms):
+            last = n == len(forms) - 1
+            nxt = set()
+            for state in frontier:
+                for e in lat.edges(state):
+                    if e[0] == form and e[2].samasa == bool(flags[n]) and ((e[5] == _END) == last):
+                        nxt.add(e[5])
+            frontier = nxt
+            if not frontier:
+                break
+        if _END in frontier:
+            return True
+    return False

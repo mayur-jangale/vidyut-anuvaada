@@ -64,10 +64,10 @@ def test_verse_one_plain():
 def test_verse_one_compound_and_alignment():
     out = translate.render(_verse1(True))
     t = out.translation
-    assert t == "Vālmīki asked austerity-study-devoted best Nārada."
+    assert t == "Vālmīki asked devoted to austerity and study best Nārada."
     check(out)
     spans = {a.word: t[a.start:a.end] for a in out.alignment}
-    assert spans[0] == "austerity" and spans[1] == "study" and spans[2] == "devoted"
+    assert spans[0] == "austerity" and spans[1] == "study" and spans[2] == "devoted to"
     assert spans[6] == "Vālmīki" and spans[5] == "asked" and spans[4] == "Nārada"
     assert set(spans) == set(range(7))
 
@@ -272,3 +272,35 @@ def test_name_sense_prefers_common(monkeypatch):
     monkeypatch.setattr(gloss.resources, "derived", lambda n: tables.get(n, {}))
     monkeypatch.setattr(gloss, "_own", lambda: {})
     assert gloss.lookup(M("x", "महर्षि", "subanta")) == ("great seer", "dcs-dictionary")
+
+
+def test_apposition_when_more_than_two_qualifiers():
+    words = [_c("निरतम्", "निरत", "विशेषण", 3, "devoted", vib="द्वितीया"),
+             _c("वरम्", "वर", "विशेषण", 3, "best", vib="द्वितीया"),
+             _c("तपस्विनम्", "तपस्विन्", "विशेषण", 3, "ascetic", vib="द्वितीया"),
+             _c("नारदम्", "नारद", "कर्म", 4, "Nārada", vib="द्वितीया"),
+             verb("पप्रच्छ", "प्रच्छ्", "ask", lak="लिट्")]
+    out = translate.render(Reading(words=words, anvaya=[4, 0, 1, 2, 3]))
+    assert out.translation == "[He] asked Nārada, devoted, best, ascetic."
+    check(out)
+
+
+def test_final_member_patterns_and_equal_in():
+    words = [_c("पृथिवी", "पृथिवी", "समासपूर्वपद", None, "earth", linga="स्त्रीलिङ्ग"),
+             _c("समस्", "सम", "विधेय", None, "equal"),
+             _c("क्षमया", "क्षमा", "करण", 1, "patience", vib="तृतीया", linga="स्त्रीलिङ्ग")]
+    words[0].in_compound = True
+    out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="तत्पुरुष")],
+                                   anvaya=[1, 2]))
+    assert out.translation == "[He is] equal to earth in patience."
+    check(out)
+    words = [_c("मुनि", "मुनि", "समासपूर्वपद", None, "sage"), _c("पुङ्गवम्", "पुंगव", "कर्म", None, "best")]
+    words[0].in_compound = True
+    out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="तत्पुरुष")], anvaya=[1]))
+    assert out.translation == "Best of sages."
+
+
+def test_gloss_sanitising():
+    from mayur import gloss
+    assert gloss.first_sense("fire that is like death") == "fire"
+    assert gloss.first_sense('ifc. "a staff"; stick') == "stick"

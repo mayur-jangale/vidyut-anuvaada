@@ -57,7 +57,8 @@ _NASALS = {"ं", "ङ्", "ञ्", "ण्", "न्", "म्", "ँ"}
 
 
 def _flat(text: str) -> str:
-    return "".join("N" if v in _NASALS else v for v in varnas(sandhi.canon(text)))
+    flat = ("N" if v in _NASALS else v for v in varnas(sandhi.canon(text)))
+    return "".join("न्" if v == "ण्" else v for v in flat)
 
 
 def _core(form: str) -> tuple:
@@ -76,6 +77,16 @@ def _anomalous(forms, target: str) -> bool:
     """A gold word whose untouchable core is not in the text: a DCS reconstruction (मम for मे)."""
     t = _flat(target)
     return any(len(c) >= 2 and _flat(from_varnas(c)) not in t for c in map(_core, forms))
+
+
+def _dcs_variant_ok(forms, flags, target: str) -> bool:
+    """DCS artefacts: न for internal ण (8.4.2 undone), र्/स् finals guessed from the lemma."""
+    fixed = [f.replace("ण", "न") for f in forms]
+    t = target.replace("ण", "न")
+    swapped = [f[:-2] + "स्" if f.endswith("र्") else (f[:-2] + "र्" if f.endswith("स्") else f) for f in fixed]
+    if _ok(fixed, flags, t):
+        return True
+    return any(_ok(fixed[:i] + [swapped[i]] + fixed[i + 1:], flags, t) for i in range(len(forms)) if swapped[i] != fixed[i])
 
 
 def _first_bad(forms, flags, target: str) -> int:
@@ -104,7 +115,7 @@ def audit(lines) -> None:
         if _ok(forms, flags, target):
             ok += 1
             continue
-        if _anomalous(forms, target):
+        if _anomalous(forms, target) or _dcs_variant_ok(forms, flags, target):
             anomalies += 1
             continue
         m = _first_bad(forms, flags, target)

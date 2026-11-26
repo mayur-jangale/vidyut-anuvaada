@@ -159,6 +159,13 @@ def _agent_noun_preferred(word: Word, m: Morph) -> bool:
 
 
 def choose(words: list[Word]) -> list[int]:
+    """Chosen analysis indices: the learned tagger when its model is present, else the rules."""
+    from mayur import tagger
+    learned = tagger.choose(words, lambda w: candidates(w) if w.analyses else [])
+    return learned if learned is not None else choose_rules(words)
+
+
+def choose_rules(words: list[Word]) -> list[int]:
     """Coordinate ascent from the best unary choice; returns chosen analysis indices."""
     cands = [candidates(w) if not w.in_compound else [] for w in words]
     chosen = [max(c, key=lambda i, w=w: unary(w.analyses[i])) if c else w.chosen for c, w in zip(cands, words)]

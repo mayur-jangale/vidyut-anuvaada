@@ -83,3 +83,19 @@ def test_word_matches_by_lemma():
     assert ev.word_matches("मे", "मम", "मद्", False, lemma="मद्", lenient=True) is True
     assert ev.split_equal([("मे", False, "मद्")], [{"form": "मम", "lemma": "मद्", "compound_member": False}],
                           lenient=True)
+
+
+def test_pada_units_group_compounds():
+    ours = [("तपस्", True, ""), ("स्वाध्याय", True, ""), ("निरतम्", False, "निरम्"), ("तपस्वी", False, "तपस्विन्")]
+    assert ev.pada_units(ours) == [("तपस्स्वाध्यायनिरतम्", "निरम्"), ("तपस्वी", "तपस्विन्")]
+    assert ev.pada_units([("वाच्", True, "")]) == [("वाच्", "")]
+
+
+def test_pada_line_equal_by_form_or_final_lemma():
+    gold_words = [g("तपः", "तपस्", cm=True), g("स्वाध्यायनिरतम्", "निरम्"), g("तपस्वी", "तपस्विन्")]
+    gold_words[0]["form"], gold_words[1]["form"] = "तपः", "निरतम्"
+    ours = [("तपः", True, ""), ("निरतम्", False, "निरम्"), ("तपस्वी", False, "तपस्विन्")]
+    assert ev.pada_line_equal(ours, gold_words)
+    split_differently = [("तपः", True, ""), ("निरतं", True, ""), ("तम्", False, "निरम्"), ("तपस्वी", False, "")]
+    assert ev.pada_line_equal(split_differently, gold_words)  # final member lemma decides
+    assert not ev.pada_line_equal(ours[:2], gold_words)

@@ -24,6 +24,9 @@ from mayur.lipi import devanagari  # noqa: E402
 # (= Mahabharata 6 BhaGi 1, 2).
 HELD_OUT_IDS = ("1067", "7305", "7242", "7243")
 MIN_BIGRAM = 2
+# (split, chapter_id, verse range): Ramayana Bala 1 and Kumarasambhava 1 are split 1-20 test / rest dev.
+HELD_OUT_SPLITS = (("test", "1067", (1, 20)), ("dev", "1067", (21, 79)), ("test", "7305", (1, 20)),
+                   ("dev", "7305", (21, 60)), ("test", "7242", None), ("test", "7243", None))
 TAG_FEATS = ("Case", "Gender", "Number", "Person", "Tense", "Mood", "VerbForm")
 CLASS_OF_UPOS = {"NOUN": "noun", "PROPN": "noun", "ADJ": "adjective", "NUM": "adjective", "PRON": "pronoun",
                  "DET": "pronoun", "VERB": "verb", "AUX": "verb"}
@@ -107,6 +110,19 @@ def chapter_files(root: Path) -> list[Path]:
     return sorted((root / "files").glob("*/*.conllu"))  # not the *.conllu_parsed files
 
 
+def splits(root: Path, files: list[Path]) -> dict[str, list[dict]]:
+    """Train = every counted chapter; dev/test = parts of the held-out chapters (see HELD_OUT_SPLITS)."""
+    rel = lambda f: str(f.relative_to(root))  # noqa: E731
+    by_id = {f.stem.rsplit("-", 1)[-1]: f for f in files}
+    out: dict[str, list[dict]] = {"train": [{"file": rel(f), "verses": None}
+                                            for cid, f in by_id.items() if cid not in HELD_OUT_IDS],
+                                  "dev": [], "test": []}
+    for name, cid, span in HELD_OUT_SPLITS:
+        if cid in by_id:
+            out[name].append({"file": rel(by_id[cid]), "verses": list(span) if span else None})
+    return out
+
+
 def build(data_dir: Path) -> dict[str, int]:
     root = data_dir / "dcs" / "sanskrit" / "dcs" / "data" / "conllu"
     files = chapter_files(root)
@@ -115,6 +131,7 @@ def build(data_dir: Path) -> dict[str, int]:
     sentences = (s for f in files for s in dcs.iter_sentences(f))
     counted = count_sentences(sentences)
     out = tables(counted, sense_labels(root / "lookup" / "word-senses.csv"), dictionary(root / "lookup" / "dictionary.csv"))
+    out["splits.json"] = splits(root, files)
     dest = data_dir / "derived"
     dest.mkdir(parents=True, exist_ok=True)
     for name, obj in out.items():

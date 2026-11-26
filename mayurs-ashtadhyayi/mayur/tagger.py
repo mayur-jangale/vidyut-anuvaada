@@ -72,6 +72,21 @@ def unary(m: Morph) -> Feats:
     return f
 
 
+def unary_all(cands: list[Morph]) -> list[Feats]:
+    """Unary features plus features relative to the word's other candidates."""
+    fs = [unary(m) for m in cands]
+    top_lac = max(f["lac"] for f in fs)
+    top_q = max(m.quality for m in cands)
+    for f, m in zip(fs, cands):
+        f["lac_gap"] = f["lac"] - top_lac
+        if f["lac"] == top_lac:
+            f["lac_top"] = 1.0
+        if m.quality == top_q:
+            f["q_top"] = 1.0
+        f["ncand"] = math.log(len(cands))
+    return fs
+
+
 def _agree(a: Morph, b: Morph) -> bool:
     return a.kind == b.kind == "subanta" and (a.vibhakti, a.vacana, a.linga) == (b.vibhakti, b.vacana, b.linga)
 
@@ -116,7 +131,7 @@ def decode(cands: list[list[Morph]], w: dict[str, float]) -> list[int]:
     n = len(cands)
     if n == 0:
         return []
-    un = [[dot(w, unary(m)) for m in c] for c in cands]
+    un = [[dot(w, f) for f in unary_all(c)] for c in cands]
     best = [list(un[0])]
     back: list[list[int]] = [[0] * len(cands[0])]
     for i in range(1, n):
@@ -151,10 +166,11 @@ def decode(cands: list[list[Morph]], w: dict[str, float]) -> list[int]:
     return path
 
 
-def features(ms: list[Morph]) -> Feats:
+def features(cands: list[list[Morph]], path: list[int]) -> Feats:
     """Global feature vector of one analysed half-verse (for training)."""
     out: Feats = {}
-    parts = [unary(m) for m in ms] + [pair(ms[i - 1], ms[i]) for i in range(1, len(ms))] + [sentence(ms)]
+    ms = [c[i] for c, i in zip(cands, path)]
+    parts = [unary_all(c)[i] for c, i in zip(cands, path)] + [pair(ms[i - 1], ms[i]) for i in range(1, len(ms))] + [sentence(ms)]
     for f in parts:
         for k, v in f.items():
             out[k] = out.get(k, 0.0) + v

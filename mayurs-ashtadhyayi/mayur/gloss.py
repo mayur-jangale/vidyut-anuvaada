@@ -26,7 +26,7 @@ def _own() -> dict[str, str]:
 
 _ARTICLES = ("the ", "a ", "an ")
 _TRAILING = {"or", "to", "of", "and", "the", "a", "an", "in", "on", "with", "for", "by", "as"}
-_CUT = re.compile(r"\s+or\s+|\s+and\s+|[;,/]|\s+-\s+")
+_CUT = re.compile(r"\s+(?:that|which|who|whose|having)\s+|\s+or\s+|\s+and\s+|[;,/]|\s+-\s+")
 _MAX_CLEAN = 3
 
 
@@ -71,7 +71,7 @@ def first_sense(text: str, verb: bool = False) -> str:
         if part.strip().startswith(("[", "(")):
             continue
         g = clean(part, verb)
-        if not g or _GRAMMAR_ONLY.match(g):
+        if not g or _GRAMMAR_ONLY.match(g) or any(x in g for x in ('"', "ifc", "°", "=")):
             continue
         return g
     return ""
@@ -101,6 +101,8 @@ def lookup(m: Morph) -> tuple[str, str]:
     keys = _keys(m)
     verb = m.root is not None
     own = _own()
+    if m.krt in ("ण्यत्", "यत्", "क्यप्", "तव्य", "अनीयर्") and m.stem in own:
+        return own[m.stem], "own"  # a noun that only looks like a gerundive: वाक्य "speech"
     for k in keys:
         if k in own:
             return own[k], "own"
@@ -117,9 +119,10 @@ def lookup(m: Morph) -> tuple[str, str]:
             return g, "dcs-sense"
     for k in keys:
         for entry in dictionary.get(k, []) or []:
-            g = first_sense(str(entry.get("meanings", "")), verb)
-            if g:
-                return g, "dcs-dictionary"
+            for part in str(entry.get("meanings", "")).split(";"):
+                g = first_sense(part, verb)
+                if g and not g.lower().startswith("name"):
+                    return g, "dcs-dictionary"
     g = first_sense(m.root_gloss or "", verb)
     if g:
         return g, "vidyut-dhatupatha"

@@ -7,7 +7,9 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-from typing import Iterator
+import json
+import random
+from typing import Any, Iterator, Optional
 
 from mayur.lipi import devanagari
 
@@ -117,3 +119,34 @@ def iter_sentences(path: str | Path) -> Iterator[dict]:
     """Sentences of one CoNLL-U file: text, chapter, sent_counter, sent_subcounter, tokens."""
     with open(path, encoding="utf-8") as fh:
         yield from parse_sentences(fh.readlines())
+
+
+def split_files(name: str) -> list[dict[str, Any]]:
+    """Entries ``{"file": absolute path, "verses": [first, last] | None}`` of the split ``name``
+    ("train" | "dev" | "test") from data/derived/splits.json; ``[]`` when the manifest is missing."""
+    from mayur.resources import data_dir, derived
+
+    root = data_dir() / "dcs" / "sanskrit" / "dcs" / "data" / "conllu"
+    return [{"file": str(root / e["file"]), "verses": e["verses"]} for e in derived("splits.json").get(name, [])]
+
+
+def gold_lines(files: Any, limit: Optional[int] = None, seed: int = 0) -> Iterator[dict[str, Any]]:
+    """Gold half-verses in the format of ``mayur.gold`` lines (text, compact, iast, words, ...).
+
+    ``files``: paths or ``split_files`` entries. With ``limit`` a seeded random sample is yielded.
+    """
+    lines = []
+    for entry in files:
+        path, span = (entry["file"], entry.get("verses")) if isinstance(entry, dict) else (entry, None)
+        for sent in iter_sentences(path):
+            if span and not span[0] <= sent["sent_counter"] <= span[1]:
+                continue
+            lines.append({
+                "text": sent["text"], "compact": compact(sent["text"]), "iast": sent["iast"],
+                "chapter": sent["chapter"], "verse": sent["sent_counter"],
+                "words": [{"form": t["form"], "lemma": t["lemma"], "upos": t["upos"], "feats": t["feats"],
+                           "compound_member": t["compound_member"]} for t in sent["tokens"]],
+            })
+    if limit is not None and limit < len(lines):
+        lines = random.Random(seed).sample(lines, limit)
+    yield from lines

@@ -80,6 +80,10 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             pada = bridge.prefixed_tinanta(entry, upasargas)
         elif entry.entry == "krdanta" and m.krt in _GOOD_KRT:
             pada = bridge.prefixed_krdanta(entry, upasargas)
+            if m.krt in ("यत्", "ण्यत्", "क्यप्") and form.endswith("्य") and not any(
+                    d.text == form for d in bridge.derive(pada)):
+                pada = bridge.prefixed_krdanta(entry, upasargas, as_ktva=True)
+                m = replace(m, krt="क्त्वा", kind="avyaya", linga=None, vibhakti=None, vacana=None)
         else:
             continue
         if pada is None:
@@ -114,6 +118,7 @@ _ENDINGS = (
     ("इस्", "इ", ("पुंलिङ्ग", "स्त्रीलिङ्ग")), ("इम्", "इ", ("पुंलिङ्ग", "स्त्रीलिङ्ग")),
     ("एण", "अ", ("पुंलिङ्ग", "नपुंसकलिङ्ग")), ("आणाम्", "अ", ("पुंलिङ्ग", "नपुंसकलिङ्ग")),
     ("आणि", "अ", ("नपुंसकलिङ्ग",)), ("ईस्", "इन्", ("पुंलिङ्ग",)), ("ई", "इन्", ("पुंलिङ्ग",)),
+    ("उवि", "ऊ", ("स्त्रीलिङ्ग",)), ("उवस्", "ऊ", ("स्त्रीलिङ्ग",)), ("उवम्", "ऊ", ("स्त्रीलिङ्ग",)),
     ("ई", "ई", ("स्त्रीलिङ्ग",)), ("ईम्", "ई", ("स्त्रीलिङ्ग",)), ("उस्", "उ", ("पुंलिङ्ग", "स्त्रीलिङ्ग")),
 )
 _BUDGET_S = 0.005

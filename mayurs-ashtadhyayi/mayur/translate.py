@@ -115,6 +115,8 @@ def render(reading: Reading) -> Reading:
         if w.in_compound and i not in r.used:
             r.used.add(i)
             pieces.append(_p(r.text(i), i))
+    while pieces and (pieces[0][0] in _CONNECTIVES or not pieces[0][0]) and pieces[0][1] is not None:
+        pieces = pieces[1:]  # never open a sentence with a dangling conjunction
     text, alignment = _compose(pieces)
     if text:
         k = next((n for n, ch in enumerate(text) if ch.isalpha()), 0)
