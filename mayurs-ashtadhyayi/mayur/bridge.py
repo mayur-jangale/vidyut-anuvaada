@@ -275,3 +275,22 @@ def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...], as_ktva: bool = F
         return Pada.Subanta(pratipadika=stem, linga=e.linga, vibhakti=e.vibhakti, vacana=e.vacana)
     except Exception:  # noqa: BLE001
         return None
+
+
+def ktva_of_verb(entry: Entry, upasargas: tuple[str, ...]) -> Any:
+    """A Pada for the क्त्वा/ल्यप् absolutive of a kosha tinanta's dhatu with ``upasargas``."""
+    from vidyut.prakriya import Krt, Linga, Pada, Pratipadika, Vacana, Vibhakti
+
+    e = entry.morph.handle
+    dhatu = e.dhatu_entry.dhatu
+    codes = [UPASARGA_CODE[u] for u in upasargas] + list(getattr(dhatu, "prefixes", None) or [])
+    try:
+        stem = Pratipadika.krdanta(dhatu.with_prefixes(codes), Krt.ktvA)
+        return Pada.Subanta(pratipadika=stem, linga=Linga.Pum, vibhakti=Vibhakti.Prathama, vacana=Vacana.Eka)
+    except Exception:  # noqa: BLE001
+        return None
+
+
+def pratipadika_of(handle: Any) -> Any:
+    """The pratipadika inside a Pada.Subanta handle (its own derivation gives the stem)."""
+    return getattr(handle, "pratipadika", None)

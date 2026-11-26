@@ -65,15 +65,59 @@ def _splits(form: str) -> tuple[tuple[str, str], ...]:
             rest = sounds[len(wv):]
             for s in starts:
                 out.append((u, lipi.from_varnas(s + rest)))
+            for undone in _unretroflex(rest):
+                out.append((u, lipi.from_varnas(undone)))
     return tuple(dict.fromkeys(out))
+
+
+_DENTAL = {"ट्": "त्", "ठ्": "थ्", "ण्": "न्"}
+
+
+def _unretroflex(rest: tuple[str, ...]) -> tuple[tuple[str, ...], ...]:
+    """The remainder as the root stands alone, before the prefix's ष / ण (8.3.65 उपसर्गात् सुनोति...,
+    8.4.14 उपसर्गादसमासेऽपि णोपदेशस्य): ष्ठित -> स्थित, णम -> नम. Forward derivation checks it."""
+    out = []
+    if rest and rest[0] == "ष्":
+        tail = rest[1:]
+        if tail and tail[0] in _DENTAL:
+            tail = (_DENTAL[tail[0]],) + tail[1:]
+        out.append(("स्",) + tail)
+    if rest and rest[0] == "ण्":
+        out.append(("न्",) + rest[1:])
+    if len(rest) > 1 and rest[0] == "अ" and rest[1] == "ष्":  # augment: अभ्यषिञ्चत् -> असिञ्चत्
+        out.append(("अ", "स्") + rest[2:])
+    return tuple(out)
 
 
 def _lemma(upasargas: tuple[str, ...], root: str) -> str:
     return "".join(upasargas) + root
 
 
+def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> list[Morph]:
+    """परित्यज्य: the kosha lacks त्यज्य, so find the dhatu through a present (त्यजति / चिन्तयति)
+    and forward-derive its ल्यप् with the upasargas."""
+    if not remainder.endswith("्य"):
+        return []
+    base = remainder[: -len("्य")]
+    out: list[Morph] = []
+    seen: set[str] = set()
+    for probe in (base + "ति", base + "यति", base + "ते", base + "यते"):
+        for entry in bridge.lookup(probe):
+            if entry.entry != "tinanta" or repr(entry.morph.handle.dhatu_entry.dhatu) in seen:
+                continue
+            seen.add(repr(entry.morph.handle.dhatu_entry.dhatu))
+            pada = bridge.ktva_of_verb(entry, upasargas)
+            if pada is not None and any(d.text == form for d in bridge.derive(pada)):
+                m = entry.morph
+                prefixes = upasargas + m.prefixes
+                out.append(Morph(form=form, lemma=_lemma(prefixes, m.root or m.lemma), kind="avyaya", root=m.root,
+                                 dhatu=m.dhatu, gana=m.gana, prefixes=prefixes, krt="ल्यप्", root_gloss=m.root_gloss,
+                                 source="generated", quality=3, handle=pada))
+    return out
+
+
 def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list[Morph]:
-    out = []
+    out = _lyap_from_verbs(form, upasargas, remainder) if form.endswith("्य") else []
     for entry in bridge.lookup(remainder):
         m = entry.morph
         if entry.entry == "tinanta":

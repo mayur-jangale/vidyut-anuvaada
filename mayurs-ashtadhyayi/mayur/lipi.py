@@ -15,6 +15,7 @@ from vidyut.lipi import Scheme, transliterate
 
 _DEVANAGARI = re.compile(r"[ऀ-ॿ]")
 _SPECIAL = {"M": "ं", "H": "ः", "'": "ऽ", "~": "ँ", " ": " "}
+_OM = "ॐ"
 
 
 class AmbiguousScript(ValueError):
@@ -51,21 +52,37 @@ def _varna_of(code_char: str) -> str:
 
 @lru_cache(maxsize=200_000)
 def varnas(deva: str) -> tuple[str, ...]:
-    """The sounds of ``deva`` in order: ``varnas("रामस्") == ("र्", "आ", "म्", "अ", "स्")``."""
+    """The sounds of ``deva`` in order: ``varnas("रामस्") == ("र्", "आ", "म्", "अ", "स्")``.
+
+    The syllable ॐ is kept as one unit.
+    """
+    if _OM in deva:
+        head, _, tail = deva.partition(_OM)
+        return varnas(head) + (_OM,) + varnas(tail)
     return tuple(_varna_of(ch) for ch in to_code(deva))
 
 
+_MATRA = {"अ": "", "आ": "ा", "इ": "ि", "ई": "ी", "उ": "ु", "ऊ": "ू", "ऋ": "ृ", "ॠ": "ॄ", "ऌ": "ॢ",
+          "ॡ": "ॣ", "ए": "े", "ऐ": "ै", "ओ": "ो", "औ": "ौ"}
+_VIRAMA = "्"
+
+
 def from_varnas(sounds) -> str:
-    """Inverse of :func:`varnas`."""
-    return from_code("".join(_code_of(v) for v in sounds))
+    """Inverse of :func:`varnas`, composed directly in Devanagari.
 
-
-@lru_cache(maxsize=None)
-def _code_of(varna: str) -> str:
-    for code_char, special in _SPECIAL.items():
-        if varna == special:
-            return code_char
-    return to_code(varna)
+    A vowel after a consonant becomes its matra; a vowel after a vowel stays an independent
+    letter, so a hiatus such as ते + आ is written तेआ and never lost.
+    """
+    out: list[str] = []
+    after_consonant = False
+    for v in sounds:
+        if after_consonant and v in _MATRA:
+            out[-1] = out[-1][: -len(_VIRAMA)] + _MATRA[v]
+            after_consonant = False
+        else:
+            out.append(v)
+            after_consonant = len(v) > 1 and v.endswith(_VIRAMA)
+    return "".join(out)
 
 
 def pausa(pada: str) -> str:

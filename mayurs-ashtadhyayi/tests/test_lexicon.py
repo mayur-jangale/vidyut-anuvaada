@@ -150,3 +150,34 @@ def test_verbal_lemma_sandhi_joined(form, lemma):
 
 def test_pronoun_stems_voiced():
     assert L.stems("मद्")[0].lemma == "अस्मद्" and L.stems("त्वद्")[0].lemma == "युष्मद्"
+
+
+@pytest.mark.parametrize("form,lemma,krt", [("विचिन्त्य", "विचिन्तय्", "ल्यप्"), ("परित्यज्य", "परित्यज्", "ल्यप्"),
+                                            ("पुरस्कृत्य", "पुरस्कृ", "ल्यप्"), ("निश्चित्य", "निश्चि", "ल्यप्"),
+                                            ("सम्पन्नस्", "सम्पद्", "क्त")])
+def test_prefixed_krdanta_always_offered(form, lemma, krt):
+    from mayur import ud
+
+    ms = [m for m in L.padas(form) if ud.lemma(m) == lemma and m.krt == krt]
+    assert ms and L.prove(ms[0]).derivable
+
+
+@pytest.mark.parametrize("form,lemma", [("पश्य", "पश्"), ("दध्यौ", "ध्या"), ("अगात्", "गा"), ("प्राह", "प्राह्")])
+def test_corpus_citation_of_roots(form, lemma):
+    from mayur import ud
+
+    assert lemma in {ud.lemma(m) for m in L.padas(form)}
+
+
+def test_participle_also_adjective():
+    m = [m for m in L.padas("समन्वितस्") if m.lemma == "समन्वित" and not m.krt]
+    assert m and L.prove(m[0]).derivable
+
+
+@pytest.mark.parametrize("form,lemma", [("अनुष्ठितम्", "अनुष्ठा"), ("उत्थितस्", "उत्था"), ("उत्थाय", "उत्था"),
+                                        ("अभ्यषिञ्चत्", "अभिषिच्"), ("न्यषेधत्", "निषिध्"), ("निषेदुस्", "निषद्")])
+def test_retroflexed_prefixed_roots(form, lemma):
+    from mayur import ud
+
+    ms = [m for m in L.padas(form) if ud.lemma(m) == lemma]
+    assert ms and L.prove(ms[0]).derivable

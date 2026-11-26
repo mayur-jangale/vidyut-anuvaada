@@ -265,4 +265,12 @@ def decode(line: str, top_k: int = 12, model: Optional[Mapping[str, Any]] = None
     table = m.get("tag_bigram", {})
     tid = m.get("table_id") or register_table(table)
     g, raw = build_graph(lat, table)
-    return [lat._split([raw[i] for i in path], score) for score, path in viterbi(g, m["weights"], tid, top_k)]
+    out, seen = [], set()
+    for score, path in viterbi(g, m["weights"], tid, top_k * 3):
+        key = tuple((g.edges[i].form, g.edges[i].samasa) for i in path)
+        if key not in seen:  # one word sequence can arise from several junction analyses
+            seen.add(key)
+            out.append(lat._split([raw[i] for i in path], score))
+        if len(out) >= top_k:
+            break
+    return out

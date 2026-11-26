@@ -106,8 +106,21 @@ def _kosha_morphs(form: str) -> list[Morph]:
     out = []
     for variant in spelling_variants(form):
         for entry in bridge.lookup(variant):
-            out.append(replace(entry.morph, form=form, quality=_quality(entry)))
+            m = replace(entry.morph, form=form, quality=_quality(entry))
+            out.append(m)
+            if m.krt in _ADJECTIVAL_KRT and m.stem and m.kind == "subanta":
+                out.append(_as_adjective(m))
     return out
+
+
+# participles the corpus also cites as adjectives under their own stem (समन्वित, शक्य, उचित)
+_ADJECTIVAL_KRT = frozenset({"क्त", "क्तवतु", "यत्", "ण्यत्", "क्यप्", "तव्य", "अनीयर्"})
+
+
+def _as_adjective(m: Morph) -> Morph:
+    """The same derived pada, analysed as a subanta of the kṛdanta stem (same vidyut handle)."""
+    return replace(m, lemma=m.stem, stem="", root=None, dhatu=None, gana=None, prefixes=(), krt=None,
+                   root_gloss=m.root_gloss, quality=min(m.quality, 2))
 
 
 @lru_cache(maxsize=200_000)
@@ -172,11 +185,31 @@ def stems(form: str) -> tuple[Morph, ...]:
             for entry in bridge.lookup(key):
                 if entry.entry == "basic" and entry.pratipadika == variant:
                     out.append(_as_stem(entry, form))
+    known = set(out)
+    out.extend(m for m in _prefixed_stems(form) if m not in known)
     if form in _SPECIAL_STEMS:
         lemma, _ = _SPECIAL_STEMS[form]
         out.append(Morph(form=form, lemma=lemma, kind="stem", source="special", quality=3,
                          handle=("stem", bridge.basic_pratipadika_handle(lemma))))
     return _rank(out)
+
+
+def _prefixed_stems(form: str) -> list[Morph]:
+    """उन्नत, प्रदीप्त: a prefixed kṛdanta stem the kosha lacks, forward-derived (stem = form)."""
+    from mayur.lexicon_gen import looks_verbal, prefixed
+
+    if not looks_verbal(form + "स्"):
+        return []
+    out = []
+    for m in prefixed(form):
+        stem_handle = bridge.pratipadika_of(m.handle) if m.kind == "subanta" else None
+        if stem_handle is None or m.krt not in _GOOD_KRT:
+            continue
+        if any(d.text == form for d in bridge.derive(stem_handle)):
+            out.append(Morph(form=form, lemma=m.lemma, kind="stem", stem=form, root=m.root, dhatu=m.dhatu,
+                             gana=m.gana, prefixes=m.prefixes, krt=m.krt, root_gloss=m.root_gloss,
+                             source="generated", quality=3, handle=("stem", stem_handle)))
+    return list(dict.fromkeys(out))
 
 
 def is_stem(form: str) -> bool:
@@ -267,18 +300,71 @@ _R_PREFIX = ("प्र", "परा", "परि", "निर्", "निस�
 def _join(left: str, right: str) -> str:
     from mayur import sandhi
 
+    if left == "पुरस्":  # 8.3.40 नमस्पुरसोर्गत्योः
+        return left + right
+    if left[-1:] in ("ि", "ु") and right.startswith(_SHATVA_ROOTS):  # 8.3.65-8.3.70, 8.4.41
+        right = "ष" + right[1:]
+        right = right.replace("ष्था", "ष्ठा", 1).replace("ष्तु", "ष्टु", 1).replace("ष्तम्भ्", "ष्टम्भ्", 1)
+        return left + right
+    if left == "उद्" and right.startswith(("स्था", "स्तम्भ्")):  # 8.4.61 उदः स्थास्तम्भोः पूर्वस्य
+        return "उत्" + right[2:]
+    if left == "उद्" and right[:1] in ("न", "म"):  # 8.4.45 यरोऽनुनासिकेऽनुनासिको वा (the usual spelling)
+        return "उन्" + right
+    if left.endswith("र्") and right[:1] not in _VOWEL_INITIAL:  # निर्गम्, दुर्गम्: र् stays
+        return left + right
     outs = sandhi.outcomes(left, right)
-    text = outs[0].text if outs else left + right
+    # within a word the samhita rules are obligatory (1.4.109 with 6.1.72): prefer an outcome that applied one
+    applied = [o for o in outs if o.sutras and "पादान्त-विराम" not in o.sutras]
+    text = (applied or list(outs))[0].text if outs else left + right
+    if "ः" in text and right[:1] not in _VOWEL_INITIAL:  # निस्/दुस् before a voiced sound: निर्, दुर्
+        if right[:1] in _VOICED:
+            sub = "र्"
+        elif right[:1] in "कखपफ" and left[-3:-2] in ("ि", "ु"):  # 8.3.41 इदुदुपधस्य चाप्रत्ययस्य
+            sub = "ष्"
+        elif right[:1] in "तथ":
+            sub = "स्"
+        elif right[:1] in "चछ":
+            sub = "श्"
+        else:
+            sub = "ः"
+        text = text.replace("ः", sub, 1)
     if left in _R_PREFIX and text[len(left):].startswith("न"):  # 8.4.14 उपसर्गादसमासेऽपि णोपदेशस्य
         text = text[: len(left)] + "ण" + text[len(left) + 1:]
     return text
 
 
+_VOWEL_INITIAL = frozenset("अआइईउऊऋॠऌएऐओऔ")
+_VOICED = frozenset("गघङजझञडढणदधनबभमयरलवह")
+_SHATVA_ROOTS = ("स्था", "सद्", "सिच्", "सिध्", "सञ्ज्", "स्तु", "स्तम्भ्", "सेव्", "सो", "स्वप्", "सह्",
+                 "सिव्", "सु", "सू", "स्यन्द्", "स्वञ्ज्")
+
+
 def _dcs_root(m: Morph) -> str:
     """A ṇic / curādi stem as the corpus cites it: कथि -> कथय्, कारि -> कारय् (vidyut ends it in इ)."""
     root = m.root or m.lemma
-    if root.endswith("ि") and (m.gana == "चुरादि" or not (m.dhatu or "").rstrip("॒॑ँ").endswith(("ि", "इ"))):
+    taught = "".join(ch for ch in (m.dhatu or "") if ch not in "॒॑ँ")
+    if root.endswith("ि") and not taught.startswith(root):
+        short = root.replace("ा", "", 1)
+        if short != root and short[:-1] in m.form and root[:-1] not in m.form:  # 6.4.92 मितां ह्रस्वः
+            root = short
         return root[:-1] + "य्"
+    return _CITED_ROOT.get(root, root)
+
+
+# How the corpus cites roots that vidyut names by their Dhatupatha form (ध्यै -> ध्या, 6.1.45)
+_CITED_ROOT = {"ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
+               "दै": "दा", "वे": "वा", "व्ये": "व्या", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
+# Present-system suppletion (7.3.78 पाघ्राध्मास्थाम्नादाण्दृश्यर्तिसर्तिशदसदां पिबजिघ्र...): दृश् -> पश्य
+_PRESENT = frozenset({"लट्", "लोट्", "लङ्", "विधिलिङ्"})
+
+
+def _suppletive_root(m: Morph, root: str) -> str:
+    if root == "दृश्" and "पश्य" in m.form and (m.lakara in _PRESENT or m.krt in ("शतृ", "शानच्")):
+        return "पश्"
+    if root == "इ" and m.lakara == "लुङ्" and "गा" in m.form:  # 2.4.45 इणो गा लुङि
+        return "गा"
+    if root == "ब्रू" and any(x in m.form for x in ("आह", "ाह", "आत्थ", "ात्थ")):  # 3.4.84 ब्रुवः पञ्चानाम् ... आहः
+        return "अह्"
     return root
 
 
@@ -300,4 +386,4 @@ def _labial_m(text: str) -> str:
 def verbal_lemma(m: Morph) -> str:
     """The upasargas joined to the root by sandhi, in the corpus' citation form: प्र+आप् -> प्राप्,
     प्र+नम् -> प्रणम्, आ+इ -> ए, आ+सादि -> आसादय्. For ``mayur.ud.lemma``."""
-    return _labial_m(_verbal_lemma(tuple(m.prefixes), _dcs_root(m)))
+    return _labial_m(_verbal_lemma(tuple(m.prefixes), _suppletive_root(m, _dcs_root(m))))

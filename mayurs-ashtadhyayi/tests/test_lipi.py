@@ -28,3 +28,9 @@ def test_input_scripts():
     assert lipi.devanagari("śveto dhāvati") == "श्वेतो धावति"
     with pytest.raises(lipi.AmbiguousScript):
         lipi.devanagari("shveto dhavati")
+
+
+def test_hiatus_and_om_survive_the_round_trip():
+    assert lipi.from_varnas(("त्", "ए", "आ", "स्", "अ")) == "तेआस"
+    for text in ("अइ", "प्रउग", "ॐकारस्", "निर्ॐकार"):
+        assert lipi.from_varnas(lipi.varnas(text)) == text
