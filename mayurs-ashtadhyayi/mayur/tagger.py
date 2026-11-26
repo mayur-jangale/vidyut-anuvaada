@@ -326,6 +326,11 @@ def decode(v: Verse, w: Weights, gold: Optional[Sequence[tuple[int, ...]]] = Non
     prefixes at the first point where no gold-consistent path survives (early update), else full paths."""
     n = len(v.cands)
     stat = [[score_obs(w, v.static[i][k], keys(m)) for k, m in enumerate(c)] for i, c in enumerate(v.cands)]
+    # --- neural hook (mayur.neural): + λ · neural candidate score, set by choose_indices ---
+    bonus = getattr(v, "neural_bonus", None)
+    if bonus:
+        stat = [[x + b for x, b in zip(row, brow)] for row, brow in zip(stat, bonus)]
+    # --- end neural hook ---
     beam: list[tuple[float, tuple[int, ...]]] = [(0.0, ())]
     gpath: tuple[int, ...] = ()
     gscore = 0.0
@@ -369,19 +374,39 @@ def enabled() -> bool:
 
 def choose_indices(cands: Sequence[Sequence[Morph]], lines: Sequence[int], compound_flags: Sequence[bool],
                    forms: Sequence[str], weights: Optional[Weights] = None,
-                   weights2: Optional[Weights] = None, tables: Optional[dict] = None) -> list[int]:
+                   weights2: Optional[Weights] = None, tables: Optional[dict] = None,
+                   neural_bonus: Optional[Sequence[Sequence[float]]] = None) -> list[int]:
     """Index of the chosen candidate per word (0 for a word without candidates). With second-pass
-    weights the verse is decoded again, every word seeing the first-pass choices of the others."""
+    weights the verse is decoded again, every word seeing the first-pass choices of the others.
+    ``neural_bonus``: λ-weighted neural score per candidate; None = from ``mayur.neural`` when enabled."""
     if weights is None:
         model = load() or {}
         weights, weights2, tables = model.get("weights", {}), model.get("weights2"), model.get("tables", {})
     if not cands:
         return []
-    path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms, tables=tables), weights)]
+    if neural_bonus is None:  # --- neural hook ---
+        neural_bonus = _neural_bonus(cands, lines, compound_flags, forms)
+    v1 = Verse(cands, lines, compound_flags, forms, tables=tables)
+    v1.neural_bonus = neural_bonus
+    path = [max(k, 0) for k in decode(v1, weights)]
     if weights2:
-        path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms, prior=path, tables=tables),
-                                          weights2)]
+        v2 = Verse(cands, lines, compound_flags, forms, prior=path, tables=tables)
+        v2.neural_bonus = neural_bonus
+        path = [max(k, 0) for k in decode(v2, weights2)]
     return path
+
+
+def _neural_bonus(cands, lines, compound_flags, forms) -> list:
+    """--- neural hook --- λ · Σ log P(feature value) per candidate, [] when the model is off."""
+    try:
+        from mayur import neural
+        if not neural.enabled() or neural.weight() <= 0:
+            return []
+        lam = neural.weight()
+        scores = neural.candidate_scores(cands, neural.feature_logprobs(forms, lines, compound_flags))
+        return [[lam * x for x in row] for row in scores]
+    except Exception:  # torch or model broken: fall back to the perceptron alone
+        return []
 
 
 def choose(words, candidates=None, compound_flags=None, forms=None):
@@ -402,6 +427,21 @@ def choose(words, candidates=None, compound_flags=None, forms=None):
     return [ix[k] if ix else x.chosen for x, ix, k in zip(words, idx, pick)]
 
 
+def _agent_noun_governs(words, chosen: list[int], i: int) -> bool:
+    """A feminine participle read where a तृच् agent noun is possible, next to a genitive it can govern
+    (2.3.65 कर्तृकर्मणोः कृति) and with no feminine noun in its case in the half-verse to agree with."""
+    m = words[i].analyses[chosen[i]]
+    if not (m.krt and m.krt != "तृच्" and m.linga == "स्त्रीलिङ्ग" and m.vibhakti == "प्रथमा"):
+        return False
+    if not any(a.krt == "तृच्" and a.vibhakti == "प्रथमा" for a in words[i].analyses):
+        return False
+    near = [words[j].analyses[chosen[j]] for j in (i - 1, i + 1) if 0 <= j < len(words) and words[j].analyses]
+    fem = any(w.analyses and k != i and w.line == words[i].line and w.analyses[chosen[k]].linga == "स्त्रीलिङ्ग"
+              and w.analyses[chosen[k]].vibhakti == "प्रथमा" and not w.analyses[chosen[k]].krt
+              for k, w in enumerate(words))
+    return any(x.vibhakti == "षष्ठी" for x in near) and not fem
+
+
 def enforce(words, chosen: list[int], force: bool = False) -> list[int]:
     """Hard constraints on a learned choice: a तृच् noun over an equally likely लुट् verb, and
     a finite verb without an agreeing nominative takes the nearest word that has one.
@@ -410,6 +450,8 @@ def enforce(words, chosen: list[int], force: bool = False) -> list[int]:
     out = list(chosen)
     for i, w in enumerate(words):
         if w.analyses and _agent_noun_preferred(w, w.analyses[out[i]]):
+            out[i] = next(j for j, a in enumerate(w.analyses) if a.krt == "तृच्" and is_case(a, PRATHAMA))
+        elif w.analyses and _agent_noun_governs(words, out, i):
             out[i] = next(j for j, a in enumerate(w.analyses) if a.krt == "तृच्" and is_case(a, PRATHAMA))
     if not force and not (load() or {}).get("enforce", True):
         return out
