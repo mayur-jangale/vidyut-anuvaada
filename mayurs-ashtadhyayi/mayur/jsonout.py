@@ -17,9 +17,9 @@ ASHTADHYAYI = "अष्टाध्यायी"
 MAX_OTHER = 5
 
 SAMASA = {
-    "tatpurusha": ("तत्पुरुष", "determinative"), "karmadharaya": ("कर्मधारय", "descriptive"),
-    "dvandva": ("द्वन्द्व", "copulative"), "bahuvrihi": ("बहुव्रीहि", "possessive"),
-    "avyayibhava": ("अव्ययीभाव", "adverbial"), "unknown": ("अज्ञात", "unknown"), "": ("अज्ञात", "unknown"),
+    "तत्पुरुष": "determinative", "कर्मधारय": "descriptive", "द्वन्द्व": "copulative",
+    "बहुव्रीहि": "possessive", "अव्ययीभाव": "adverbial", "नञ्-तत्पुरुष": "negative determinative",
+    "नञ्-बहुव्रीहि": "negative possessive", "अज्ञात": "unknown", "": "unknown",
 }
 KIND_EN = {"subanta": "nominal", "tinanta": "finite verb", "avyaya": "indeclinable", "stem": "stem", "unknown": "unknown"}
 
@@ -187,7 +187,7 @@ def junction_json(reading: Reading, j: Junction) -> dict[str, Any]:
 
 
 def compound_json(reading: Reading, c: Compound) -> dict[str, Any]:
-    deva, eng = SAMASA.get(c.samasa, (c.samasa, c.samasa))
+    deva, eng = c.samasa or "अज्ञात", SAMASA.get(c.samasa, "unknown")
     return {
         "id": c.id, "members": list(c.members),
         "member_forms": [sk(display(reading.words[i].form)) for i in c.members if i < len(reading.words)],

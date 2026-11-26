@@ -160,7 +160,7 @@ def _nearest(cands: list[int], i: int) -> Optional[int]:
 def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     m = words[i].morph
     cls = lemma_class(m.lemma)
-    if not verbs and (cls == "pronoun" or m.lemma in PRONOUNS):
+    if not verbs and m.vibhakti == PRATHAMA and (cls == "pronoun" or m.lemma in PRONOUNS):
         return 3.0  # verbless sentence: the pronoun (कस्) is the subject
     score = {"noun": 2.0, "pronoun": 1.5, "": 1.0}.get(cls, 0.0)
     if m.krt:

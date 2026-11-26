@@ -196,8 +196,6 @@ class _Lattice:
                     continue
                 if not jn.right_head and self.t[j] not in jn.rights:
                     continue
-                if any(k < s <= j for s in self.sp) and not (jn.surface and all(s == j for s in self.sp if k < s <= j)):
-                    pass
                 inner = [s for s in self.sp if k <= s <= j]
                 if jn.samasa and inner:
                     continue
@@ -213,6 +211,8 @@ class _Lattice:
         for k in range(i, min(nxt_space, self.n, i + MAX_WORD) + 1):
             core = head + self.t[i:k]
             for jn, j in self.cands[k]:
+                if k == i and j <= k and j >= 0:
+                    continue  # no progress: a word wholly absent from the text
                 word = core + jn.left_tail
                 if not word or word[-len(jn.left_ctx):] != jn.left_ctx or len(word) < len(jn.left_ctx):
                     continue

@@ -40,7 +40,9 @@ button.tog{margin-top:1rem;background:none;border:1px solid var(--line);color:va
 h2{font-size:.82rem;letter-spacing:.09em;text-transform:uppercase;color:var(--accent);margin:1.6rem 0 .5rem;font-weight:600}
 h2 span{text-transform:none;letter-spacing:0;color:var(--mute);font-weight:400}
 .scroll{overflow-x:auto;max-width:100%}
-table{border-collapse:collapse;width:100%;font-size:.93rem}
+table{border-collapse:collapse;width:100%;font-size:.93rem;overflow-wrap:normal;word-break:normal}
+.scroll table{min-width:38rem}
+.scroll table.g{min-width:50rem}
 th,td{text-align:left;vertical-align:top;padding:.45rem .6rem;border-bottom:1px solid var(--line)}
 th{font-weight:600;color:var(--mute);font-size:.8rem;white-space:nowrap}
 td .en{display:block;color:var(--mute);font-size:.82rem}
@@ -56,7 +58,7 @@ td .en{display:block;color:var(--mute);font-size:.82rem}
 .chip i{color:var(--mute);font-style:normal}
 mark.al{background:var(--tint);color:inherit;border-radius:4px;padding:0 .1rem;cursor:pointer}
 .ok{color:var(--ok);font-weight:700}.no{color:var(--no);font-weight:700}
-.tag{font-size:.75rem;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 .35rem;margin-left:.3rem}
+.tag{white-space:nowrap;font-size:.75rem;border:1px solid var(--accent);color:var(--accent);border-radius:4px;padding:0 .35rem;margin-left:.3rem}
 details{border:1px solid var(--line);border-radius:8px;margin:.4rem 0;padding:.3rem .8rem}
 summary{cursor:pointer;color:var(--ink)}
 summary::marker{color:var(--accent)}
@@ -187,7 +189,7 @@ def _grammar(data: dict[str, Any]) -> str:
             f"<td>{esc(w['role']['devanagari'])}<span class='en'>{esc(w['role']['english'])}</span></td>"
             f"<td>{esc(w['gloss'])}</td><td>{mark}{reason}</td></tr>"
         )
-    return (f'<h2>व्याकरणम् <span>grammar</span></h2><div class="scroll"><table><tr><th>Word</th><th>Lemma</th>'
+    return (f'<h2>व्याकरणम् <span>grammar</span></h2><div class="scroll"><table class="g"><tr><th>Word</th><th>Lemma</th>'
             f"<th>Grammar</th><th>Role</th><th>Gloss</th><th>Proof</th></tr>{''.join(rows)}</table></div>")
 
 

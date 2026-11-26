@@ -15,6 +15,11 @@ TEXT = LINE1 + " । " + LINE2
 TRANSLATION = "Valmiki asked Narada, the best of sages, who is the best of the eloquent, an ascetic, devoted to austerity and study."
 
 
+def _span(word: int, text: str) -> Alignment:
+    i = TRANSLATION.index(text)
+    return Alignment(word, i, i + len(text))
+
+
 def _trace(n: int = 8) -> list[SutraStep]:
     base = [
         SutraStep("धातुपाठ", "1.1", "प्रच्छ्"),
@@ -98,7 +103,7 @@ def make_reading(rank: int = 0) -> Reading:
         notes=["तपस्वी is labelled आर्ष: the accusative तपस्वी is not derivable"] if rank == 0 else [],
         anvaya=[8, 6, 9, 5, 4, 3, 0, 1, 2, 7],
         translation=TRANSLATION if rank == 0 else "Valmiki asked sage Narada, an ascetic.",
-        alignment=[Alignment(8, 0, 7), Alignment(7, 8, 13), Alignment(6, 14, 20), Alignment(9, 22, 37)]
+        alignment=[_span(8, "Valmiki"), _span(7, "asked"), _span(6, "Narada"), _span(9, "the best of sages")]
         if rank == 0 else [],
     )
 

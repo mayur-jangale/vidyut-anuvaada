@@ -42,6 +42,22 @@ def _lemma(word: Word) -> str:
     return (m.stem or m.lemma) if m else word.form
 
 
+def _lexical_genders(lemma: str) -> set[str]:
+    """Genders the lexicon gives the stem itself (empty when unknown)."""
+    try:
+        from mayur import lexicon
+        return {m.linga for m in lexicon.stems(lemma) if m.linga}
+    except Exception:  # lexicon unavailable
+        return set()
+
+
+def _gender_shift(word: Word) -> bool:
+    """Final member used in a gender it does not have lexically (व्रत n. in दृढव्रतस् m.)."""
+    m = word.morph
+    genders = _lexical_genders(_lemma(word))
+    return bool(m is not None and m.linga and genders and m.linga not in genders)
+
+
 def _is_a_stem(stem: str) -> bool:
     return bool(stem) and stem[-1] not in _MATRAS and "क" <= stem[-1] <= "ह"
 
@@ -126,6 +142,8 @@ def classify(reading: Reading, members: list[int]) -> tuple[str, str, str]:
         return DVANDVA, " ".join(f"{_lemma(w)} च" for w in words), "heuristic: coordinated nouns, non-singular final (2.2.29)"
     if classes[-1] == "noun" and classes[0] not in ("noun", "") and _external_head(reading, members[-1]):
         return BAHUVRIHI, hyphen, "heuristic: noun-final compound qualifying an external head (2.2.24)"
+    if _gender_shift(words[-1]) and _external_head(reading, members[-1]):
+        return BAHUVRIHI, hyphen, "heuristic: final noun in a gender not its own, agreeing with an external head (2.2.24)"
     if classes[0] == "noun" and classes[-1] == "noun":
         return TATPURUSHA, hyphen, "heuristic: noun + noun, षष्ठी relation assumed (2.2.8)"
     return UNKNOWN, hyphen, "heuristic: no pattern matched"
