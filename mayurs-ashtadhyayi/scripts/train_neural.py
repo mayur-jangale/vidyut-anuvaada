@@ -37,7 +37,7 @@ def verse_record(verse: list[dict]) -> dict:
             forms.append(t["form"])
             lines.append(line)
             cpd.append(t["compound_member"])
-            tg.append(neural.targets(t["upos"], t["feats"], t["compound_member"]))
+            tg.append(tuple(neural.targets(t["upos"], t["feats"], t["compound_member"])[h] for h in neural.HEADS))
     return {"forms": forms, "lines": lines, "cpd": cpd, "targets": tg}
 
 
@@ -59,18 +59,18 @@ def load_train(max_words: int, seed: int = 0) -> list[dict]:
 def vocab(data: list[dict]) -> tuple[list[str], dict[str, list[str]]]:
     sc = Counter(s for r in data for f in r["forms"] for s in neural.sounds(f))
     sounds = [neural.PAD, neural.UNK] + sorted(s for s, c in sc.items() if c >= 2)
-    values = {h: sorted({t[h] for r in data for t in r["targets"]}) for h in neural.HEADS}
+    values = {h: sorted({t[j] for r in data for t in r["targets"]}) for j, h in enumerate(neural.HEADS)}
     return sounds, values
 
 
 def target_tensor(batch: list[dict], values: dict[str, list[str]]) -> dict[str, torch.Tensor]:
     t = max(len(r["forms"]) for r in batch)
     out = {}
-    for h, vals in values.items():
+    for j, (h, vals) in enumerate(values.items()):
         ix = {v: i for i, v in enumerate(vals)}
         y = torch.full((len(batch), t), -100, dtype=torch.long)
         for b, r in enumerate(batch):
-            y[b, : len(r["targets"])] = torch.tensor([ix.get(x[h], -100) for x in r["targets"]])
+            y[b, : len(r["targets"])] = torch.tensor([ix.get(x[j], -100) for x in r["targets"]])
         out[h] = y
     return out
 
@@ -99,8 +99,8 @@ def head_accuracy(model, meta: dict, data: list[dict]) -> dict[str, float]:
             for t, w in zip(r["targets"], lp):
                 n += 1
                 ok = True
-                for h in neural.HEADS:
-                    good = max(w[h], key=w[h].get) == t[h]
+                for j, h in enumerate(neural.HEADS):
+                    good = max(w[h], key=w[h].get) == t[j]
                     right[h] += good
                     ok &= good
                 right["all"] += ok
@@ -129,7 +129,7 @@ def train(data, dev, epochs: int, log, cfg: dict) -> tuple:
             torch.nn.utils.clip_grad_norm_(model.parameters(), 5.0)
             opt.step()
             nw += sum(len(r["forms"]) for r in b)
-            tot += float(loss)
+            tot += float(loss.detach())
             if k % 200 == 0:
                 log(f"epoch {epoch + 1} batch {k}/{len(bs)} loss {tot / (k + 1):.3f} {nw / (time.time() - t0):.0f} w/s")
         for g in opt.param_groups:

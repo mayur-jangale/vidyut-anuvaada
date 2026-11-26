@@ -120,16 +120,11 @@ def batch_tensors(verses: Sequence[tuple[Sequence[str], Sequence[int], Sequence[
     enc = [encode(f, sound_ix, n_buckets) for f, _, _ in verses]
     t = max(len(f) for f, _, _ in verses)
     s = max(len(x) for snd, _ in enc for x in snd)
-    snd = torch.zeros(len(verses), t, s, dtype=torch.long)
-    form = torch.zeros(len(verses), t, dtype=torch.long)
-    line = torch.zeros(len(verses), t, dtype=torch.long)
-    cpd = torch.zeros(len(verses), t, dtype=torch.long)
-    for b, ((sx, fx), (_, ln, cf)) in enumerate(zip(enc, verses)):
-        for i, x in enumerate(sx):
-            snd[b, i, : len(x)] = torch.tensor(x)
-        form[b, : len(fx)] = torch.tensor(fx)
-        line[b, : len(ln)] = torch.tensor([min(int(v), 3) for v in ln])
-        cpd[b, : len(cf)] = torch.tensor([int(bool(v)) for v in cf])
+    pad_word = [0] * s
+    snd = torch.tensor([[x + [0] * (s - len(x)) for x in sx] + [pad_word] * (t - len(sx)) for sx, _ in enc])
+    form = torch.tensor([fx + [0] * (t - len(fx)) for _, fx in enc])
+    line = torch.tensor([[min(int(v), 3) for v in ln] + [0] * (t - len(ln)) for _, ln, _ in verses])
+    cpd = torch.tensor([[int(bool(v)) for v in cf] + [0] * (t - len(cf)) for _, _, cf in verses])
     return snd, form, line, cpd, torch.tensor([len(f) for f, _, _ in verses])
 
 

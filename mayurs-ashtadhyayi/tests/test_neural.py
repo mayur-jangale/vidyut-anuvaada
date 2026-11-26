@@ -59,7 +59,7 @@ def test_training_smoke_loss_decreases():
     sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
     import train_neural as tn
 
-    data = tn.load_train(1)[:300] if tn.dcs.split_files("train") else []
+    data = tn.load_train(20000)[:300] if tn.dcs.split_files("train") else []
     if len(data) < 50:
         pytest.skip("corpus not available")
     torch.manual_seed(0)
