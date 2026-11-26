@@ -16,8 +16,21 @@ repository.
 Digital Corpus of Sanskrit (DCS) by Oliver Hellwig, https://github.com/OliverHellwig/sanskrit.
 Licensed under CC BY 4.0. Citation: Hellwig, Oliver (2010–2024): The Digital Corpus of Sanskrit
 (DCS). The file mayur/gold/ramayana_bala_1.json is an excerpt converted from the DCS CoNLL-U
-files (Rāmāyaṇa, Bālakāṇḍa 1), transliterated to Devanagari. Frequency tables and the gloss
-tables derived from DCS are built locally by script and are not committed.
+files (Rāmāyaṇa, Bālakāṇḍa 1), transliterated to Devanagari. The following files are derived
+from DCS annotations and carry the same attribution: the trained model files in mayur/models/
+(statistics of DCS annotations), the sampled verses in eval/samples/dev*.json, the word splits
+and morphology inside eval/review/claude/*.json, and mayur/gold/pools.json (chapter ids).
+Frequency tables and DCS-derived gloss tables are built locally by script and are not committed.
+
+Universal Dependencies treebanks UD_Sanskrit-UFAL and UD_Sanskrit-Vedic, licensed under
+CC BY-SA 4.0, are fetched by scripts/fetch_gold_external.py for evaluation only and are not
+redistributed in this repository.
+
+Annotations written by Claude (a large language model by Anthropic) during development, not
+human-verified, licensed CC BY-SA 4.0: the gloss draft table mayur/annotations/gloss_draft.json,
+the suffix-sense table mayur/annotations/suffix_senses.json, and the roles, compound types,
+prose order and English in eval/review/claude/. The interpreter itself uses no language model
+at run time.
 
 Monier-Williams Sanskrit-English Dictionary, Cologne Digital Sanskrit Dictionaries,
 https://www.sanskrit-lexicon.uni-koeln.de. The licence is unclear. The dictionary may optionally

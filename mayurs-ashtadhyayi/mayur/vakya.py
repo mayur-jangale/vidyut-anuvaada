@@ -23,8 +23,13 @@ def _compound_final(words: list[Word], i: int) -> Optional[int]:
     return None
 
 
+_QUALIFYING: set[int] = set()  # set per call of assign_roles
+
+
 def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     m = words[i].morph
+    if i in _QUALIFYING:
+        return 0.2  # दृढव्रतस्, पापात्मानस्: an adjective by formation, whatever its last member is
     if m.lemma in FIRST_PERSON | SECOND_PERSON:
         return 4.0  # अस्मद्/युष्मद् never qualify another word
     cls = lemma_class(m.lemma)
@@ -170,9 +175,12 @@ def _adverbial(word: Word) -> bool:
     return adverb > 0 and adverb >= sum(n for _, upos, _, n in tags if upos not in ("ADV", "PART"))
 
 
-def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
-    """Karaka roles and heads for the chosen analyses (returns new Word objects)."""
+def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> tuple[list[Word], list[str]]:
+    """Karaka roles and heads for the chosen analyses (returns new Word objects). ``qualifying``:
+    indices of words known to qualify another (the final of a बहुव्रीहि)."""
     words = [replace(w, role="", head=None) for w in words_in]
+    _QUALIFYING.clear()
+    _QUALIFYING.update(qualifying)
     notes: list[str] = []
     finite = [i for i, w in enumerate(words) if is_finite(w.morph)]
     verbs = [v for v in finite if not _quoted(words, v)]

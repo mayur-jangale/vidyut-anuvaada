@@ -176,7 +176,7 @@ def lookup_in_context(reading: Reading, index: int) -> tuple[str, str]:
     if m is None:
         return "", "none"
     plain = lookup(m)
-    if plain[1] == "own":
+    if plain[1] in ("own", "own-draft"):  # a gloss written for the lemma comes before a corpus sense label
         return plain
     from . import senses  # lazy: senses -> ud -> lexicon
 

@@ -17,10 +17,11 @@ from typing import Callable, Optional
 
 from . import english
 from .fluent_checks import Failure, Rendering, run_checks
+from .fluent_more import coordination, questions  # noqa: F401  (rules of RULES)
+from .fluent_tok import PUNCT, Tok, _is_name, _pronoun, _w
 from .model import Alignment, Reading, Word
 
 NOTE_OK = "rule-based; checks passed"
-PUNCT = {",", ";", ".", "?", "!", ":"}
 _PIECE = re.compile(r"\[[^\]]*\]|[^\s,;.?!:\-\[\]]+|[,;.?!:\-]")
 _AUX = {"is", "are", "am", "was", "were", "will", "shall", "do", "did", "does", "has", "have"}
 _DET = {"such", "other", "same", "the", "a", "an", "this", "that", "these", "those", "my", "your", "his", "her", "its", "our", "their",
@@ -35,12 +36,6 @@ _AGENT_END = ("er", "or", "ist")
 _ADJ_WORDS = {"like", "equal", "good", "best", "great", "other", "dear", "fine", "firm", "such", "same", "all", "only",
               "noble", "wise", "high", "low", "steadfast", "clean", "well", "mahat", "large", "small", "many", "much"}
 _PREP_START = ("of", "in", "by", "to", "from", "with", "for", "on", "at", "like", "as")
-
-
-@dataclass(frozen=True)
-class Tok:
-    text: str
-    word: Optional[int] = None
 
 
 Rule = Callable[[list[Tok], Reading], list[Tok]]
@@ -71,18 +66,6 @@ def render(toks: list[Tok]) -> tuple[str, list[Alignment]]:
             spans.append(Alignment(t.word, len(out), len(out) + len(t.text)))
         out += t.text
     return out, spans
-
-
-def _w(reading: Reading, t: Tok) -> Optional[Word]:
-    return reading.words[t.word] if t.word is not None else None
-
-
-def _is_name(w: Optional[Word]) -> bool:
-    return bool(w and w.gloss and w.gloss[0].isupper())
-
-
-def _pronoun(w: Optional[Word]) -> bool:
-    return bool(w and w.morph and english.is_pronoun(w.morph.lemma))
 
 
 def _sentence_start(toks: list[Tok], i: int) -> int:
@@ -236,58 +219,6 @@ def apposition(toks, reading):
     return out
 
 
-def coordination(toks, reading):
-    """'a, b, c, d' / ', and b, and c' of three or more predicates or qualifiers -> 'a, b, c and d'."""
-    items, cur = [], []
-    for t in toks:
-        if t.text == ",":
-            items.append(cur)
-            cur = []
-        else:
-            cur.append(t)
-    items.append(cur)
-
-    def adjectival(it: list[Tok], first: bool = False) -> bool:
-        body = [t for t in it if not (t.word is None and t.text in ("and", "also", ".", "?", "!"))]
-        ok = [t for t in body if t.word is not None and reading.words[t.word].role in _ADJ]
-        return bool(body) and (all(t.word is not None and reading.words[t.word].role in _ADJ for t in body)
-                               if not first else bool(ok) and body[-1] in ok)
-
-    k, nocomma = 0, set()
-    while k < len(items):
-        if not adjectival(items[k], True):
-            k += 1
-            continue
-        e = k + 1
-        while e < len(items) and adjectival(items[e]):
-            e += 1
-        if e - k >= 3 and e == len(items):
-            for n in range(k + 1, e):
-                items[n] = [t for t in items[n] if not (t.word is None and t.text == "and")]
-            items[e - 1] = [Tok("and")] + items[e - 1]
-            nocomma.add(e - 1)
-        k = max(e, k + 1)
-    out: list[Tok] = []
-    for n, it in enumerate(items):
-        if n and n not in nocomma:
-            out.append(Tok(","))
-        out += it
-    return out
-
-
-def questions(toks, reading):
-    """Sentence-initial question word that is not the subject: move the auxiliary up (inversion)."""
-    if not toks or toks[0].word is None or toks[0].text.lower() not in _WH or "?" not in [t.text for t in toks]:
-        return toks
-    w = reading.words[toks[0].word]
-    if w.role == "कर्ता":
-        return toks
-    k = next((i for i, t in enumerate(toks) if i > 1 and t.word is None and t.text in _AUX), None)
-    if k is None or any(t.text in PUNCT for t in toks[:k]):
-        return toks
-    return [toks[0], toks[k]] + toks[1:k] + toks[k + 1:]
-
-
 def _phrase_start(toks, i, t, reading) -> int:
     j = i
     while j > 0 and toks[j - 1].word is not None and reading.words[toks[j - 1].word].head == t.word \
@@ -358,8 +289,6 @@ def tidy(toks, reading):
     out: list[Tok] = []
     for t in ts:
         if t.text in {",", ";"} and out and out[-1].text in {",", ";"}:
-            continue
-        if t.text == "," and out and out[-1].word is None and out[-1].text in ("of", "to", "by", "in") and False:
             continue
         out.append(t)
     if out:

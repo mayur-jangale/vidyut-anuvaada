@@ -327,4 +327,19 @@ def decode(line: str, top_k: int = 12, model: Optional[Mapping[str, Any]] = None
     g, raw = build_graph(lat, table, m.get("prefix", {}))
     extra = dynamic_features(g, m)
     paths = viterbi(g, m["weights"], tid, top_k * 3, extra=extra)
+    out = [lat._split([raw[i] for i in path], score) for score, path in order_alternatives(g, paths, top_k)]
+    from mayur import unknown_guard  # a decode-time guard, not a feature (see that module)
+
+    return unknown_guard.guard(line, out, top_k, m)
+
+
+def decode_graph(line: str, m: Mapping[str, Any], unknown: bool, top_k: int) -> list[Split]:
+    """Decode ``line`` with model ``m`` on the plain or the unknown-word lattice (no guard)."""
+    lat = lattice(line, unknown)
+    if lat is None:
+        return []
+    table = m.get("tag_bigram", {})
+    tid = m.get("table_id") or register_table(table, m.get("prefix", {}))
+    g, raw = build_graph(lat, table, m.get("prefix", {}))
+    paths = viterbi(g, m["weights"], tid, top_k * 3, extra=dynamic_features(g, m))
     return [lat._split([raw[i] for i in path], score) for score, path in order_alternatives(g, paths, top_k)]

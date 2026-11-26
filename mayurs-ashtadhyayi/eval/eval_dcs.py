@@ -152,13 +152,15 @@ def align_words(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict],
 
 def morphology_counts(pairs: Sequence[tuple[Any, dict]]) -> dict[str, int]:
     """Counts over (Morph | None, gold word) pairs of non-compound words."""
-    c = {"words": 0, "lemma": 0, "all_features": 0, **{f"feat_{k}_total": 0 for k in FEATURES},
+    c = {"words": 0, "lemma": 0, "all_features": 0, "analysis": 0, **{f"feat_{k}_total": 0 for k in FEATURES},
          **{f"feat_{k}": 0 for k in FEATURES}}
     for morph, g in pairs:
         c["words"] += 1
         ours = ud.feats(morph) if morph is not None else {}
         upos = g.get("upos", "")
-        c["lemma"] += int(morph is not None and ud.same_lemma(morph, g["lemma"], upos))
+        lemma_ok = morph is not None and ud.same_lemma(morph, g["lemma"], upos)
+        c["lemma"] += int(lemma_ok)
+        c["analysis"] += int(lemma_ok and ud.same_feats(morph, upos, g["feats"]))  # lemma AND every feature
         for k in ud.compared_features(upos, g["feats"]):
             if k in FEATURES:
                 c[f"feat_{k}_total"] += 1
@@ -404,9 +406,11 @@ def headline(s: dict[str, Any]) -> str:
         "HEADLINE (word level):",
         f"  words identified (same boundaries and lexeme) F1: {s['same_word']['f1']:.3f}"
         f"  (P {s['same_word']['precision']:.3f}, R {s['same_word']['recall']:.3f})",
-        f"  segmentation F1 on exact forms, member level: {s['f1']:.3f}   pada level: {s['pada']['f1']:.3f}",
+        f"  padas identified (a compound is one pada, compared as written) F1: {s['pada']['f1']:.3f}",
+        f"  segmentation F1 on exact forms, member level: {s['f1']:.3f}",
         f"  lemma accuracy: {_frac(m.get('lemma', 0), m.get('words', 0))}",
         f"  all-features accuracy: {_frac(m.get('all_features', 0), m.get('words', 0))}",
+        f"  full analysis (lemma and every feature) right: {_frac(m.get('analysis', 0), m.get('words', 0))}",
         f"  END-TO-END word accuracy: {_frac(s['e2e_correct'], s['gold_words'])}"])
 
 

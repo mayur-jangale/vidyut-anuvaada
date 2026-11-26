@@ -28,14 +28,29 @@ _SU_LOPA = {"स": "सस्", "एष": "एषस्"}  # written without the
 # synonym pairs accepted as equal, only where both are right glosses (eat/devour is NOT one: fix the gloss)
 SYNONYMS = [("kill", "slay"), ("teacher", "guru"), ("pupil", "student"), ("big", "large"), ("big", "great"),
             ("large", "great"), ("live", "dwell"), ("live", "stay"), ("dwell", "stay")]
-_SYN = {w: min(a, b) for a, b in SYNONYMS for w in (a, b)}
+
+
+def _groups(pairs):
+    """Connected groups of the synonym pairs; every word maps to the smallest of its group."""
+    canon: dict[str, str] = {}
+    for a, b in pairs:
+        group = {a, b} | {w for w, c in canon.items() if c in (canon.get(a), canon.get(b))}
+        low = min(group)
+        for w in group:
+            canon[w] = low
+    return canon
+
+
+_SYN = _groups(SYNONYMS)
 
 
 def normal(text: str) -> list[str]:
     """Lower-cased words without punctuation, articles and apostrophes; listed synonyms merged."""
     import re
     words = re.findall(r"[^\W\d_]+", text.lower().replace("\u2019", "'").replace("'s", "s"))
-    return [_SYN.get(w, w) for w in words if w not in ("a", "an", "the")]
+    from mayur.fluent_checks import stem
+    syn = {stem(k): stem(v) for k, v in _SYN.items()}
+    return [syn.get(stem(w), stem(w)) for w in words if w not in ("a", "an", "the")]
 
 
 def same_english(ours: str, want: str) -> bool:

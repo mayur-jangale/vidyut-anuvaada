@@ -64,6 +64,8 @@ def test_in_context_falls_back_when_model_missing(monkeypatch):
 def test_in_context_own_table_first_then_sense(monkeypatch):
     from mayur import senses
 
+    monkeypatch.setattr(gloss, "_draft", lambda: {})
+
     monkeypatch.setattr(gloss.resources, "derived", lambda n: {"dcs_senses.json": {"रथ": "chariot"}}.get(n, {}))
     model = {"top": {}, "gloss": {"king": "king"},
              "lemmas": {"रथ": {"p": {"chariot": 5, "king": 5}, "f": {"g:Nom/Sing": {"king": 5}}}}}

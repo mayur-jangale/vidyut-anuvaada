@@ -116,3 +116,36 @@ def test_neural_model_refused_without_neural(monkeypatch, tmp_path):
             assert decoder.score_scale() == 5.0
     finally:
         decoder._model.cache_clear()
+
+
+MADE_UP = "ग्लोकस्य ब्लिम्फति ट्रम्पः"
+RARE_REAL = ("तस्यार्णवस्य क्षुब्धस्य तस्मिन्नम्भसि मन्थिते", "औतथ्यो वेदमत्रैव षडङ्गं प्रत्यधीयत")
+
+
+def test_guard_keeps_unknown_chunks_whole():
+    from mayur import unknown_guard
+
+    out = decoder.decode(MADE_UP, 5)
+    assert [w.form for w in out[0].words] == ["ग्लोकस्य", "ब्लिम्फति", "ट्रम्पस्"]
+    assert len(out[0].junctions) == 2
+    assert unknown_guard.rewrite(MADE_UP, out[0]) is out[0]  # idempotent
+
+
+def test_guard_leaves_rare_real_words_alone():
+    from mayur import unknown_guard
+
+    for line in RARE_REAL:
+        best = decoder.decode(line, 3)[0]
+        assert not unknown_guard.unknown_chunks(line, best)
+    assert "मन्थिते" in [w.form for w in decoder.decode(RARE_REAL[0], 3)[0].words]
+    assert "औतथ्यस्" in [w.form for w in decoder.decode(RARE_REAL[1], 3)[0].words]
+
+
+def test_made_up_line_is_three_unverified_arsha_words():
+    from mayur import pipeline
+
+    analysis = pipeline.analyze_verse(MADE_UP)
+    reading = analysis.readings[0]
+    assert [w.form for w in reading.words] == ["ग्लोकस्य", "ब्लिम्फति", "ट्रम्पस्"]
+    assert all(w.arsha for w in reading.words)
+    assert analysis.status == "unverified"

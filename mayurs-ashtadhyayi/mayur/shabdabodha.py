@@ -191,7 +191,8 @@ def resolve(reading: Reading) -> Reading:
     from mayur.vakya_case import syncretic
 
     words, case_notes = syncretic(words)  # प्रथमा/द्वितीया only where the kāraka rules decide it
-    words, notes = assign_roles(words)
+    qualifying = frozenset(c.members[-1] for c in reading.compounds if "बहुव्रीहि" in c.samasa and c.members)
+    words, notes = assign_roles(words, qualifying)  # a बहुव्रीहि qualifies another word: it does not head a phrase
     notes = case_notes + notes
     words, licence_notes = karaka_links.license_words(words)  # a link stays only if a rule licenses it
     scores = evaluate(words, reading.scores)
