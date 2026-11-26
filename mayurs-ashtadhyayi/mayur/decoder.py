@@ -25,8 +25,6 @@ from mayur.segmenter import Split
 MODEL_FILE = Path(__file__).with_name("models") / "lattice_decoder.json"
 BEAM = 12
 SAME_PREV = 4  # hypotheses kept per distinct previous word at one state
-BOUNDARY_K = 3
-BOUNDARY_MIN = 3
 KINDS = ("none", "pada", "cpd")
 _START_TAG, _END_TAG = ranker._START_TAG, ranker._END_TAG
 Feats = tuple[tuple[str, float], ...]
@@ -46,6 +44,10 @@ class Edge:
     jsurf: str = ""  # junction surface + following sound
     jcls: str = ""  # junction rule class
     q0: bool = False
+    unknown: bool = False  # no dictionary analysis: offered via lexicon.generated (see UnknownLattice)
+    slen: int = 0  # number of surface sounds of the right junction
+    rhead: bool = False  # the junction surface contains the right word's first sound (vowel fusion)
+    elide: bool = False  # अ elided after ए/ओ (6.1.109)
 
 
 @dataclass(frozen=True)
@@ -97,6 +99,10 @@ def edge_features(lat: Any, state: tuple, e: tuple, table: Mapping[str, float]) 
         f["chunk_fallback"] = 1.0
     if not plain:
         f["not_plain"] = 1.0
+    if sg.word_score(form, jn.samasa, lat.tier) is None and base == UNK_BASE:
+        n = len(sd.varnas(form))
+        f["unknown"] = 1.0
+        f[f"unknown_len{min(n // 3, 5)}"] = 1.0
     if nxt == sg._END:
         f["tag_end"] = table.get(f"{ranker.word_tag(form, jn.samasa)}|{_END_TAG}", table.get("<unk>", -8.0))
     return f
@@ -142,61 +148,75 @@ def register_table(table: Mapping[str, float]) -> int:
     return tid
 
 
-# ---------------------------------------------------------------- boundary + junction statistics
-
-def boundary_keys(text: Sequence[str], spaces: frozenset, p: int) -> list[str]:
-    """Context keys (most specific first) of the position before sound ``p``."""
-    sp = "_" if p in spaces else "."
-    return [f"{k}|{''.join(text[max(0, p - k):p])}|{''.join(text[p:p + k])}|{sp}" for k in range(BOUNDARY_K, 0, -1)]
-
-
-def boundary_logprobs(text: Sequence[str], spaces: frozenset, table: Mapping[str, Sequence[int]]) -> list[tuple]:
-    """Per position p (0..n): log P(none), log P(pada), log P(cpd) with back-off; zeros when unknown."""
-    out = []
-    for p in range(len(text) + 1):
-        lp = (0.0, 0.0, 0.0)
-        for key in boundary_keys(text, spaces, p):
-            c = table.get(key)
-            if c and sum(c) >= BOUNDARY_MIN:
-                tot = sum(c) + 0.3
-                lp = tuple(math.log((x + 0.1) / tot) for x in c)
-                break
-        out.append(lp)
-    return out
-
-
-def dynamic_features(g: Graph, tables: Mapping[str, Any]) -> list[Feats]:
-    """Per edge: boundary-model and junction-statistics features (tables from the model)."""
-    btab, jtab = tables.get("boundary", {}), tables.get("junction", {})
-    if not btab and not jtab:
-        return [()] * len(g.edges)
-    lps = boundary_logprobs(g.text, g.spaces, btab) if btab else []
-    out = []
-    for e in g.edges:
-        f: list[tuple[str, float]] = []
-        if lps:
-            inside = sum(lps[p][0] for p in range(e.start + 1, min(e.end, len(lps))))
-            f.append(("bnd_inside", inside))
-            if e.kind != "end" and e.end < len(lps):
-                f.append(("bnd_right", lps[e.end][2 if e.kind == "cpd" else 1]))
-        if jtab and e.kind != "end":
-            dist = jtab.get(e.jsurf)
-            if dist:
-                tot = sum(dist.values()) + 0.5 * (len(dist) + 1)
-                f.append(("junc_logp", math.log((dist.get(e.jcls, 0) + 0.5) / tot)))
-            else:
-                f.append(("junc_unseen", 1.0))
-        out.append(tuple(f))
-    return out
+from mayur.decoder_stats import (  # noqa: E402,F401 - re-exported
+    BOUNDARY_K, BOUNDARY_MIN, boundary_keys, boundary_logprobs, dynamic_features, neural_available, neural_features)
 
 
 # ---------------------------------------------------------------- lattice -> graph
 
-def lattice(line: str) -> Optional[Any]:
-    """The segmenter's lattice at the first tier that has a valid path (or None)."""
+UNK_BASE = -30.0
+UNK_CAP = 3  # unknown-word edges per lattice state
+UNK_MAX = 18  # sounds
+
+
+@lru_cache(maxsize=200_000)
+def _generated_nominal(form: str) -> bool:
+    from mayur import lexicon
+
+    try:
+        return any(m.kind == "subanta" for m in lexicon.generated(form))
+    except Exception:  # noqa: BLE001 - the generator must never break decoding
+        return False
+
+
+class UnknownLattice(sg._Lattice):
+    """Tier-0 lattice plus gated edges for words with no dictionary analysis (should move upstream)."""
+
+    def __init__(self, text, spaces, tier: int = 0):
+        super().__init__(text, spaces, tier)
+        self._base = sg._Lattice(text, spaces, tier)
+
+    def edges(self, state) -> list:
+        if state in self._edges:
+            return self._edges[state]
+        res = list(self._base.edges(state)) + self._unknown_edges(state)
+        self._edges[state] = res
+        return res
+
+    def _unknown_edges(self, state) -> list:
+        i, head, after_samasa = state
+        if after_samasa or head or not (i == 0 or i in self.sp):
+            return []  # unknown words only start a written chunk
+        nxt_space = min((s for s in self.sp if s > i), default=self.n)
+        out: list = []
+        for k in range(min(nxt_space, self.n, i + UNK_MAX), i, -1):
+            core = head + self.t[i:k]
+            for jn, j in self.cands[k]:
+                word = core + jn.left_tail
+                if jn.samasa or len(word) < 4 or word[-len(jn.left_ctx):] != jn.left_ctx:
+                    continue
+                form = from_varnas(word)
+                if (jn.whole and form != jn.whole) or sg.word_score(form, False, self.tier) is not None:
+                    continue
+                nxt = sg._END if j < 0 else (j, jn.right_head, False)
+                at_chunk_end = j < 0 or any(k <= s <= j for s in self.sp)
+                if not at_chunk_end and not self._base.edges(nxt):
+                    continue
+                if _generated_nominal(form):
+                    out.append((form, k, jn, UNK_BASE, True, nxt))
+                    if len(out) >= UNK_CAP:
+                        return out
+        return out
+
+
+def lattice(line: str, unknown: bool = False) -> Optional[Any]:
+    """The segmenter's lattice at the first tier that has a valid path (or None).
+
+    With ``unknown`` tier 0 also offers gated edges for words the dictionary does not know.
+    """
     text, spaces = sg._prepare(line)
     for tier in (0, 1, 2):
-        lat = sg._Lattice(text, spaces, tier)
+        lat = UnknownLattice(text, spaces, tier) if unknown and tier == 0 else sg._Lattice(text, spaces, tier)
         if _reachable(lat)[1]:
             return lat
     return None
@@ -250,7 +270,8 @@ def build_graph(lat: Any, table: Mapping[str, float]) -> tuple[Graph, list[tuple
             out[index[st]].append(len(edges))
             edges.append(Edge(index[st], index[e[5]], e[0], e[2].samasa, ranker.word_tag(e[0], e[2].samasa),
                               tuple(sorted(feats.items())), st[0], e[1], _junction_kind(lat, e), surf, cls,
-                              "w_q0" in feats))
+                              "w_q0" in feats, bool(feats.get("unknown")), len(e[2].surface),
+                              bool(e[2].right_head), "६.१.१०९" in e[2].sutras and e[2].right_head == ("अ",)))
             raw.append((st, e))
     return Graph(tuple(edges), tuple(map(tuple, out)), tuple(range(len(states))), index.get(sg._END, -1),
                  tuple(lat.t), frozenset(lat.sp)), raw
@@ -359,7 +380,7 @@ def decode(line: str, top_k: int = 12, model: Optional[Mapping[str, Any]] = None
     m = model if model is not None else _model()
     if not (m.get("enabled") and m.get("weights")):
         return list(sg.segment_line(line, top_k).splits)
-    lat = lattice(line)
+    lat = lattice(line, bool(m.get("unknown_edges")))
     if lat is None:
         return list(sg.segment_line(line, top_k).splits)
     table = m.get("tag_bigram", {})

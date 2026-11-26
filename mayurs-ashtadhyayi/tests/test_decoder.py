@@ -57,3 +57,25 @@ def test_long_line_is_fast_enough():
 
 def test_enabled_is_bool():
     assert isinstance(decoder.enabled(), bool)
+
+
+def test_unknown_edges_are_gated_and_flagged():
+    line = "नारदं परिपप्रच्छ वाल्मीकिर्मुनिपुंगवम्"
+    g0, _ = decoder.build_graph(decoder.lattice(line), {})
+    g1, _ = decoder.build_graph(decoder.lattice(line, unknown=True), {})
+    assert not any(e.unknown for e in g0.edges)
+    unk = [e for e in g1.edges if e.unknown]
+    assert 0 < len(unk) <= 3 * 3  # capped per chunk-start state
+    assert all(dict(e.feats).get("unknown") == 1.0 for e in unk)
+
+
+def test_neural_features_mapping():
+    from mayur.decoder_stats import neural_features
+
+    lat = decoder.lattice(LINE)
+    g, _ = decoder.build_graph(lat, {})
+    lps = [{"N": -0.1, "P": -2.0, "C": -3.0, "FP": -4.0, "FC": -5.0} for _ in g.text]
+    e = next(e for e in g.edges if e.kind == "cpd" and e.slen == 0)
+    f = dict(neural_features(g, e, lps))
+    assert f["nb_junc"] == -3.0
+    assert abs(f["nb_inside"] - (-0.1) * (e.end - 1 - e.start)) < 1e-9

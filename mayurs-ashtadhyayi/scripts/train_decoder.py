@@ -1,6 +1,6 @@
 """Train the in-lattice decoder (mayur/decoder.py): averaged structured perceptron, gold path forced.
 
-    python scripts/train_decoder.py [--lines 6000] [--epochs 5] [--dev-per-text 20] [--ablate]
+    python scripts/train_decoder.py [--lines 6000] [--epochs 5] [--dev-per-text 20] [--configs round2,unknown]
 
 TRAIN = split_files("train") (stratified by text). DEV = split_files("dev") + dev_pool sample
 (early stopping on DEV lenient word F1). TEST = split_files("test") (report only). sealed_test is
@@ -48,7 +48,7 @@ def matches(form: str, samasa: bool, g: dict, lenient: bool) -> bool:
     return lenient and any(ud.same_lemma(m, g["lemma"], g.get("upos", "")) for m in _morphs(form, samasa))
 
 
-def oracle(g, match: tuple, n_gold: int) -> tuple[tuple[int, ...], float, bool]:
+def oracle(g, match: tuple, n_gold: int, skip_unknown: bool = False) -> tuple[tuple[int, ...], float, bool]:
     """Lattice path with the most gold words matched in order (LCS); (path, F1, gold exactly in lattice)."""
     best: dict[int, dict[int, tuple]] = {0: {0: (0, 0, -1, -1)}}
     back: dict[tuple[int, int], tuple] = {}
@@ -62,6 +62,8 @@ def oracle(g, match: tuple, n_gold: int) -> tuple[tuple[int, ...], float, bool]:
             break
         for gi, (m, n, _, _) in here.items():
             for eid in g.out[node]:
+                if skip_unknown and g.edges[eid].unknown:
+                    continue
                 dst = g.edges[eid].dst
                 for g2, m2 in [(gi, m)] + [(j + 1, m + 1) for j in match[eid] if j >= gi]:
                     cur = best.setdefault(dst, {}).get(g2)
@@ -81,7 +83,7 @@ def oracle(g, match: tuple, n_gold: int) -> tuple[tuple[int, ...], float, bool]:
 
 def _item(line: str, gold: list[dict], table: dict) -> dict | None:
     try:
-        lat = decoder.lattice(line)
+        lat = decoder.lattice(line, unknown=True)
         if lat is None:
             return {"line": line, "gold": gold, "g": None}
         g, _ = decoder.build_graph(lat, table)
@@ -89,8 +91,10 @@ def _item(line: str, gold: list[dict], table: dict) -> dict | None:
         return None
     match = tuple(tuple(i for i, gw in enumerate(gold) if matches(e.form, e.samasa, gw, True)) for e in g.edges)
     path, f1, exact = oracle(g, match, len(gold))
-    present = {j for m in match for j in m}
+    bpath, bf1, bexact = oracle(g, match, len(gold), skip_unknown=True)
+    present = {j for m, e in zip(match, g.edges) if not e.unknown for j in m}
     return {"line": line, "gold": gold, "g": g, "target": path, "oracle_f1": f1, "covered": exact,
+            "target_base": bpath, "oracle_f1_base": bf1, "covered_base": bexact,
             "missing": [w["form"] for j, w in enumerate(gold) if j not in present]}
 
 
@@ -167,29 +171,31 @@ def evaluate(paths: list[Path], w: dict, tid: int, tables: dict) -> dict[str, fl
 
 
 def train(train_p: list[Path], dev_p: list[Path], tid: int, tables: dict, epochs: int,
-          allow: Callable[[str], bool]) -> tuple[dict, dict]:
-    w: Counter = Counter({"base": 1.0})
+          allow: Callable[[str], bool], target: str = "target", fixed: dict | None = None) -> tuple[dict, dict]:
+    fixed = fixed or {}
+    w: Counter = Counter({"base": 1.0, **fixed})
     total, stamp, t = Counter(), Counter(), 0
     best, best_w, rng = None, dict(w), random.Random(1)
     for ep in range(epochs):
         for it in items(train_p, rng):
             g = it["g"]
-            if g is None or not it["target"]:
+            if g is None or not it[target]:
                 continue
             t += 1
             extra = decoder.dynamic_features(g, tables)
             pred = decoder.viterbi(g, w, tid, 1, extra=extra)
-            if not pred or pred[0][1] == it["target"]:
+            if not pred or pred[0][1] == it[target]:
                 continue
-            fg = decoder.path_features(g, it["target"], tid, extra)
+            fg = decoder.path_features(g, it[target], tid, extra)
             fp = decoder.path_features(g, pred[0][1], tid, extra)
             for k in set(fg) | set(fp):
-                if not allow(k):
+                if not allow(k) or k in fixed:
                     continue
                 total[k] += (t - stamp[k]) * w[k]
                 stamp[k] = t
                 w[k] += fg.get(k, 0.0) - fp.get(k, 0.0)
         avg = {k: (total[k] + (t - stamp[k]) * w[k]) / t for k in w if w[k] or total[k]}
+        avg.update(fixed)
         m = evaluate(dev_p, avg, tid, tables)
         print(f"  epoch {ep + 1}: DEV strict {m['strict']:.4f} lenient {m['lenient']:.4f} exact {m['exact']:.3f}",
               flush=True)
@@ -208,7 +214,9 @@ def audit(dev_p: list[Path]) -> tuple[float, float, list[str]]:
             continue
         covered += it["covered"]
         f1s += it["oracle_f1"]
-        if not it["covered"]:
+        reasons["(without unknown edges) covered"] += it.get("covered_base", 0)
+        reasons["(without unknown edges) oracle F1 x100"] += round(100 * it.get("oracle_f1_base", 0))
+        if not it["covered_base"]:
             why = "unknown word (no edge)" if it["missing"] else "junction / path (all words have edges)"
             reasons[why] += 1
             examples.append(f"{why}\t{it['line']}\tgold: {' '.join(x['form'] for x in it['gold'])}"
@@ -221,7 +229,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--lines", type=int, default=6000)
     ap.add_argument("--epochs", type=int, default=5)
     ap.add_argument("--dev-per-text", type=int, default=20)
-    ap.add_argument("--ablate", action="store_true", help="also train without endings / without statistics")
+    ap.add_argument("--configs", default="", help="comma-separated substrings of config names to run")
     a = ap.parse_args(argv)
     t0 = time.time()
     raw_train = train_lines(a.lines, seed=7)
@@ -239,28 +247,41 @@ def main(argv: list[str] | None = None) -> int:
     stats = stat_tables(train_p)
     print(f"boundary contexts {len(stats['boundary'])}, junction surfaces {len(stats['junction'])}", flush=True)
     full = {"tag_bigram": table, **stats}
-    none: dict = {}
-    configs = [("full", full, lambda k: True)]
-    if a.ablate:
-        configs = [("no endings, no stats", none, lambda k: not k.startswith("end")),
-                   ("+ endings", none, lambda k: True)] + configs
+    neural = decoder.neural_available()
+    no_unk = {"unknown": -1e6}
+    configs = {
+        "round2 (no unknown edges)": (full, lambda k: not k.startswith("unk"), "target_base", no_unk),
+        "+ unknown edges": (full, lambda k: True, "target", {}),
+        "+ unknown + neural boundary": ({**full, "neural": True}, lambda k: True, "target", {}),
+        "round2 + neural boundary": ({**full, "neural": True}, lambda k: not k.startswith("unk"), "target_base",
+                                     no_unk),
+    }
+    wanted = [c for c in configs if neural or "neural" not in c]
+    if a.configs:
+        wanted = [c for c in configs if any(x in c for x in a.configs.split(","))]
     results = {}
-    for name, tabs, allow in configs:
+    for name in wanted:
+        tabs, allow, target, fixed = configs[name]
         print(f"config: {name}", flush=True)
-        results[name] = train(train_p, dev_p, tid, tabs, a.epochs if name == "full" else min(a.epochs, 2), allow)
-    w, _ = results["full"]
-    base = {"base": 1.0}
-    b_dev, n_dev = evaluate(dev_p, base, tid, {}), evaluate(dev_p, w, tid, full)
+        results[name] = train(train_p, dev_p, tid, tabs, a.epochs, allow, target, fixed)
     for name, (_, m) in results.items():
-        print(f"ABLATION {name:22s} DEV strict {m['strict']:.4f} lenient {m['lenient']:.4f} exact {m['exact']:.3f}")
+        print(f"ABLATION {name:30s} DEV strict {m['strict']:.4f} lenient {m['lenient']:.4f} exact {m['exact']:.3f}")
+    best_name = max(results, key=lambda n: results[n][1]["lenient"])
+    w, _ = results[best_name]
+    tabs = configs[best_name][0]
+    base = {"base": 1.0, **no_unk}
+    print(f"chosen: {best_name}")
+    b_dev, n_dev = evaluate(dev_p, base, tid, {}), evaluate(dev_p, w, tid, tabs)
     for name, ps in held.items():
-        b, r = evaluate(ps, base, tid, {}), evaluate(ps, w, tid, full)
+        b, r = evaluate(ps, base, tid, {}), evaluate(ps, w, tid, tabs)
         print(f"{name[:26]:26s} n={b['n']:4d} strict {b['strict']:.4f} -> {r['strict']:.4f}  lenient "
               f"{b['lenient']:.4f} -> {r['lenient']:.4f}  exact {b['exact']:.3f} -> {r['exact']:.3f}", flush=True)
+    full = {**tabs}
     on = n_dev["lenient"] > b_dev["lenient"]
     print(f"DEV all strict {b_dev['strict']:.4f} -> {n_dev['strict']:.4f}  lenient {b_dev['lenient']:.4f} -> "
           f"{n_dev['lenient']:.4f}  exact {b_dev['exact']:.3f} -> {n_dev['exact']:.3f}; enabled={on}")
     model = {"source": SOURCE, "enabled": on, "train_lines": n_tr, "weights": {k: v for k, v in w.items() if v},
+             "config": best_name, "unknown_edges": "unknown edges" in best_name or best_name.startswith("+ unknown"),
              **full, "dev": {"before": b_dev, "after": n_dev, "coverage": cov, "oracle_f1": ora}}
     decoder.MODEL_FILE.write_text(json.dumps(model, ensure_ascii=False, sort_keys=True), encoding="utf-8")
     print(f"wrote {decoder.MODEL_FILE} [{time.time() - t0:.0f}s]")
