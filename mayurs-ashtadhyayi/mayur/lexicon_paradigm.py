@@ -24,7 +24,7 @@ from mayur.model import Morph
 _STEMS = (("पुम्स्", "पुंस्", "पुंलिङ्ग"),)
 _TVA_NOTE = ("the taddhita त्व (5.1.119 तस्य भावस्त्वतलौ) cited by the corpus as its own member; its ending "
              "is that of vidyut's derivation of भवत्व in the same case, since vidyut's bare त्व is the "
-             "sarvanāma (1.1.27)")
+             "सर्वनाम (1.1.27)")
 # kaṇḍvādi dhātus in their Dhatupatha form, with the text every form of them contains (the gate)
 _KANDVADI = (("महीङ्", "महीय"),)
 

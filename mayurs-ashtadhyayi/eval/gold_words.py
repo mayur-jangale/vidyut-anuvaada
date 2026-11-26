@@ -1,5 +1,5 @@
 """A Reading built from a reference file's own words (gold split, lemma, feats), for evaluating the
-sentence layer alone: each word gets the one lexicon analysis that matches the gold feats, or a Morph
+sentence layer alone (the split includes which words are compound members): each word gets the one lexicon analysis that matches the gold feats, or a Morph
 built from the feats when the lexicon has none."""
 
 from __future__ import annotations
@@ -95,7 +95,9 @@ def reading_of(verse: dict[str, Any], lexicon: Optional[Any] = None) -> tuple[Re
         lexicon = lex
     words, built = [], 0
     for k, w in enumerate(sorted(verse["words"], key=lambda x: x["index"])):
-        form, member = w["form"], bool(w.get("compound_member"))
+        form = w["form"]
+        # a word the reference treats as a compound member (role समासपूर्वपद) is one, whatever its flag
+        member = bool(w.get("compound_member")) or w.get("role") == "समासपूर्वपद"
         try:
             analyses = list(lexicon.stems(form) if member else lexicon.padas(form))
         except Exception:  # an unanalysable form: fall back to the feats

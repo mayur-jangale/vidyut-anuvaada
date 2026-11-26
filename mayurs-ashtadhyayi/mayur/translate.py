@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 from dataclasses import replace
-from typing import Optional
 
 from . import english
 from .model import Alignment, Reading

@@ -10,7 +10,6 @@ the text even ignoring sandhi are counted as DCS anomalies, not rule gaps.
 from __future__ import annotations
 
 import argparse
-import itertools
 import random
 import sys
 from collections import Counter, defaultdict

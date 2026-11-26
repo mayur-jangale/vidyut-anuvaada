@@ -1,6 +1,6 @@
-"""Forward samāsa derivation: an explicit, sūtra-cited rule chain for a compound.
+"""Forward समास derivation: an explicit rule chain for a compound, each step citing its सूत्र.
 
-vidyut's Python API has no samāsa derivation. This module builds the chain itself:
+vidyut's Python API has no समास derivation. This module builds the chain itself:
 the alaukika-vigraha and the type rule (the TYPE is a heuristic choice and says so),
 1.2.46 / 2.4.71 / upasarjana placement, member-form rules, then it RUNS the forward
 compound-internal sandhi (``sandhi.outcomes(..., samasa=True)``) member by member and
@@ -34,8 +34,14 @@ TYPE_RULE: dict[str, tuple[str, str]] = {
     "बहुव्रीहि": ("2.2.24", "अनेकमन्यपदार्थे"),
     "अव्ययीभाव": ("2.1.6", "अव्ययं विभक्तिसमीप..."),
     "प्रादि": ("2.2.18", "कुगतिप्रादयः"),
+    "सह": ("2.2.28", "तेन सहेति तुल्ययोगे"),
+    "द्विगु": ("2.1.52", "संख्यापूर्वो द्विगुः"),
+    "उपमान": ("2.1.55", "उपमानानि सामान्यवचनैः"),
+    "उपमान-बहुव्रीहि": ("2.2.24", "अनेकमन्यपदार्थे"),
+    "तुं-काम": ("2.2.24", "अनेकमन्यपदार्थे"),
+    "संख्या": ("2.1.57", "विशेषणं विशेष्येण बहुलम्"),
 }
-# 2.1.32 कर्तृकरणे कृता बहुलम् for तृतीया with a kṛdanta final member
+# 2.1.32 कर्तृकरणे कृता बहुलम् for तृतीया with a कृदन्त final member
 TRITIYA_KRT = ("2.1.32", "कर्तृकरणे कृता बहुलम्")
 
 SUP_EKA = {"प्रथमा": "सु", "द्वितीया": "अम्", "तृतीया": "टा", "चतुर्थी": "ङे", "पञ्चमी": "ङसि",
@@ -64,13 +70,16 @@ def _stem_of(m: Morph) -> str:
 
 def _member_cases(samasa: str, relation: str, n: int) -> list[str]:
     """Case ending of each member in the alaukika-vigraha."""
-    if samasa in ("द्वन्द्व", "बहुव्रीहि", "कर्मधारय", "नञ्", "प्रादि"):
+    if samasa in ("द्वन्द्व", "बहुव्रीहि", "कर्मधारय", "नञ्", "प्रादि", "सह", "द्विगु", "उपमान",
+                  "उपमान-बहुव्रीहि", "तुं-काम", "संख्या", "अव्ययीभाव"):
         return ["सु"] * n
     first = SUP_EKA.get(relation, "ङस्")
     return [first] * (n - 1) + ["सु"]
 
 
-def _type_step(samasa: str, relation: str, final: Morph) -> SutraStep:
+def _type_step(samasa: str, relation: str, final: Morph, rule_code: str = "", rule_note: str = "") -> SutraStep:
+    if rule_code:
+        return _step(rule_code, f"{rule_note} {HEUR}")
     key = relation if samasa == "तत्पुरुष" else samasa
     code, name = TYPE_RULE.get(key, TYPE_RULE["षष्ठी"])
     if key == "तृतीया" and final.krt:
@@ -151,18 +160,24 @@ def _inflect(stem: str, final: Morph) -> tuple[str, list[SutraStep], bool, str]:
 
 
 def derive(members: Sequence[Morph], final: Morph, samasa: str, relation: str = "",
-           surface: str = "", forms: Sequence[str] = ()) -> SamasaDerivation:
+           surface: str = "", forms: Sequence[str] = (), rule_code: str = "", rule_note: str = "",
+           inner: str = "") -> SamasaDerivation:
     """Forward derivation of a compound of ``members`` (all members, the last being
-    ``final``'s stem) of type ``samasa`` (relation = vibhakti for a vibhakti-tatpuruṣa).
-    ``surface`` is the expected compound stem; ``forms`` the members' written forms."""
+    ``final``'s stem) of type ``samasa`` (relation = vibhakti for a विभक्ति-तत्पुरुष).
+    ``surface`` is the expected compound stem; ``forms`` the members' written forms.
+    ``rule_code``/``rule_note``: the type rule as decided (mayur.samasa_type); ``inner``: the
+    type of the non-final members when they form a compound first (द्वन्द्व)."""
     stems = [_stem_of(m) for m in members]
     surface = surface or "".join(stems)
     forms = list(forms) or stems
     cases = _member_cases(samasa, relation, len(stems))
     vig = " + ".join(f"{s} + {c}" for s, c in zip(stems, cases))
+    inner_steps = [_step("2.2.29", f"चार्थे द्वन्द्वः: [{' + '.join(stems[:-1])}] first, as one member "
+                                   f"(bracketing) {HEUR}")] if inner == "द्वन्द्व" and len(stems) > 2 else []
     trace = [_step("2.1.3", f"प्राक्कडारात्समासः: {vig}"),
              _step("2.1.4", f"सह सुपा: {vig}"),
-             _type_step(samasa, relation, final),
+             *inner_steps,
+             _type_step(samasa, relation, final, rule_code, rule_note),
              _step("1.2.43", f"प्रथमानिर्दिष्टं समास उपसर्जनम्: {stems[0]} उपसर्जन"),
              _step("2.2.30", f"उपसर्जनं पूर्वम्: {' + '.join(f'{s} + {c}' for s, c in zip(stems, cases))}"),
              _step("1.2.46", f"कृत्तद्धितसमासाश्च: प्रातिपदिक {' + '.join(stems)}"),
@@ -170,13 +185,13 @@ def derive(members: Sequence[Morph], final: Morph, samasa: str, relation: str = 
     parts = []
     for k, s in enumerate(stems):
         if k < len(stems) - 1:
-            form, st = _member_form(s, stems[k + 1], surface if k == 0 else "")
-            if st:
-                trace.append(st)
+            form, member_step = _member_form(s, stems[k + 1], surface if k == 0 else "")
+            if member_step:
+                trace.append(member_step)
             parts.append(form)
         else:
             parts.append(s)
-    notes = ["samāsānta (5.4.x) and puṃvadbhāva (6.3.34) not applied"]
+    notes = ["समासान्त (5.4.x) and पुंवद्भाव (6.3.34) not applied"]
     stem, sandhi_steps, ok_c = _join(parts, forms, surface) if len(parts) > 1 else (parts[0], [], True)
     trace += sandhi_steps
     if not ok_c:

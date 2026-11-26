@@ -161,11 +161,18 @@ def _stem_ok(form: str, ms: tuple) -> bool:
     return not verb or any(m.kind == "subanta" and m.quality >= 3 for m in padas)
 
 
+# Particles that denote no thing (1.4.57 चादयोऽसत्त्वे) do not end a compound: a compound is made of
+# inflected nominals (2.1.4 सह सुपा). In 39,094 compounds of the training corpus none ends in one of these.
+NIPATA_NEVER_FINAL = frozenset("च वा ह एव न अपि तु हि खलु किल स्म इव उ नु वै मा चेत् ननु".split())
+
+
 @lru_cache(maxsize=300_000)
 def _can_follow_samasa(form: str, as_stem: bool) -> bool:
     """The word after a compound-internal junction must be able to be nominal (not only a finite verb)."""
     if as_stem:
         return True
+    if form in NIPATA_NEVER_FINAL:
+        return False
     return any(m.kind != "tinanta" for m in _analyses(form, False))
 
 
@@ -239,6 +246,9 @@ def _unmarked_elision(jn: _Jn) -> bool:
     """ए/ओ + अ with the अ elided (6.1.109) but no avagraha written: legal, but rare in our texts."""
     return jn.right_head == ("अ",) and sd.AVAGRAHA not in jn.surface and "६.१.१०९" in jn.sutras
 
+SPACE_BLOCKS_MERGE = True
+
+
 class _Lattice:
     def __init__(self, text: Varnas, spaces: frozenset, tier: int):
         self.t, self.sp, self.tier, self.n = text, spaces, tier, len(text)
@@ -271,6 +281,8 @@ class _Lattice:
                     continue
                 if sd.PADA_HIATUS in jn.sutras and (jn.samasa or not inner):
                     continue
+                if SPACE_BLOCKS_MERGE and jn.right_head and j in self.sp and not _unmarked_elision(jn):
+                    continue  # a vowel that merges two words cannot be followed by a written space
                 out.append((jn, j))
         return out
 

@@ -1,4 +1,4 @@
-"""Forward samāsa rule chains with real lexicon objects (Devanagari only)."""
+"""Forward समास rule chains with real lexicon objects (Devanagari only)."""
 
 import pytest
 

@@ -16,7 +16,7 @@ from dataclasses import dataclass, replace
 from typing import Callable, Optional
 
 from . import english
-from .fluent_checks import Failure, Rendering, run_checks, tokens as words_of
+from .fluent_checks import Failure, Rendering, run_checks
 from .model import Alignment, Reading, Word
 
 NOTE_OK = "rule-based; checks passed"

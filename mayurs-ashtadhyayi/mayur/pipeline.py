@@ -16,7 +16,16 @@ LINE_BREAK = re.compile(r"[।॥|/\n]+")
 NOISE = re.compile(r"[0-9०-९.,;:!?\"“”‘’()\[\]-]+")
 SPLITS_PER_LINE = 12
 MAX_CANDIDATES = 24
-FREQUENCY_TEMPERATURE = 5.0
+# Scale of a split-score difference that should matter when readings are compared. The rule-based
+# ranking scores are log-probabilities; the trained decoder's are raw linear scores whose top-two
+# gap has a median of about 250 on dev verses. Measured on 150 dev-pool verses: with the old
+# scale (5) for decoder scores the split evidence vanished and words-identified F1 was 0.934; with
+# this one it is 0.942 (decoder's own first choice: 0.942).
+TEMPERATURE_RULES = 5.0
+TEMPERATURE_DECODER = 1000.0
+# A proof-verified reading wins a near tie; it is not preferred outright, because words vidyut
+# cannot derive (मे, महा-) occur in right readings (measured: outright preference costs 0.5 F1).
+VERIFIED_BONUS = 0.02
 
 
 def to_lines(text: str, script: str | None = None) -> list[str]:
@@ -47,15 +56,30 @@ def _combinations(per_line: Sequence[Sequence[segmenter.Split]], limit: int) -> 
 def _best_splits(seg: segmenter.Segmentation) -> list[segmenter.Split]:
     """The best valid splits of a line: the trained lattice decoder's choices first, then the
     rule-based ranking's own best ones, so that neither system's readings are dropped."""
-    ruled = list(seg.splits[:SPLITS_PER_LINE])
+    ruled = _distinct(seg.splits)[:SPLITS_PER_LINE]
     if seg.tier != 0 or not decoder.enabled():
         return ruled
-    decoded = list(decoder.decode(seg.line, top_k=SPLITS_PER_LINE))
-    seen = {tuple((w.form, w.in_compound) for w in split.words) for split in decoded}
+    decoded = _distinct(decoder.decode(seg.line, top_k=SPLITS_PER_LINE))
+    seen = {_key(split) for split in decoded}
     floor = min((split.score for split in decoded), default=0.0)
-    extra = [replace(split, score=floor - rank - 1.0) for rank, split in enumerate(ruled)
-             if tuple((w.form, w.in_compound) for w in split.words) not in seen]
+    extra = [replace(split, score=floor - rank - 1.0) for rank, split in enumerate(ruled) if _key(split) not in seen]
     return decoded + extra
+
+
+def _key(split: segmenter.Split) -> tuple:
+    return tuple((w.form, w.in_compound) for w in split.words)
+
+
+def _distinct(splits: Sequence[segmenter.Split]) -> list[segmenter.Split]:
+    """Splits with different words, best first (the same words reached through another junction
+    rule are one split, so they do not crowd out real alternatives)."""
+    seen: set[tuple] = set()
+    out = []
+    for split in splits:
+        if _key(split) not in seen:
+            seen.add(_key(split))
+            out.append(split)
+    return out
 
 
 def _analyses(seg: segmenter.SegWord) -> list:
@@ -63,7 +87,7 @@ def _analyses(seg: segmenter.SegWord) -> list:
     return list(found or lexicon.generated(seg.form))
 
 
-def _reading(splits: Sequence[segmenter.Split], best: float) -> Reading:
+def _reading(splits: Sequence[segmenter.Split], best: float, temperature: float) -> Reading:
     words: list[Word] = []
     junctions: list[Junction] = []
     for line, split in enumerate(splits):
@@ -72,7 +96,7 @@ def _reading(splits: Sequence[segmenter.Split], best: float) -> Reading:
                           in_compound=seg.in_compound, analyses=_analyses(seg)) for seg in split.words)
         junctions.extend(replace(j, left=j.left + offset) for j in split.junctions)
     score = sum(split.score for split in splits)
-    frequency = 0.0 if math.isinf(score) else math.exp((score - best) / FREQUENCY_TEMPERATURE)
+    frequency = 0.0 if math.isinf(score) else math.exp((score - best) / temperature)
     scores = {"frequency": round(frequency, 4), "split_logprob": round(score, 3)}
     return Reading(words=words, junctions=junctions, scores=scores)
 
@@ -110,6 +134,35 @@ def _finish(reading: Reading) -> Reading:
     return replace(fluent_reading, reworded_alignment=spans)
 
 
+def candidate_readings(lines: Sequence[str]) -> tuple[list[segmenter.Segmentation], list[Reading], list[str]]:
+    """(segmentations, candidate readings, notes) for the half-verses ``lines``: every candidate is
+    analysed, given roles and proof-checked, but not yet ranked."""
+    segmentations = [segmenter.segment_line(line, top_k=SPLITS_PER_LINE) for line in lines]
+    notes = [f"line {i + 1}: no dictionary-only split; fallback tier {seg.tier} used"
+             for i, seg in enumerate(segmentations) if seg.tier]
+    per_line = [_best_splits(seg) for seg in segmentations]
+    empty = [i + 1 for i, splits in enumerate(per_line) if not splits]
+    if empty:
+        return segmentations, [], notes + [f"line {i}: no split found" for i in empty]
+    # Split score of a line: the trained decoder's score for its own choices; a rule-ranked split
+    # the decoder did not return sits below all of them (see _best_splits).
+    best = sum(splits[0].score for splits in per_line)
+    decoded = decoder.enabled() and any(seg.tier == 0 for seg in segmentations)
+    temperature = TEMPERATURE_DECODER if decoded else TEMPERATURE_RULES
+    candidates = []
+    for idx in _combinations(per_line, MAX_CANDIDATES):
+        reading = _reading([per_line[i][j] for i, j in enumerate(idx)], best, temperature)
+        reading = shabdabodha.resolve(compounds.annotate(reading))
+        candidates.append(_label_unproven(proof.check(reading, lines)))
+    return segmentations, candidates, notes
+
+
+def choose(candidates: list[Reading]) -> list[Reading]:
+    """Candidates best first by total score; proof-verified readings win near ties. Nothing is dropped."""
+    return sorted(candidates, key=lambda r: (-(r.scores.get("total", 0.0) + VERIFIED_BONUS * (r.status == VERIFIED)),
+                                             len(r.words)))
+
+
 def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
                   max_readings: int = 5) -> VerseAnalysis:
     """Analyse one verse. ``readings[0]`` is the chosen reading; the rest are kept alternatives."""
@@ -118,26 +171,10 @@ def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
     lines = to_lines(text, script)
     if not lines:
         return VerseAnalysis(id=verse_id, input=text, notes=["empty input"])
-    segmentations = [segmenter.segment_line(line, top_k=SPLITS_PER_LINE) for line in lines]
-    notes = [f"line {i + 1}: no dictionary-only split; fallback tier {seg.tier} used"
-             for i, seg in enumerate(segmentations) if seg.tier]
-    per_line = [_best_splits(seg) for seg in segmentations]
-    empty = [i + 1 for i, splits in enumerate(per_line) if not splits]
-    if empty:
-        return VerseAnalysis(id=verse_id, input=text, lines=lines, metre=metre.identify(lines),
-                             notes=notes + [f"line {i}: no split found" for i in empty])
-    # Split score of a line: the trained decoder's score for its own choices; a rule-ranked split
-    # the decoder did not return sits below all of them (see _best_splits). The sum over lines is
-    # reported as the "frequency" score of a reading, relative to the best combination.
-    best = sum(splits[0].score for splits in per_line)
-
-    candidates = []
-    for idx in _combinations(per_line, MAX_CANDIDATES):
-        reading = _reading([per_line[i][j] for i, j in enumerate(idx)], best)
-        reading = shabdabodha.resolve(compounds.annotate(reading))
-        candidates.append(_label_unproven(proof.check(reading, lines)))
-
-    ranked = sorted(shabdabodha.rank(candidates), key=lambda r: r.status != VERIFIED)  # stable
+    segmentations, candidates, notes = candidate_readings(lines)
+    if not candidates:
+        return VerseAnalysis(id=verse_id, input=text, lines=lines, metre=metre.identify(lines), notes=notes)
+    ranked = choose(candidates)
     readings = [_finish(r) for r in ranked[:max_readings]] + ranked[max_readings:]
     return VerseAnalysis(
         id=verse_id,

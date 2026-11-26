@@ -77,8 +77,8 @@ def indefinite(form: str, lookup) -> tuple[Morph, ...]:
 
 
 _PARTICLE_ENDS = (("अपि", ("पि",)), ("तु", ("तु",)), ("च", ("च",)), ("उ", ("ु", "उ")))
-_YATHA = ("यथा",)  # avyayībhāva with यथा (2.1.7 यथाऽसादृश्ये)
-AVYAYA_NOTE = ("indeclinable compound of kosha-listed members ({parts}); the joining (avyayībhāva 2.1.6 "
+_YATHA = ("यथा",)  # अव्ययीभाव with यथा (2.1.7 यथाऽसादृश्ये)
+AVYAYA_NOTE = ("indeclinable compound of kosha-listed members ({parts}); the joining (अव्ययीभाव 2.1.6 "
                "or a particle in samhita) is not derived through vidyut's Python API")
 
 

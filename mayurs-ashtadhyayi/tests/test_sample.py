@@ -1,7 +1,6 @@
 """Sampler (ledger exclusion, determinism) and the end-to-end metric."""
 
 import importlib.util
-import json
 from pathlib import Path
 from types import SimpleNamespace
 

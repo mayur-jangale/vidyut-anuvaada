@@ -24,6 +24,30 @@ def _own() -> dict[str, str]:
         return {}
 
 
+_DRAFT = Path(__file__).parent / "annotations" / "gloss_draft.json"
+_VERBAL_KINDS = frozenset({"verb"})
+
+
+@lru_cache(maxsize=1)
+def _draft() -> dict[str, list[str]]:
+    """lemma -> [gloss, kind]: the Claude-drafted table for frequent lemmas (not human-verified)."""
+    try:
+        return json.loads(_DRAFT.read_text(encoding="utf-8"))["glosses"]
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
+def _from_draft(m: Morph, keys: list[str]) -> str:
+    """The drafted gloss whose kind fits the analysis: a root's gloss for verbal forms, a nominal
+    or indeclinable gloss otherwise (मद् is "I" as a pronoun and "rejoice" as a root)."""
+    draft = _draft()
+    for k in keys:
+        hit = draft.get(k)
+        if hit and (hit[1] in _VERBAL_KINDS) == (m.root is not None and k != m.stem):
+            return hit[0]
+    return ""
+
+
 _ARTICLES = ("the ", "a ", "an ")
 _TRAILING = {"or", "to", "of", "and", "the", "a", "an", "in", "on", "with", "for", "by", "as"}
 _CUT = re.compile(r"\s+(?:that|which|who|whose|having)\s+|\s+or\s+|\s+and\s+|[;,/]|\s+-\s+")
@@ -106,8 +130,21 @@ def lookup(m: Morph) -> tuple[str, str]:
     for k in keys:
         if k in own:
             return own[k], "own"
+    cited = ud.lemma(m)  # the corpus's citation form: समवे for सम् + अव + इ
     senses = resources.derived("dcs_senses.json") or {}
     dictionary = resources.derived("dcs_dict.json") or {}
+    drafted = _from_draft(m, [cited])
+    if drafted:
+        return drafted, "own-draft"
+    if m.prefixes and cited != m.root:
+        # a prefixed verb the drafted table lacks: the dictionary entry of the prefixed verb itself
+        # comes before the bare root's gloss (समवे "come together", not इ "go")
+        g = _common(dictionary.get(cited, []), verb)
+        if g:
+            return g, "dcs-dictionary"
+    drafted = _from_draft(m, keys)
+    if drafted:
+        return drafted, "own-draft"
     for k in keys:
         g = first_sense(str(senses.get(k, "")), verb)
         if g.lower().startswith("name") or g[:1].isupper():  # proper-noun reading: prefer a common sense

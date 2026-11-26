@@ -93,7 +93,6 @@ def score_sentence(ours: dict[str, Any], gold: dict[str, Any], sid: str = "") ->
     c: dict[str, Any] = {"gold_words": len(gw), "aligned": len(mapping), "unaligned_gold": len(gw) - len(mapping),
                          "members_skipped": 0, "evaluated": 0, "head_ok": 0, "role_eval": 0, "role_ok": 0,
                          "unmapped_gold_role": 0, "role_ok_lenient": 0, "roles": {}, "confusion": {}, "wrong": {}}
-    inv = {v: k for k, v in mapping.items()}
 
     def form_of(gi: Optional[int]) -> str:
         return gw[gi]["form"] if gi is not None and 0 <= gi < len(gw) else "-"

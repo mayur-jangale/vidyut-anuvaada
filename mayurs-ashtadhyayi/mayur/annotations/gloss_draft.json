@@ -1,0 +1,15997 @@
+{
+"about": "Short English glosses for the 4,000 most frequent lemmas of the corpus, drafted by Claude (an LLM) from its own knowledge with the corpus dictionary as a hint; not human-verified. Used after the hand-made table gloss.json. Licence CC BY-SA 4.0. Format: lemma -> [gloss, kind]; a capitalised gloss is a proper name.",
+"glosses": {
+"अ": [
+"not",
+"ind"
+],
+"अंश": [
+"part",
+"noun"
+],
+"अंशु": [
+"ray",
+"noun"
+],
+"अंशुक": [
+"cloth",
+"noun"
+],
+"अंशुमन्त्": [
+"Aṃśumat",
+"name"
+],
+"अंस": [
+"shoulder",
+"noun"
+],
+"अकस्मात्": [
+"suddenly",
+"ind"
+],
+"अकाम": [
+"without desire",
+"adj"
+],
+"अकार्य": [
+"wrongdoing",
+"noun"
+],
+"अकाल": [
+"untimely",
+"adj"
+],
+"अकृत": [
+"undone",
+"adj"
+],
+"अकृतात्मन्": [
+"undisciplined",
+"adj"
+],
+"अक्रूर": [
+"Akrūra",
+"name"
+],
+"अक्लिष्ट": [
+"untroubled",
+"adj"
+],
+"अक्ष": [
+"die",
+"noun"
+],
+"अक्षय": [
+"imperishable",
+"adj"
+],
+"अक्षय्य": [
+"undecaying",
+"adj"
+],
+"अक्षर": [
+"syllable",
+"noun"
+],
+"अक्षि": [
+"eye",
+"noun"
+],
+"अक्षौहिणी": [
+"great army",
+"noun"
+],
+"अखिल": [
+"entire",
+"adj"
+],
+"अगस्त्य": [
+"Agastya",
+"name"
+],
+"अगाध": [
+"unfathomable",
+"adj"
+],
+"अग्नि": [
+"fire",
+"noun"
+],
+"अग्निहोत्र": [
+"agnihotra",
+"noun"
+],
+"अग्र": [
+"front",
+"noun"
+],
+"अग्रज": [
+"elder brother",
+"noun"
+],
+"अग्रतस्": [
+"in front",
+"ind"
+],
+"अग्रे": [
+"in front",
+"ind"
+],
+"अग्र्य": [
+"foremost",
+"adj"
+],
+"अघ": [
+"sin",
+"noun"
+],
+"अघोर": [
+"Aghora",
+"name"
+],
+"अङ्क": [
+"lap",
+"noun"
+],
+"अङ्कुर": [
+"sprout",
+"noun"
+],
+"अङ्कुश": [
+"goad",
+"noun"
+],
+"अङ्ग": [
+"limb",
+"noun"
+],
+"अङ्गद": [
+"Aṅgada",
+"name"
+],
+"अङ्गना": [
+"woman",
+"noun"
+],
+"अङ्गिरस्": [
+"Aṅgiras",
+"name"
+],
+"अङ्गुल": [
+"finger",
+"noun"
+],
+"अङ्गुलि": [
+"finger",
+"noun"
+],
+"अङ्गुष्ठ": [
+"thumb",
+"noun"
+],
+"अङ्घ्रि": [
+"foot",
+"noun"
+],
+"अचल": [
+"mountain",
+"noun"
+],
+"अचिन्त्य": [
+"inconceivable",
+"adj"
+],
+"अचिर": [
+"brief",
+"adj"
+],
+"अचिरात्": [
+"soon",
+"ind"
+],
+"अच्युत": [
+"Acyuta",
+"name"
+],
+"अज": [
+"goat",
+"noun"
+],
+"अजर": [
+"ageless",
+"adj"
+],
+"अजित": [
+"unconquered",
+"adj"
+],
+"अजिन": [
+"hide",
+"noun"
+],
+"अजिर": [
+"courtyard",
+"noun"
+],
+"अजिह्मग": [
+"arrow",
+"noun"
+],
+"अज्ञात": [
+"unknown",
+"adj"
+],
+"अज्ञान": [
+"ignorance",
+"noun"
+],
+"अञ्जन": [
+"collyrium",
+"noun"
+],
+"अञ्जलि": [
+"cupped hands",
+"noun"
+],
+"अञ्जसा": [
+"directly",
+"ind"
+],
+"अटवी": [
+"forest",
+"noun"
+],
+"अणु": [
+"minute",
+"adj"
+],
+"अण्ड": [
+"egg",
+"noun"
+],
+"अतन्द्रित": [
+"unwearied",
+"adj"
+],
+"अतस्": [
+"hence",
+"ind"
+],
+"अति": [
+"very",
+"ind"
+],
+"अतिक्रम्": [
+"cross",
+"verb"
+],
+"अतिग": [
+"surpassing",
+"adj"
+],
+"अतिथि": [
+"guest",
+"noun"
+],
+"अतिरथ": [
+"great chariot warrior",
+"noun"
+],
+"अतिवृत्": [
+"surpass",
+"verb"
+],
+"अतिव्यध्": [
+"pierce through",
+"verb"
+],
+"अती": [
+"pass",
+"verb"
+],
+"अतीव": [
+"very",
+"ind"
+],
+"अतुल": [
+"incomparable",
+"adj"
+],
+"अत्यन्त": [
+"excessive",
+"adj"
+],
+"अत्यय": [
+"lapse",
+"noun"
+],
+"अत्यर्थम्": [
+"excessively",
+"ind"
+],
+"अत्र": [
+"here",
+"ind"
+],
+"अत्रि": [
+"Atri",
+"name"
+],
+"अथ": [
+"then",
+"ind"
+],
+"अथवा": [
+"or",
+"ind"
+],
+"अथो": [
+"then",
+"ind"
+],
+"अदर्शन": [
+"disappearance",
+"noun"
+],
+"अदस्": [
+"that",
+"pron"
+],
+"अदिति": [
+"Aditi",
+"name"
+],
+"अदृश्य": [
+"invisible",
+"adj"
+],
+"अदृष्ट": [
+"unseen",
+"adj"
+],
+"अद्": [
+"eat",
+"verb"
+],
+"अद्भुत": [
+"wonderful",
+"adj"
+],
+"अद्य": [
+"today",
+"ind"
+],
+"अद्रि": [
+"mountain",
+"noun"
+],
+"अधम": [
+"lowest",
+"adj"
+],
+"अधर": [
+"lip",
+"noun"
+],
+"अधर्म": [
+"adharma",
+"noun"
+],
+"अधस्": [
+"below",
+"ind"
+],
+"अधस्तात्": [
+"below",
+"ind"
+],
+"अधिक": [
+"more",
+"adj"
+],
+"अधिकृ": [
+"appoint",
+"verb"
+],
+"अधिगम्": [
+"obtain",
+"verb"
+],
+"अधिप": [
+"ruler",
+"noun"
+],
+"अधिपति": [
+"ruler",
+"noun"
+],
+"अधिरुह्": [
+"mount",
+"verb"
+],
+"अधिष्ठा": [
+"preside",
+"verb"
+],
+"अधिष्ठान": [
+"basis",
+"noun"
+],
+"अधी": [
+"study",
+"verb"
+],
+"अधीन": [
+"dependent",
+"adj"
+],
+"अधुना": [
+"now",
+"ind"
+],
+"अधोमुख": [
+"downcast",
+"adj"
+],
+"अध्ययन": [
+"study",
+"noun"
+],
+"अध्यात्म": [
+"inner self",
+"noun"
+],
+"अध्यापय्": [
+"teach",
+"verb"
+],
+"अध्याय": [
+"chapter",
+"noun"
+],
+"अध्वन्": [
+"road",
+"noun"
+],
+"अध्वर": [
+"rite",
+"noun"
+],
+"अनघ": [
+"sinless",
+"adj"
+],
+"अनङ्ग": [
+"Anaṅga",
+"name"
+],
+"अनङ्गप्रभा": [
+"Anaṅgaprabhā",
+"name"
+],
+"अनन्त": [
+"endless",
+"adj"
+],
+"अनन्तर": [
+"next",
+"adj"
+],
+"अनन्तरम्": [
+"immediately",
+"ind"
+],
+"अनन्य": [
+"exclusive",
+"adj"
+],
+"अनय": [
+"misconduct",
+"noun"
+],
+"अनर्थ": [
+"misfortune",
+"noun"
+],
+"अनल": [
+"fire",
+"noun"
+],
+"अनवद्य": [
+"faultless",
+"adj"
+],
+"अनागत": [
+"future",
+"adj"
+],
+"अनाथ": [
+"helpless",
+"adj"
+],
+"अनादि": [
+"beginningless",
+"adj"
+],
+"अनामय": [
+"healthy",
+"adj"
+],
+"अनार्य": [
+"ignoble",
+"adj"
+],
+"अनित्य": [
+"impermanent",
+"adj"
+],
+"अनिरुद्ध": [
+"Aniruddha",
+"name"
+],
+"अनिल": [
+"wind",
+"noun"
+],
+"अनिवर्तिन्": [
+"not retreating",
+"adj"
+],
+"अनिशम्": [
+"ceaselessly",
+"ind"
+],
+"अनिष्ट": [
+"undesirable",
+"adj"
+],
+"अनीक": [
+"army",
+"noun"
+],
+"अनु": [
+"after",
+"ind"
+],
+"अनुकम्पा": [
+"pity",
+"noun"
+],
+"अनुकूल": [
+"favourable",
+"adj"
+],
+"अनुक्रोश": [
+"pity",
+"noun"
+],
+"अनुग": [
+"following",
+"adj"
+],
+"अनुगम्": [
+"follow",
+"verb"
+],
+"अनुग्रह": [
+"favor",
+"noun"
+],
+"अनुग्रह्": [
+"favor",
+"verb"
+],
+"अनुचर": [
+"attendant",
+"noun"
+],
+"अनुचिन्तय्": [
+"reflect",
+"verb"
+],
+"अनुज": [
+"younger brother",
+"noun"
+],
+"अनुज्ञा": [
+"permit",
+"verb"
+],
+"अनुतप्": [
+"repent",
+"verb"
+],
+"अनुत्तम": [
+"supreme",
+"adj"
+],
+"अनुनी": [
+"conciliate",
+"verb"
+],
+"अनुपद्": [
+"follow",
+"verb"
+],
+"अनुपश्": [
+"discern",
+"verb"
+],
+"अनुपालय्": [
+"preserve",
+"verb"
+],
+"अनुप्राप्": [
+"attain",
+"verb"
+],
+"अनुबन्ध": [
+"connection",
+"noun"
+],
+"अनुभाव": [
+"power",
+"noun"
+],
+"अनुभू": [
+"experience",
+"verb"
+],
+"अनुमत": [
+"consent",
+"noun"
+],
+"अनुमन्": [
+"approve",
+"verb"
+],
+"अनुया": [
+"follow",
+"verb"
+],
+"अनुरञ्ज्": [
+"be attached",
+"verb"
+],
+"अनुराग": [
+"attachment",
+"noun"
+],
+"अनुरूप": [
+"suitable",
+"adj"
+],
+"अनुलेपन": [
+"ointment",
+"noun"
+],
+"अनुवर्तिन्": [
+"following",
+"adj"
+],
+"अनुवृत्": [
+"follow",
+"verb"
+],
+"अनुव्रत": [
+"devoted",
+"adj"
+],
+"अनुशासन": [
+"instruction",
+"noun"
+],
+"अनुशास्": [
+"instruct",
+"verb"
+],
+"अनुशुच्": [
+"lament",
+"verb"
+],
+"अनुष्ठा": [
+"perform",
+"verb"
+],
+"अनुसृ": [
+"follow",
+"verb"
+],
+"अनुस्मृ": [
+"remember",
+"verb"
+],
+"अनृत": [
+"falsehood",
+"noun"
+],
+"अनेक": [
+"many",
+"adj"
+],
+"अनेकशस्": [
+"repeatedly",
+"ind"
+],
+"अन्": [
+"not",
+"ind"
+],
+"अन्त": [
+"end",
+"noun"
+],
+"अन्तःपुर": [
+"inner apartments",
+"noun"
+],
+"अन्तक": [
+"death",
+"noun"
+],
+"अन्तर": [
+"interval",
+"noun"
+],
+"अन्तरा": [
+"between",
+"ind"
+],
+"अन्तरात्मन्": [
+"inner self",
+"noun"
+],
+"अन्तरिक्ष": [
+"atmosphere",
+"noun"
+],
+"अन्तर्": [
+"within",
+"ind"
+],
+"अन्तर्धा": [
+"vanish",
+"verb"
+],
+"अन्तिक": [
+"vicinity",
+"noun"
+],
+"अन्ध": [
+"blind",
+"adj"
+],
+"अन्धक": [
+"Andhaka",
+"name"
+],
+"अन्धकार": [
+"darkness",
+"noun"
+],
+"अन्न": [
+"food",
+"noun"
+],
+"अन्य": [
+"other",
+"pron"
+],
+"अन्यतस्": [
+"elsewhere",
+"ind"
+],
+"अन्यत्र": [
+"elsewhere",
+"ind"
+],
+"अन्यथा": [
+"otherwise",
+"ind"
+],
+"अन्येद्युस्": [
+"next day",
+"ind"
+],
+"अन्योन्य": [
+"each other",
+"pron"
+],
+"अन्वय": [
+"connection",
+"noun"
+],
+"अन्वि": [
+"follow",
+"verb"
+],
+"अन्वित": [
+"endowed",
+"adj"
+],
+"अन्विष्": [
+"seek",
+"verb"
+],
+"अपकृष्": [
+"drag away",
+"verb"
+],
+"अपक्रम्": [
+"retreat",
+"verb"
+],
+"अपत्य": [
+"offspring",
+"noun"
+],
+"अपनी": [
+"lead away",
+"verb"
+],
+"अपया": [
+"depart",
+"verb"
+],
+"अपर": [
+"other",
+"pron"
+],
+"अपराजित": [
+"unconquered",
+"adj"
+],
+"अपराध": [
+"offence",
+"noun"
+],
+"अपराध्": [
+"offend",
+"verb"
+],
+"अपव्यध्": [
+"pierce",
+"verb"
+],
+"अपश्यत्": [
+"unseeing",
+"adj"
+],
+"अपह": [
+"removing",
+"adj"
+],
+"अपहृ": [
+"carry off",
+"verb"
+],
+"अपान": [
+"downward breath",
+"noun"
+],
+"अपास्": [
+"cast away",
+"verb"
+],
+"अपि": [
+"also",
+"ind"
+],
+"अपूर्व": [
+"unprecedented",
+"adj"
+],
+"अपे": [
+"depart",
+"verb"
+],
+"अप्": [
+"water",
+"noun"
+],
+"अप्यय": [
+"dissolution",
+"noun"
+],
+"अप्रतिम": [
+"unequalled",
+"adj"
+],
+"अप्रमत्त": [
+"vigilant",
+"adj"
+],
+"अप्रिय": [
+"unpleasant",
+"adj"
+],
+"अप्सरस्": [
+"apsaras",
+"noun"
+],
+"अफल": [
+"fruitless",
+"adj"
+],
+"अबल": [
+"weak",
+"adj"
+],
+"अबुद्धि": [
+"foolish",
+"adj"
+],
+"अब्ज": [
+"lotus",
+"noun"
+],
+"अब्द": [
+"year",
+"noun"
+],
+"अब्धि": [
+"ocean",
+"noun"
+],
+"अभय": [
+"fearlessness",
+"noun"
+],
+"अभाव": [
+"absence",
+"noun"
+],
+"अभिगम्": [
+"approach",
+"verb"
+],
+"अभिगा": [
+"approach",
+"verb"
+],
+"अभिजन": [
+"family",
+"noun"
+],
+"अभिजन्": [
+"be born",
+"verb"
+],
+"अभिज्ञा": [
+"recognize",
+"verb"
+],
+"अभितप्": [
+"scorch",
+"verb"
+],
+"अभितस्": [
+"around",
+"ind"
+],
+"अभिद्रु": [
+"rush at",
+"verb"
+],
+"अभिधा": [
+"call",
+"verb"
+],
+"अभिधान": [
+"name",
+"noun"
+],
+"अभिधाव्": [
+"rush",
+"verb"
+],
+"अभिनन्द्": [
+"welcome",
+"verb"
+],
+"अभिपत्": [
+"rush at",
+"verb"
+],
+"अभिपद्": [
+"go to",
+"verb"
+],
+"अभिपूजय्": [
+"honor",
+"verb"
+],
+"अभिप्राय": [
+"intention",
+"noun"
+],
+"अभिप्रे": [
+"intend",
+"verb"
+],
+"अभिप्रेक्ष्": [
+"look at",
+"verb"
+],
+"अभिभाष्": [
+"address",
+"verb"
+],
+"अभिभु": [
+"overpowering",
+"adj"
+],
+"अभिभू": [
+"overpower",
+"verb"
+],
+"अभिमन्": [
+"regard",
+"verb"
+],
+"अभिमन्यु": [
+"Abhimanyu",
+"name"
+],
+"अभिमान": [
+"conceit",
+"noun"
+],
+"अभिमुख": [
+"facing",
+"adj"
+],
+"अभिया": [
+"attack",
+"verb"
+],
+"अभियुज्": [
+"attack",
+"verb"
+],
+"अभिरक्ष्": [
+"protect",
+"verb"
+],
+"अभिरम्": [
+"delight",
+"verb"
+],
+"अभिलष्": [
+"desire",
+"verb"
+],
+"अभिवादय्": [
+"greet",
+"verb"
+],
+"अभिवीक्ष्": [
+"gaze at",
+"verb"
+],
+"अभिवृत्": [
+"approach",
+"verb"
+],
+"अभिवृष्": [
+"rain upon",
+"verb"
+],
+"अभिषिच्": [
+"consecrate",
+"verb"
+],
+"अभिषेक": [
+"consecration",
+"noun"
+],
+"अभिषेचय्": [
+"consecrate",
+"verb"
+],
+"अभिसंधा": [
+"aim",
+"verb"
+],
+"अभिसंवृ": [
+"envelop",
+"verb"
+],
+"अभिहन्": [
+"strike",
+"verb"
+],
+"अभी": [
+"come near",
+"verb"
+],
+"अभीप्स्": [
+"wish",
+"verb"
+],
+"अभ्यधिक": [
+"greater",
+"adj"
+],
+"अभ्यनुज्ञा": [
+"permit",
+"verb"
+],
+"अभ्यन्तर": [
+"interior",
+"noun"
+],
+"अभ्यर्च्": [
+"adore",
+"verb"
+],
+"अभ्यस्": [
+"practise",
+"verb"
+],
+"अभ्यागम्": [
+"come to",
+"verb"
+],
+"अभ्याश": [
+"nearness",
+"noun"
+],
+"अभ्यास": [
+"practice",
+"noun"
+],
+"अभ्युपे": [
+"approach",
+"verb"
+],
+"अभ्ये": [
+"approach",
+"verb"
+],
+"अभ्र": [
+"cloud",
+"noun"
+],
+"अमर": [
+"immortal",
+"adj"
+],
+"अमर्ष": [
+"indignation",
+"noun"
+],
+"अमर्षण": [
+"wrathful",
+"adj"
+],
+"अमर्षित": [
+"angry",
+"adj"
+],
+"अमर्षिन्": [
+"intolerant",
+"adj"
+],
+"अमल": [
+"spotless",
+"adj"
+],
+"अमात्य": [
+"minister",
+"noun"
+],
+"अमित": [
+"immeasurable",
+"adj"
+],
+"अमित्र": [
+"enemy",
+"noun"
+],
+"अमुत्र": [
+"hereafter",
+"ind"
+],
+"अमृत": [
+"nectar",
+"noun"
+],
+"अमेय": [
+"boundless",
+"adj"
+],
+"अमोघ": [
+"unfailing",
+"adj"
+],
+"अम्बर": [
+"sky",
+"noun"
+],
+"अम्बरीष": [
+"Ambarīṣa",
+"name"
+],
+"अम्बा": [
+"mother",
+"noun"
+],
+"अम्बिका": [
+"Ambikā",
+"name"
+],
+"अम्बु": [
+"water",
+"noun"
+],
+"अम्बुज": [
+"lotus",
+"noun"
+],
+"अम्बुद": [
+"cloud",
+"noun"
+],
+"अम्बुधि": [
+"ocean",
+"noun"
+],
+"अम्भस्": [
+"water",
+"noun"
+],
+"अयन": [
+"path",
+"noun"
+],
+"अयस्": [
+"iron",
+"noun"
+],
+"अयुक्त": [
+"improper",
+"adj"
+],
+"अयुत": [
+"ten thousand",
+"num"
+],
+"अयोध्या": [
+"Ayodhyā",
+"name"
+],
+"अरण्य": [
+"forest",
+"noun"
+],
+"अरि": [
+"enemy",
+"noun"
+],
+"अरिंदम": [
+"foe tamer",
+"adj"
+],
+"अरिष्ट": [
+"ill omen",
+"noun"
+],
+"अरुण": [
+"reddish",
+"adj"
+],
+"अरुन्धती": [
+"Arundhatī",
+"name"
+],
+"अर्क": [
+"sun",
+"noun"
+],
+"अर्घ्य": [
+"water offering",
+"noun"
+],
+"अर्चन": [
+"worship",
+"noun"
+],
+"अर्चय्": [
+"worship",
+"verb"
+],
+"अर्चिस्": [
+"flame",
+"noun"
+],
+"अर्च्": [
+"worship",
+"verb"
+],
+"अर्जय्": [
+"acquire",
+"verb"
+],
+"अर्जुन": [
+"Arjuna",
+"name"
+],
+"अर्णव": [
+"sea",
+"noun"
+],
+"अर्थ": [
+"purpose",
+"noun"
+],
+"अर्थवत्": [
+"meaningful",
+"adj"
+],
+"अर्थिन्": [
+"desirous",
+"adj"
+],
+"अर्दय्": [
+"afflict",
+"verb"
+],
+"अर्ध": [
+"half",
+"noun"
+],
+"अर्धचन्द्र": [
+"half moon",
+"noun"
+],
+"अर्पय्": [
+"place",
+"verb"
+],
+"अर्बुद": [
+"Arbuda",
+"name"
+],
+"अर्ह": [
+"worthy",
+"adj"
+],
+"अर्ह्": [
+"deserve",
+"verb"
+],
+"अलंकार": [
+"ornament",
+"noun"
+],
+"अलंकृ": [
+"decorate",
+"verb"
+],
+"अलम्": [
+"enough",
+"ind"
+],
+"अलस": [
+"lazy",
+"adj"
+],
+"अल्प": [
+"little",
+"adj"
+],
+"अवकाश": [
+"space",
+"noun"
+],
+"अवकृ": [
+"scatter",
+"verb"
+],
+"अवगम्": [
+"understand",
+"verb"
+],
+"अवगाह्": [
+"plunge",
+"verb"
+],
+"अवज्ञा": [
+"despise",
+"verb"
+],
+"अवतार": [
+"descent",
+"noun"
+],
+"अवतृ": [
+"descend",
+"verb"
+],
+"अवनम्": [
+"bow",
+"verb"
+],
+"अवप्लु": [
+"leap down",
+"verb"
+],
+"अवबुध्": [
+"understand",
+"verb"
+],
+"अवमन्": [
+"despise",
+"verb"
+],
+"अवमान": [
+"disrespect",
+"noun"
+],
+"अवयव": [
+"limb",
+"noun"
+],
+"अवर": [
+"lower",
+"adj"
+],
+"अवरुह्": [
+"descend",
+"verb"
+],
+"अवलोकय्": [
+"look at",
+"verb"
+],
+"अवश": [
+"helpless",
+"adj"
+],
+"अवशिष्": [
+"be left",
+"verb"
+],
+"अवश्यम्": [
+"necessarily",
+"ind"
+],
+"अवसद्": [
+"sink",
+"verb"
+],
+"अवसान": [
+"end",
+"noun"
+],
+"अवसृज्": [
+"release",
+"verb"
+],
+"अवस्था": [
+"remain",
+"verb"
+],
+"अवाप्": [
+"obtain",
+"verb"
+],
+"अविद्या": [
+"ignorance",
+"noun"
+],
+"अवे": [
+"understand",
+"verb"
+],
+"अवेक्ष्": [
+"look at",
+"verb"
+],
+"अव्यक्त": [
+"unmanifest",
+"adj"
+],
+"अव्यग्र": [
+"calm",
+"adj"
+],
+"अव्यय": [
+"imperishable",
+"adj"
+],
+"अशक्त": [
+"unable",
+"adj"
+],
+"अशक्य": [
+"impossible",
+"adj"
+],
+"अशन": [
+"food",
+"noun"
+],
+"अशनि": [
+"thunderbolt",
+"noun"
+],
+"अशिव": [
+"inauspicious",
+"adj"
+],
+"अशुचि": [
+"impure",
+"adj"
+],
+"अशुभ": [
+"inauspicious",
+"adj"
+],
+"अशेष": [
+"complete",
+"adj"
+],
+"अशेषतस्": [
+"completely",
+"ind"
+],
+"अशोक": [
+"aśoka tree",
+"noun"
+],
+"अश्": [
+"eat",
+"verb"
+],
+"अश्मन्": [
+"stone",
+"noun"
+],
+"अश्रु": [
+"tear",
+"noun"
+],
+"अश्व": [
+"horse",
+"noun"
+],
+"अश्वत्थामन्": [
+"Aśvatthāman",
+"name"
+],
+"अश्वमेध": [
+"horse sacrifice",
+"noun"
+],
+"अश्विन्": [
+"Aśvin",
+"name"
+],
+"अष्टक": [
+"octad",
+"noun"
+],
+"अष्टन्": [
+"eight",
+"num"
+],
+"अष्टम": [
+"eighth",
+"num"
+],
+"अष्टादशन्": [
+"eighteen",
+"num"
+],
+"अष्टावक्र": [
+"Aṣṭāvakra",
+"name"
+],
+"असंशय": [
+"certainty",
+"noun"
+],
+"असंशयम्": [
+"doubtless",
+"ind"
+],
+"असकृत्": [
+"repeatedly",
+"ind"
+],
+"असत्": [
+"unreal",
+"adj"
+],
+"असाधु": [
+"bad",
+"adj"
+],
+"असि": [
+"sword",
+"noun"
+],
+"असित": [
+"dark",
+"adj"
+],
+"असु": [
+"breath",
+"noun"
+],
+"असुख": [
+"unhappiness",
+"noun"
+],
+"असुर": [
+"asura",
+"noun"
+],
+"असृज्": [
+"blood",
+"noun"
+],
+"अस्": [
+"be",
+"verb"
+],
+"अस्त": [
+"setting",
+"noun"
+],
+"अस्त्र": [
+"weapon",
+"noun"
+],
+"अस्थि": [
+"bone",
+"noun"
+],
+"अस्र": [
+"tear",
+"noun"
+],
+"अह": [
+"day",
+"noun"
+],
+"अहंकार": [
+"egoism",
+"noun"
+],
+"अहर्": [
+"day",
+"noun"
+],
+"अहि": [
+"snake",
+"noun"
+],
+"अहिंसा": [
+"nonviolence",
+"noun"
+],
+"अहित": [
+"harmful",
+"adj"
+],
+"अहो": [
+"oh",
+"ind"
+],
+"अहोरात्र": [
+"day and night",
+"noun"
+],
+"अह्": [
+"say",
+"verb"
+],
+"आ": [
+"up to",
+"ind"
+],
+"आकर": [
+"mine",
+"noun"
+],
+"आकर्णय्": [
+"listen",
+"verb"
+],
+"आकाङ्क्षिन्": [
+"desiring",
+"adj"
+],
+"आकाङ्क्ष्": [
+"desire",
+"verb"
+],
+"आकार": [
+"form",
+"noun"
+],
+"आकाश": [
+"sky",
+"noun"
+],
+"आकुल": [
+"agitated",
+"adj"
+],
+"आकृ": [
+"scatter",
+"verb"
+],
+"आकृति": [
+"form",
+"noun"
+],
+"आकृष्": [
+"draw",
+"verb"
+],
+"आक्रम्": [
+"attack",
+"verb"
+],
+"आक्षिप्": [
+"reproach",
+"verb"
+],
+"आख्या": [
+"tell",
+"verb"
+],
+"आख्यान": [
+"tale",
+"noun"
+],
+"आगम": [
+"tradition",
+"noun"
+],
+"आगमन": [
+"arrival",
+"noun"
+],
+"आगम्": [
+"come",
+"verb"
+],
+"आगा": [
+"come",
+"verb"
+],
+"आगार": [
+"house",
+"noun"
+],
+"आग्नेय": [
+"of Agni",
+"adj"
+],
+"आघ्रा": [
+"smell",
+"verb"
+],
+"आचक्ष्": [
+"tell",
+"verb"
+],
+"आचम्": [
+"sip",
+"verb"
+],
+"आचर्": [
+"practice",
+"verb"
+],
+"आचार": [
+"conduct",
+"noun"
+],
+"आचार्य": [
+"preceptor",
+"noun"
+],
+"आचि": [
+"pile",
+"verb"
+],
+"आजि": [
+"battle",
+"noun"
+],
+"आज्ञा": [
+"command",
+"noun"
+],
+"आज्ञापय्": [
+"order",
+"verb"
+],
+"आज्य": [
+"ghee",
+"noun"
+],
+"आढ्य": [
+"rich",
+"adj"
+],
+"आतप": [
+"sunshine",
+"noun"
+],
+"आतिथ्य": [
+"hospitality",
+"noun"
+],
+"आतुर": [
+"afflicted",
+"adj"
+],
+"आत्मक": [
+"consisting of",
+"adj"
+],
+"आत्मज": [
+"son",
+"noun"
+],
+"आत्मजा": [
+"daughter",
+"noun"
+],
+"आत्मन्": [
+"self",
+"noun"
+],
+"आत्मवत्": [
+"self possessed",
+"adj"
+],
+"आदर": [
+"respect",
+"noun"
+],
+"आदा": [
+"take",
+"verb"
+],
+"आदान": [
+"taking",
+"noun"
+],
+"आदि": [
+"beginning",
+"noun"
+],
+"आदिक": [
+"and so on",
+"adj"
+],
+"आदितस्": [
+"from the beginning",
+"ind"
+],
+"आदित्य": [
+"Āditya",
+"name"
+],
+"आदिश्": [
+"command",
+"verb"
+],
+"आदृ": [
+"respect",
+"verb"
+],
+"आदेश": [
+"order",
+"noun"
+],
+"आद्य": [
+"first",
+"adj"
+],
+"आधा": [
+"place",
+"verb"
+],
+"आधार": [
+"support",
+"noun"
+],
+"आधि": [
+"anxiety",
+"noun"
+],
+"आधिपत्य": [
+"sovereignty",
+"noun"
+],
+"आधिरथि": [
+"Ādhiratha son",
+"name"
+],
+"आनन": [
+"face",
+"noun"
+],
+"आनन्द": [
+"joy",
+"noun"
+],
+"आनम्": [
+"bow",
+"verb"
+],
+"आनायय्": [
+"bring",
+"verb"
+],
+"आनी": [
+"bring",
+"verb"
+],
+"आनुपूर्व्य": [
+"order",
+"noun"
+],
+"आनृशंस्य": [
+"compassion",
+"noun"
+],
+"आपगा": [
+"river",
+"noun"
+],
+"आपत्": [
+"fall upon",
+"verb"
+],
+"आपद्": [
+"calamity",
+"noun"
+],
+"आपूरय्": [
+"fill",
+"verb"
+],
+"आप्": [
+"gain",
+"verb"
+],
+"आप्त": [
+"trustworthy",
+"adj"
+],
+"आप्यायय्": [
+"nourish",
+"verb"
+],
+"आप्रच्छ्": [
+"take leave",
+"verb"
+],
+"आप्लु": [
+"plunge",
+"verb"
+],
+"आभ": [
+"resembling",
+"adj"
+],
+"आभरण": [
+"ornament",
+"noun"
+],
+"आभा": [
+"shine",
+"verb"
+],
+"आभाष्": [
+"address",
+"verb"
+],
+"आमन्त्रय्": [
+"address",
+"verb"
+],
+"आमिष": [
+"flesh",
+"noun"
+],
+"आयतन": [
+"abode",
+"noun"
+],
+"आयत्": [
+"depend",
+"verb"
+],
+"आयम्": [
+"stretch",
+"verb"
+],
+"आयस": [
+"iron",
+"adj"
+],
+"आया": [
+"approach",
+"verb"
+],
+"आयास": [
+"toil",
+"noun"
+],
+"आयुत": [
+"joined",
+"adj"
+],
+"आयुध": [
+"weapon",
+"noun"
+],
+"आयुस्": [
+"life",
+"noun"
+],
+"आयोधन": [
+"battlefield",
+"noun"
+],
+"आरभ्": [
+"begin",
+"verb"
+],
+"आरम्भ": [
+"beginning",
+"noun"
+],
+"आराधन": [
+"propitiation",
+"noun"
+],
+"आराधय्": [
+"propitiate",
+"verb"
+],
+"आराम": [
+"garden",
+"noun"
+],
+"आरुह्": [
+"ascend",
+"verb"
+],
+"आरोग्य": [
+"health",
+"noun"
+],
+"आरोपय्": [
+"set up",
+"verb"
+],
+"आरोह": [
+"ascent",
+"noun"
+],
+"आर्जव": [
+"honesty",
+"noun"
+],
+"आर्त": [
+"afflicted",
+"adj"
+],
+"आर्ति": [
+"distress",
+"noun"
+],
+"आर्द्र": [
+"wet",
+"adj"
+],
+"आर्य": [
+"noble",
+"adj"
+],
+"आलक्षय्": [
+"observe",
+"verb"
+],
+"आलम्ब्": [
+"lean on",
+"verb"
+],
+"आलय": [
+"abode",
+"noun"
+],
+"आलाप": [
+"conversation",
+"noun"
+],
+"आलोकय्": [
+"behold",
+"verb"
+],
+"आलोचय्": [
+"consider",
+"verb"
+],
+"आवरण": [
+"covering",
+"noun"
+],
+"आवर्त": [
+"whirlpool",
+"noun"
+],
+"आवलि": [
+"row",
+"noun"
+],
+"आवसथ": [
+"dwelling",
+"noun"
+],
+"आवह": [
+"bringing",
+"adj"
+],
+"आवास": [
+"dwelling",
+"noun"
+],
+"आविश्": [
+"enter",
+"verb"
+],
+"आवृ": [
+"cover",
+"verb"
+],
+"आवृत्": [
+"return",
+"verb"
+],
+"आवेदय्": [
+"announce",
+"verb"
+],
+"आव्यध्": [
+"pierce",
+"verb"
+],
+"आशंस्": [
+"hope",
+"verb"
+],
+"आशय": [
+"intention",
+"noun"
+],
+"आशा": [
+"hope",
+"noun"
+],
+"आशिन्": [
+"eating",
+"adj"
+],
+"आशिस्": [
+"benediction",
+"noun"
+],
+"आशीविष": [
+"viper",
+"noun"
+],
+"आशु": [
+"quickly",
+"ind"
+],
+"आशुग": [
+"arrow",
+"noun"
+],
+"आश्चर्य": [
+"wonder",
+"noun"
+],
+"आश्रम": [
+"hermitage",
+"noun"
+],
+"आश्रय": [
+"support",
+"noun"
+],
+"आश्रि": [
+"resort to",
+"verb"
+],
+"आश्वासय्": [
+"comfort",
+"verb"
+],
+"आसञ्ज्": [
+"attach",
+"verb"
+],
+"आसद्": [
+"approach",
+"verb"
+],
+"आसन": [
+"seat",
+"noun"
+],
+"आसादय्": [
+"reach",
+"verb"
+],
+"आसुर": [
+"demonic",
+"adj"
+],
+"आस्": [
+"sit",
+"verb"
+],
+"आस्तरण": [
+"bedding",
+"noun"
+],
+"आस्तीक": [
+"Āstīka",
+"name"
+],
+"आस्तृ": [
+"spread",
+"verb"
+],
+"आस्था": [
+"rely",
+"verb"
+],
+"आस्पद": [
+"place",
+"noun"
+],
+"आस्य": [
+"mouth",
+"noun"
+],
+"आहन्": [
+"hit",
+"verb"
+],
+"आहव": [
+"battle",
+"noun"
+],
+"आहार": [
+"food",
+"noun"
+],
+"आहुति": [
+"oblation",
+"noun"
+],
+"आहृ": [
+"bring",
+"verb"
+],
+"आह्वा": [
+"summon",
+"verb"
+],
+"इ": [
+"go",
+"verb"
+],
+"इक्ष्वाकु": [
+"Ikṣvāku",
+"name"
+],
+"इच्छा": [
+"wish",
+"noun"
+],
+"इतर": [
+"other",
+"pron"
+],
+"इतरेतर": [
+"one another",
+"pron"
+],
+"इतस्": [
+"from here",
+"ind"
+],
+"इति": [
+"thus",
+"ind"
+],
+"इतिहास": [
+"history",
+"noun"
+],
+"इत्थम्": [
+"thus",
+"ind"
+],
+"इत्यादि": [
+"and so on",
+"adj"
+],
+"इदम्": [
+"this",
+"pron"
+],
+"इदानीम्": [
+"now",
+"ind"
+],
+"इन्दु": [
+"moon",
+"noun"
+],
+"इन्द्र": [
+"Indra",
+"name"
+],
+"इन्द्रजित्": [
+"Indrajit",
+"name"
+],
+"इन्द्रिय": [
+"sense",
+"noun"
+],
+"इन्धन": [
+"fuel",
+"noun"
+],
+"इव": [
+"like",
+"ind"
+],
+"इषु": [
+"arrow",
+"noun"
+],
+"इष्": [
+"desire",
+"verb"
+],
+"इष्वास": [
+"archer",
+"noun"
+],
+"इह": [
+"here",
+"ind"
+],
+"ईक्षण": [
+"sight",
+"noun"
+],
+"ईक्ष्": [
+"look",
+"verb"
+],
+"ईदृश": [
+"such",
+"adj"
+],
+"ईप्सय्": [
+"desire",
+"verb"
+],
+"ईप्सा": [
+"wish",
+"noun"
+],
+"ईप्सु": [
+"desirous",
+"adj"
+],
+"ईरय्": [
+"utter",
+"verb"
+],
+"ईर्ष्या": [
+"envy",
+"noun"
+],
+"ईश": [
+"lord",
+"noun"
+],
+"ईशान": [
+"ruler",
+"noun"
+],
+"ईश्वर": [
+"lord",
+"noun"
+],
+"ईषा": [
+"pole",
+"noun"
+],
+"ईह्": [
+"strive",
+"verb"
+],
+"उक्ष्": [
+"sprinkle",
+"verb"
+],
+"उग्र": [
+"fierce",
+"adj"
+],
+"उग्रसेन": [
+"Ugrasena",
+"name"
+],
+"उचित": [
+"proper",
+"adj"
+],
+"उच्चावच": [
+"various",
+"adj"
+],
+"उच्चैस्": [
+"loudly",
+"ind"
+],
+"उच्छ्रि": [
+"raise",
+"verb"
+],
+"उज्ज्वल": [
+"bright",
+"adj"
+],
+"उत": [
+"or",
+"ind"
+],
+"उत्कट": [
+"excessive",
+"adj"
+],
+"उत्क्षिप्": [
+"throw up",
+"verb"
+],
+"उत्तङ्क": [
+"Uttaṅka",
+"name"
+],
+"उत्तम": [
+"best",
+"adj"
+],
+"उत्तर": [
+"northern",
+"adj"
+],
+"उत्तृ": [
+"cross",
+"verb"
+],
+"उत्था": [
+"rise",
+"verb"
+],
+"उत्थापय्": [
+"raise",
+"verb"
+],
+"उत्पत्": [
+"rise",
+"verb"
+],
+"उत्पत्ति": [
+"origin",
+"noun"
+],
+"उत्पद्": [
+"arise",
+"verb"
+],
+"उत्पल": [
+"blue lotus",
+"noun"
+],
+"उत्पाटय्": [
+"uproot",
+"verb"
+],
+"उत्पात": [
+"omen",
+"noun"
+],
+"उत्पादय्": [
+"produce",
+"verb"
+],
+"उत्फुल्ल": [
+"blossoming",
+"adj"
+],
+"उत्सङ्ग": [
+"lap",
+"noun"
+],
+"उत्सर्ग": [
+"emission",
+"noun"
+],
+"उत्सव": [
+"festival",
+"noun"
+],
+"उत्सह्": [
+"be able",
+"verb"
+],
+"उत्साह": [
+"energy",
+"noun"
+],
+"उत्सुक": [
+"eager",
+"adj"
+],
+"उत्सृज्": [
+"discharge",
+"verb"
+],
+"उद": [
+"water",
+"noun"
+],
+"उदक": [
+"water",
+"noun"
+],
+"उदग्र": [
+"lofty",
+"adj"
+],
+"उदञ्च्": [
+"northern",
+"adj"
+],
+"उदधि": [
+"ocean",
+"noun"
+],
+"उदय": [
+"rise",
+"noun"
+],
+"उदर": [
+"belly",
+"noun"
+],
+"उदार": [
+"generous",
+"adj"
+],
+"उदाहृ": [
+"cite",
+"verb"
+],
+"उदि": [
+"rise",
+"verb"
+],
+"उदीक्ष्": [
+"look up",
+"verb"
+],
+"उदीरय्": [
+"utter",
+"verb"
+],
+"उद्गम्": [
+"rise",
+"verb"
+],
+"उद्दिश्": [
+"indicate",
+"verb"
+],
+"उद्देश": [
+"place",
+"noun"
+],
+"उद्धन्": [
+"uproot",
+"verb"
+],
+"उद्धव": [
+"Uddhava",
+"name"
+],
+"उद्धू": [
+"shake",
+"verb"
+],
+"उद्धृ": [
+"raise",
+"verb"
+],
+"उद्भव": [
+"arising",
+"adj"
+],
+"उद्भू": [
+"arise",
+"verb"
+],
+"उद्यम": [
+"exertion",
+"noun"
+],
+"उद्यम्": [
+"raise",
+"verb"
+],
+"उद्यान": [
+"garden",
+"noun"
+],
+"उद्योग": [
+"effort",
+"noun"
+],
+"उद्वह": [
+"chief",
+"noun"
+],
+"उद्वह्": [
+"carry",
+"verb"
+],
+"उद्वाह": [
+"marriage",
+"noun"
+],
+"उद्विज्": [
+"tremble",
+"verb"
+],
+"उद्वेग": [
+"anxiety",
+"noun"
+],
+"उन्नम्": [
+"rise",
+"verb"
+],
+"उन्मद्": [
+"go mad",
+"verb"
+],
+"उन्मुख": [
+"facing",
+"adj"
+],
+"उपकरण": [
+"equipment",
+"noun"
+],
+"उपकार": [
+"help",
+"noun"
+],
+"उपक्रम्": [
+"approach",
+"verb"
+],
+"उपगम्": [
+"approach",
+"verb"
+],
+"उपचर्": [
+"serve",
+"verb"
+],
+"उपचार": [
+"service",
+"noun"
+],
+"उपचि": [
+"accumulate",
+"verb"
+],
+"उपजीविन्": [
+"living on",
+"adj"
+],
+"उपजीव्": [
+"subsist",
+"verb"
+],
+"उपदिश्": [
+"instruct",
+"verb"
+],
+"उपदेश": [
+"instruction",
+"noun"
+],
+"उपद्रु": [
+"rush at",
+"verb"
+],
+"उपधा": [
+"place",
+"verb"
+],
+"उपनी": [
+"bring",
+"verb"
+],
+"उपपद्": [
+"occur",
+"verb"
+],
+"उपपादय्": [
+"accomplish",
+"verb"
+],
+"उपभुज्": [
+"enjoy",
+"verb"
+],
+"उपभोग": [
+"enjoyment",
+"noun"
+],
+"उपम": [
+"similar",
+"adj"
+],
+"उपयम्": [
+"marry",
+"verb"
+],
+"उपया": [
+"go near",
+"verb"
+],
+"उपयुज्": [
+"use",
+"verb"
+],
+"उपरम्": [
+"desist",
+"verb"
+],
+"उपरि": [
+"above",
+"ind"
+],
+"उपलक्षय्": [
+"notice",
+"verb"
+],
+"उपलभ्": [
+"perceive",
+"verb"
+],
+"उपवन": [
+"grove",
+"noun"
+],
+"उपवस्": [
+"fast",
+"verb"
+],
+"उपवास": [
+"fast",
+"noun"
+],
+"उपविश्": [
+"sit",
+"verb"
+],
+"उपशोभय्": [
+"adorn",
+"verb"
+],
+"उपसृप्": [
+"approach",
+"verb"
+],
+"उपस्था": [
+"approach",
+"verb"
+],
+"उपस्पृश्": [
+"touch",
+"verb"
+],
+"उपहन्": [
+"strike",
+"verb"
+],
+"उपहार": [
+"gift",
+"noun"
+],
+"उपहृ": [
+"offer",
+"verb"
+],
+"उपागम्": [
+"approach",
+"verb"
+],
+"उपादा": [
+"take",
+"verb"
+],
+"उपाध्याय": [
+"preceptor",
+"noun"
+],
+"उपाय": [
+"means",
+"noun"
+],
+"उपाया": [
+"approach",
+"verb"
+],
+"उपाश्रि": [
+"take refuge",
+"verb"
+],
+"उपास्": [
+"worship",
+"verb"
+],
+"उपे": [
+"come near",
+"verb"
+],
+"उपेक्ष्": [
+"neglect",
+"verb"
+],
+"उभय": [
+"both",
+"adj"
+],
+"उभ्": [
+"both",
+"pron"
+],
+"उमा": [
+"Umā",
+"name"
+],
+"उमापति": [
+"Umāpati",
+"name"
+],
+"उरग": [
+"serpent",
+"noun"
+],
+"उरस्": [
+"chest",
+"noun"
+],
+"उरस्क": [
+"chest",
+"noun"
+],
+"उरु": [
+"wide",
+"adj"
+],
+"उर्वशी": [
+"Urvaśī",
+"name"
+],
+"उर्वी": [
+"earth",
+"noun"
+],
+"उलूक": [
+"owl",
+"noun"
+],
+"उल्का": [
+"meteor",
+"noun"
+],
+"उल्बण": [
+"intense",
+"adj"
+],
+"उशनस्": [
+"Uśanas",
+"name"
+],
+"उष्ट्र": [
+"camel",
+"noun"
+],
+"उष्ण": [
+"hot",
+"adj"
+],
+"ऊरु": [
+"thigh",
+"noun"
+],
+"ऊर्ध्व": [
+"upward",
+"adj"
+],
+"ऊर्ध्वम्": [
+"upward",
+"ind"
+],
+"ऊर्ध्वरेतस्": [
+"celibate",
+"adj"
+],
+"ऊर्मि": [
+"wave",
+"noun"
+],
+"ऋक्ष": [
+"bear",
+"noun"
+],
+"ऋच्": [
+"vedic verse",
+"noun"
+],
+"ऋछ्": [
+"go",
+"verb"
+],
+"ऋजु": [
+"straight",
+"adj"
+],
+"ऋण": [
+"debt",
+"noun"
+],
+"ऋत": [
+"truth",
+"noun"
+],
+"ऋतु": [
+"season",
+"noun"
+],
+"ऋते": [
+"without",
+"ind"
+],
+"ऋत्विज्": [
+"priest",
+"noun"
+],
+"ऋद्धि": [
+"abundance",
+"noun"
+],
+"ऋषभ": [
+"bull",
+"noun"
+],
+"ऋषि": [
+"sage",
+"noun"
+],
+"ऋष्टि": [
+"spear",
+"noun"
+],
+"ए": [
+"approach",
+"verb"
+],
+"एक": [
+"one",
+"num"
+],
+"एकतस्": [
+"on one side",
+"ind"
+],
+"एकदा": [
+"once",
+"ind"
+],
+"एकाकिन्": [
+"alone",
+"adj"
+],
+"एकाग्र": [
+"one-pointed",
+"adj"
+],
+"एकादशन्": [
+"eleven",
+"num"
+],
+"एकान्त": [
+"solitude",
+"noun"
+],
+"एकैक": [
+"each one",
+"pron"
+],
+"एतद्": [
+"this",
+"pron"
+],
+"एतावत्": [
+"so much",
+"adj"
+],
+"एध्": [
+"prosper",
+"verb"
+],
+"एनद्": [
+"this",
+"pron"
+],
+"एनस्": [
+"sin",
+"noun"
+],
+"एव": [
+"only",
+"ind"
+],
+"एवंविध": [
+"such",
+"adj"
+],
+"एवम्": [
+"thus",
+"ind"
+],
+"एषिन्": [
+"seeking",
+"adj"
+],
+"ऐन्द्र": [
+"of Indra",
+"adj"
+],
+"ऐरावत": [
+"Airāvata",
+"name"
+],
+"ऐश्वर्य": [
+"lordship",
+"noun"
+],
+"ओघ": [
+"flood",
+"noun"
+],
+"ओजस्": [
+"vigor",
+"noun"
+],
+"ओषधि": [
+"herb",
+"noun"
+],
+"ओष्ठ": [
+"lip",
+"noun"
+],
+"और्व": [
+"Aurva",
+"name"
+],
+"औषध": [
+"medicine",
+"noun"
+],
+"क": [
+"who",
+"pron"
+],
+"कंस": [
+"Kaṃsa",
+"name"
+],
+"कक्ष": [
+"chamber",
+"noun"
+],
+"कक्ष्या": [
+"enclosure",
+"noun"
+],
+"कङ्क": [
+"Kaṅka",
+"name"
+],
+"कच": [
+"hair",
+"noun"
+],
+"कच्चित्": [
+"whether",
+"ind"
+],
+"कण्टक": [
+"thorn",
+"noun"
+],
+"कण्ठ": [
+"throat",
+"noun"
+],
+"कण्व": [
+"Kaṇva",
+"name"
+],
+"कथंचन": [
+"somehow",
+"ind"
+],
+"कथंचिद्": [
+"somehow",
+"ind"
+],
+"कथम्": [
+"how",
+"ind"
+],
+"कथय्": [
+"tell",
+"verb"
+],
+"कथा": [
+"story",
+"noun"
+],
+"कदन": [
+"slaughter",
+"noun"
+],
+"कदम्ब": [
+"kadamba tree",
+"noun"
+],
+"कदल": [
+"banana",
+"noun"
+],
+"कदा": [
+"when",
+"ind"
+],
+"कदाचन": [
+"ever",
+"ind"
+],
+"कदाचिद्": [
+"sometimes",
+"ind"
+],
+"कनक": [
+"gold",
+"noun"
+],
+"कनीयस्": [
+"younger",
+"adj"
+],
+"कन्दर": [
+"cave",
+"noun"
+],
+"कन्यका": [
+"girl",
+"noun"
+],
+"कन्या": [
+"girl",
+"noun"
+],
+"कपाल": [
+"skull",
+"noun"
+],
+"कपि": [
+"monkey",
+"noun"
+],
+"कपिल": [
+"Kapila",
+"name"
+],
+"कपोत": [
+"dove",
+"noun"
+],
+"कबन्ध": [
+"Kabandha",
+"name"
+],
+"कमल": [
+"lotus",
+"noun"
+],
+"कम्पय्": [
+"shake",
+"verb"
+],
+"कम्प्": [
+"tremble",
+"verb"
+],
+"कर": [
+"hand",
+"noun"
+],
+"करण": [
+"instrument",
+"noun"
+],
+"कराल": [
+"fearsome",
+"adj"
+],
+"करिन्": [
+"elephant",
+"noun"
+],
+"करुण": [
+"piteous",
+"adj"
+],
+"कर्ण": [
+"Karṇa",
+"name"
+],
+"कर्तृ": [
+"doer",
+"noun"
+],
+"कर्दम": [
+"mud",
+"noun"
+],
+"कर्मन्": [
+"action",
+"noun"
+],
+"कर्शन": [
+"tormenting",
+"adj"
+],
+"कर्शय्": [
+"emaciate",
+"verb"
+],
+"कर्हिचित्": [
+"ever",
+"ind"
+],
+"कल": [
+"melodious",
+"adj"
+],
+"कलश": [
+"pot",
+"noun"
+],
+"कलह": [
+"quarrel",
+"noun"
+],
+"कला": [
+"art",
+"noun"
+],
+"कलि": [
+"Kali",
+"name"
+],
+"कलिङ्ग": [
+"Kaliṅga",
+"name"
+],
+"कलिङ्गसेना": [
+"Kaliṅgasenā",
+"name"
+],
+"कलुष": [
+"impure",
+"adj"
+],
+"कलेवर": [
+"body",
+"noun"
+],
+"कल्प": [
+"ritual",
+"noun"
+],
+"कल्पय्": [
+"arrange",
+"verb"
+],
+"कल्मष": [
+"stain",
+"noun"
+],
+"कल्याण": [
+"auspicious",
+"adj"
+],
+"कवच": [
+"armour",
+"noun"
+],
+"कवि": [
+"poet",
+"noun"
+],
+"कव्य": [
+"ancestral offering",
+"noun"
+],
+"कश्चन": [
+"someone",
+"pron"
+],
+"कश्चित्": [
+"someone",
+"pron"
+],
+"कश्मल": [
+"dejection",
+"noun"
+],
+"कश्यप": [
+"Kaśyapa",
+"name"
+],
+"कष्ट": [
+"painful",
+"adj"
+],
+"कस्मात्": [
+"why",
+"ind"
+],
+"काक": [
+"crow",
+"noun"
+],
+"काकुत्स्थ": [
+"Kākutstha",
+"name"
+],
+"काङ्क्षिन्": [
+"desiring",
+"adj"
+],
+"काङ्क्ष्": [
+"desire",
+"verb"
+],
+"काञ्चन": [
+"golden",
+"adj"
+],
+"कानन": [
+"forest",
+"noun"
+],
+"कान्त": [
+"lovely",
+"adj"
+],
+"कान्ता": [
+"beloved",
+"noun"
+],
+"कान्ति": [
+"beauty",
+"noun"
+],
+"काम": [
+"desire",
+"noun"
+],
+"कामम्": [
+"willingly",
+"ind"
+],
+"कामय्": [
+"desire",
+"verb"
+],
+"कामरूपिन्": [
+"shape changing",
+"adj"
+],
+"कामिन्": [
+"lover",
+"noun"
+],
+"काम्बोज": [
+"Kāmboja",
+"name"
+],
+"काम्या": [
+"desire",
+"noun"
+],
+"काय": [
+"body",
+"noun"
+],
+"कारक": [
+"doing",
+"adj"
+],
+"कारण": [
+"cause",
+"noun"
+],
+"कारय्": [
+"cause",
+"verb"
+],
+"कारिन्": [
+"doing",
+"adj"
+],
+"कारुण्य": [
+"compassion",
+"noun"
+],
+"कार्तवीर्य": [
+"Kārtavīrya",
+"name"
+],
+"कार्त्स्न्य": [
+"entirety",
+"noun"
+],
+"कार्मुक": [
+"bow",
+"noun"
+],
+"कार्य": [
+"task",
+"noun"
+],
+"काल": [
+"time",
+"noun"
+],
+"कालनेमि": [
+"Kālanemi",
+"name"
+],
+"कालाग्नि": [
+"doomsday fire",
+"noun"
+],
+"काव्य": [
+"poem",
+"noun"
+],
+"काशि": [
+"Kāśi",
+"name"
+],
+"काश्यप": [
+"Kāśyapa",
+"name"
+],
+"काष्ठ": [
+"wood",
+"noun"
+],
+"काष्ठा": [
+"limit",
+"noun"
+],
+"किंकर": [
+"servant",
+"noun"
+],
+"किंतु": [
+"but",
+"ind"
+],
+"किंनर": [
+"kinnara",
+"noun"
+],
+"किंशुक": [
+"kiṃśuka tree",
+"noun"
+],
+"किमर्थम्": [
+"why",
+"ind"
+],
+"किमु": [
+"how much more",
+"ind"
+],
+"किम्": [
+"what",
+"pron"
+],
+"किम्पुरुष": [
+"kimpuruṣa",
+"noun"
+],
+"कियत्": [
+"how much",
+"adj"
+],
+"किरात": [
+"Kirāta",
+"name"
+],
+"किरीट": [
+"crown",
+"noun"
+],
+"किरीटिन्": [
+"Kirīṭin",
+"name"
+],
+"किल": [
+"indeed",
+"ind"
+],
+"किल्बिष": [
+"sin",
+"noun"
+],
+"कीचक": [
+"Kīcaka",
+"name"
+],
+"कीट": [
+"insect",
+"noun"
+],
+"कीदृश": [
+"of what kind",
+"adj"
+],
+"कीर्तय्": [
+"proclaim",
+"verb"
+],
+"कीर्ति": [
+"fame",
+"noun"
+],
+"कु": [
+"bad",
+"ind"
+],
+"कुक्षि": [
+"belly",
+"noun"
+],
+"कुञ्जर": [
+"elephant",
+"noun"
+],
+"कुण्ड": [
+"basin",
+"noun"
+],
+"कुण्डल": [
+"earring",
+"noun"
+],
+"कुतस्": [
+"whence",
+"ind"
+],
+"कुन्तिभोज": [
+"Kuntibhoja",
+"name"
+],
+"कुन्ती": [
+"Kuntī",
+"name"
+],
+"कुप्": [
+"be angry",
+"verb"
+],
+"कुबेर": [
+"Kubera",
+"name"
+],
+"कुब्ज": [
+"hunchback",
+"adj"
+],
+"कुमार": [
+"youth",
+"noun"
+],
+"कुमारक": [
+"boy",
+"noun"
+],
+"कुमारी": [
+"maiden",
+"noun"
+],
+"कुमुद": [
+"water lily",
+"noun"
+],
+"कुम्भ": [
+"pot",
+"noun"
+],
+"कुम्भकर्ण": [
+"Kumbhakarṇa",
+"name"
+],
+"कुरु": [
+"Kuru",
+"name"
+],
+"कुरुक्षेत्र": [
+"Kurukṣetra",
+"name"
+],
+"कुल": [
+"family",
+"noun"
+],
+"कुलीन": [
+"well-born",
+"adj"
+],
+"कुश": [
+"sacred grass",
+"noun"
+],
+"कुशल": [
+"skilled",
+"adj"
+],
+"कुशलिन्": [
+"well",
+"adj"
+],
+"कुशिक": [
+"Kuśika",
+"name"
+],
+"कुसुम": [
+"flower",
+"noun"
+],
+"कूज्": [
+"coo",
+"verb"
+],
+"कूट": [
+"summit",
+"noun"
+],
+"कूप": [
+"well",
+"noun"
+],
+"कूर्म": [
+"tortoise",
+"noun"
+],
+"कूल": [
+"bank",
+"noun"
+],
+"कृ": [
+"make",
+"verb"
+],
+"कृच्छ्र": [
+"hardship",
+"noun"
+],
+"कृत": [
+"done",
+"adj"
+],
+"कृतकृत्य": [
+"fulfilled",
+"adj"
+],
+"कृतघ्न": [
+"ungrateful",
+"adj"
+],
+"कृतज्ञ": [
+"grateful",
+"adj"
+],
+"कृतवर्मन्": [
+"Kṛtavarman",
+"name"
+],
+"कृताञ्जलि": [
+"with joined palms",
+"adj"
+],
+"कृतान्त": [
+"fate",
+"noun"
+],
+"कृतार्थ": [
+"successful",
+"adj"
+],
+"कृतास्त्र": [
+"skilled in weapons",
+"adj"
+],
+"कृतिन्": [
+"accomplished",
+"adj"
+],
+"कृते": [
+"for",
+"ind"
+],
+"कृत्": [
+"making",
+"adj"
+],
+"कृत्य": [
+"duty",
+"noun"
+],
+"कृत्या": [
+"sorceress",
+"noun"
+],
+"कृत्स्न": [
+"entire",
+"adj"
+],
+"कृप": [
+"Kṛpa",
+"name"
+],
+"कृपण": [
+"wretched",
+"adj"
+],
+"कृपा": [
+"compassion",
+"noun"
+],
+"कृमि": [
+"worm",
+"noun"
+],
+"कृश": [
+"thin",
+"adj"
+],
+"कृषि": [
+"farming",
+"noun"
+],
+"कृष्": [
+"draw",
+"verb"
+],
+"कृष्ण": [
+"Kṛṣṇa",
+"name"
+],
+"कृष्णद्वैपायन": [
+"Kṛṣṇa Dvaipāyana",
+"name"
+],
+"कृष्णा": [
+"Kṛṣṇā",
+"name"
+],
+"केकय": [
+"Kekaya",
+"name"
+],
+"केतु": [
+"banner",
+"noun"
+],
+"केयूर": [
+"armlet",
+"noun"
+],
+"केवल": [
+"mere",
+"adj"
+],
+"केवलम्": [
+"merely",
+"ind"
+],
+"केश": [
+"hair",
+"noun"
+],
+"केशव": [
+"Keśava",
+"name"
+],
+"केशिन्": [
+"Keśin",
+"name"
+],
+"केसर": [
+"mane",
+"noun"
+],
+"केसरिन्": [
+"lion",
+"noun"
+],
+"कैकेयी": [
+"Kaikeyī",
+"name"
+],
+"कैलास": [
+"Kailāsa",
+"name"
+],
+"कोकिल": [
+"cuckoo",
+"noun"
+],
+"कोटि": [
+"ten million",
+"num"
+],
+"कोप": [
+"anger",
+"noun"
+],
+"कोविद": [
+"learned",
+"adj"
+],
+"कोश": [
+"treasury",
+"noun"
+],
+"कौतुक": [
+"curiosity",
+"noun"
+],
+"कौतूहल": [
+"curiosity",
+"noun"
+],
+"कौन्तेय": [
+"Kaunteya",
+"name"
+],
+"कौरव": [
+"Kaurava",
+"name"
+],
+"कौरव्य": [
+"Kauravya",
+"name"
+],
+"कौशिक": [
+"Kauśika",
+"name"
+],
+"कौसल्या": [
+"Kausalyā",
+"name"
+],
+"क्रतु": [
+"sacrifice",
+"noun"
+],
+"क्रम": [
+"order",
+"noun"
+],
+"क्रमशस्": [
+"gradually",
+"ind"
+],
+"क्रमात्": [
+"in order",
+"ind"
+],
+"क्रमेण": [
+"successively",
+"ind"
+],
+"क्रम्": [
+"step",
+"verb"
+],
+"क्रव्याद": [
+"flesh eater",
+"noun"
+],
+"क्रिया": [
+"action",
+"noun"
+],
+"क्री": [
+"buy",
+"verb"
+],
+"क्रीडा": [
+"play",
+"noun"
+],
+"क्रीड्": [
+"play",
+"verb"
+],
+"क्रुध्": [
+"be angry",
+"verb"
+],
+"क्रुश्": [
+"cry out",
+"verb"
+],
+"क्रूर": [
+"cruel",
+"adj"
+],
+"क्रोध": [
+"anger",
+"noun"
+],
+"क्रौञ्च": [
+"heron",
+"noun"
+],
+"क्लम": [
+"fatigue",
+"noun"
+],
+"क्लम्": [
+"be weary",
+"verb"
+],
+"क्लिश्": [
+"suffer",
+"verb"
+],
+"क्लीब": [
+"impotent",
+"adj"
+],
+"क्लेश": [
+"suffering",
+"noun"
+],
+"क्व": [
+"where",
+"ind"
+],
+"क्वचिद्": [
+"sometimes",
+"ind"
+],
+"क्वापि": [
+"anywhere",
+"ind"
+],
+"क्षण": [
+"moment",
+"noun"
+],
+"क्षत्तृ": [
+"Vidura",
+"name"
+],
+"क्षत्र": [
+"warrior",
+"noun"
+],
+"क्षत्रिय": [
+"kṣatriya",
+"noun"
+],
+"क्षन्": [
+"wound",
+"verb"
+],
+"क्षपय्": [
+"exhaust",
+"verb"
+],
+"क्षपा": [
+"night",
+"noun"
+],
+"क्षम": [
+"able",
+"adj"
+],
+"क्षमा": [
+"patience",
+"noun"
+],
+"क्षम्": [
+"forgive",
+"verb"
+],
+"क्षय": [
+"decay",
+"noun"
+],
+"क्षर्": [
+"flow",
+"verb"
+],
+"क्षात्र": [
+"of warriors",
+"adj"
+],
+"क्षि": [
+"decay",
+"verb"
+],
+"क्षिति": [
+"earth",
+"noun"
+],
+"क्षिप्": [
+"throw",
+"verb"
+],
+"क्षिप्रम्": [
+"quickly",
+"ind"
+],
+"क्षीर": [
+"milk",
+"noun"
+],
+"क्षुद्र": [
+"petty",
+"adj"
+],
+"क्षुधा": [
+"hunger",
+"noun"
+],
+"क्षुध्": [
+"hunger",
+"noun"
+],
+"क्षुभ्": [
+"shake",
+"verb"
+],
+"क्षुर": [
+"razor",
+"noun"
+],
+"क्षुरप्र": [
+"razor arrow",
+"noun"
+],
+"क्षेत्र": [
+"field",
+"noun"
+],
+"क्षेत्रज्ञ": [
+"knower of field",
+"noun"
+],
+"क्षेम": [
+"safety",
+"noun"
+],
+"क्षोभ": [
+"agitation",
+"noun"
+],
+"क्षोभय्": [
+"agitate",
+"verb"
+],
+"ख": [
+"sky",
+"noun"
+],
+"खग": [
+"bird",
+"noun"
+],
+"खड्ग": [
+"sword",
+"noun"
+],
+"खण्ड": [
+"piece",
+"noun"
+],
+"खन्": [
+"dig",
+"verb"
+],
+"खर": [
+"Khara",
+"name"
+],
+"खलु": [
+"indeed",
+"ind"
+],
+"खाण्डव": [
+"Khāṇḍava",
+"name"
+],
+"खाद्": [
+"devour",
+"verb"
+],
+"खिद्": [
+"be weary",
+"verb"
+],
+"खुर": [
+"hoof",
+"noun"
+],
+"खेचर": [
+"sky roamer",
+"noun"
+],
+"खेद": [
+"weariness",
+"noun"
+],
+"ख्या": [
+"tell",
+"verb"
+],
+"ख्याति": [
+"fame",
+"noun"
+],
+"ग": [
+"going",
+"adj"
+],
+"गगन": [
+"sky",
+"noun"
+],
+"गङ्गा": [
+"Gaṅgā",
+"name"
+],
+"गज": [
+"elephant",
+"noun"
+],
+"गण": [
+"troop",
+"noun"
+],
+"गणय्": [
+"count",
+"verb"
+],
+"गणेश्वर": [
+"troop leader",
+"noun"
+],
+"गतासु": [
+"dead",
+"adj"
+],
+"गति": [
+"course",
+"noun"
+],
+"गदा": [
+"mace",
+"noun"
+],
+"गद्": [
+"speak",
+"verb"
+],
+"गद्गद": [
+"faltering",
+"adj"
+],
+"गन्ध": [
+"smell",
+"noun"
+],
+"गन्धमादन": [
+"Gandhamādana",
+"name"
+],
+"गन्धर्व": [
+"Gandharva",
+"name"
+],
+"गभस्ति": [
+"ray",
+"noun"
+],
+"गमन": [
+"going",
+"noun"
+],
+"गमय्": [
+"send",
+"verb"
+],
+"गम्": [
+"go",
+"verb"
+],
+"गम्भीर": [
+"deep",
+"adj"
+],
+"गय": [
+"Gaya",
+"name"
+],
+"गरीयस्": [
+"greater",
+"adj"
+],
+"गरुड": [
+"Garuḍa",
+"name"
+],
+"गरुत्मन्त्": [
+"Garutmat",
+"name"
+],
+"गर्ज्": [
+"roar",
+"verb"
+],
+"गर्भ": [
+"womb",
+"noun"
+],
+"गर्ह्": [
+"reproach",
+"verb"
+],
+"गहन": [
+"dense",
+"adj"
+],
+"गा": [
+"go",
+"verb"
+],
+"गाङ्गेय": [
+"Gāṅgeya",
+"name"
+],
+"गाढ": [
+"firm",
+"adj"
+],
+"गाण्डीव": [
+"Gāṇḍīva",
+"name"
+],
+"गाण्डीवधन्वन्": [
+"Gāṇḍīvadhanvan",
+"name"
+],
+"गात्र": [
+"limb",
+"noun"
+],
+"गाथा": [
+"song",
+"noun"
+],
+"गान्धर्व": [
+"of gandharvas",
+"adj"
+],
+"गान्धार": [
+"Gāndhāra",
+"name"
+],
+"गान्धारी": [
+"Gāndhārī",
+"name"
+],
+"गामिन्": [
+"going",
+"adj"
+],
+"गायत्री": [
+"Gāyatrī",
+"name"
+],
+"गालव": [
+"Gālava",
+"name"
+],
+"गिरि": [
+"mountain",
+"noun"
+],
+"गिर्": [
+"speech",
+"noun"
+],
+"गीत": [
+"song",
+"noun"
+],
+"गुण": [
+"quality",
+"noun"
+],
+"गुणवत्": [
+"virtuous",
+"adj"
+],
+"गुणशर्मन्": [
+"Guṇaśarman",
+"name"
+],
+"गुप्": [
+"protect",
+"verb"
+],
+"गुरु": [
+"teacher",
+"noun"
+],
+"गुल्म": [
+"thicket",
+"noun"
+],
+"गुह": [
+"Guha",
+"name"
+],
+"गुहा": [
+"cave",
+"noun"
+],
+"गुह्": [
+"conceal",
+"verb"
+],
+"गुह्य": [
+"secret",
+"noun"
+],
+"गुह्यक": [
+"guhyaka",
+"noun"
+],
+"गृद्धिन्": [
+"greedy",
+"adj"
+],
+"गृध्र": [
+"vulture",
+"noun"
+],
+"गृह": [
+"house",
+"noun"
+],
+"गृहस्थ": [
+"householder",
+"noun"
+],
+"गेह": [
+"house",
+"noun"
+],
+"गो": [
+"cow",
+"noun"
+],
+"गोचर": [
+"within reach",
+"adj"
+],
+"गोत्र": [
+"lineage",
+"noun"
+],
+"गोप": [
+"cowherd",
+"noun"
+],
+"गोपाल": [
+"herdsman",
+"noun"
+],
+"गोप्तृ": [
+"protector",
+"noun"
+],
+"गोमायु": [
+"jackal",
+"noun"
+],
+"गोमुख": [
+"Gomukha",
+"name"
+],
+"गोविन्द": [
+"Govinda",
+"name"
+],
+"गौतम": [
+"Gautama",
+"name"
+],
+"गौर": [
+"fair",
+"adj"
+],
+"गौरव": [
+"gravity",
+"noun"
+],
+"गौरी": [
+"Gaurī",
+"name"
+],
+"ग्रस्": [
+"swallow",
+"verb"
+],
+"ग्रह": [
+"planet",
+"noun"
+],
+"ग्रहण": [
+"seizing",
+"noun"
+],
+"ग्रह्": [
+"seize",
+"verb"
+],
+"ग्राम": [
+"village",
+"noun"
+],
+"ग्राम्य": [
+"rustic",
+"adj"
+],
+"ग्राह": [
+"crocodile",
+"noun"
+],
+"ग्रीवा": [
+"neck",
+"noun"
+],
+"घट": [
+"pot",
+"noun"
+],
+"घटोत्कच": [
+"Ghaṭotkaca",
+"name"
+],
+"घण्टा": [
+"bell",
+"noun"
+],
+"घन": [
+"dense",
+"adj"
+],
+"घर्म": [
+"warmth",
+"noun"
+],
+"घात": [
+"blow",
+"noun"
+],
+"घातय्": [
+"kill",
+"verb"
+],
+"घातिन्": [
+"killing",
+"adj"
+],
+"घृत": [
+"ghee",
+"noun"
+],
+"घोर": [
+"terrible",
+"adj"
+],
+"घोष": [
+"sound",
+"noun"
+],
+"घ्न": [
+"slaying",
+"adj"
+],
+"घ्राण": [
+"nose",
+"noun"
+],
+"च": [
+"and",
+"ind"
+],
+"चक्र": [
+"wheel",
+"noun"
+],
+"चक्रवर्तिन्": [
+"emperor",
+"noun"
+],
+"चक्रवाक": [
+"ruddy goose",
+"noun"
+],
+"चक्षुस्": [
+"eye",
+"noun"
+],
+"चण्ड": [
+"fierce",
+"adj"
+],
+"चण्डाल": [
+"outcaste",
+"noun"
+],
+"चतुर्": [
+"four",
+"num"
+],
+"चतुर्थ": [
+"fourth",
+"num"
+],
+"चतुर्दशन्": [
+"fourteen",
+"num"
+],
+"चतुर्दशी": [
+"fourteenth day",
+"noun"
+],
+"चतुर्विध": [
+"fourfold",
+"adj"
+],
+"चतुष्टय": [
+"set of four",
+"noun"
+],
+"चन्दन": [
+"sandalwood",
+"noun"
+],
+"चन्द्र": [
+"moon",
+"noun"
+],
+"चन्द्रमस्": [
+"moon",
+"noun"
+],
+"चपल": [
+"fickle",
+"adj"
+],
+"चमू": [
+"army",
+"noun"
+],
+"चय": [
+"heap",
+"noun"
+],
+"चर": [
+"moving",
+"adj"
+],
+"चरण": [
+"foot",
+"noun"
+],
+"चराचर": [
+"all beings",
+"noun"
+],
+"चरित": [
+"deed",
+"noun"
+],
+"चरु": [
+"oblation pot",
+"noun"
+],
+"चर्": [
+"move",
+"verb"
+],
+"चर्मन्": [
+"skin",
+"noun"
+],
+"चर्या": [
+"conduct",
+"noun"
+],
+"चल": [
+"moving",
+"adj"
+],
+"चल्": [
+"move",
+"verb"
+],
+"चातुर्वर्ण्य": [
+"four classes",
+"noun"
+],
+"चाप": [
+"bow",
+"noun"
+],
+"चामर": [
+"fly whisk",
+"noun"
+],
+"चार": [
+"spy",
+"noun"
+],
+"चारण": [
+"bard",
+"noun"
+],
+"चारिन्": [
+"moving",
+"adj"
+],
+"चारु": [
+"lovely",
+"adj"
+],
+"चि": [
+"gather",
+"verb"
+],
+"चिकीर्ष्": [
+"intend",
+"verb"
+],
+"चिता": [
+"pyre",
+"noun"
+],
+"चित्त": [
+"mind",
+"noun"
+],
+"चित्र": [
+"variegated",
+"adj"
+],
+"चित्रसेन": [
+"Citrasena",
+"name"
+],
+"चिन्तय्": [
+"ponder",
+"verb"
+],
+"चिन्ता": [
+"worry",
+"noun"
+],
+"चिर": [
+"long",
+"adj"
+],
+"चिरम्": [
+"for long",
+"ind"
+],
+"चिरात्": [
+"long",
+"ind"
+],
+"चिह्न": [
+"sign",
+"noun"
+],
+"चीर": [
+"bark cloth",
+"noun"
+],
+"चूर्ण": [
+"powder",
+"noun"
+],
+"चेकितान": [
+"Cekitāna",
+"name"
+],
+"चेतना": [
+"consciousness",
+"noun"
+],
+"चेतस्": [
+"mind",
+"noun"
+],
+"चेदि": [
+"Cedi",
+"name"
+],
+"चेद्": [
+"if",
+"ind"
+],
+"चेष्टा": [
+"effort",
+"noun"
+],
+"चेष्ट्": [
+"act",
+"verb"
+],
+"चैत्य": [
+"shrine",
+"noun"
+],
+"चोदय्": [
+"urge",
+"verb"
+],
+"चोर": [
+"thief",
+"noun"
+],
+"चौर": [
+"thief",
+"noun"
+],
+"च्यवन": [
+"Cyavana",
+"name"
+],
+"च्यु": [
+"fall away",
+"verb"
+],
+"छत्त्र": [
+"parasol",
+"noun"
+],
+"छद्": [
+"cover",
+"verb"
+],
+"छन्द": [
+"desire",
+"noun"
+],
+"छन्दस्": [
+"metre",
+"noun"
+],
+"छादय्": [
+"cover",
+"verb"
+],
+"छाया": [
+"shadow",
+"noun"
+],
+"छिद्": [
+"cut",
+"verb"
+],
+"छिद्र": [
+"flaw",
+"noun"
+],
+"छेद": [
+"cutting",
+"noun"
+],
+"ज": [
+"born",
+"adj"
+],
+"जगती": [
+"world",
+"noun"
+],
+"जगत्पति": [
+"lord of world",
+"noun"
+],
+"जगन्त्": [
+"world",
+"noun"
+],
+"जघन": [
+"hip",
+"noun"
+],
+"जङ्गम": [
+"moving",
+"adj"
+],
+"जङ्घा": [
+"shank",
+"noun"
+],
+"जटा": [
+"matted hair",
+"noun"
+],
+"जठर": [
+"belly",
+"noun"
+],
+"जड": [
+"dull",
+"adj"
+],
+"जन": [
+"people",
+"noun"
+],
+"जनक": [
+"Janaka",
+"name"
+],
+"जनकात्मजा": [
+"Sītā",
+"name"
+],
+"जनन": [
+"producing",
+"adj"
+],
+"जननी": [
+"mother",
+"noun"
+],
+"जनपद": [
+"country",
+"noun"
+],
+"जनमेजय": [
+"Janamejaya",
+"name"
+],
+"जनय्": [
+"beget",
+"verb"
+],
+"जनस्थान": [
+"Janasthāna",
+"name"
+],
+"जनाधिप": [
+"king",
+"noun"
+],
+"जनार्दन": [
+"Janārdana",
+"name"
+],
+"जनेश्वर": [
+"king",
+"noun"
+],
+"जन्": [
+"be born",
+"verb"
+],
+"जन्तु": [
+"creature",
+"noun"
+],
+"जन्मन्": [
+"birth",
+"noun"
+],
+"जप": [
+"recitation",
+"noun"
+],
+"जप्": [
+"mutter",
+"verb"
+],
+"जप्य": [
+"muttered prayer",
+"noun"
+],
+"जमदग्नि": [
+"Jamadagni",
+"name"
+],
+"जम्बुक": [
+"jackal",
+"noun"
+],
+"जम्भ": [
+"Jambha",
+"name"
+],
+"जय": [
+"victory",
+"noun"
+],
+"जयद्रथ": [
+"Jayadratha",
+"name"
+],
+"जरा": [
+"old age",
+"noun"
+],
+"जरासंध": [
+"Jarāsandha",
+"name"
+],
+"जल": [
+"water",
+"noun"
+],
+"जलद": [
+"cloud",
+"noun"
+],
+"जलाशय": [
+"lake",
+"noun"
+],
+"जल्प्": [
+"speak",
+"verb"
+],
+"जव": [
+"speed",
+"noun"
+],
+"जागृ": [
+"wake",
+"verb"
+],
+"जातरूप": [
+"gold",
+"noun"
+],
+"जातवेदस्": [
+"Jātavedas",
+"name"
+],
+"जाति": [
+"birth",
+"noun"
+],
+"जातु": [
+"once",
+"ind"
+],
+"जानकी": [
+"Jānakī",
+"name"
+],
+"जानपद": [
+"countryman",
+"noun"
+],
+"जानु": [
+"knee",
+"noun"
+],
+"जामदग्न्य": [
+"Jāmadagnya",
+"name"
+],
+"जाम्बवन्त्": [
+"Jāmbavat",
+"name"
+],
+"जाम्बूनद": [
+"gold",
+"noun"
+],
+"जाल": [
+"net",
+"noun"
+],
+"जाह्नवी": [
+"Jāhnavī",
+"name"
+],
+"जि": [
+"conquer",
+"verb"
+],
+"जिघांसा": [
+"desire to kill",
+"noun"
+],
+"जिघांसु": [
+"wishing to kill",
+"adj"
+],
+"जिघांस्": [
+"wish to kill",
+"verb"
+],
+"जिष्णु": [
+"Jiṣṇu",
+"name"
+],
+"जिह्म": [
+"crooked",
+"adj"
+],
+"जिह्वा": [
+"tongue",
+"noun"
+],
+"जीमूत": [
+"cloud",
+"noun"
+],
+"जीव": [
+"life",
+"noun"
+],
+"जीवन": [
+"livelihood",
+"noun"
+],
+"जीवित": [
+"life",
+"noun"
+],
+"जीविन्": [
+"living",
+"adj"
+],
+"जीव्": [
+"live",
+"verb"
+],
+"जुष्": [
+"enjoy",
+"verb"
+],
+"जृ": [
+"decay",
+"verb"
+],
+"ज्ञ": [
+"knowing",
+"adj"
+],
+"ज्ञा": [
+"know",
+"verb"
+],
+"ज्ञाति": [
+"kinsman",
+"noun"
+],
+"ज्ञान": [
+"knowledge",
+"noun"
+],
+"ज्या": [
+"bowstring",
+"noun"
+],
+"ज्यायस्": [
+"elder",
+"adj"
+],
+"ज्येष्ठ": [
+"eldest",
+"adj"
+],
+"ज्योतिस्": [
+"light",
+"noun"
+],
+"ज्वर": [
+"fever",
+"noun"
+],
+"ज्वलन": [
+"fire",
+"noun"
+],
+"ज्वल्": [
+"blaze",
+"verb"
+],
+"ज्वाला": [
+"flame",
+"noun"
+],
+"तक्षक": [
+"Takṣaka",
+"name"
+],
+"तट": [
+"shore",
+"noun"
+],
+"तडाग": [
+"pond",
+"noun"
+],
+"ततस्": [
+"then",
+"ind"
+],
+"तत्त्व": [
+"reality",
+"noun"
+],
+"तत्पर": [
+"devoted",
+"adj"
+],
+"तत्र": [
+"there",
+"ind"
+],
+"तत्रस्थ": [
+"situated there",
+"adj"
+],
+"तथा": [
+"so",
+"ind"
+],
+"तथागत": [
+"Tathāgata",
+"name"
+],
+"तथाविध": [
+"such",
+"adj"
+],
+"तथ्य": [
+"true",
+"adj"
+],
+"तदा": [
+"then",
+"ind"
+],
+"तदानीम्": [
+"then",
+"ind"
+],
+"तद्": [
+"that",
+"pron"
+],
+"तद्वत्": [
+"likewise",
+"ind"
+],
+"तनय": [
+"son",
+"noun"
+],
+"तनया": [
+"daughter",
+"noun"
+],
+"तनु": [
+"body",
+"noun"
+],
+"तन्": [
+"extend",
+"verb"
+],
+"तन्त्र": [
+"system",
+"noun"
+],
+"तपस्": [
+"austerity",
+"noun"
+],
+"तपस्विनी": [
+"female ascetic",
+"noun"
+],
+"तपस्विन्": [
+"ascetic",
+"noun"
+],
+"तपोधन": [
+"ascetic",
+"noun"
+],
+"तप्": [
+"heat",
+"verb"
+],
+"तमस्": [
+"darkness",
+"noun"
+],
+"तरस्": [
+"speed",
+"noun"
+],
+"तरस्विन्": [
+"swift",
+"adj"
+],
+"तरु": [
+"tree",
+"noun"
+],
+"तरुण": [
+"young",
+"adj"
+],
+"तर्पय्": [
+"satisfy",
+"verb"
+],
+"तर्हि": [
+"then",
+"ind"
+],
+"तल": [
+"surface",
+"noun"
+],
+"तल्प": [
+"couch",
+"noun"
+],
+"तस्मात्": [
+"therefore",
+"ind"
+],
+"ता": [
+"ness",
+"noun"
+],
+"ताडय्": [
+"strike",
+"verb"
+],
+"तात": [
+"father",
+"noun"
+],
+"तादृश": [
+"such",
+"adj"
+],
+"तादृश्": [
+"like that",
+"adj"
+],
+"ताप": [
+"heat",
+"noun"
+],
+"तापन": [
+"burning",
+"adj"
+],
+"तापय्": [
+"torment",
+"verb"
+],
+"तापस": [
+"hermit",
+"noun"
+],
+"तापसी": [
+"female ascetic",
+"noun"
+],
+"तामस": [
+"dark",
+"adj"
+],
+"ताम्र": [
+"coppery",
+"adj"
+],
+"तार": [
+"shrill",
+"adj"
+],
+"तारक": [
+"Tāraka",
+"name"
+],
+"तारका": [
+"star",
+"noun"
+],
+"तारय्": [
+"rescue",
+"verb"
+],
+"तारा": [
+"star",
+"noun"
+],
+"तार्क्ष्य": [
+"Tārkṣya",
+"name"
+],
+"ताल": [
+"palm",
+"noun"
+],
+"तावक": [
+"your",
+"adj"
+],
+"तावत्": [
+"so much",
+"ind"
+],
+"तिमिर": [
+"darkness",
+"noun"
+],
+"तिर्यग्योनि": [
+"animal birth",
+"noun"
+],
+"तिर्यञ्च्": [
+"animal",
+"noun"
+],
+"तिल": [
+"sesame",
+"noun"
+],
+"तिलक": [
+"mark",
+"noun"
+],
+"तीक्ष्ण": [
+"sharp",
+"adj"
+],
+"तीर": [
+"shore",
+"noun"
+],
+"तीर्थ": [
+"sacred ford",
+"noun"
+],
+"तीव्र": [
+"intense",
+"adj"
+],
+"तु": [
+"but",
+"ind"
+],
+"तुमुल": [
+"tumultuous",
+"adj"
+],
+"तुरग": [
+"horse",
+"noun"
+],
+"तुला": [
+"balance",
+"noun"
+],
+"तुल्य": [
+"equal",
+"adj"
+],
+"तुष्": [
+"be pleased",
+"verb"
+],
+"तुष्टि": [
+"satisfaction",
+"noun"
+],
+"तूर्णम्": [
+"swiftly",
+"ind"
+],
+"तूर्य": [
+"musical instrument",
+"noun"
+],
+"तूष्णीम्": [
+"silently",
+"ind"
+],
+"तृ": [
+"cross",
+"verb"
+],
+"तृण": [
+"grass",
+"noun"
+],
+"तृतीय": [
+"third",
+"num"
+],
+"तृप्": [
+"be satisfied",
+"verb"
+],
+"तृप्ति": [
+"satisfaction",
+"noun"
+],
+"तृष्णा": [
+"thirst",
+"noun"
+],
+"तेजस्": [
+"splendour",
+"noun"
+],
+"तेजस्विन्": [
+"radiant",
+"adj"
+],
+"तेन": [
+"therefore",
+"ind"
+],
+"तैल": [
+"oil",
+"noun"
+],
+"तोमर": [
+"javelin",
+"noun"
+],
+"तोय": [
+"water",
+"noun"
+],
+"तोयद": [
+"cloud",
+"noun"
+],
+"तोरण": [
+"archway",
+"noun"
+],
+"तोषय्": [
+"please",
+"verb"
+],
+"त्यज्": [
+"abandon",
+"verb"
+],
+"त्याग": [
+"abandonment",
+"noun"
+],
+"त्रय": [
+"triad",
+"noun"
+],
+"त्रयी": [
+"three Vedas",
+"noun"
+],
+"त्रयोदश": [
+"thirteen",
+"num"
+],
+"त्रयोदशन्": [
+"thirteen",
+"num"
+],
+"त्रस्": [
+"fear",
+"verb"
+],
+"त्रा": [
+"protect",
+"verb"
+],
+"त्राण": [
+"protection",
+"noun"
+],
+"त्रास": [
+"terror",
+"noun"
+],
+"त्रासय्": [
+"frighten",
+"verb"
+],
+"त्रि": [
+"three",
+"num"
+],
+"त्रिंशत्": [
+"thirty",
+"num"
+],
+"त्रिगर्त": [
+"Trigarta",
+"name"
+],
+"त्रिगुण": [
+"threefold",
+"adj"
+],
+"त्रिदश": [
+"god",
+"noun"
+],
+"त्रिदिव": [
+"heaven",
+"noun"
+],
+"त्रिधा": [
+"in three ways",
+"ind"
+],
+"त्रिपुर": [
+"Tripura",
+"name"
+],
+"त्रिभुवन": [
+"three worlds",
+"noun"
+],
+"त्रिवर्ग": [
+"three aims",
+"noun"
+],
+"त्रिविध": [
+"threefold",
+"adj"
+],
+"त्रिविष्टप": [
+"heaven",
+"noun"
+],
+"त्रिशिरस्": [
+"Triśiras",
+"name"
+],
+"त्रिस्": [
+"thrice",
+"ind"
+],
+"त्रेता": [
+"Tretā",
+"name"
+],
+"त्रैलोक्य": [
+"three worlds",
+"noun"
+],
+"त्र्यम्बक": [
+"Tryambaka",
+"name"
+],
+"त्व": [
+"ness",
+"noun"
+],
+"त्वच्": [
+"skin",
+"noun"
+],
+"त्वदीय": [
+"your",
+"adj"
+],
+"त्वद्": [
+"you",
+"pron"
+],
+"त्वरा": [
+"haste",
+"noun"
+],
+"त्वरित": [
+"hasty",
+"adj"
+],
+"त्वर्": [
+"hasten",
+"verb"
+],
+"त्वष्टृ": [
+"Tvaṣṭṛ",
+"name"
+],
+"द": [
+"giving",
+"adj"
+],
+"दंशय्": [
+"arm",
+"verb"
+],
+"दंश्": [
+"bite",
+"verb"
+],
+"दंष्ट्र": [
+"fang",
+"noun"
+],
+"दक्ष": [
+"Dakṣa",
+"name"
+],
+"दक्षिण": [
+"southern",
+"adj"
+],
+"दक्षिणा": [
+"sacrificial fee",
+"noun"
+],
+"दण्ड": [
+"punishment",
+"noun"
+],
+"दण्डक": [
+"Daṇḍaka",
+"name"
+],
+"दण्डय्": [
+"punish",
+"verb"
+],
+"दधि": [
+"curd",
+"noun"
+],
+"दधीच": [
+"Dadhīca",
+"name"
+],
+"दन्त": [
+"tooth",
+"noun"
+],
+"दन्तिन्": [
+"elephant",
+"noun"
+],
+"दम": [
+"self-control",
+"noun"
+],
+"दमयन्ती": [
+"Damayantī",
+"name"
+],
+"दम्": [
+"tame",
+"verb"
+],
+"दम्पति": [
+"married couple",
+"noun"
+],
+"दम्भ": [
+"hypocrisy",
+"noun"
+],
+"दया": [
+"compassion",
+"noun"
+],
+"दयित": [
+"beloved",
+"adj"
+],
+"दरिद्र": [
+"poor",
+"adj"
+],
+"दर्प": [
+"pride",
+"noun"
+],
+"दर्पय्": [
+"make proud",
+"verb"
+],
+"दर्भ": [
+"darbha grass",
+"noun"
+],
+"दर्शन": [
+"seeing",
+"noun"
+],
+"दर्शनीय": [
+"good looking",
+"adj"
+],
+"दर्शय्": [
+"show",
+"verb"
+],
+"दर्शिन्": [
+"seeing",
+"adj"
+],
+"दल": [
+"petal",
+"noun"
+],
+"दशग्रीव": [
+"Daśagrīva",
+"name"
+],
+"दशन": [
+"tooth",
+"noun"
+],
+"दशन्": [
+"ten",
+"num"
+],
+"दशम": [
+"tenth",
+"num"
+],
+"दशरथ": [
+"Daśaratha",
+"name"
+],
+"दस्यु": [
+"bandit",
+"noun"
+],
+"दहन": [
+"fire",
+"noun"
+],
+"दह्": [
+"burn",
+"verb"
+],
+"दा": [
+"give",
+"verb"
+],
+"दातृ": [
+"generous",
+"adj"
+],
+"दान": [
+"gift",
+"noun"
+],
+"दानव": [
+"Dānava",
+"name"
+],
+"दापय्": [
+"cause to give",
+"verb"
+],
+"दामन्": [
+"gift",
+"noun"
+],
+"दामोदर": [
+"Dāmodara",
+"name"
+],
+"दायाद": [
+"heir",
+"noun"
+],
+"दायिन्": [
+"giving",
+"adj"
+],
+"दार": [
+"wife",
+"noun"
+],
+"दारक": [
+"child",
+"noun"
+],
+"दारय्": [
+"tear",
+"verb"
+],
+"दारु": [
+"wood",
+"noun"
+],
+"दारुक": [
+"Dāruka",
+"name"
+],
+"दारुण": [
+"dreadful",
+"adj"
+],
+"दाव": [
+"wildfire",
+"noun"
+],
+"दाश": [
+"fisherman",
+"noun"
+],
+"दाशरथि": [
+"Dāśarathi",
+"name"
+],
+"दाशार्ह": [
+"Dāśārha",
+"name"
+],
+"दास": [
+"slave",
+"noun"
+],
+"दासी": [
+"maidservant",
+"noun"
+],
+"दाह": [
+"burning",
+"noun"
+],
+"दिति": [
+"Diti",
+"name"
+],
+"दिदृक्षु": [
+"wishing to see",
+"adj"
+],
+"दिन": [
+"day",
+"noun"
+],
+"दिवस": [
+"day",
+"noun"
+],
+"दिवा": [
+"by day",
+"ind"
+],
+"दिवाकर": [
+"sun",
+"noun"
+],
+"दिवौकस्": [
+"god",
+"noun"
+],
+"दिव्": [
+"sky",
+"noun"
+],
+"दिव्य": [
+"divine",
+"adj"
+],
+"दिश्": [
+"direction",
+"noun"
+],
+"दिष्ट": [
+"fate",
+"noun"
+],
+"दिष्टि": [
+"fortune",
+"noun"
+],
+"दिह्": [
+"smear",
+"verb"
+],
+"दीक्षा": [
+"initiation",
+"noun"
+],
+"दीक्ष्": [
+"initiate",
+"verb"
+],
+"दीन": [
+"wretched",
+"adj"
+],
+"दीप": [
+"lamp",
+"noun"
+],
+"दीप्": [
+"blaze",
+"verb"
+],
+"दीर्घ": [
+"long",
+"adj"
+],
+"दीव्": [
+"gamble",
+"verb"
+],
+"दुःख": [
+"suffering",
+"noun"
+],
+"दुःखित": [
+"afflicted",
+"adj"
+],
+"दुःशासन": [
+"Duḥśāsana",
+"name"
+],
+"दुःषन्त": [
+"Duḥṣanta",
+"name"
+],
+"दुःसह": [
+"unbearable",
+"adj"
+],
+"दुन्दुभि": [
+"drum",
+"noun"
+],
+"दुरात्मन्": [
+"wicked",
+"adj"
+],
+"दुराधर्ष": [
+"unassailable",
+"adj"
+],
+"दुरासद": [
+"formidable",
+"adj"
+],
+"दुर्ग": [
+"fortress",
+"noun"
+],
+"दुर्गम": [
+"impassable",
+"adj"
+],
+"दुर्जन": [
+"wicked person",
+"noun"
+],
+"दुर्जय": [
+"invincible",
+"adj"
+],
+"दुर्धर्ष": [
+"invincible",
+"adj"
+],
+"दुर्बल": [
+"weak",
+"adj"
+],
+"दुर्बुद्धि": [
+"foolish",
+"adj"
+],
+"दुर्मति": [
+"foolish",
+"adj"
+],
+"दुर्मद": [
+"arrogant",
+"adj"
+],
+"दुर्मनस्": [
+"dejected",
+"adj"
+],
+"दुर्मुख": [
+"Durmukha",
+"name"
+],
+"दुर्योधन": [
+"Duryodhana",
+"name"
+],
+"दुर्लभ": [
+"rare",
+"adj"
+],
+"दुर्वासस्": [
+"Durvāsas",
+"name"
+],
+"दुर्वृत्त": [
+"ill-behaved",
+"adj"
+],
+"दुश्चर": [
+"difficult",
+"adj"
+],
+"दुष्": [
+"be corrupted",
+"verb"
+],
+"दुष्कर": [
+"difficult",
+"adj"
+],
+"दुष्कृत": [
+"misdeed",
+"noun"
+],
+"दुष्ट": [
+"wicked",
+"adj"
+],
+"दुस्तर": [
+"hard to cross",
+"adj"
+],
+"दुहितृ": [
+"daughter",
+"noun"
+],
+"दुह्": [
+"milk",
+"verb"
+],
+"दूत": [
+"messenger",
+"noun"
+],
+"दूर": [
+"distant",
+"adj"
+],
+"दूरात्": [
+"from afar",
+"ind"
+],
+"दूषण": [
+"corruption",
+"noun"
+],
+"दूषय्": [
+"corrupt",
+"verb"
+],
+"दृ": [
+"respect",
+"verb"
+],
+"दृढ": [
+"firm",
+"adj"
+],
+"दृप्": [
+"be proud",
+"verb"
+],
+"दृश्": [
+"see",
+"verb"
+],
+"दृष्टि": [
+"sight",
+"noun"
+],
+"देव": [
+"god",
+"noun"
+],
+"देवकी": [
+"Devakī",
+"name"
+],
+"देवता": [
+"deity",
+"noun"
+],
+"देवदेव": [
+"god of gods",
+"noun"
+],
+"देवदेवेश": [
+"lord of gods",
+"noun"
+],
+"देवयानी": [
+"Devayānī",
+"name"
+],
+"देवराज": [
+"king of gods",
+"noun"
+],
+"देवर्षि": [
+"divine sage",
+"noun"
+],
+"देवल": [
+"Devala",
+"name"
+],
+"देवव्रत": [
+"Devavrata",
+"name"
+],
+"देवासुर": [
+"gods and asuras",
+"noun"
+],
+"देवी": [
+"goddess",
+"noun"
+],
+"देवेश": [
+"lord of gods",
+"noun"
+],
+"देश": [
+"region",
+"noun"
+],
+"देह": [
+"body",
+"noun"
+],
+"देहिन्": [
+"embodied being",
+"noun"
+],
+"दैतेय": [
+"Daiteya",
+"name"
+],
+"दैत्य": [
+"Daitya",
+"name"
+],
+"दैव": [
+"fate",
+"noun"
+],
+"दैवत": [
+"deity",
+"noun"
+],
+"दोष": [
+"fault",
+"noun"
+],
+"दोस्": [
+"arm",
+"noun"
+],
+"दौहित्र": [
+"grandson",
+"noun"
+],
+"द्युति": [
+"splendour",
+"noun"
+],
+"द्यूत": [
+"gambling",
+"noun"
+],
+"द्रविण": [
+"wealth",
+"noun"
+],
+"द्रव्य": [
+"substance",
+"noun"
+],
+"द्रावय्": [
+"melt",
+"verb"
+],
+"द्रु": [
+"flee",
+"verb"
+],
+"द्रुतम्": [
+"fast",
+"ind"
+],
+"द्रुपद": [
+"Drupada",
+"name"
+],
+"द्रुम": [
+"tree",
+"noun"
+],
+"द्रोण": [
+"Droṇa",
+"name"
+],
+"द्रोणपुत्र": [
+"Aśvatthāman",
+"name"
+],
+"द्रोह": [
+"injury",
+"noun"
+],
+"द्रौणि": [
+"Drauṇi",
+"name"
+],
+"द्रौपदी": [
+"Draupadī",
+"name"
+],
+"द्रौपदेय": [
+"Draupadeya",
+"name"
+],
+"द्वंद्व": [
+"pair",
+"noun"
+],
+"द्वय": [
+"pair",
+"noun"
+],
+"द्वादशन्": [
+"twelve",
+"num"
+],
+"द्वापर": [
+"Dvāpara",
+"name"
+],
+"द्वार": [
+"door",
+"noun"
+],
+"द्वारका": [
+"Dvārakā",
+"name"
+],
+"द्वारवती": [
+"Dvāravatī",
+"name"
+],
+"द्वार्": [
+"door",
+"noun"
+],
+"द्वि": [
+"two",
+"num"
+],
+"द्विगुण": [
+"double",
+"adj"
+],
+"द्विज": [
+"brahmin",
+"noun"
+],
+"द्विजर्षभ": [
+"best brahmin",
+"noun"
+],
+"द्विजश्रेष्ठ": [
+"best brahmin",
+"noun"
+],
+"द्विजसत्तम": [
+"best brahmin",
+"noun"
+],
+"द्विजाति": [
+"twice born",
+"noun"
+],
+"द्विजोत्तम": [
+"best brahmin",
+"noun"
+],
+"द्वितीय": [
+"second",
+"adj"
+],
+"द्विधा": [
+"twofold",
+"ind"
+],
+"द्विप": [
+"elephant",
+"noun"
+],
+"द्विरद": [
+"elephant",
+"noun"
+],
+"द्विष्": [
+"hate",
+"verb"
+],
+"द्वीप": [
+"island",
+"noun"
+],
+"द्वेष": [
+"hatred",
+"noun"
+],
+"द्वैपायन": [
+"Dvaipāyana",
+"name"
+],
+"धन": [
+"wealth",
+"noun"
+],
+"धनंजय": [
+"Dhanañjaya",
+"name"
+],
+"धनद": [
+"Dhanada",
+"name"
+],
+"धनिन्": [
+"wealthy",
+"adj"
+],
+"धनुर्धर": [
+"archer",
+"noun"
+],
+"धनुर्वेद": [
+"archery",
+"noun"
+],
+"धनुष्मत्": [
+"archer",
+"noun"
+],
+"धनुस्": [
+"bow",
+"noun"
+],
+"धन्य": [
+"fortunate",
+"adj"
+],
+"धन्वन्": [
+"bow",
+"noun"
+],
+"धन्विन्": [
+"archer",
+"noun"
+],
+"धम्": [
+"blow",
+"verb"
+],
+"धर": [
+"holding",
+"adj"
+],
+"धरणी": [
+"earth",
+"noun"
+],
+"धरा": [
+"earth",
+"noun"
+],
+"धर्म": [
+"dharma",
+"noun"
+],
+"धर्मन्": [
+"law",
+"noun"
+],
+"धर्मपुत्र": [
+"Dharmaputra",
+"name"
+],
+"धर्मराज": [
+"Dharmarāja",
+"name"
+],
+"धर्मिन्": [
+"righteous",
+"adj"
+],
+"धर्मिष्ठ": [
+"most righteous",
+"adj"
+],
+"धर्म्य": [
+"righteous",
+"adj"
+],
+"धर्षय्": [
+"assault",
+"verb"
+],
+"धा": [
+"place",
+"verb"
+],
+"धातु": [
+"element",
+"noun"
+],
+"धातृ": [
+"creator",
+"noun"
+],
+"धात्री": [
+"nurse",
+"noun"
+],
+"धान्य": [
+"grain",
+"noun"
+],
+"धामन्": [
+"abode",
+"noun"
+],
+"धारण": [
+"holding",
+"noun"
+],
+"धारणा": [
+"holding",
+"noun"
+],
+"धारय्": [
+"hold",
+"verb"
+],
+"धारा": [
+"stream",
+"noun"
+],
+"धारिन्": [
+"bearing",
+"adj"
+],
+"धार्तराष्ट्र": [
+"Dhārtarāṣṭra",
+"name"
+],
+"धार्मिक": [
+"righteous",
+"adj"
+],
+"धाव्": [
+"run",
+"verb"
+],
+"धिक्": [
+"shame",
+"ind"
+],
+"धिष्ण्य": [
+"altar",
+"noun"
+],
+"धी": [
+"thought",
+"noun"
+],
+"धीमत्": [
+"wise",
+"adj"
+],
+"धीर": [
+"steadfast",
+"adj"
+],
+"धू": [
+"shake",
+"verb"
+],
+"धूप": [
+"incense",
+"noun"
+],
+"धूम": [
+"smoke",
+"noun"
+],
+"धूर्त": [
+"rogue",
+"noun"
+],
+"धृ": [
+"hold",
+"verb"
+],
+"धृतराष्ट्र": [
+"Dhṛtarāṣṭra",
+"name"
+],
+"धृति": [
+"firmness",
+"noun"
+],
+"धृतिमत्": [
+"resolute",
+"adj"
+],
+"धृष्टकेतु": [
+"Dhṛṣṭaketu",
+"name"
+],
+"धृष्टद्युम्न": [
+"Dhṛṣṭadyumna",
+"name"
+],
+"धेनु": [
+"milch cow",
+"noun"
+],
+"धैर्य": [
+"fortitude",
+"noun"
+],
+"धौम्य": [
+"Dhaumya",
+"name"
+],
+"ध्या": [
+"meditate",
+"verb"
+],
+"ध्यान": [
+"meditation",
+"noun"
+],
+"ध्रुव": [
+"firm",
+"adj"
+],
+"ध्रुवम्": [
+"certainly",
+"ind"
+],
+"ध्वंस्": [
+"perish",
+"verb"
+],
+"ध्वज": [
+"banner",
+"noun"
+],
+"ध्वनि": [
+"sound",
+"noun"
+],
+"न": [
+"not",
+"ind"
+],
+"नकुल": [
+"Nakula",
+"name"
+],
+"नक्त": [
+"night",
+"noun"
+],
+"नक्षत्र": [
+"lunar mansion",
+"noun"
+],
+"नख": [
+"nail",
+"noun"
+],
+"नग": [
+"mountain",
+"noun"
+],
+"नगर": [
+"city",
+"noun"
+],
+"नगरी": [
+"city",
+"noun"
+],
+"नग्न": [
+"naked",
+"adj"
+],
+"नदी": [
+"river",
+"noun"
+],
+"नद्": [
+"roar",
+"verb"
+],
+"ननु": [
+"surely",
+"ind"
+],
+"नन्द": [
+"Nanda",
+"name"
+],
+"नन्दन": [
+"son",
+"noun"
+],
+"नन्दिन्": [
+"Nandin",
+"name"
+],
+"नन्द्": [
+"delight",
+"verb"
+],
+"नप्तृ": [
+"grandson",
+"noun"
+],
+"नभस्": [
+"sky",
+"noun"
+],
+"नभस्तल": [
+"sky",
+"noun"
+],
+"नमस्": [
+"homage",
+"noun"
+],
+"नमस्कृ": [
+"bow",
+"verb"
+],
+"नमस्य्": [
+"honour",
+"verb"
+],
+"नम्": [
+"bow",
+"verb"
+],
+"नय": [
+"policy",
+"noun"
+],
+"नयन": [
+"eye",
+"noun"
+],
+"नर": [
+"man",
+"noun"
+],
+"नरक": [
+"hell",
+"noun"
+],
+"नरदेव": [
+"king",
+"noun"
+],
+"नरपति": [
+"king",
+"noun"
+],
+"नरवाहनदत्त": [
+"Naravāhanadatta",
+"name"
+],
+"नराधिप": [
+"king",
+"noun"
+],
+"नरेन्द्र": [
+"king",
+"noun"
+],
+"नरेश्वर": [
+"king",
+"noun"
+],
+"नर्द्": [
+"roar",
+"verb"
+],
+"नर्मदा": [
+"Narmadā",
+"name"
+],
+"नल": [
+"Nala",
+"name"
+],
+"नलिनी": [
+"lotus pond",
+"noun"
+],
+"नव": [
+"new",
+"adj"
+],
+"नवन्": [
+"nine",
+"num"
+],
+"नश्": [
+"perish",
+"verb"
+],
+"नहुष": [
+"Nahuṣa",
+"name"
+],
+"नाक": [
+"heaven",
+"noun"
+],
+"नाग": [
+"serpent",
+"noun"
+],
+"नाथ": [
+"protector",
+"noun"
+],
+"नाद": [
+"sound",
+"noun"
+],
+"नादय्": [
+"resound",
+"verb"
+],
+"नाना": [
+"variously",
+"ind"
+],
+"नानाविध": [
+"various",
+"adj"
+],
+"नाभि": [
+"navel",
+"noun"
+],
+"नाम": [
+"by name",
+"ind"
+],
+"नामधेय": [
+"name",
+"noun"
+],
+"नामन्": [
+"name",
+"noun"
+],
+"नारद": [
+"Nārada",
+"name"
+],
+"नाराच": [
+"arrow",
+"noun"
+],
+"नारायण": [
+"Nārāyaṇa",
+"name"
+],
+"नारी": [
+"woman",
+"noun"
+],
+"नाश": [
+"loss",
+"noun"
+],
+"नाशन": [
+"destroying",
+"adj"
+],
+"नाशय्": [
+"destroy",
+"verb"
+],
+"नासा": [
+"nose",
+"noun"
+],
+"नासिका": [
+"nose",
+"noun"
+],
+"नाहुष": [
+"Nāhuṣa",
+"name"
+],
+"निःशेष": [
+"complete",
+"adj"
+],
+"निःश्रेयस": [
+"highest good",
+"noun"
+],
+"निःश्वस्": [
+"sigh",
+"verb"
+],
+"निःश्वास": [
+"sigh",
+"noun"
+],
+"निःसृ": [
+"go out",
+"verb"
+],
+"निःस्वन": [
+"sound",
+"noun"
+],
+"निकट": [
+"close",
+"adj"
+],
+"निकृति": [
+"deceit",
+"noun"
+],
+"निकृत्": [
+"cut down",
+"verb"
+],
+"निक्षिप्": [
+"place",
+"verb"
+],
+"निखिल": [
+"entire",
+"adj"
+],
+"निगद्": [
+"declare",
+"verb"
+],
+"निग्रह": [
+"restraint",
+"noun"
+],
+"निग्रह्": [
+"restrain",
+"verb"
+],
+"निज": [
+"own",
+"adj"
+],
+"नित्य": [
+"eternal",
+"adj"
+],
+"नित्यदा": [
+"always",
+"ind"
+],
+"नित्यम्": [
+"always",
+"ind"
+],
+"नित्यशस्": [
+"constantly",
+"ind"
+],
+"निदर्शन": [
+"example",
+"noun"
+],
+"निदाघ": [
+"summer",
+"noun"
+],
+"निदेश": [
+"command",
+"noun"
+],
+"निद्रा": [
+"sleep",
+"noun"
+],
+"निधन": [
+"death",
+"noun"
+],
+"निधा": [
+"place",
+"verb"
+],
+"निधि": [
+"treasure",
+"noun"
+],
+"निनद": [
+"sound",
+"noun"
+],
+"निनाद": [
+"roar",
+"noun"
+],
+"निन्दा": [
+"blame",
+"noun"
+],
+"निन्द्": [
+"blame",
+"verb"
+],
+"निपत्": [
+"fall down",
+"verb"
+],
+"निपात": [
+"falling",
+"noun"
+],
+"निपातय्": [
+"strike down",
+"verb"
+],
+"निपुण": [
+"skilled",
+"adj"
+],
+"निबन्ध्": [
+"bind",
+"verb"
+],
+"निबर्हण": [
+"destroying",
+"adj"
+],
+"निबुध्": [
+"understand",
+"verb"
+],
+"निभ": [
+"like",
+"adj"
+],
+"निमज्ज्": [
+"sink",
+"verb"
+],
+"निमित्त": [
+"cause",
+"noun"
+],
+"निमेष": [
+"blink",
+"noun"
+],
+"नियम": [
+"restraint",
+"noun"
+],
+"नियम्": [
+"restrain",
+"verb"
+],
+"नियुज्": [
+"appoint",
+"verb"
+],
+"नियोग": [
+"command",
+"noun"
+],
+"नियोजय्": [
+"appoint",
+"verb"
+],
+"निरम्": [
+"cease",
+"verb"
+],
+"निरय": [
+"hell",
+"noun"
+],
+"निरस्": [
+"expel",
+"verb"
+],
+"निरामय": [
+"healthy",
+"adj"
+],
+"निराश": [
+"hopeless",
+"adj"
+],
+"निराहार": [
+"fasting",
+"adj"
+],
+"निरीक्ष्": [
+"behold",
+"verb"
+],
+"निरुध्": [
+"restrain",
+"verb"
+],
+"निर्गम्": [
+"go out",
+"verb"
+],
+"निर्गुण": [
+"without qualities",
+"adj"
+],
+"निर्घात": [
+"thunderclap",
+"noun"
+],
+"निर्घोष": [
+"sound",
+"noun"
+],
+"निर्जि": [
+"vanquish",
+"verb"
+],
+"निर्दह्": [
+"burn",
+"verb"
+],
+"निर्दिश्": [
+"indicate",
+"verb"
+],
+"निर्द्वंद्व": [
+"beyond duality",
+"adj"
+],
+"निर्बन्ध": [
+"insistence",
+"noun"
+],
+"निर्भय": [
+"fearless",
+"adj"
+],
+"निर्भिद्": [
+"split",
+"verb"
+],
+"निर्मल": [
+"spotless",
+"adj"
+],
+"निर्मा": [
+"fashion",
+"verb"
+],
+"निर्मुच्": [
+"free",
+"verb"
+],
+"निर्या": [
+"depart",
+"verb"
+],
+"निर्वाण": [
+"extinction",
+"noun"
+],
+"निर्वृत": [
+"content",
+"adj"
+],
+"निर्वृति": [
+"bliss",
+"noun"
+],
+"निर्वृत्": [
+"be completed",
+"verb"
+],
+"निर्वेद": [
+"despondency",
+"noun"
+],
+"निलय": [
+"resting place",
+"noun"
+],
+"निवर्तय्": [
+"turn back",
+"verb"
+],
+"निवस्": [
+"dwell",
+"verb"
+],
+"निवात": [
+"windless",
+"adj"
+],
+"निवारय्": [
+"prevent",
+"verb"
+],
+"निवास": [
+"dwelling",
+"noun"
+],
+"निवासिन्": [
+"dwelling",
+"adj"
+],
+"निविश्": [
+"settle",
+"verb"
+],
+"निवृत्": [
+"return",
+"verb"
+],
+"निवृत्ति": [
+"cessation",
+"noun"
+],
+"निवेदय्": [
+"announce",
+"verb"
+],
+"निवेश": [
+"settlement",
+"noun"
+],
+"निवेशन": [
+"dwelling",
+"noun"
+],
+"निवेशय्": [
+"place",
+"verb"
+],
+"निशा": [
+"night",
+"noun"
+],
+"निशाकर": [
+"moon",
+"noun"
+],
+"निशाचर": [
+"night prowler",
+"noun"
+],
+"निशामय्": [
+"hear",
+"verb"
+],
+"निश्": [
+"night",
+"noun"
+],
+"निश्चय": [
+"resolve",
+"noun"
+],
+"निश्चि": [
+"decide",
+"verb"
+],
+"निश्चेष्ट": [
+"motionless",
+"adj"
+],
+"निषद्": [
+"sit",
+"verb"
+],
+"निषध": [
+"Niṣadha",
+"name"
+],
+"निषाद": [
+"Niṣāda",
+"name"
+],
+"निषेव्": [
+"serve",
+"verb"
+],
+"निष्क": [
+"gold coin",
+"noun"
+],
+"निष्कृति": [
+"atonement",
+"noun"
+],
+"निष्क्रम्": [
+"go out",
+"verb"
+],
+"निष्ठा": [
+"devotion",
+"noun"
+],
+"निष्पत्": [
+"rush out",
+"verb"
+],
+"निष्फल": [
+"futile",
+"adj"
+],
+"निस्त्रिंश": [
+"sword",
+"noun"
+],
+"निस्वन": [
+"sound",
+"noun"
+],
+"निहन्": [
+"slay",
+"verb"
+],
+"नी": [
+"lead",
+"verb"
+],
+"नीच": [
+"low",
+"adj"
+],
+"नीति": [
+"policy",
+"noun"
+],
+"नील": [
+"blue",
+"adj"
+],
+"नु": [
+"now",
+"ind"
+],
+"नुद्": [
+"push",
+"verb"
+],
+"नूनम्": [
+"surely",
+"ind"
+],
+"नूपुर": [
+"anklet",
+"noun"
+],
+"नृ": [
+"man",
+"noun"
+],
+"नृत्": [
+"dance",
+"verb"
+],
+"नृत्त": [
+"dance",
+"noun"
+],
+"नृत्य": [
+"dance",
+"noun"
+],
+"नृप": [
+"king",
+"noun"
+],
+"नृपति": [
+"king",
+"noun"
+],
+"नृशंस": [
+"cruel",
+"adj"
+],
+"नेत्र": [
+"eye",
+"noun"
+],
+"नेमि": [
+"rim",
+"noun"
+],
+"नैरृत": [
+"demon",
+"noun"
+],
+"नैषध": [
+"Naiṣadha",
+"name"
+],
+"नो": [
+"not",
+"ind"
+],
+"नौ": [
+"boat",
+"noun"
+],
+"न्यग्रोध": [
+"banyan",
+"noun"
+],
+"न्यस्": [
+"place",
+"verb"
+],
+"न्याय": [
+"justice",
+"noun"
+],
+"न्यास": [
+"placing",
+"noun"
+],
+"पक्व": [
+"cooked",
+"adj"
+],
+"पक्ष": [
+"side",
+"noun"
+],
+"पक्षिन्": [
+"bird",
+"noun"
+],
+"पङ्क": [
+"mud",
+"noun"
+],
+"पङ्कज": [
+"lotus",
+"noun"
+],
+"पङ्क्ति": [
+"row",
+"noun"
+],
+"पच्": [
+"cook",
+"verb"
+],
+"पञ्चत्व": [
+"death",
+"noun"
+],
+"पञ्चन्": [
+"five",
+"num"
+],
+"पञ्चम": [
+"fifth",
+"num"
+],
+"पञ्चविंशति": [
+"twenty-five",
+"num"
+],
+"पञ्चाशत्": [
+"fifty",
+"num"
+],
+"पट्टिश": [
+"spear",
+"noun"
+],
+"पठ्": [
+"recite",
+"verb"
+],
+"पण": [
+"wager",
+"noun"
+],
+"पण्डित": [
+"scholar",
+"noun"
+],
+"पतंग": [
+"insect",
+"noun"
+],
+"पतग": [
+"bird",
+"noun"
+],
+"पतत्रिन्": [
+"bird",
+"noun"
+],
+"पतन": [
+"falling",
+"noun"
+],
+"पताका": [
+"banner",
+"noun"
+],
+"पति": [
+"lord",
+"noun"
+],
+"पतिव्रता": [
+"devoted wife",
+"noun"
+],
+"पत्": [
+"fall",
+"verb"
+],
+"पत्ति": [
+"foot soldier",
+"noun"
+],
+"पत्त्र": [
+"leaf",
+"noun"
+],
+"पत्त्रिन्": [
+"bird",
+"noun"
+],
+"पत्नी": [
+"wife",
+"noun"
+],
+"पथ": [
+"path",
+"noun"
+],
+"पथिन्": [
+"path",
+"noun"
+],
+"पथ्य": [
+"wholesome",
+"adj"
+],
+"पद": [
+"foot",
+"noun"
+],
+"पदवी": [
+"path",
+"noun"
+],
+"पदाति": [
+"foot soldier",
+"noun"
+],
+"पदानुग": [
+"attendant",
+"adj"
+],
+"पद्": [
+"foot",
+"noun"
+],
+"पद्म": [
+"lotus",
+"noun"
+],
+"पद्मावती": [
+"Padmāvatī",
+"name"
+],
+"पद्मिनी": [
+"lotus pond",
+"noun"
+],
+"पन्नग": [
+"serpent",
+"noun"
+],
+"पयस्": [
+"milk",
+"noun"
+],
+"पयोधर": [
+"breast",
+"noun"
+],
+"पर": [
+"other",
+"pron"
+],
+"परंतप": [
+"Paraṃtapa",
+"name"
+],
+"परत्र": [
+"hereafter",
+"ind"
+],
+"परपुरंजय": [
+"city conqueror",
+"adj"
+],
+"परम": [
+"supreme",
+"adj"
+],
+"परमक": [
+"supreme",
+"adj"
+],
+"परमात्मन्": [
+"supreme self",
+"noun"
+],
+"परमेश्वर": [
+"supreme lord",
+"noun"
+],
+"परमेष्ठिन्": [
+"Parameṣṭhin",
+"name"
+],
+"परम्": [
+"afterwards",
+"ind"
+],
+"परश्वध": [
+"axe",
+"noun"
+],
+"परस्पर": [
+"each other",
+"pron"
+],
+"पराक्रम": [
+"prowess",
+"noun"
+],
+"पराक्रम्": [
+"exert",
+"verb"
+],
+"पराङ्मुख": [
+"turned away",
+"adj"
+],
+"पराजय": [
+"defeat",
+"noun"
+],
+"पराजि": [
+"be defeated",
+"verb"
+],
+"पराभव": [
+"defeat",
+"noun"
+],
+"परामृश्": [
+"touch",
+"verb"
+],
+"परायण": [
+"devoted",
+"adj"
+],
+"परावर": [
+"high and low",
+"noun"
+],
+"पराशर": [
+"Parāśara",
+"name"
+],
+"परिकीर्तय्": [
+"declare",
+"verb"
+],
+"परिक्रम्": [
+"walk around",
+"verb"
+],
+"परिक्षिप्": [
+"surround",
+"verb"
+],
+"परिग्रह": [
+"taking",
+"noun"
+],
+"परिग्रह्": [
+"embrace",
+"verb"
+],
+"परिघ": [
+"club",
+"noun"
+],
+"परिचर्": [
+"attend",
+"verb"
+],
+"परिच्छद": [
+"equipment",
+"noun"
+],
+"परिणी": [
+"marry",
+"verb"
+],
+"परितप्": [
+"suffer",
+"verb"
+],
+"परितुष्": [
+"be pleased",
+"verb"
+],
+"परित्यज्": [
+"abandon",
+"verb"
+],
+"परित्याग": [
+"abandonment",
+"noun"
+],
+"परिधाव्": [
+"run",
+"verb"
+],
+"परिपालय्": [
+"protect",
+"verb"
+],
+"परिप्रच्छ्": [
+"ask",
+"verb"
+],
+"परिप्लु": [
+"float",
+"verb"
+],
+"परिभू": [
+"overcome",
+"verb"
+],
+"परिभ्रंश्": [
+"slip",
+"verb"
+],
+"परिभ्रम्": [
+"wander",
+"verb"
+],
+"परिरक्ष्": [
+"protect",
+"verb"
+],
+"परिवर्जय्": [
+"avoid",
+"verb"
+],
+"परिवारय्": [
+"surround",
+"verb"
+],
+"परिवृ": [
+"surround",
+"verb"
+],
+"परिवृत्": [
+"revolve",
+"verb"
+],
+"परिश्रम्": [
+"toil",
+"verb"
+],
+"परिष्कृ": [
+"adorn",
+"verb"
+],
+"परिष्वज्": [
+"embrace",
+"verb"
+],
+"परिहृ": [
+"avoid",
+"verb"
+],
+"परी": [
+"go around",
+"verb"
+],
+"परीक्ष्": [
+"examine",
+"verb"
+],
+"परीप्स्": [
+"desire",
+"verb"
+],
+"परुष": [
+"harsh",
+"adj"
+],
+"परोक्ष": [
+"out of sight",
+"adj"
+],
+"पर्जन्य": [
+"rain cloud",
+"noun"
+],
+"पर्ण": [
+"leaf",
+"noun"
+],
+"पर्यङ्क": [
+"couch",
+"noun"
+],
+"पर्यन्त": [
+"end",
+"noun"
+],
+"पर्यय": [
+"reversal",
+"noun"
+],
+"पर्याप्": [
+"suffice",
+"verb"
+],
+"पर्याय": [
+"sequence",
+"noun"
+],
+"पर्युपास्": [
+"attend",
+"verb"
+],
+"पर्वत": [
+"mountain",
+"noun"
+],
+"पर्वन्": [
+"joint",
+"noun"
+],
+"पलाय्": [
+"flee",
+"verb"
+],
+"पलाश": [
+"palāśa tree",
+"noun"
+],
+"पल्लव": [
+"sprout",
+"noun"
+],
+"पवन": [
+"wind",
+"noun"
+],
+"पवित्र": [
+"pure",
+"adj"
+],
+"पशु": [
+"animal",
+"noun"
+],
+"पशुपति": [
+"Paśupati",
+"name"
+],
+"पश्": [
+"see",
+"verb"
+],
+"पश्चात्": [
+"afterwards",
+"ind"
+],
+"पश्चिम": [
+"western",
+"adj"
+],
+"पा": [
+"drink",
+"verb"
+],
+"पांसु": [
+"dust",
+"noun"
+],
+"पाकशासन": [
+"Pākaśāsana",
+"name"
+],
+"पाञ्चाल": [
+"Pāñcāla",
+"name"
+],
+"पाञ्चाली": [
+"Pāñcālī",
+"name"
+],
+"पाञ्चाल्य": [
+"Pāñcālya",
+"name"
+],
+"पाटय्": [
+"split",
+"verb"
+],
+"पाणि": [
+"hand",
+"noun"
+],
+"पाण्डव": [
+"Pāṇḍava",
+"name"
+],
+"पाण्डवेय": [
+"Pāṇḍaveya",
+"name"
+],
+"पाण्डु": [
+"Pāṇḍu",
+"name"
+],
+"पाण्डुर": [
+"pale",
+"adj"
+],
+"पात": [
+"fall",
+"noun"
+],
+"पातक": [
+"sin",
+"noun"
+],
+"पातय्": [
+"fell",
+"verb"
+],
+"पाताल": [
+"netherworld",
+"noun"
+],
+"पात्र": [
+"vessel",
+"noun"
+],
+"पाद": [
+"foot",
+"noun"
+],
+"पादप": [
+"tree",
+"noun"
+],
+"पाद्य": [
+"foot water",
+"noun"
+],
+"पान": [
+"drink",
+"noun"
+],
+"पानीय": [
+"drinking water",
+"noun"
+],
+"पाप": [
+"evil",
+"noun"
+],
+"पाप्मन्": [
+"evil",
+"noun"
+],
+"पायस": [
+"milk rice",
+"noun"
+],
+"पार": [
+"far shore",
+"noun"
+],
+"पारग": [
+"versed",
+"adj"
+],
+"पार्थ": [
+"Pārtha",
+"name"
+],
+"पार्थिव": [
+"king",
+"noun"
+],
+"पार्वती": [
+"Pārvatī",
+"name"
+],
+"पार्श्व": [
+"flank",
+"noun"
+],
+"पार्षत": [
+"Pārṣata",
+"name"
+],
+"पाल": [
+"guardian",
+"noun"
+],
+"पालन": [
+"guarding",
+"noun"
+],
+"पालय्": [
+"guard",
+"verb"
+],
+"पावक": [
+"fire",
+"noun"
+],
+"पावन": [
+"purifying",
+"adj"
+],
+"पाश": [
+"noose",
+"noun"
+],
+"पाशुपत": [
+"Pāśupata",
+"name"
+],
+"पिङ्गल": [
+"tawny",
+"adj"
+],
+"पिण्ड": [
+"lump",
+"noun"
+],
+"पितामह": [
+"grandfather",
+"noun"
+],
+"पितृ": [
+"father",
+"noun"
+],
+"पितृपैतामह": [
+"ancestral",
+"adj"
+],
+"पित्र्य": [
+"paternal",
+"adj"
+],
+"पिधा": [
+"cover",
+"verb"
+],
+"पिनाकिन्": [
+"Pinākin",
+"name"
+],
+"पिपासा": [
+"thirst",
+"noun"
+],
+"पिशाच": [
+"goblin",
+"noun"
+],
+"पिशित": [
+"meat",
+"noun"
+],
+"पीडय्": [
+"torment",
+"verb"
+],
+"पीडा": [
+"pain",
+"noun"
+],
+"पीत": [
+"yellow",
+"adj"
+],
+"पीन": [
+"plump",
+"adj"
+],
+"पुंगव": [
+"bull",
+"noun"
+],
+"पुंस्": [
+"man",
+"noun"
+],
+"पुङ्ख": [
+"shaft",
+"noun"
+],
+"पुच्छ": [
+"tail",
+"noun"
+],
+"पुट": [
+"fold",
+"noun"
+],
+"पुण्डरीक": [
+"white lotus",
+"noun"
+],
+"पुण्डरीकाक्ष": [
+"Puṇḍarīkākṣa",
+"name"
+],
+"पुण्य": [
+"virtuous",
+"adj"
+],
+"पुत्र": [
+"son",
+"noun"
+],
+"पुत्रक": [
+"boy",
+"noun"
+],
+"पुत्री": [
+"daughter",
+"noun"
+],
+"पुनर्": [
+"again",
+"ind"
+],
+"पुर": [
+"city",
+"noun"
+],
+"पुरंदर": [
+"Purandara",
+"name"
+],
+"पुरःसर": [
+"headed by",
+"adj"
+],
+"पुरतस्": [
+"in front",
+"ind"
+],
+"पुरस्": [
+"before",
+"ind"
+],
+"पुरस्कृ": [
+"put first",
+"verb"
+],
+"पुरस्तात्": [
+"in front",
+"ind"
+],
+"पुरा": [
+"formerly",
+"ind"
+],
+"पुराण": [
+"ancient",
+"adj"
+],
+"पुरातन": [
+"ancient",
+"adj"
+],
+"पुरी": [
+"city",
+"noun"
+],
+"पुरीष": [
+"excrement",
+"noun"
+],
+"पुरुष": [
+"person",
+"noun"
+],
+"पुरुषोत्तम": [
+"Puruṣottama",
+"name"
+],
+"पुरूरवस्": [
+"Purūravas",
+"name"
+],
+"पुरोगम": [
+"leading",
+"adj"
+],
+"पुरोधस्": [
+"priest",
+"noun"
+],
+"पुरोहित": [
+"priest",
+"noun"
+],
+"पुलस्त्य": [
+"Pulastya",
+"name"
+],
+"पुष्": [
+"nourish",
+"verb"
+],
+"पुष्कर": [
+"lotus",
+"noun"
+],
+"पुष्कल": [
+"abundant",
+"adj"
+],
+"पुष्टि": [
+"growth",
+"noun"
+],
+"पुष्प": [
+"flower",
+"noun"
+],
+"पुष्पक": [
+"Puṣpaka",
+"name"
+],
+"पुष्पित": [
+"flowering",
+"adj"
+],
+"पू": [
+"purify",
+"verb"
+],
+"पूग": [
+"areca nut",
+"noun"
+],
+"पूजन": [
+"worship",
+"noun"
+],
+"पूजय्": [
+"worship",
+"verb"
+],
+"पूजा": [
+"worship",
+"noun"
+],
+"पूरय्": [
+"fill",
+"verb"
+],
+"पूरु": [
+"Pūru",
+"name"
+],
+"पूरुष": [
+"person",
+"noun"
+],
+"पूर्ण": [
+"full",
+"adj"
+],
+"पूर्व": [
+"former",
+"adj"
+],
+"पूर्वक": [
+"preceded by",
+"adj"
+],
+"पूर्वज": [
+"ancestor",
+"noun"
+],
+"पूर्वम्": [
+"before",
+"ind"
+],
+"पूर्ववत्": [
+"as before",
+"ind"
+],
+"पृ": [
+"fill",
+"verb"
+],
+"पृतना": [
+"army",
+"noun"
+],
+"पृथक्": [
+"separately",
+"ind"
+],
+"पृथा": [
+"Pṛthā",
+"name"
+],
+"पृथिवी": [
+"earth",
+"noun"
+],
+"पृथिवीपति": [
+"king",
+"noun"
+],
+"पृथिवीपाल": [
+"king",
+"noun"
+],
+"पृथु": [
+"broad",
+"adj"
+],
+"पृथ्वी": [
+"earth",
+"noun"
+],
+"पृषत्क": [
+"arrow",
+"noun"
+],
+"पृष्ठ": [
+"back",
+"noun"
+],
+"पृष्ठतस्": [
+"behind",
+"ind"
+],
+"पौत्र": [
+"grandson",
+"noun"
+],
+"पौर": [
+"citizen",
+"noun"
+],
+"पौरव": [
+"Paurava",
+"name"
+],
+"पौरुष": [
+"valour",
+"noun"
+],
+"पौर्णमासी": [
+"full moon",
+"noun"
+],
+"प्रकार": [
+"kind",
+"noun"
+],
+"प्रकाश": [
+"light",
+"noun"
+],
+"प्रकाशय्": [
+"reveal",
+"verb"
+],
+"प्रकाश्": [
+"shine forth",
+"verb"
+],
+"प्रकीर्तय्": [
+"proclaim",
+"verb"
+],
+"प्रकृ": [
+"perform",
+"verb"
+],
+"प्रकृति": [
+"nature",
+"noun"
+],
+"प्रक्रम्": [
+"advance",
+"verb"
+],
+"प्रक्षिप्": [
+"throw",
+"verb"
+],
+"प्रख्या": [
+"appearance",
+"noun"
+],
+"प्रग्रह्": [
+"seize",
+"verb"
+],
+"प्रचक्ष्": [
+"tell",
+"verb"
+],
+"प्रचर्": [
+"roam",
+"verb"
+],
+"प्रचेतस्": [
+"Pracetas",
+"name"
+],
+"प्रचोदय्": [
+"urge",
+"verb"
+],
+"प्रच्छद्": [
+"conceal",
+"verb"
+],
+"प्रच्छादय्": [
+"conceal",
+"verb"
+],
+"प्रच्छ्": [
+"ask",
+"verb"
+],
+"प्रजन्": [
+"be born",
+"verb"
+],
+"प्रजा": [
+"people",
+"noun"
+],
+"प्रजापति": [
+"Prajāpati",
+"name"
+],
+"प्रज्ञा": [
+"wisdom",
+"noun"
+],
+"प्रज्वल्": [
+"blaze",
+"verb"
+],
+"प्रणम्": [
+"bow",
+"verb"
+],
+"प्रणय": [
+"affection",
+"noun"
+],
+"प्रणव": [
+"om",
+"noun"
+],
+"प्रणश्": [
+"perish",
+"verb"
+],
+"प्रणाम": [
+"bow",
+"noun"
+],
+"प्रणिधा": [
+"apply",
+"verb"
+],
+"प्रणिपत्": [
+"bow down",
+"verb"
+],
+"प्रणी": [
+"lead",
+"verb"
+],
+"प्रणुद्": [
+"drive away",
+"verb"
+],
+"प्रतप्": [
+"burn",
+"verb"
+],
+"प्रताप": [
+"majesty",
+"noun"
+],
+"प्रतापवत्": [
+"mighty",
+"adj"
+],
+"प्रति": [
+"toward",
+"ind"
+],
+"प्रतिकूल": [
+"adverse",
+"adj"
+],
+"प्रतिकृ": [
+"requite",
+"verb"
+],
+"प्रतिगम्": [
+"return",
+"verb"
+],
+"प्रतिग्रह": [
+"acceptance",
+"noun"
+],
+"प्रतिग्रह्": [
+"accept",
+"verb"
+],
+"प्रतिज्ञा": [
+"promise",
+"noun"
+],
+"प्रतिदृश्": [
+"appear",
+"verb"
+],
+"प्रतिनन्द्": [
+"greet",
+"verb"
+],
+"प्रतिपद्": [
+"undertake",
+"verb"
+],
+"प्रतिपादय्": [
+"bestow",
+"verb"
+],
+"प्रतिपूजय्": [
+"revere",
+"verb"
+],
+"प्रतिबुध्": [
+"awake",
+"verb"
+],
+"प्रतिभा": [
+"seem",
+"verb"
+],
+"प्रतिभाष्": [
+"answer",
+"verb"
+],
+"प्रतिम": [
+"similar",
+"adj"
+],
+"प्रतिमा": [
+"image",
+"noun"
+],
+"प्रतिया": [
+"return",
+"verb"
+],
+"प्रतियुध्": [
+"fight",
+"verb"
+],
+"प्रतिवच्": [
+"reply",
+"verb"
+],
+"प्रतिव्यध्": [
+"pierce",
+"verb"
+],
+"प्रतिश्रु": [
+"promise",
+"verb"
+],
+"प्रतिष्ठा": [
+"set out",
+"verb"
+],
+"प्रतिहन्": [
+"repel",
+"verb"
+],
+"प्रती": [
+"return",
+"verb"
+],
+"प्रतीकाश": [
+"resembling",
+"adj"
+],
+"प्रतीक्ष्": [
+"wait",
+"verb"
+],
+"प्रतीप": [
+"contrary",
+"adj"
+],
+"प्रत्यक्ष": [
+"visible",
+"adj"
+],
+"प्रत्यय": [
+"belief",
+"noun"
+],
+"प्रत्याख्या": [
+"refuse",
+"verb"
+],
+"प्रत्यागम्": [
+"return",
+"verb"
+],
+"प्रत्युद्या": [
+"go to meet",
+"verb"
+],
+"प्रथम": [
+"first",
+"adj"
+],
+"प्रथमम्": [
+"first",
+"ind"
+],
+"प्रथ्": [
+"spread",
+"verb"
+],
+"प्रद": [
+"giving",
+"adj"
+],
+"प्रदक्षिण": [
+"clockwise",
+"adj"
+],
+"प्रदह्": [
+"burn",
+"verb"
+],
+"प्रदा": [
+"give",
+"verb"
+],
+"प्रदान": [
+"giving",
+"noun"
+],
+"प्रदिश्": [
+"direction",
+"noun"
+],
+"प्रदीप": [
+"light",
+"noun"
+],
+"प्रदीप्": [
+"flare",
+"verb"
+],
+"प्रदेश": [
+"spot",
+"noun"
+],
+"प्रद्युम्न": [
+"Pradyumna",
+"name"
+],
+"प्रद्रु": [
+"flee",
+"verb"
+],
+"प्रधान": [
+"chief",
+"adj"
+],
+"प्रधाव्": [
+"run",
+"verb"
+],
+"प्रपत्": [
+"fall",
+"verb"
+],
+"प्रपद्": [
+"approach",
+"verb"
+],
+"प्रपश्": [
+"behold",
+"verb"
+],
+"प्रपितामह": [
+"great grandfather",
+"noun"
+],
+"प्रबुध्": [
+"awaken",
+"verb"
+],
+"प्रब्रू": [
+"say",
+"verb"
+],
+"प्रभञ्ज्": [
+"shatter",
+"verb"
+],
+"प्रभव": [
+"origin",
+"noun"
+],
+"प्रभा": [
+"light",
+"noun"
+],
+"प्रभात": [
+"dawn",
+"noun"
+],
+"प्रभाव": [
+"power",
+"noun"
+],
+"प्रभावती": [
+"Prabhāvatī",
+"name"
+],
+"प्रभाष्": [
+"speak",
+"verb"
+],
+"प्रभास": [
+"Prabhāsa",
+"name"
+],
+"प्रभिद्": [
+"split",
+"verb"
+],
+"प्रभु": [
+"lord",
+"noun"
+],
+"प्रभू": [
+"be able",
+"verb"
+],
+"प्रभूत": [
+"abundant",
+"adj"
+],
+"प्रभृति": [
+"onward",
+"ind"
+],
+"प्रमथ": [
+"Pramatha",
+"name"
+],
+"प्रमथ्": [
+"churn",
+"verb"
+],
+"प्रमदा": [
+"woman",
+"noun"
+],
+"प्रमद्": [
+"be careless",
+"verb"
+],
+"प्रमा": [
+"measure",
+"verb"
+],
+"प्रमाण": [
+"authority",
+"noun"
+],
+"प्रमाथिन्": [
+"harassing",
+"adj"
+],
+"प्रमाद": [
+"negligence",
+"noun"
+],
+"प्रमुख": [
+"foremost",
+"adj"
+],
+"प्रमुच्": [
+"release",
+"verb"
+],
+"प्रमुद्": [
+"exult",
+"verb"
+],
+"प्रयत्": [
+"strive",
+"verb"
+],
+"प्रयत्न": [
+"effort",
+"noun"
+],
+"प्रयम्": [
+"offer",
+"verb"
+],
+"प्रया": [
+"set out",
+"verb"
+],
+"प्रयाग": [
+"Prayāga",
+"name"
+],
+"प्रयुज्": [
+"apply",
+"verb"
+],
+"प्रयोग": [
+"use",
+"noun"
+],
+"प्रयोजन": [
+"purpose",
+"noun"
+],
+"प्रलम्ब": [
+"Pralamba",
+"name"
+],
+"प्रलय": [
+"dissolution",
+"noun"
+],
+"प्रलाप": [
+"babble",
+"noun"
+],
+"प्रवच्": [
+"declare",
+"verb"
+],
+"प्रवद्": [
+"declare",
+"verb"
+],
+"प्रवर": [
+"excellent",
+"adj"
+],
+"प्रवर्तय्": [
+"initiate",
+"verb"
+],
+"प्रविश्": [
+"enter",
+"verb"
+],
+"प्रवीर": [
+"hero",
+"noun"
+],
+"प्रवृत्": [
+"proceed",
+"verb"
+],
+"प्रवृत्ति": [
+"activity",
+"noun"
+],
+"प्रवृध्": [
+"increase",
+"verb"
+],
+"प्रवेश": [
+"entrance",
+"noun"
+],
+"प्रवेशय्": [
+"introduce",
+"verb"
+],
+"प्रव्रज्": [
+"go forth",
+"verb"
+],
+"प्रशंस्": [
+"praise",
+"verb"
+],
+"प्रशम": [
+"calm",
+"noun"
+],
+"प्रशम्": [
+"become calm",
+"verb"
+],
+"प्रशास्": [
+"rule",
+"verb"
+],
+"प्रश्न": [
+"question",
+"noun"
+],
+"प्रसङ्ग": [
+"occasion",
+"noun"
+],
+"प्रसञ्ज्": [
+"cling",
+"verb"
+],
+"प्रसद्": [
+"be pleased",
+"verb"
+],
+"प्रसव": [
+"birth",
+"noun"
+],
+"प्रसह्": [
+"overpower",
+"verb"
+],
+"प्रसाद": [
+"favour",
+"noun"
+],
+"प्रसादय्": [
+"appease",
+"verb"
+],
+"प्रसू": [
+"produce",
+"verb"
+],
+"प्रसूति": [
+"birth",
+"noun"
+],
+"प्रसृ": [
+"advance",
+"verb"
+],
+"प्रस्था": [
+"set out",
+"verb"
+],
+"प्रस्थापय्": [
+"send",
+"verb"
+],
+"प्रस्रवण": [
+"spring",
+"noun"
+],
+"प्रस्वप्": [
+"sleep",
+"verb"
+],
+"प्रहरण": [
+"weapon",
+"noun"
+],
+"प्रहर्ष": [
+"delight",
+"noun"
+],
+"प्रहस्": [
+"laugh aloud",
+"verb"
+],
+"प्रहस्त": [
+"Prahasta",
+"name"
+],
+"प्रहा": [
+"give up",
+"verb"
+],
+"प्रहार": [
+"blow",
+"noun"
+],
+"प्रहारिन्": [
+"striking",
+"adj"
+],
+"प्रहि": [
+"send",
+"verb"
+],
+"प्रहृ": [
+"strike",
+"verb"
+],
+"प्रहृष्": [
+"rejoice",
+"verb"
+],
+"प्रह्राद": [
+"Prahlāda",
+"name"
+],
+"प्रह्लाद": [
+"Prahlāda",
+"name"
+],
+"प्राकार": [
+"rampart",
+"noun"
+],
+"प्राकृत": [
+"common",
+"adj"
+],
+"प्राक्": [
+"before",
+"ind"
+],
+"प्राग्ज्योतिष": [
+"Prāgjyotiṣa",
+"name"
+],
+"प्राजापत्य": [
+"of Prajāpati",
+"adj"
+],
+"प्राज्ञ": [
+"wise",
+"adj"
+],
+"प्राञ्च्": [
+"eastern",
+"adj"
+],
+"प्राञ्जलि": [
+"with joined palms",
+"adj"
+],
+"प्राण": [
+"breath",
+"noun"
+],
+"प्राणायाम": [
+"breath control",
+"noun"
+],
+"प्राणिन्": [
+"living being",
+"noun"
+],
+"प्रातर्": [
+"morning",
+"ind"
+],
+"प्रादुरस्": [
+"appear",
+"verb"
+],
+"प्रादुर्भू": [
+"appear",
+"verb"
+],
+"प्रापय्": [
+"convey",
+"verb"
+],
+"प्राप्": [
+"obtain",
+"verb"
+],
+"प्राप्ति": [
+"attainment",
+"noun"
+],
+"प्राय": [
+"majority",
+"noun"
+],
+"प्रायशस्": [
+"mostly",
+"ind"
+],
+"प्रायश्चित्त": [
+"atonement",
+"noun"
+],
+"प्रायस्": [
+"mostly",
+"ind"
+],
+"प्रार्थय्": [
+"request",
+"verb"
+],
+"प्रावृष्": [
+"rainy season",
+"noun"
+],
+"प्राश्": [
+"eat",
+"verb"
+],
+"प्रास": [
+"spear",
+"noun"
+],
+"प्रासाद": [
+"palace",
+"noun"
+],
+"प्राह्": [
+"say",
+"verb"
+],
+"प्रिय": [
+"dear",
+"adj"
+],
+"प्रिया": [
+"beloved",
+"noun"
+],
+"प्री": [
+"please",
+"verb"
+],
+"प्रीति": [
+"pleasure",
+"noun"
+],
+"प्रीतिमत्": [
+"pleased",
+"adj"
+],
+"प्रे": [
+"proceed",
+"verb"
+],
+"प्रेक्ष्": [
+"look",
+"verb"
+],
+"प्रेत": [
+"ghost",
+"noun"
+],
+"प्रेप्सु": [
+"desiring",
+"adj"
+],
+"प्रेमन्": [
+"love",
+"noun"
+],
+"प्रेरय्": [
+"impel",
+"verb"
+],
+"प्रेषय्": [
+"send",
+"verb"
+],
+"प्रेष्": [
+"send",
+"verb"
+],
+"प्रेष्य": [
+"servant",
+"noun"
+],
+"प्लव": [
+"raft",
+"noun"
+],
+"प्लवंगम": [
+"monkey",
+"noun"
+],
+"प्लवग": [
+"monkey",
+"noun"
+],
+"प्लु": [
+"float",
+"verb"
+],
+"फल": [
+"fruit",
+"noun"
+],
+"फल्": [
+"bear fruit",
+"verb"
+],
+"फल्गुन": [
+"Phalguna",
+"name"
+],
+"फुल्ल": [
+"blooming",
+"adj"
+],
+"फेन": [
+"foam",
+"noun"
+],
+"बक": [
+"heron",
+"noun"
+],
+"बत": [
+"alas",
+"ind"
+],
+"बन्दिन्": [
+"bard",
+"noun"
+],
+"बन्ध": [
+"bond",
+"noun"
+],
+"बन्धन": [
+"bond",
+"noun"
+],
+"बन्धु": [
+"kinsman",
+"noun"
+],
+"बन्ध्": [
+"bind",
+"verb"
+],
+"बल": [
+"strength",
+"noun"
+],
+"बलदेव": [
+"Baladeva",
+"name"
+],
+"बलवत्": [
+"powerful",
+"adj"
+],
+"बलवत्तर": [
+"stronger",
+"adj"
+],
+"बलाहक": [
+"cloud",
+"noun"
+],
+"बलि": [
+"offering",
+"noun"
+],
+"बलिन्": [
+"strong",
+"adj"
+],
+"बलीयस्": [
+"stronger",
+"adj"
+],
+"बहिस्": [
+"outside",
+"ind"
+],
+"बहु": [
+"many",
+"adj"
+],
+"बहुधा": [
+"variously",
+"ind"
+],
+"बहुल": [
+"abundant",
+"adj"
+],
+"बहुविध": [
+"various",
+"adj"
+],
+"बहुशस्": [
+"often",
+"ind"
+],
+"बाण": [
+"arrow",
+"noun"
+],
+"बाध्": [
+"oppress",
+"verb"
+],
+"बान्धव": [
+"kinsman",
+"noun"
+],
+"बाल": [
+"child",
+"noun"
+],
+"बालक": [
+"boy",
+"noun"
+],
+"बाला": [
+"girl",
+"noun"
+],
+"बालिश": [
+"fool",
+"noun"
+],
+"बाल्य": [
+"childhood",
+"noun"
+],
+"बाष्प": [
+"tear",
+"noun"
+],
+"बाहु": [
+"arm",
+"noun"
+],
+"बाहुक": [
+"Bāhuka",
+"name"
+],
+"बाह्य": [
+"outer",
+"adj"
+],
+"बाह्लिक": [
+"Bāhlika",
+"name"
+],
+"बिन्दु": [
+"drop",
+"noun"
+],
+"बिम्ब": [
+"disk",
+"noun"
+],
+"बिल": [
+"hole",
+"noun"
+],
+"बिल्व": [
+"bilva tree",
+"noun"
+],
+"बिस": [
+"lotus stalk",
+"noun"
+],
+"बीज": [
+"seed",
+"noun"
+],
+"बीभत्सु": [
+"Bībhatsu",
+"name"
+],
+"बुद्धि": [
+"intellect",
+"noun"
+],
+"बुद्धिमत्": [
+"intelligent",
+"adj"
+],
+"बुध": [
+"wise",
+"adj"
+],
+"बुध्": [
+"awaken",
+"verb"
+],
+"बृहत्": [
+"large",
+"adj"
+],
+"बृहदश्व": [
+"Bṛhadaśva",
+"name"
+],
+"बृहस्पति": [
+"Bṛhaspati",
+"name"
+],
+"बोधय्": [
+"rouse",
+"verb"
+],
+"ब्रह्मचर्य": [
+"celibacy",
+"noun"
+],
+"ब्रह्मचारिन्": [
+"student",
+"noun"
+],
+"ब्रह्मण्य": [
+"pious",
+"adj"
+],
+"ब्रह्मदत्त": [
+"Brahmadatta",
+"name"
+],
+"ब्रह्मन्": [
+"brahman",
+"noun"
+],
+"ब्रह्मर्षि": [
+"brahmin sage",
+"noun"
+],
+"ब्रह्महत्या": [
+"killing a brahmin",
+"noun"
+],
+"ब्रह्मास्त्र": [
+"Brahmāstra",
+"name"
+],
+"ब्राह्म": [
+"sacred",
+"adj"
+],
+"ब्राह्मण": [
+"brahmin",
+"noun"
+],
+"ब्राह्मणी": [
+"brahmin woman",
+"noun"
+],
+"ब्राह्मण्य": [
+"brahminhood",
+"noun"
+],
+"ब्रू": [
+"say",
+"verb"
+],
+"भक्त": [
+"devotee",
+"noun"
+],
+"भक्ति": [
+"devotion",
+"noun"
+],
+"भक्ष": [
+"food",
+"noun"
+],
+"भक्षण": [
+"eating",
+"noun"
+],
+"भक्षय्": [
+"eat",
+"verb"
+],
+"भक्ष्": [
+"eat",
+"verb"
+],
+"भक्ष्य": [
+"food",
+"noun"
+],
+"भग": [
+"fortune",
+"noun"
+],
+"भगदत्त": [
+"Bhagadatta",
+"name"
+],
+"भगवत्": [
+"blessed",
+"adj"
+],
+"भगवन्त्": [
+"lord",
+"noun"
+],
+"भगिनी": [
+"sister",
+"noun"
+],
+"भगीरथ": [
+"Bhagīratha",
+"name"
+],
+"भङ्ग": [
+"breaking",
+"noun"
+],
+"भज्": [
+"worship",
+"verb"
+],
+"भञ्ज्": [
+"break",
+"verb"
+],
+"भद्र": [
+"auspicious",
+"adj"
+],
+"भद्रा": [
+"Bhadrā",
+"name"
+],
+"भय": [
+"fear",
+"noun"
+],
+"भयंकर": [
+"terrible",
+"adj"
+],
+"भर": [
+"load",
+"noun"
+],
+"भरत": [
+"Bharata",
+"name"
+],
+"भरद्वाज": [
+"Bharadvāja",
+"name"
+],
+"भर्तृ": [
+"husband",
+"noun"
+],
+"भल्ल": [
+"arrow",
+"noun"
+],
+"भव": [
+"existence",
+"noun"
+],
+"भवत्": [
+"you",
+"pron"
+],
+"भवन": [
+"house",
+"noun"
+],
+"भवानी": [
+"Bhavānī",
+"name"
+],
+"भवितृ": [
+"future",
+"adj"
+],
+"भविष्य": [
+"future",
+"adj"
+],
+"भव्य": [
+"excellent",
+"adj"
+],
+"भस्मन्": [
+"ash",
+"noun"
+],
+"भा": [
+"shine",
+"verb"
+],
+"भाग": [
+"share",
+"noun"
+],
+"भागवत": [
+"Bhāgavata",
+"name"
+],
+"भागिन्": [
+"sharing",
+"adj"
+],
+"भागीरथी": [
+"Bhāgīrathī",
+"name"
+],
+"भाग्य": [
+"fortune",
+"noun"
+],
+"भाजन": [
+"vessel",
+"noun"
+],
+"भाज्": [
+"partaking",
+"adj"
+],
+"भाण्ड": [
+"vessel",
+"noun"
+],
+"भानु": [
+"sun",
+"noun"
+],
+"भामिनी": [
+"lady",
+"noun"
+],
+"भार": [
+"burden",
+"noun"
+],
+"भारत": [
+"Bhārata",
+"name"
+],
+"भारद्वाज": [
+"Bhāradvāja",
+"name"
+],
+"भार्गव": [
+"Bhārgava",
+"name"
+],
+"भार्या": [
+"wife",
+"noun"
+],
+"भाव": [
+"state",
+"noun"
+],
+"भावन": [
+"producing",
+"adj"
+],
+"भावय्": [
+"consider",
+"verb"
+],
+"भावितात्मन्": [
+"pure-souled",
+"adj"
+],
+"भाविन्": [
+"future",
+"adj"
+],
+"भाषित": [
+"speech",
+"noun"
+],
+"भाषिन्": [
+"speaking",
+"adj"
+],
+"भाष्": [
+"speak",
+"verb"
+],
+"भास्": [
+"radiance",
+"noun"
+],
+"भास्कर": [
+"sun",
+"noun"
+],
+"भास्वर": [
+"shining",
+"adj"
+],
+"भिक्षा": [
+"alms",
+"noun"
+],
+"भिक्षु": [
+"mendicant",
+"noun"
+],
+"भिद्": [
+"split",
+"verb"
+],
+"भिषज्": [
+"physician",
+"noun"
+],
+"भी": [
+"fear",
+"verb"
+],
+"भीम": [
+"Bhīma",
+"name"
+],
+"भीमसेन": [
+"Bhīmasena",
+"name"
+],
+"भीरु": [
+"timid",
+"adj"
+],
+"भीषण": [
+"frightful",
+"adj"
+],
+"भीष्म": [
+"Bhīṣma",
+"name"
+],
+"भुज": [
+"arm",
+"noun"
+],
+"भुजंग": [
+"serpent",
+"noun"
+],
+"भुजंगम": [
+"serpent",
+"noun"
+],
+"भुजग": [
+"snake",
+"noun"
+],
+"भुज्": [
+"enjoy",
+"verb"
+],
+"भुवन": [
+"realm",
+"noun"
+],
+"भू": [
+"be",
+"verb"
+],
+"भूत": [
+"being",
+"noun"
+],
+"भूति": [
+"prosperity",
+"noun"
+],
+"भूप": [
+"king",
+"noun"
+],
+"भूपति": [
+"king",
+"noun"
+],
+"भूभृत्": [
+"king",
+"noun"
+],
+"भूमि": [
+"earth",
+"noun"
+],
+"भूमिप": [
+"king",
+"noun"
+],
+"भूयस्": [
+"more",
+"ind"
+],
+"भूयिष्ठ": [
+"most",
+"adj"
+],
+"भूरि": [
+"much",
+"adj"
+],
+"भूरिश्रवस्": [
+"Bhūriśravas",
+"name"
+],
+"भूषण": [
+"ornament",
+"noun"
+],
+"भूषय्": [
+"adorn",
+"verb"
+],
+"भृ": [
+"bear",
+"verb"
+],
+"भृगु": [
+"Bhṛgu",
+"name"
+],
+"भृत्": [
+"bearing",
+"adj"
+],
+"भृत्य": [
+"servant",
+"noun"
+],
+"भृश": [
+"intense",
+"adj"
+],
+"भृशम्": [
+"greatly",
+"ind"
+],
+"भेद": [
+"division",
+"noun"
+],
+"भेदिन्": [
+"splitting",
+"adj"
+],
+"भेरी": [
+"drum",
+"noun"
+],
+"भैक्ष": [
+"alms",
+"noun"
+],
+"भैरव": [
+"dreadful",
+"adj"
+],
+"भो": [
+"hey",
+"ind"
+],
+"भोः": [
+"hey",
+"ind"
+],
+"भोग": [
+"enjoyment",
+"noun"
+],
+"भोगिन्": [
+"serpent",
+"noun"
+],
+"भोज": [
+"Bhoja",
+"name"
+],
+"भोजन": [
+"meal",
+"noun"
+],
+"भोजय्": [
+"feed",
+"verb"
+],
+"भोज्य": [
+"meal",
+"noun"
+],
+"भौम": [
+"earthly",
+"adj"
+],
+"भ्रंश्": [
+"fall",
+"verb"
+],
+"भ्रमर": [
+"bee",
+"noun"
+],
+"भ्रम्": [
+"wander",
+"verb"
+],
+"भ्राज्": [
+"shine",
+"verb"
+],
+"भ्रातृ": [
+"brother",
+"noun"
+],
+"भ्रामय्": [
+"whirl",
+"verb"
+],
+"भ्रू": [
+"eyebrow",
+"noun"
+],
+"मकर": [
+"sea monster",
+"noun"
+],
+"मख": [
+"sacrifice",
+"noun"
+],
+"मगध": [
+"Magadha",
+"name"
+],
+"मघवन्": [
+"Maghavan",
+"name"
+],
+"मङ्गल": [
+"welfare",
+"noun"
+],
+"मज्ज्": [
+"sink",
+"verb"
+],
+"मणि": [
+"jewel",
+"noun"
+],
+"मण्डय्": [
+"adorn",
+"verb"
+],
+"मण्डल": [
+"circle",
+"noun"
+],
+"मण्डूक": [
+"frog",
+"noun"
+],
+"मत": [
+"opinion",
+"noun"
+],
+"मति": [
+"mind",
+"noun"
+],
+"मतिमत्": [
+"intelligent",
+"adj"
+],
+"मत्सर": [
+"envy",
+"noun"
+],
+"मत्स्य": [
+"fish",
+"noun"
+],
+"मथुरा": [
+"Mathurā",
+"name"
+],
+"मथ्": [
+"churn",
+"verb"
+],
+"मद": [
+"intoxication",
+"noun"
+],
+"मदन": [
+"passion",
+"noun"
+],
+"मदीय": [
+"my",
+"pron"
+],
+"मद्": [
+"I",
+"pron"
+],
+"मद्र": [
+"Madra",
+"name"
+],
+"मधु": [
+"honey",
+"noun"
+],
+"मधुर": [
+"sweet",
+"adj"
+],
+"मधुसूदन": [
+"Madhusūdana",
+"name"
+],
+"मध्य": [
+"middle",
+"noun"
+],
+"मध्यम": [
+"middle",
+"adj"
+],
+"मध्ये": [
+"among",
+"ind"
+],
+"मनस्": [
+"mind",
+"noun"
+],
+"मनस्विन्": [
+"high-minded",
+"adj"
+],
+"मनीषिन्": [
+"thoughtful",
+"adj"
+],
+"मनु": [
+"Manu",
+"name"
+],
+"मनुज": [
+"human",
+"noun"
+],
+"मनुष्य": [
+"human",
+"noun"
+],
+"मनोजव": [
+"swift as thought",
+"adj"
+],
+"मनोरथ": [
+"wish",
+"noun"
+],
+"मनोरम": [
+"delightful",
+"adj"
+],
+"मनोहर": [
+"charming",
+"adj"
+],
+"मन्": [
+"think",
+"verb"
+],
+"मन्त्र": [
+"mantra",
+"noun"
+],
+"मन्त्रय्": [
+"consult",
+"verb"
+],
+"मन्त्रिन्": [
+"minister",
+"noun"
+],
+"मन्द": [
+"slow",
+"adj"
+],
+"मन्दर": [
+"Mandara",
+"name"
+],
+"मन्दिर": [
+"dwelling",
+"noun"
+],
+"मन्मथ": [
+"Manmatha",
+"name"
+],
+"मन्यु": [
+"anger",
+"noun"
+],
+"मन्वन्तर": [
+"manvantara",
+"noun"
+],
+"मय": [
+"made of",
+"adj"
+],
+"मयूर": [
+"peacock",
+"noun"
+],
+"मरण": [
+"death",
+"noun"
+],
+"मरीचि": [
+"Marīci",
+"name"
+],
+"मरुत्": [
+"wind",
+"noun"
+],
+"मरुत्त": [
+"Marutta",
+"name"
+],
+"मर्त्य": [
+"mortal",
+"noun"
+],
+"मर्दन": [
+"crushing",
+"adj"
+],
+"मर्मन्": [
+"vital spot",
+"noun"
+],
+"मर्यादा": [
+"limit",
+"noun"
+],
+"मर्षय्": [
+"forgive",
+"verb"
+],
+"मल": [
+"impurity",
+"noun"
+],
+"मलय": [
+"Malaya",
+"name"
+],
+"मलिन": [
+"dirty",
+"adj"
+],
+"मल्ल": [
+"wrestler",
+"noun"
+],
+"महत्": [
+"great",
+"adj"
+],
+"महन्त्": [
+"great one",
+"noun"
+],
+"महात्मन्": [
+"noble",
+"adj"
+],
+"महादेव": [
+"Mahādeva",
+"name"
+],
+"महाधन": [
+"costly",
+"adj"
+],
+"महापुराण": [
+"major Purāṇa",
+"noun"
+],
+"महाभाग": [
+"fortunate",
+"adj"
+],
+"महाभूत": [
+"great element",
+"noun"
+],
+"महामति": [
+"wise",
+"adj"
+],
+"महामनस्": [
+"magnanimous",
+"adj"
+],
+"महार्ह": [
+"precious",
+"adj"
+],
+"महिमन्": [
+"greatness",
+"noun"
+],
+"महिष": [
+"buffalo",
+"noun"
+],
+"महिषी": [
+"queen",
+"noun"
+],
+"मही": [
+"earth",
+"noun"
+],
+"महीक्षित्": [
+"king",
+"noun"
+],
+"महीधर": [
+"mountain",
+"noun"
+],
+"महीपति": [
+"king",
+"noun"
+],
+"महीपाल": [
+"king",
+"noun"
+],
+"महीय्": [
+"be honored",
+"verb"
+],
+"महेन्द्र": [
+"Mahendra",
+"name"
+],
+"महेश्वर": [
+"Maheśvara",
+"name"
+],
+"महोदर": [
+"Mahodara",
+"name"
+],
+"मा": [
+"not",
+"ind"
+],
+"मांस": [
+"flesh",
+"noun"
+],
+"मागध": [
+"Māgadha",
+"name"
+],
+"माचिरम्": [
+"soon",
+"ind"
+],
+"मातंग": [
+"elephant",
+"noun"
+],
+"मातलि": [
+"Mātali",
+"name"
+],
+"माता": [
+"mother",
+"noun"
+],
+"मातुल": [
+"maternal uncle",
+"noun"
+],
+"मातृ": [
+"mother",
+"noun"
+],
+"मात्र": [
+"mere",
+"adj"
+],
+"मात्रा": [
+"measure",
+"noun"
+],
+"माद्री": [
+"Mādrī",
+"name"
+],
+"माधव": [
+"Mādhava",
+"name"
+],
+"मान": [
+"pride",
+"noun"
+],
+"मानद": [
+"honouring",
+"adj"
+],
+"मानय्": [
+"respect",
+"verb"
+],
+"मानव": [
+"human",
+"adj"
+],
+"मानस": [
+"mental",
+"adj"
+],
+"मानिन्": [
+"proud",
+"adj"
+],
+"मानुष": [
+"human",
+"adj"
+],
+"मानुष्य": [
+"humanity",
+"noun"
+],
+"मान्धातृ": [
+"Māndhātṛ",
+"name"
+],
+"मामक": [
+"my",
+"adj"
+],
+"माया": [
+"illusion",
+"noun"
+],
+"मारिष": [
+"good sir",
+"noun"
+],
+"मारीच": [
+"Mārīca",
+"name"
+],
+"मारुत": [
+"wind",
+"noun"
+],
+"मारुतात्मज": [
+"Mārutātmaja",
+"name"
+],
+"मार्कण्डेय": [
+"Mārkaṇḍeya",
+"name"
+],
+"मार्ग": [
+"path",
+"noun"
+],
+"मार्गण": [
+"arrow",
+"noun"
+],
+"मार्ग्": [
+"seek",
+"verb"
+],
+"मार्जार": [
+"cat",
+"noun"
+],
+"माला": [
+"garland",
+"noun"
+],
+"मालिन्": [
+"garlanded",
+"adj"
+],
+"माल्य": [
+"garland",
+"noun"
+],
+"माल्यवन्त्": [
+"Mālyavān",
+"name"
+],
+"मास": [
+"month",
+"noun"
+],
+"मास्": [
+"month",
+"noun"
+],
+"माहात्म्य": [
+"greatness",
+"noun"
+],
+"मित्र": [
+"friend",
+"noun"
+],
+"मिथस्": [
+"mutually",
+"ind"
+],
+"मिथुन": [
+"couple",
+"noun"
+],
+"मिथ्या": [
+"falsely",
+"ind"
+],
+"मिल्": [
+"meet",
+"verb"
+],
+"मिश्र": [
+"mixed",
+"adj"
+],
+"मिष्": [
+"blink",
+"verb"
+],
+"मीन": [
+"fish",
+"noun"
+],
+"मुकुट": [
+"crown",
+"noun"
+],
+"मुक्ता": [
+"pearl",
+"noun"
+],
+"मुक्ति": [
+"liberation",
+"noun"
+],
+"मुख": [
+"face",
+"noun"
+],
+"मुख्य": [
+"chief",
+"adj"
+],
+"मुच्": [
+"release",
+"verb"
+],
+"मुद्": [
+"rejoice",
+"verb"
+],
+"मुद्गर": [
+"mallet",
+"noun"
+],
+"मुनि": [
+"sage",
+"noun"
+],
+"मुष्": [
+"steal",
+"verb"
+],
+"मुष्टि": [
+"fist",
+"noun"
+],
+"मुसल": [
+"pestle",
+"noun"
+],
+"मुहुर्": [
+"repeatedly",
+"ind"
+],
+"मुहूर्त": [
+"moment",
+"noun"
+],
+"मुह्": [
+"be bewildered",
+"verb"
+],
+"मूत्र": [
+"urine",
+"noun"
+],
+"मूर्ख": [
+"foolish",
+"adj"
+],
+"मूर्छय्": [
+"stupefy",
+"verb"
+],
+"मूर्छ्": [
+"faint",
+"verb"
+],
+"मूर्ति": [
+"form",
+"noun"
+],
+"मूर्तिमत्": [
+"embodied",
+"adj"
+],
+"मूर्धज": [
+"hair",
+"noun"
+],
+"मूर्धन्": [
+"head",
+"noun"
+],
+"मूल": [
+"root",
+"noun"
+],
+"मूल्य": [
+"price",
+"noun"
+],
+"मूषक": [
+"mouse",
+"noun"
+],
+"मृ": [
+"die",
+"verb"
+],
+"मृग": [
+"deer",
+"noun"
+],
+"मृगया": [
+"hunting",
+"noun"
+],
+"मृगय्": [
+"seek",
+"verb"
+],
+"मृज्": [
+"wipe",
+"verb"
+],
+"मृत्यु": [
+"death",
+"noun"
+],
+"मृदङ्ग": [
+"drum",
+"noun"
+],
+"मृदु": [
+"soft",
+"adj"
+],
+"मृद्": [
+"crush",
+"verb"
+],
+"मृध": [
+"battle",
+"noun"
+],
+"मृषा": [
+"falsely",
+"ind"
+],
+"मृष्": [
+"endure",
+"verb"
+],
+"मेखला": [
+"girdle",
+"noun"
+],
+"मेघ": [
+"cloud",
+"noun"
+],
+"मेदिनी": [
+"earth",
+"noun"
+],
+"मेधा": [
+"intelligence",
+"noun"
+],
+"मेधाविन्": [
+"wise",
+"adj"
+],
+"मेध्य": [
+"pure",
+"adj"
+],
+"मेनका": [
+"Menakā",
+"name"
+],
+"मेरु": [
+"Meru",
+"name"
+],
+"मैत्र": [
+"friendly",
+"adj"
+],
+"मैत्री": [
+"friendliness",
+"noun"
+],
+"मैत्रेय": [
+"Maitreya",
+"name"
+],
+"मैथिली": [
+"Maithilī",
+"name"
+],
+"मैथुन": [
+"sexual union",
+"noun"
+],
+"मोक्ष": [
+"liberation",
+"noun"
+],
+"मोक्षय्": [
+"free",
+"verb"
+],
+"मोघ": [
+"vain",
+"adj"
+],
+"मोचय्": [
+"set free",
+"verb"
+],
+"मोह": [
+"delusion",
+"noun"
+],
+"मोहय्": [
+"bewilder",
+"verb"
+],
+"मौन": [
+"silence",
+"noun"
+],
+"म्लेच्छ": [
+"barbarian",
+"noun"
+],
+"यक्ष": [
+"yakṣa",
+"noun"
+],
+"यजुस्": [
+"yajus",
+"noun"
+],
+"यज्": [
+"sacrifice",
+"verb"
+],
+"यज्ञ": [
+"sacrifice",
+"noun"
+],
+"यज्वन्": [
+"sacrificer",
+"noun"
+],
+"यतस्": [
+"whence",
+"ind"
+],
+"यति": [
+"ascetic",
+"noun"
+],
+"यत्": [
+"that",
+"ind"
+],
+"यत्न": [
+"effort",
+"noun"
+],
+"यत्र": [
+"where",
+"ind"
+],
+"यथा": [
+"as",
+"ind"
+],
+"यथाकाम": [
+"as desired",
+"adj"
+],
+"यथाक्रमम्": [
+"in order",
+"ind"
+],
+"यथागत": [
+"as come",
+"adj"
+],
+"यथातत्त्वम्": [
+"truly",
+"ind"
+],
+"यथातथ": [
+"true",
+"adj"
+],
+"यथान्यायम्": [
+"properly",
+"ind"
+],
+"यथार्ह": [
+"fitting",
+"adj"
+],
+"यथावत्": [
+"properly",
+"ind"
+],
+"यथाविधि": [
+"as prescribed",
+"ind"
+],
+"यथावृत्त": [
+"as happened",
+"adj"
+],
+"यथाशक्ति": [
+"as able",
+"ind"
+],
+"यथासुखम्": [
+"at ease",
+"ind"
+],
+"यथेष्ट": [
+"as wished",
+"adj"
+],
+"यथोक्तम्": [
+"as said",
+"ind"
+],
+"यदा": [
+"when",
+"ind"
+],
+"यदि": [
+"if",
+"ind"
+],
+"यदु": [
+"Yadu",
+"name"
+],
+"यदृच्छा": [
+"chance",
+"noun"
+],
+"यद्": [
+"which",
+"pron"
+],
+"यन्तृ": [
+"driver",
+"noun"
+],
+"यन्त्र": [
+"device",
+"noun"
+],
+"यम": [
+"Yama",
+"name"
+],
+"यमुना": [
+"Yamunā",
+"name"
+],
+"यम्": [
+"restrain",
+"verb"
+],
+"ययाति": [
+"Yayāti",
+"name"
+],
+"यव": [
+"barley",
+"noun"
+],
+"यवन": [
+"Yavana",
+"name"
+],
+"यवीयस्": [
+"younger",
+"adj"
+],
+"यशस्": [
+"fame",
+"noun"
+],
+"यशस्विन्": [
+"famous",
+"adj"
+],
+"यष्टि": [
+"staff",
+"noun"
+],
+"यस्मात्": [
+"because",
+"ind"
+],
+"या": [
+"go",
+"verb"
+],
+"याच्": [
+"beg",
+"verb"
+],
+"याजय्": [
+"officiate",
+"verb"
+],
+"यात्रा": [
+"journey",
+"noun"
+],
+"यादव": [
+"Yādava",
+"name"
+],
+"यादृश": [
+"such as",
+"adj"
+],
+"यान": [
+"vehicle",
+"noun"
+],
+"यावत्": [
+"as much as",
+"ind"
+],
+"युक्त": [
+"engaged",
+"adj"
+],
+"युक्ति": [
+"reasoning",
+"noun"
+],
+"युग": [
+"age",
+"noun"
+],
+"युगपद्": [
+"simultaneously",
+"ind"
+],
+"युगान्त": [
+"end of age",
+"noun"
+],
+"युज्": [
+"join",
+"verb"
+],
+"युत": [
+"joined",
+"adj"
+],
+"युद्ध": [
+"battle",
+"noun"
+],
+"युधिष्ठिर": [
+"Yudhiṣṭhira",
+"name"
+],
+"युध्": [
+"fight",
+"verb"
+],
+"युयुत्सु": [
+"Yuyutsu",
+"name"
+],
+"युयुधान": [
+"Yuyudhāna",
+"name"
+],
+"युवन्": [
+"young man",
+"noun"
+],
+"यूथ": [
+"herd",
+"noun"
+],
+"यूथप": [
+"herd leader",
+"noun"
+],
+"यूप": [
+"sacrificial post",
+"noun"
+],
+"येन": [
+"whereby",
+"ind"
+],
+"योग": [
+"yoga",
+"noun"
+],
+"योगिन्": [
+"yogin",
+"noun"
+],
+"योग्य": [
+"fit",
+"adj"
+],
+"योजन": [
+"yojana",
+"noun"
+],
+"योजय्": [
+"join",
+"verb"
+],
+"योध": [
+"warrior",
+"noun"
+],
+"योधय्": [
+"fight",
+"verb"
+],
+"योधिन्": [
+"fighting",
+"adj"
+],
+"योनि": [
+"womb",
+"noun"
+],
+"योषित्": [
+"woman",
+"noun"
+],
+"यौगंधरायण": [
+"Yaugandharāyaṇa",
+"name"
+],
+"यौवन": [
+"youth",
+"noun"
+],
+"यौवराज्य": [
+"heirship",
+"noun"
+],
+"रंहस्": [
+"impetus",
+"noun"
+],
+"रक्त": [
+"red",
+"adj"
+],
+"रक्षण": [
+"protection",
+"noun"
+],
+"रक्षस्": [
+"demon",
+"noun"
+],
+"रक्षा": [
+"protection",
+"noun"
+],
+"रक्षिन्": [
+"protecting",
+"adj"
+],
+"रक्ष्": [
+"protect",
+"verb"
+],
+"रघुनन्दन": [
+"Raghunandana",
+"name"
+],
+"रङ्ग": [
+"stage",
+"noun"
+],
+"रचय्": [
+"compose",
+"verb"
+],
+"रजत": [
+"silver",
+"noun"
+],
+"रजनी": [
+"night",
+"noun"
+],
+"रजस्": [
+"dust",
+"noun"
+],
+"रज्जु": [
+"rope",
+"noun"
+],
+"रञ्जय्": [
+"dye",
+"verb"
+],
+"रञ्ज्": [
+"colour",
+"verb"
+],
+"रण": [
+"battle",
+"noun"
+],
+"रति": [
+"pleasure",
+"noun"
+],
+"रत्न": [
+"jewel",
+"noun"
+],
+"रथ": [
+"chariot",
+"noun"
+],
+"रथिन्": [
+"chariot warrior",
+"noun"
+],
+"रथोपस्थ": [
+"chariot seat",
+"noun"
+],
+"रभस": [
+"impetuous",
+"adj"
+],
+"रमणीय": [
+"pleasing",
+"adj"
+],
+"रमय्": [
+"gladden",
+"verb"
+],
+"रम्": [
+"delight",
+"verb"
+],
+"रम्भा": [
+"Rambhā",
+"name"
+],
+"रम्य": [
+"delightful",
+"adj"
+],
+"रव": [
+"cry",
+"noun"
+],
+"रवि": [
+"sun",
+"noun"
+],
+"रश्मि": [
+"ray",
+"noun"
+],
+"रस": [
+"taste",
+"noun"
+],
+"रसातल": [
+"netherworld",
+"noun"
+],
+"रहस्": [
+"secret",
+"noun"
+],
+"रहस्य": [
+"secret",
+"noun"
+],
+"रहित": [
+"devoid",
+"adj"
+],
+"राक्षस": [
+"demon",
+"noun"
+],
+"राक्षसी": [
+"demoness",
+"noun"
+],
+"राग": [
+"passion",
+"noun"
+],
+"राघव": [
+"Rāghava",
+"name"
+],
+"राज": [
+"king",
+"noun"
+],
+"राजत": [
+"silver",
+"adj"
+],
+"राजन्": [
+"king",
+"noun"
+],
+"राजन्य": [
+"noble",
+"noun"
+],
+"राजमार्ग": [
+"highway",
+"noun"
+],
+"राजर्षि": [
+"royal sage",
+"noun"
+],
+"राजस": [
+"rajasic",
+"adj"
+],
+"राजसूय": [
+"rājasūya",
+"noun"
+],
+"राजीव": [
+"lotus",
+"noun"
+],
+"राज्": [
+"shine",
+"verb"
+],
+"राज्ञी": [
+"queen",
+"noun"
+],
+"राज्य": [
+"kingdom",
+"noun"
+],
+"रात्र": [
+"night",
+"noun"
+],
+"रात्रि": [
+"night",
+"noun"
+],
+"राधेय": [
+"Rādheya",
+"name"
+],
+"राम": [
+"Rāma",
+"name"
+],
+"रावण": [
+"Rāvaṇa",
+"name"
+],
+"रावणि": [
+"Rāvaṇi",
+"name"
+],
+"राशि": [
+"heap",
+"noun"
+],
+"राष्ट्र": [
+"kingdom",
+"noun"
+],
+"राहु": [
+"Rāhu",
+"name"
+],
+"रिपु": [
+"enemy",
+"noun"
+],
+"रुक्म": [
+"gold",
+"noun"
+],
+"रुक्मिणी": [
+"Rukmiṇī",
+"name"
+],
+"रुचि": [
+"liking",
+"noun"
+],
+"रुचिर": [
+"charming",
+"adj"
+],
+"रुच्": [
+"shine",
+"verb"
+],
+"रुज्": [
+"break",
+"verb"
+],
+"रुद्": [
+"weep",
+"verb"
+],
+"रुद्र": [
+"Rudra",
+"name"
+],
+"रुधिर": [
+"blood",
+"noun"
+],
+"रुध्": [
+"obstruct",
+"verb"
+],
+"रुरु": [
+"Ruru",
+"name"
+],
+"रुष्": [
+"be angry",
+"verb"
+],
+"रूक्ष": [
+"rough",
+"adj"
+],
+"रूप": [
+"form",
+"noun"
+],
+"रूपवत्": [
+"beautiful",
+"adj"
+],
+"रूपिन्": [
+"embodied",
+"adj"
+],
+"रेणु": [
+"dust",
+"noun"
+],
+"रेतस्": [
+"semen",
+"noun"
+],
+"रोग": [
+"disease",
+"noun"
+],
+"रोचय्": [
+"please",
+"verb"
+],
+"रोमन्": [
+"body hair",
+"noun"
+],
+"रोष": [
+"anger",
+"noun"
+],
+"रोहिणी": [
+"Rohiṇī",
+"name"
+],
+"रौद्र": [
+"fierce",
+"adj"
+],
+"रौहिणेय": [
+"Rauhiṇeya",
+"name"
+],
+"लक्ष": [
+"target",
+"noun"
+],
+"लक्षण": [
+"mark",
+"noun"
+],
+"लक्षय्": [
+"observe",
+"verb"
+],
+"लक्ष्मण": [
+"Lakṣmaṇa",
+"name"
+],
+"लक्ष्मी": [
+"prosperity",
+"noun"
+],
+"लक्ष्य": [
+"aim",
+"noun"
+],
+"लग्": [
+"stick",
+"verb"
+],
+"लघु": [
+"light",
+"adj"
+],
+"लङ्का": [
+"Laṅkā",
+"name"
+],
+"लङ्घय्": [
+"leap over",
+"verb"
+],
+"लज्जा": [
+"shame",
+"noun"
+],
+"लता": [
+"creeper",
+"noun"
+],
+"लभ्": [
+"obtain",
+"verb"
+],
+"लम्ब्": [
+"hang",
+"verb"
+],
+"लय": [
+"absorption",
+"noun"
+],
+"ललाट": [
+"forehead",
+"noun"
+],
+"लल्": [
+"play",
+"verb"
+],
+"लव": [
+"bit",
+"noun"
+],
+"लवण": [
+"salt",
+"noun"
+],
+"लाघव": [
+"dexterity",
+"noun"
+],
+"लाङ्गूल": [
+"tail",
+"noun"
+],
+"लाभ": [
+"gain",
+"noun"
+],
+"लालस": [
+"eager",
+"adj"
+],
+"लिख्": [
+"write",
+"verb"
+],
+"लिङ्ग": [
+"mark",
+"noun"
+],
+"लिप्": [
+"smear",
+"verb"
+],
+"ली": [
+"dissolve",
+"verb"
+],
+"लीला": [
+"play",
+"noun"
+],
+"लुब्धक": [
+"hunter",
+"noun"
+],
+"लुभ्": [
+"be greedy",
+"verb"
+],
+"लोक": [
+"world",
+"noun"
+],
+"लोकपाल": [
+"world guardian",
+"noun"
+],
+"लोचन": [
+"eye",
+"noun"
+],
+"लोभ": [
+"greed",
+"noun"
+],
+"लोमन्": [
+"body hair",
+"noun"
+],
+"लोमश": [
+"Lomaśa",
+"name"
+],
+"लोल": [
+"restless",
+"adj"
+],
+"लोह": [
+"iron",
+"noun"
+],
+"लोहित": [
+"red",
+"adj"
+],
+"वंश": [
+"lineage",
+"noun"
+],
+"वक्तृ": [
+"speaker",
+"noun"
+],
+"वक्त्र": [
+"mouth",
+"noun"
+],
+"वक्र": [
+"crooked",
+"adj"
+],
+"वक्षस्": [
+"breast",
+"noun"
+],
+"वचन": [
+"word",
+"noun"
+],
+"वचस्": [
+"word",
+"noun"
+],
+"वच्": [
+"speak",
+"verb"
+],
+"वज्र": [
+"thunderbolt",
+"noun"
+],
+"वज्रिन्": [
+"Vajrin",
+"name"
+],
+"वञ्चय्": [
+"deceive",
+"verb"
+],
+"वट": [
+"banyan",
+"noun"
+],
+"वणिज्": [
+"merchant",
+"noun"
+],
+"वत्": [
+"like",
+"ind"
+],
+"वत्स": [
+"child",
+"noun"
+],
+"वत्सर": [
+"year",
+"noun"
+],
+"वत्सल": [
+"affectionate",
+"adj"
+],
+"वदन": [
+"face",
+"noun"
+],
+"वद्": [
+"speak",
+"verb"
+],
+"वध": [
+"killing",
+"noun"
+],
+"वधू": [
+"bride",
+"noun"
+],
+"वध्": [
+"kill",
+"verb"
+],
+"वन": [
+"forest",
+"noun"
+],
+"वनस्पति": [
+"tree",
+"noun"
+],
+"वनौकस्": [
+"forest dweller",
+"noun"
+],
+"वन्द्": [
+"salute",
+"verb"
+],
+"वन्य": [
+"wild",
+"adj"
+],
+"वपुस्": [
+"body",
+"noun"
+],
+"वप्": [
+"sow",
+"verb"
+],
+"वम्": [
+"vomit",
+"verb"
+],
+"वयस्": [
+"age",
+"noun"
+],
+"वयस्य": [
+"friend",
+"noun"
+],
+"वर": [
+"boon",
+"noun"
+],
+"वरय्": [
+"choose",
+"verb"
+],
+"वरवर्णिनी": [
+"beautiful woman",
+"noun"
+],
+"वरारोह": [
+"fair-hipped",
+"adj"
+],
+"वराह": [
+"boar",
+"noun"
+],
+"वरिष्ठ": [
+"best",
+"adj"
+],
+"वरुण": [
+"Varuṇa",
+"name"
+],
+"वर्ग": [
+"group",
+"noun"
+],
+"वर्चस्": [
+"splendour",
+"noun"
+],
+"वर्जय्": [
+"avoid",
+"verb"
+],
+"वर्ण": [
+"color",
+"noun"
+],
+"वर्णय्": [
+"describe",
+"verb"
+],
+"वर्तय्": [
+"turn",
+"verb"
+],
+"वर्तिन्": [
+"abiding",
+"adj"
+],
+"वर्त्मन्": [
+"path",
+"noun"
+],
+"वर्धन": [
+"increasing",
+"adj"
+],
+"वर्धय्": [
+"increase",
+"verb"
+],
+"वर्मन्": [
+"mail",
+"noun"
+],
+"वर्य": [
+"excellent",
+"adj"
+],
+"वर्ष": [
+"year",
+"noun"
+],
+"वर्षा": [
+"rainy season",
+"noun"
+],
+"वर्षिन्": [
+"raining",
+"adj"
+],
+"वलय": [
+"bracelet",
+"noun"
+],
+"वल्कल": [
+"bark garment",
+"noun"
+],
+"वल्मीक": [
+"anthill",
+"noun"
+],
+"वल्लभ": [
+"beloved",
+"adj"
+],
+"वश": [
+"control",
+"noun"
+],
+"वशिन्": [
+"self-controlled",
+"adj"
+],
+"वश्य": [
+"subject",
+"adj"
+],
+"वसति": [
+"lodging",
+"noun"
+],
+"वसन": [
+"garment",
+"noun"
+],
+"वसन्त": [
+"spring",
+"noun"
+],
+"वसिष्ठ": [
+"Vasiṣṭha",
+"name"
+],
+"वसु": [
+"wealth",
+"noun"
+],
+"वसुंधरा": [
+"earth",
+"noun"
+],
+"वसुदेव": [
+"Vasudeva",
+"name"
+],
+"वसुधा": [
+"earth",
+"noun"
+],
+"वस्": [
+"dwell",
+"verb"
+],
+"वस्तु": [
+"thing",
+"noun"
+],
+"वस्त्र": [
+"garment",
+"noun"
+],
+"वह": [
+"carrying",
+"adj"
+],
+"वह्": [
+"carry",
+"verb"
+],
+"वह्नि": [
+"fire",
+"noun"
+],
+"वा": [
+"or",
+"ind"
+],
+"वाक्य": [
+"speech",
+"noun"
+],
+"वाचय्": [
+"recite",
+"verb"
+],
+"वाच्": [
+"speech",
+"noun"
+],
+"वाजिन्": [
+"horse",
+"noun"
+],
+"वाञ्छ्": [
+"desire",
+"verb"
+],
+"वाट": [
+"enclosure",
+"noun"
+],
+"वाणी": [
+"speech",
+"noun"
+],
+"वात": [
+"wind",
+"noun"
+],
+"वाद": [
+"discourse",
+"noun"
+],
+"वादय्": [
+"play",
+"verb"
+],
+"वादित्र": [
+"musical instrument",
+"noun"
+],
+"वादिन्": [
+"speaking",
+"adj"
+],
+"वाद्य": [
+"instrument",
+"noun"
+],
+"वानर": [
+"monkey",
+"noun"
+],
+"वापी": [
+"pond",
+"noun"
+],
+"वाम": [
+"left",
+"adj"
+],
+"वामदेव": [
+"Vāmadeva",
+"name"
+],
+"वामन": [
+"dwarf",
+"noun"
+],
+"वायस": [
+"crow",
+"noun"
+],
+"वायु": [
+"wind",
+"noun"
+],
+"वारण": [
+"elephant",
+"noun"
+],
+"वारय्": [
+"restrain",
+"verb"
+],
+"वाराणसी": [
+"Vārāṇasī",
+"name"
+],
+"वाराह": [
+"of the boar",
+"adj"
+],
+"वारि": [
+"water",
+"noun"
+],
+"वारुण": [
+"of Varuṇa",
+"adj"
+],
+"वार्त्ता": [
+"news",
+"noun"
+],
+"वार्षिक": [
+"rainy",
+"adj"
+],
+"वार्ष्णेय": [
+"Vārṣṇeya",
+"name"
+],
+"वालिन्": [
+"Vālin",
+"name"
+],
+"वास": [
+"dwelling",
+"noun"
+],
+"वासय्": [
+"settle",
+"verb"
+],
+"वासव": [
+"Vāsava",
+"name"
+],
+"वासवदत्ता": [
+"Vāsavadattā",
+"name"
+],
+"वासस्": [
+"garment",
+"noun"
+],
+"वासिन्": [
+"dwelling",
+"adj"
+],
+"वासुकि": [
+"Vāsuki",
+"name"
+],
+"वासुदेव": [
+"Vāsudeva",
+"name"
+],
+"वाह": [
+"carrier",
+"noun"
+],
+"वाहन": [
+"vehicle",
+"noun"
+],
+"वाहिनी": [
+"host",
+"noun"
+],
+"वाह्लीक": [
+"Vāhlīka",
+"name"
+],
+"विंशति": [
+"twenty",
+"num"
+],
+"विकर्ण": [
+"Vikarṇa",
+"name"
+],
+"विकार": [
+"change",
+"noun"
+],
+"विकृ": [
+"change",
+"verb"
+],
+"विकृष्": [
+"draw",
+"verb"
+],
+"विक्रम": [
+"valor",
+"noun"
+],
+"विक्रम्": [
+"stride",
+"verb"
+],
+"विक्रय": [
+"sale",
+"noun"
+],
+"विक्री": [
+"sell",
+"verb"
+],
+"विक्लव": [
+"distraught",
+"adj"
+],
+"विक्षन्": [
+"wound",
+"verb"
+],
+"विक्षिप्": [
+"scatter",
+"verb"
+],
+"विख्या": [
+"proclaim",
+"verb"
+],
+"विगम्": [
+"depart",
+"verb"
+],
+"विगर्ह्": [
+"censure",
+"verb"
+],
+"विगाह्": [
+"dive",
+"verb"
+],
+"विग्रह": [
+"war",
+"noun"
+],
+"विघ्न": [
+"obstacle",
+"noun"
+],
+"विचक्षण": [
+"skilled",
+"adj"
+],
+"विचर्": [
+"wander",
+"verb"
+],
+"विचार": [
+"deliberation",
+"noun"
+],
+"विचारणा": [
+"deliberation",
+"noun"
+],
+"विचारय्": [
+"ponder",
+"verb"
+],
+"विचि": [
+"search",
+"verb"
+],
+"विचित्र": [
+"wonderful",
+"adj"
+],
+"विचिन्तय्": [
+"reflect",
+"verb"
+],
+"विचेतस्": [
+"bewildered",
+"adj"
+],
+"विचेष्ट्": [
+"struggle",
+"verb"
+],
+"विजन": [
+"solitary",
+"adj"
+],
+"विजन्": [
+"be born",
+"verb"
+],
+"विजय": [
+"victory",
+"noun"
+],
+"विजि": [
+"conquer",
+"verb"
+],
+"विज्ञपय्": [
+"inform",
+"verb"
+],
+"विज्ञा": [
+"understand",
+"verb"
+],
+"विज्ञान": [
+"knowledge",
+"noun"
+],
+"विज्ञापय्": [
+"inform",
+"verb"
+],
+"वितथ": [
+"false",
+"adj"
+],
+"वितन्": [
+"spread",
+"verb"
+],
+"वितान": [
+"expanse",
+"noun"
+],
+"वित्त": [
+"wealth",
+"noun"
+],
+"वित्तम": [
+"most knowing",
+"adj"
+],
+"वित्रस्": [
+"be afraid",
+"verb"
+],
+"विदर्भ": [
+"Vidarbha",
+"name"
+],
+"विदारय्": [
+"tear open",
+"verb"
+],
+"विदुर": [
+"Vidura",
+"name"
+],
+"विदूषक": [
+"jester",
+"noun"
+],
+"विदृश्": [
+"appear",
+"verb"
+],
+"विदेह": [
+"Videha",
+"name"
+],
+"विद्": [
+"know",
+"verb"
+],
+"विद्या": [
+"knowledge",
+"noun"
+],
+"विद्याधर": [
+"vidyādhara",
+"noun"
+],
+"विद्युत्": [
+"lightning",
+"noun"
+],
+"विद्रु": [
+"flee",
+"verb"
+],
+"विद्वस्": [
+"learned",
+"adj"
+],
+"विधम्": [
+"disperse",
+"verb"
+],
+"विधा": [
+"arrange",
+"verb"
+],
+"विधातृ": [
+"creator",
+"noun"
+],
+"विधान": [
+"rule",
+"noun"
+],
+"विधि": [
+"rule",
+"noun"
+],
+"विधिवत्": [
+"duly",
+"ind"
+],
+"विधू": [
+"shake",
+"verb"
+],
+"विध्वंस्": [
+"crumble",
+"verb"
+],
+"विनता": [
+"Vinatā",
+"name"
+],
+"विनद्": [
+"roar",
+"verb"
+],
+"विनय": [
+"modesty",
+"noun"
+],
+"विनश्": [
+"perish",
+"verb"
+],
+"विना": [
+"without",
+"ind"
+],
+"विनाकृत": [
+"bereft",
+"adj"
+],
+"विनाश": [
+"destruction",
+"noun"
+],
+"विनाशन": [
+"destructive",
+"adj"
+],
+"विनाशय्": [
+"destroy",
+"verb"
+],
+"विनिःसृ": [
+"go out",
+"verb"
+],
+"विनिपातय्": [
+"fell",
+"verb"
+],
+"विनिर्मा": [
+"create",
+"verb"
+],
+"विनिर्मुच्": [
+"release",
+"verb"
+],
+"विनिवृत्": [
+"return",
+"verb"
+],
+"विनिश्चय": [
+"decision",
+"noun"
+],
+"विनिश्चि": [
+"determine",
+"verb"
+],
+"विनिहन्": [
+"slay",
+"verb"
+],
+"विनी": [
+"remove",
+"verb"
+],
+"विन्ध्य": [
+"Vindhya",
+"name"
+],
+"विन्यस्": [
+"set out",
+"verb"
+],
+"विपद्": [
+"perish",
+"verb"
+],
+"विपरीत": [
+"reversed",
+"adj"
+],
+"विपर्यय": [
+"reversal",
+"noun"
+],
+"विपुल": [
+"vast",
+"adj"
+],
+"विप्": [
+"tremble",
+"verb"
+],
+"विप्र": [
+"brahmin",
+"noun"
+],
+"विप्रकृ": [
+"offend",
+"verb"
+],
+"विप्रर्षि": [
+"brahmin sage",
+"noun"
+],
+"विप्रिय": [
+"displeasure",
+"noun"
+],
+"विबुध": [
+"god",
+"noun"
+],
+"विभज्": [
+"divide",
+"verb"
+],
+"विभव": [
+"power",
+"noun"
+],
+"विभा": [
+"shine",
+"verb"
+],
+"विभाग": [
+"division",
+"noun"
+],
+"विभावसु": [
+"Vibhāvasu",
+"name"
+],
+"विभिद्": [
+"split",
+"verb"
+],
+"विभीषण": [
+"Vibhīṣaṇa",
+"name"
+],
+"विभु": [
+"mighty",
+"adj"
+],
+"विभूति": [
+"majesty",
+"noun"
+],
+"विभूषण": [
+"ornament",
+"noun"
+],
+"विभूषय्": [
+"adorn",
+"verb"
+],
+"विभ्रम": [
+"confusion",
+"noun"
+],
+"विभ्राज्": [
+"shine",
+"verb"
+],
+"विमनस्": [
+"dejected",
+"adj"
+],
+"विमर्द": [
+"crushing",
+"noun"
+],
+"विमल": [
+"pure",
+"adj"
+],
+"विमान": [
+"aerial car",
+"noun"
+],
+"विमुख": [
+"averse",
+"adj"
+],
+"विमुच्": [
+"release",
+"verb"
+],
+"विमुह्": [
+"be bewildered",
+"verb"
+],
+"विमृश्": [
+"consider",
+"verb"
+],
+"विमोहय्": [
+"bewilder",
+"verb"
+],
+"वियन्त्": [
+"sky",
+"noun"
+],
+"वियुज्": [
+"separate",
+"verb"
+],
+"वियोग": [
+"separation",
+"noun"
+],
+"विरजस्": [
+"pure",
+"adj"
+],
+"विरञ्ज्": [
+"lose colour",
+"verb"
+],
+"विरथ": [
+"chariotless",
+"adj"
+],
+"विरम्": [
+"cease",
+"verb"
+],
+"विरह": [
+"separation",
+"noun"
+],
+"विराज्": [
+"shine",
+"verb"
+],
+"विराट": [
+"Virāṭa",
+"name"
+],
+"विरुच्": [
+"gleam",
+"verb"
+],
+"विरुध्": [
+"oppose",
+"verb"
+],
+"विरूप": [
+"deformed",
+"adj"
+],
+"विरूपाक्ष": [
+"Virūpākṣa",
+"name"
+],
+"विरोध": [
+"opposition",
+"noun"
+],
+"विलप्": [
+"lament",
+"verb"
+],
+"विलास": [
+"dalliance",
+"noun"
+],
+"विलोकय्": [
+"behold",
+"verb"
+],
+"विवर": [
+"hole",
+"noun"
+],
+"विवर्जय्": [
+"avoid",
+"verb"
+],
+"विवर्ण": [
+"pale",
+"adj"
+],
+"विवर्धन": [
+"increasing",
+"adj"
+],
+"विवश": [
+"powerless",
+"adj"
+],
+"विवस्वन्त्": [
+"Vivasvat",
+"name"
+],
+"विवाद": [
+"dispute",
+"noun"
+],
+"विवाह": [
+"marriage",
+"noun"
+],
+"विविक्त": [
+"secluded",
+"adj"
+],
+"विविध": [
+"various",
+"adj"
+],
+"विवृ": [
+"open",
+"verb"
+],
+"विवृत्": [
+"turn",
+"verb"
+],
+"विवृध्": [
+"grow",
+"verb"
+],
+"विवेक": [
+"discernment",
+"noun"
+],
+"विशारद": [
+"expert",
+"adj"
+],
+"विशाल": [
+"vast",
+"adj"
+],
+"विशिख": [
+"arrow",
+"noun"
+],
+"विशिष्": [
+"distinguish",
+"verb"
+],
+"विशुध्": [
+"become pure",
+"verb"
+],
+"विशृ": [
+"shatter",
+"verb"
+],
+"विशेष": [
+"distinction",
+"noun"
+],
+"विशेषतः": [
+"especially",
+"ind"
+],
+"विशेषेण": [
+"especially",
+"ind"
+],
+"विशोक": [
+"sorrowless",
+"adj"
+],
+"विश्": [
+"enter",
+"verb"
+],
+"विश्रम्": [
+"rest",
+"verb"
+],
+"विश्रम्भ्": [
+"trust",
+"verb"
+],
+"विश्रु": [
+"become famous",
+"verb"
+],
+"विश्व": [
+"all",
+"adj"
+],
+"विश्वकर्मन्": [
+"Viśvakarman",
+"name"
+],
+"विश्वस्": [
+"trust",
+"verb"
+],
+"विश्वात्मन्": [
+"universal self",
+"noun"
+],
+"विश्वामित्र": [
+"Viśvāmitra",
+"name"
+],
+"विश्वावसु": [
+"Viśvāvasu",
+"name"
+],
+"विश्वास": [
+"trust",
+"noun"
+],
+"विष": [
+"poison",
+"noun"
+],
+"विषद्": [
+"despond",
+"verb"
+],
+"विषम": [
+"uneven",
+"adj"
+],
+"विषय": [
+"realm",
+"noun"
+],
+"विषह्": [
+"endure",
+"verb"
+],
+"विषाण": [
+"horn",
+"noun"
+],
+"विषाद": [
+"despair",
+"noun"
+],
+"विष्ठा": [
+"stand",
+"verb"
+],
+"विष्णु": [
+"Viṣṇu",
+"name"
+],
+"विसंज्ञ": [
+"unconscious",
+"adj"
+],
+"विसर्ग": [
+"release",
+"noun"
+],
+"विसर्जय्": [
+"dismiss",
+"verb"
+],
+"विसृज्": [
+"release",
+"verb"
+],
+"विस्तर": [
+"detail",
+"noun"
+],
+"विस्तार": [
+"extent",
+"noun"
+],
+"विस्तृ": [
+"spread",
+"verb"
+],
+"विस्फारय्": [
+"stretch",
+"verb"
+],
+"विस्मय": [
+"astonishment",
+"noun"
+],
+"विस्मि": [
+"marvel",
+"verb"
+],
+"विस्मृ": [
+"forget",
+"verb"
+],
+"विहंगम": [
+"bird",
+"noun"
+],
+"विहग": [
+"bird",
+"noun"
+],
+"विहन्": [
+"shatter",
+"verb"
+],
+"विहा": [
+"leave",
+"verb"
+],
+"विहार": [
+"recreation",
+"noun"
+],
+"विहृ": [
+"roam",
+"verb"
+],
+"विह्वल": [
+"distraught",
+"adj"
+],
+"वी": [
+"go",
+"verb"
+],
+"वीक्ष्": [
+"behold",
+"verb"
+],
+"वीणा": [
+"lute",
+"noun"
+],
+"वीर": [
+"hero",
+"noun"
+],
+"वीरुध्": [
+"creeper",
+"noun"
+],
+"वीर्य": [
+"vigour",
+"noun"
+],
+"वीर्यवत्": [
+"mighty",
+"adj"
+],
+"वृ": [
+"choose",
+"verb"
+],
+"वृक": [
+"wolf",
+"noun"
+],
+"वृकोदर": [
+"Vṛkodara",
+"name"
+],
+"वृक्ष": [
+"tree",
+"noun"
+],
+"वृत्": [
+"turn",
+"verb"
+],
+"वृत्त": [
+"conduct",
+"noun"
+],
+"वृत्तान्त": [
+"account",
+"noun"
+],
+"वृत्ति": [
+"conduct",
+"noun"
+],
+"वृत्र": [
+"Vṛtra",
+"name"
+],
+"वृथक्": [
+"in vain",
+"ind"
+],
+"वृद्ध": [
+"old",
+"adj"
+],
+"वृद्धि": [
+"growth",
+"noun"
+],
+"वृध्": [
+"grow",
+"verb"
+],
+"वृन्द": [
+"multitude",
+"noun"
+],
+"वृष": [
+"bull",
+"noun"
+],
+"वृषध्वज": [
+"Vṛṣadhvaja",
+"name"
+],
+"वृषपर्वन्": [
+"Vṛṣaparvan",
+"name"
+],
+"वृषभ": [
+"bull",
+"noun"
+],
+"वृषसेन": [
+"Vṛṣasena",
+"name"
+],
+"वृष्": [
+"rain",
+"verb"
+],
+"वृष्टि": [
+"rain",
+"noun"
+],
+"वृष्णि": [
+"Vṛṣṇi",
+"name"
+],
+"वेग": [
+"speed",
+"noun"
+],
+"वेगवत्": [
+"swift",
+"adj"
+],
+"वेणु": [
+"bamboo",
+"noun"
+],
+"वेद": [
+"veda",
+"noun"
+],
+"वेदना": [
+"pain",
+"noun"
+],
+"वेदपारग": [
+"Veda scholar",
+"noun"
+],
+"वेदय्": [
+"make known",
+"verb"
+],
+"वेदाङ्ग": [
+"Veda limb",
+"noun"
+],
+"वेदि": [
+"altar",
+"noun"
+],
+"वेदिन्": [
+"knowing",
+"adj"
+],
+"वेन": [
+"Vena",
+"name"
+],
+"वेला": [
+"time",
+"noun"
+],
+"वेश्मन्": [
+"house",
+"noun"
+],
+"वेश्या": [
+"courtesan",
+"noun"
+],
+"वेष": [
+"dress",
+"noun"
+],
+"वेष्टय्": [
+"wrap",
+"verb"
+],
+"वै": [
+"indeed",
+"ind"
+],
+"वैकर्तन": [
+"Vaikartana",
+"name"
+],
+"वैडूर्य": [
+"beryl",
+"noun"
+],
+"वैदिक": [
+"Vedic",
+"adj"
+],
+"वैदेही": [
+"Vaidehī",
+"name"
+],
+"वैद्य": [
+"physician",
+"noun"
+],
+"वैनतेय": [
+"Vainateya",
+"name"
+],
+"वैन्य": [
+"Vainya",
+"name"
+],
+"वैर": [
+"enmity",
+"noun"
+],
+"वैराग्य": [
+"dispassion",
+"noun"
+],
+"वैरिन्": [
+"enemy",
+"noun"
+],
+"वैवस्वत": [
+"Vaivasvata",
+"name"
+],
+"वैशम्पायन": [
+"Vaiśampāyana",
+"name"
+],
+"वैशस": [
+"slaughter",
+"noun"
+],
+"वैश्य": [
+"vaiśya",
+"noun"
+],
+"वैश्रवण": [
+"Vaiśravaṇa",
+"name"
+],
+"वैश्वानर": [
+"Vaiśvānara",
+"name"
+],
+"वैष्णव": [
+"of Viṣṇu",
+"adj"
+],
+"व्यक्त": [
+"manifest",
+"adj"
+],
+"व्यजन": [
+"fan",
+"noun"
+],
+"व्यतिक्रम": [
+"transgression",
+"noun"
+],
+"व्यतिक्रम्": [
+"pass beyond",
+"verb"
+],
+"व्यती": [
+"pass",
+"verb"
+],
+"व्यथा": [
+"pain",
+"noun"
+],
+"व्यथ्": [
+"tremble",
+"verb"
+],
+"व्यध्": [
+"pierce",
+"verb"
+],
+"व्यपोह्": [
+"remove",
+"verb"
+],
+"व्यय": [
+"loss",
+"noun"
+],
+"व्यवसा": [
+"resolve",
+"verb"
+],
+"व्यवसाय": [
+"resolve",
+"noun"
+],
+"व्यवस्था": [
+"remain",
+"verb"
+],
+"व्यवहार": [
+"conduct",
+"noun"
+],
+"व्यसन": [
+"misfortune",
+"noun"
+],
+"व्याकुल": [
+"agitated",
+"adj"
+],
+"व्याख्या": [
+"explain",
+"verb"
+],
+"व्याघ्र": [
+"tiger",
+"noun"
+],
+"व्याज": [
+"pretext",
+"noun"
+],
+"व्यादिश्": [
+"direct",
+"verb"
+],
+"व्याध": [
+"hunter",
+"noun"
+],
+"व्याधि": [
+"disease",
+"noun"
+],
+"व्याप्": [
+"pervade",
+"verb"
+],
+"व्याल": [
+"wild beast",
+"noun"
+],
+"व्यास": [
+"Vyāsa",
+"name"
+],
+"व्याहृ": [
+"utter",
+"verb"
+],
+"व्यूह": [
+"formation",
+"noun"
+],
+"व्यूह्": [
+"arrange",
+"verb"
+],
+"व्योमन्": [
+"sky",
+"noun"
+],
+"व्रज": [
+"cow pen",
+"noun"
+],
+"व्रज्": [
+"go",
+"verb"
+],
+"व्रण": [
+"wound",
+"noun"
+],
+"व्रत": [
+"vow",
+"noun"
+],
+"व्रात": [
+"band",
+"noun"
+],
+"व्रीडा": [
+"shame",
+"noun"
+],
+"व्रीड्": [
+"be ashamed",
+"verb"
+],
+"शंकर": [
+"Śaṅkara",
+"name"
+],
+"शंतनु": [
+"Śaṃtanu",
+"name"
+],
+"शंस्": [
+"praise",
+"verb"
+],
+"शकट": [
+"cart",
+"noun"
+],
+"शकुनि": [
+"Śakuni",
+"name"
+],
+"शकुन्तला": [
+"Śakuntalā",
+"name"
+],
+"शक्": [
+"be able",
+"verb"
+],
+"शक्ति": [
+"power",
+"noun"
+],
+"शक्तिदेव": [
+"Śaktideva",
+"name"
+],
+"शक्य": [
+"possible",
+"adj"
+],
+"शक्र": [
+"Śakra",
+"name"
+],
+"शङ्का": [
+"doubt",
+"noun"
+],
+"शङ्क्": [
+"suspect",
+"verb"
+],
+"शङ्ख": [
+"conch",
+"noun"
+],
+"शची": [
+"Śacī",
+"name"
+],
+"शचीपति": [
+"Śacīpati",
+"name"
+],
+"शठ": [
+"rogue",
+"noun"
+],
+"शत": [
+"hundred",
+"num"
+],
+"शतक्रतु": [
+"Śatakratu",
+"name"
+],
+"शतधा": [
+"hundredfold",
+"ind"
+],
+"शतशस्": [
+"by hundreds",
+"ind"
+],
+"शतानीक": [
+"Śatānīka",
+"name"
+],
+"शत्रु": [
+"enemy",
+"noun"
+],
+"शत्रुघ्न": [
+"Śatrughna",
+"name"
+],
+"शनकैस्": [
+"slowly",
+"ind"
+],
+"शनैस्": [
+"slowly",
+"ind"
+],
+"शप्": [
+"curse",
+"verb"
+],
+"शबर": [
+"Śabara",
+"name"
+],
+"शब्द": [
+"sound",
+"noun"
+],
+"शम": [
+"calm",
+"noun"
+],
+"शमय्": [
+"pacify",
+"verb"
+],
+"शम्": [
+"be calm",
+"verb"
+],
+"शम्बर": [
+"Śambara",
+"name"
+],
+"शम्भु": [
+"Śambhu",
+"name"
+],
+"शयन": [
+"bed",
+"noun"
+],
+"शय्या": [
+"bed",
+"noun"
+],
+"शर": [
+"arrow",
+"noun"
+],
+"शरण": [
+"refuge",
+"noun"
+],
+"शरण्य": [
+"protector",
+"noun"
+],
+"शरद्": [
+"autumn",
+"noun"
+],
+"शरभ": [
+"mythical beast",
+"noun"
+],
+"शरासन": [
+"bow",
+"noun"
+],
+"शरीर": [
+"body",
+"noun"
+],
+"शरीरिन्": [
+"embodied being",
+"noun"
+],
+"शर्मन्": [
+"refuge",
+"noun"
+],
+"शर्मिष्ठा": [
+"Śarmiṣṭhā",
+"name"
+],
+"शर्व": [
+"Śarva",
+"name"
+],
+"शर्वरी": [
+"night",
+"noun"
+],
+"शलभ": [
+"locust",
+"noun"
+],
+"शल्य": [
+"Śalya",
+"name"
+],
+"शश": [
+"hare",
+"noun"
+],
+"शशाङ्क": [
+"moon",
+"noun"
+],
+"शशिन्": [
+"moon",
+"noun"
+],
+"शश्वत्": [
+"always",
+"ind"
+],
+"शस्त्र": [
+"weapon",
+"noun"
+],
+"शस्त्रभृत्": [
+"weapon bearer",
+"noun"
+],
+"शा": [
+"sharpen",
+"verb"
+],
+"शांतनव": [
+"Śāntanava",
+"name"
+],
+"शाक": [
+"vegetable",
+"noun"
+],
+"शाखा": [
+"branch",
+"noun"
+],
+"शात्रव": [
+"enemy",
+"noun"
+],
+"शान्ति": [
+"peace",
+"noun"
+],
+"शाप": [
+"curse",
+"noun"
+],
+"शायिन्": [
+"lying",
+"adj"
+],
+"शारद": [
+"autumnal",
+"adj"
+],
+"शारद्वत": [
+"Śāradvata",
+"name"
+],
+"शार्दूल": [
+"tiger",
+"noun"
+],
+"शाल": [
+"sal tree",
+"noun"
+],
+"शालिन्": [
+"possessing",
+"adj"
+],
+"शाल्व": [
+"Śālva",
+"name"
+],
+"शाश्वत": [
+"eternal",
+"adj"
+],
+"शासन": [
+"command",
+"noun"
+],
+"शास्": [
+"rule",
+"verb"
+],
+"शास्त्र": [
+"treatise",
+"noun"
+],
+"शिक्षय्": [
+"teach",
+"verb"
+],
+"शिक्षा": [
+"instruction",
+"noun"
+],
+"शिखण्डिन्": [
+"Śikhaṇḍin",
+"name"
+],
+"शिखर": [
+"peak",
+"noun"
+],
+"शिखा": [
+"tuft",
+"noun"
+],
+"शिखिन्": [
+"peacock",
+"noun"
+],
+"शिनि": [
+"Śini",
+"name"
+],
+"शिबि": [
+"Śibi",
+"name"
+],
+"शिबिका": [
+"palanquin",
+"noun"
+],
+"शिबिर": [
+"camp",
+"noun"
+],
+"शिरस्": [
+"head",
+"noun"
+],
+"शिला": [
+"rock",
+"noun"
+],
+"शिव": [
+"Śiva",
+"name"
+],
+"शिवा": [
+"Śivā",
+"name"
+],
+"शिशिर": [
+"winter",
+"noun"
+],
+"शिशु": [
+"child",
+"noun"
+],
+"शिशुपाल": [
+"Śiśupāla",
+"name"
+],
+"शिष्": [
+"leave",
+"verb"
+],
+"शिष्य": [
+"pupil",
+"noun"
+],
+"शी": [
+"lie down",
+"verb"
+],
+"शीघ्र": [
+"swift",
+"adj"
+],
+"शीघ्रम्": [
+"quickly",
+"ind"
+],
+"शीत": [
+"cold",
+"adj"
+],
+"शीतल": [
+"cool",
+"adj"
+],
+"शीर्ष": [
+"head",
+"noun"
+],
+"शील": [
+"character",
+"noun"
+],
+"शुक": [
+"parrot",
+"noun"
+],
+"शुक्र": [
+"Śukra",
+"name"
+],
+"शुक्ल": [
+"white",
+"adj"
+],
+"शुचि": [
+"pure",
+"adj"
+],
+"शुच्": [
+"grieve",
+"verb"
+],
+"शुद्ध": [
+"pure",
+"adj"
+],
+"शुद्धि": [
+"purification",
+"noun"
+],
+"शुध्": [
+"be purified",
+"verb"
+],
+"शुभ": [
+"auspicious",
+"adj"
+],
+"शुभ्": [
+"shine",
+"verb"
+],
+"शुभ्र": [
+"white",
+"adj"
+],
+"शुल्क": [
+"price",
+"noun"
+],
+"शुश्रूषण": [
+"service",
+"noun"
+],
+"शुश्रूषा": [
+"service",
+"noun"
+],
+"शुश्रूषु": [
+"obedient",
+"adj"
+],
+"शुश्रूष्": [
+"obey",
+"verb"
+],
+"शुष्क": [
+"dry",
+"adj"
+],
+"शूद्र": [
+"Śūdra",
+"noun"
+],
+"शून्य": [
+"empty",
+"adj"
+],
+"शूर": [
+"hero",
+"noun"
+],
+"शूल": [
+"spear",
+"noun"
+],
+"शूलिन्": [
+"Śūlin",
+"name"
+],
+"शृ": [
+"crush",
+"verb"
+],
+"शृङ्ग": [
+"horn",
+"noun"
+],
+"शेष": [
+"remainder",
+"noun"
+],
+"शैनेय": [
+"Śaineya",
+"name"
+],
+"शैल": [
+"mountain",
+"noun"
+],
+"शोक": [
+"sorrow",
+"noun"
+],
+"शोणित": [
+"blood",
+"noun"
+],
+"शोभन": [
+"beautiful",
+"adj"
+],
+"शोभय्": [
+"adorn",
+"verb"
+],
+"शोभा": [
+"beauty",
+"noun"
+],
+"शोभिन्": [
+"splendid",
+"adj"
+],
+"शौच": [
+"purity",
+"noun"
+],
+"शौनक": [
+"Śaunaka",
+"name"
+],
+"शौरि": [
+"Śauri",
+"name"
+],
+"शौर्य": [
+"valour",
+"noun"
+],
+"श्मशान": [
+"cremation ground",
+"noun"
+],
+"श्याम": [
+"dark",
+"adj"
+],
+"श्येन": [
+"hawk",
+"noun"
+],
+"श्रद्धा": [
+"faith",
+"noun"
+],
+"श्रम": [
+"fatigue",
+"noun"
+],
+"श्रम्": [
+"be weary",
+"verb"
+],
+"श्रवण": [
+"hearing",
+"noun"
+],
+"श्राद्ध": [
+"ancestral rite",
+"noun"
+],
+"श्रावय्": [
+"announce",
+"verb"
+],
+"श्रि": [
+"rely on",
+"verb"
+],
+"श्री": [
+"glory",
+"noun"
+],
+"श्रीदत्त": [
+"Śrīdatta",
+"name"
+],
+"श्रीमत्": [
+"glorious",
+"adj"
+],
+"श्रु": [
+"hear",
+"verb"
+],
+"श्रुत": [
+"heard",
+"adj"
+],
+"श्रुतशर्मन्": [
+"Śrutaśarman",
+"name"
+],
+"श्रुति": [
+"scripture",
+"noun"
+],
+"श्रेयस्": [
+"welfare",
+"noun"
+],
+"श्रेष्ठ": [
+"best",
+"adj"
+],
+"श्रोत्र": [
+"ear",
+"noun"
+],
+"श्रोत्रिय": [
+"Vedic scholar",
+"noun"
+],
+"श्लक्ष्ण": [
+"smooth",
+"adj"
+],
+"श्लाघ्": [
+"praise",
+"verb"
+],
+"श्लोक": [
+"verse",
+"noun"
+],
+"श्वन्": [
+"dog",
+"noun"
+],
+"श्वशुर": [
+"father-in-law",
+"noun"
+],
+"श्वश्रू": [
+"mother-in-law",
+"noun"
+],
+"श्वस्": [
+"breathe",
+"verb"
+],
+"श्वापद": [
+"beast of prey",
+"noun"
+],
+"श्वेत": [
+"white",
+"adj"
+],
+"षष्": [
+"six",
+"num"
+],
+"षष्टि": [
+"sixty",
+"num"
+],
+"षष्ठ": [
+"sixth",
+"num"
+],
+"षोडशन्": [
+"sixteen",
+"num"
+],
+"स": [
+"with",
+"ind"
+],
+"संकट": [
+"difficulty",
+"noun"
+],
+"संकर": [
+"mixture",
+"noun"
+],
+"संकर्षण": [
+"Saṅkarṣaṇa",
+"name"
+],
+"संकल्प": [
+"resolve",
+"noun"
+],
+"संकल्पय्": [
+"resolve",
+"verb"
+],
+"संकाश": [
+"appearance",
+"noun"
+],
+"संकुल": [
+"crowded",
+"adj"
+],
+"संकृ": [
+"arrange",
+"verb"
+],
+"संक्रुध्": [
+"be angry",
+"verb"
+],
+"संक्षय": [
+"destruction",
+"noun"
+],
+"संक्षिप्": [
+"condense",
+"verb"
+],
+"संक्षेप": [
+"summary",
+"noun"
+],
+"संख्य": [
+"battle",
+"noun"
+],
+"संख्या": [
+"number",
+"noun"
+],
+"संगम": [
+"union",
+"noun"
+],
+"संगम्": [
+"meet",
+"verb"
+],
+"संगर": [
+"battle",
+"noun"
+],
+"संग्रह": [
+"collection",
+"noun"
+],
+"संग्रह्": [
+"seize",
+"verb"
+],
+"संग्राम": [
+"battle",
+"noun"
+],
+"संघ": [
+"multitude",
+"noun"
+],
+"संघात": [
+"mass",
+"noun"
+],
+"संचय": [
+"collection",
+"noun"
+],
+"संचिन्तय्": [
+"reflect",
+"verb"
+],
+"संचोदय्": [
+"urge",
+"verb"
+],
+"संछद्": [
+"cover",
+"verb"
+],
+"संजन्": [
+"arise",
+"verb"
+],
+"संजय": [
+"Sañjaya",
+"name"
+],
+"संज्ञा": [
+"consciousness",
+"noun"
+],
+"संज्ञित": [
+"called",
+"adj"
+],
+"संतति": [
+"progeny",
+"noun"
+],
+"संतप्": [
+"torment",
+"verb"
+],
+"संतान": [
+"offspring",
+"noun"
+],
+"संताप": [
+"anguish",
+"noun"
+],
+"संतुष्": [
+"be pleased",
+"verb"
+],
+"संतोष": [
+"contentment",
+"noun"
+],
+"संत्यज्": [
+"abandon",
+"verb"
+],
+"संदिश्": [
+"command",
+"verb"
+],
+"संदृश्": [
+"behold",
+"verb"
+],
+"संदेह": [
+"doubt",
+"noun"
+],
+"संधा": [
+"aim",
+"verb"
+],
+"संधि": [
+"junction",
+"noun"
+],
+"संध्या": [
+"twilight",
+"noun"
+],
+"संनम्": [
+"bend",
+"verb"
+],
+"संनह्": [
+"arm",
+"verb"
+],
+"संनिधा": [
+"place near",
+"verb"
+],
+"संनिधि": [
+"presence",
+"noun"
+],
+"संनिभ": [
+"resembling",
+"adj"
+],
+"संनिवृत्": [
+"turn back",
+"verb"
+],
+"संपश्": [
+"see",
+"verb"
+],
+"संमा": [
+"measure",
+"verb"
+],
+"संयम": [
+"self-control",
+"noun"
+],
+"संयम्": [
+"restrain",
+"verb"
+],
+"संयुग": [
+"battle",
+"noun"
+],
+"संयुज्": [
+"join",
+"verb"
+],
+"संयुत": [
+"joined",
+"adj"
+],
+"संयोग": [
+"contact",
+"noun"
+],
+"संरञ्ज्": [
+"be coloured",
+"verb"
+],
+"संरभ्": [
+"be enraged",
+"verb"
+],
+"संरम्भ": [
+"fury",
+"noun"
+],
+"संवत्सर": [
+"year",
+"noun"
+],
+"संवर्त": [
+"dissolution",
+"noun"
+],
+"संवाद": [
+"conversation",
+"noun"
+],
+"संवारय्": [
+"ward off",
+"verb"
+],
+"संविज्": [
+"tremble",
+"verb"
+],
+"संविद्": [
+"knowledge",
+"noun"
+],
+"संविश्": [
+"lie down",
+"verb"
+],
+"संवृ": [
+"cover",
+"verb"
+],
+"संवृत्": [
+"happen",
+"verb"
+],
+"संव्ये": [
+"wrap",
+"verb"
+],
+"संशप्तक": [
+"Saṃśaptaka",
+"name"
+],
+"संशय": [
+"doubt",
+"noun"
+],
+"संशित": [
+"sharp",
+"adj"
+],
+"संश्रय": [
+"refuge",
+"noun"
+],
+"संश्रि": [
+"resort",
+"verb"
+],
+"संश्रु": [
+"hear",
+"verb"
+],
+"संसञ्ज्": [
+"adhere",
+"verb"
+],
+"संसद्": [
+"council",
+"noun"
+],
+"संसर्ग": [
+"contact",
+"noun"
+],
+"संसार": [
+"rebirth",
+"noun"
+],
+"संसिध्": [
+"succeed",
+"verb"
+],
+"संस्कार": [
+"sacrament",
+"noun"
+],
+"संस्कृ": [
+"prepare",
+"verb"
+],
+"संस्तु": [
+"praise",
+"verb"
+],
+"संस्थ": [
+"situated",
+"adj"
+],
+"संस्था": [
+"be established",
+"verb"
+],
+"संस्थान": [
+"form",
+"noun"
+],
+"संस्पर्श": [
+"contact",
+"noun"
+],
+"संस्पृश्": [
+"touch",
+"verb"
+],
+"संस्मृ": [
+"remember",
+"verb"
+],
+"संहन्": [
+"strike together",
+"verb"
+],
+"संहार": [
+"dissolution",
+"noun"
+],
+"संहिता": [
+"collection",
+"noun"
+],
+"संहृ": [
+"withdraw",
+"verb"
+],
+"संहृष्": [
+"rejoice",
+"verb"
+],
+"सकल": [
+"entire",
+"adj"
+],
+"सकाश": [
+"presence",
+"noun"
+],
+"सकृत्": [
+"once",
+"ind"
+],
+"सक्तु": [
+"barley meal",
+"noun"
+],
+"सख": [
+"friend",
+"noun"
+],
+"सखि": [
+"friend",
+"noun"
+],
+"सखी": [
+"female friend",
+"noun"
+],
+"सख्य": [
+"friendship",
+"noun"
+],
+"सगर": [
+"Sagara",
+"name"
+],
+"सङ्ग": [
+"attachment",
+"noun"
+],
+"सचिव": [
+"minister",
+"noun"
+],
+"सज्ज": [
+"ready",
+"adj"
+],
+"सज्य": [
+"strung",
+"adj"
+],
+"सञ्ज्": [
+"cling",
+"verb"
+],
+"सततम्": [
+"always",
+"ind"
+],
+"सती": [
+"good wife",
+"noun"
+],
+"सत्": [
+"good",
+"adj"
+],
+"सत्कार": [
+"hospitality",
+"noun"
+],
+"सत्कृ": [
+"honour",
+"verb"
+],
+"सत्तम": [
+"best",
+"adj"
+],
+"सत्त्र": [
+"sacrifice",
+"noun"
+],
+"सत्त्व": [
+"being",
+"noun"
+],
+"सत्त्ववत्": [
+"courageous",
+"adj"
+],
+"सत्य": [
+"truth",
+"noun"
+],
+"सत्यवती": [
+"Satyavatī",
+"name"
+],
+"सत्यवन्त्": [
+"Satyavat",
+"name"
+],
+"सत्वर": [
+"hasty",
+"adj"
+],
+"सदन": [
+"dwelling",
+"noun"
+],
+"सदस्": [
+"assembly",
+"noun"
+],
+"सदस्य": [
+"assembly member",
+"noun"
+],
+"सदा": [
+"always",
+"ind"
+],
+"सदृश": [
+"similar",
+"adj"
+],
+"सद्": [
+"sit",
+"verb"
+],
+"सद्मन्": [
+"dwelling",
+"noun"
+],
+"सद्यस्": [
+"immediately",
+"ind"
+],
+"सनत्कुमार": [
+"Sanatkumāra",
+"name"
+],
+"सनातन": [
+"eternal",
+"adj"
+],
+"सपत्न": [
+"rival",
+"noun"
+],
+"सपत्नी": [
+"co-wife",
+"noun"
+],
+"सप्तति": [
+"seventy",
+"num"
+],
+"सप्तन्": [
+"seven",
+"num"
+],
+"सप्तम": [
+"seventh",
+"num"
+],
+"सप्तर्षि": [
+"seven sages",
+"noun"
+],
+"सफल": [
+"fruitful",
+"adj"
+],
+"सभा": [
+"assembly",
+"noun"
+],
+"सम": [
+"same",
+"adj"
+],
+"समक्ष": [
+"visible",
+"adj"
+],
+"समग्र": [
+"entire",
+"adj"
+],
+"समतिक्रम्": [
+"transgress",
+"verb"
+],
+"समनुप्राप्": [
+"attain",
+"verb"
+],
+"समन्ततः": [
+"all around",
+"ind"
+],
+"समन्तात्": [
+"all around",
+"ind"
+],
+"समन्वित": [
+"endowed",
+"adj"
+],
+"समम्": [
+"together",
+"ind"
+],
+"समय": [
+"agreement",
+"noun"
+],
+"समर": [
+"battle",
+"noun"
+],
+"समर्थ": [
+"capable",
+"adj"
+],
+"समर्पय्": [
+"entrust",
+"verb"
+],
+"समलंकृ": [
+"embellish",
+"verb"
+],
+"समवाप्": [
+"obtain",
+"verb"
+],
+"समस्त": [
+"whole",
+"adj"
+],
+"समा": [
+"year",
+"noun"
+],
+"समाकुल": [
+"crowded",
+"adj"
+],
+"समाकृ": [
+"gather",
+"verb"
+],
+"समाख्या": [
+"recount",
+"verb"
+],
+"समागम": [
+"meeting",
+"noun"
+],
+"समागम्": [
+"meet",
+"verb"
+],
+"समाचर्": [
+"practise",
+"verb"
+],
+"समाचार": [
+"conduct",
+"noun"
+],
+"समाज": [
+"gathering",
+"noun"
+],
+"समादा": [
+"take up",
+"verb"
+],
+"समादिस्": [
+"order",
+"verb"
+],
+"समाधा": [
+"collect",
+"verb"
+],
+"समाधि": [
+"concentration",
+"noun"
+],
+"समान": [
+"same",
+"adj"
+],
+"समानी": [
+"bring together",
+"verb"
+],
+"समाप्": [
+"complete",
+"verb"
+],
+"समाया": [
+"come together",
+"verb"
+],
+"समायुज्": [
+"unite",
+"verb"
+],
+"समारुह्": [
+"ascend",
+"verb"
+],
+"समाविश्": [
+"enter",
+"verb"
+],
+"समावृ": [
+"cover",
+"verb"
+],
+"समाश्रि": [
+"take refuge",
+"verb"
+],
+"समाश्वस्": [
+"be comforted",
+"verb"
+],
+"समाश्वासय्": [
+"console",
+"verb"
+],
+"समासादय्": [
+"reach",
+"verb"
+],
+"समास्": [
+"sit together",
+"verb"
+],
+"समास्था": [
+"adopt",
+"verb"
+],
+"समाहन्": [
+"strike",
+"verb"
+],
+"समाहित": [
+"composed",
+"adj"
+],
+"समाह्वा": [
+"summon",
+"verb"
+],
+"समि": [
+"meet",
+"verb"
+],
+"समिध्": [
+"firewood",
+"noun"
+],
+"समिन्ध्": [
+"kindle",
+"verb"
+],
+"समीक्ष्": [
+"observe",
+"verb"
+],
+"समीप": [
+"near",
+"adj"
+],
+"समीरय्": [
+"stir",
+"verb"
+],
+"समुत्था": [
+"rise up",
+"verb"
+],
+"समुत्पत्": [
+"leap up",
+"verb"
+],
+"समुत्पद्": [
+"arise",
+"verb"
+],
+"समुत्सृज्": [
+"discharge",
+"verb"
+],
+"समुद्धृ": [
+"lift",
+"verb"
+],
+"समुद्भव": [
+"origin",
+"noun"
+],
+"समुद्भू": [
+"spring up",
+"verb"
+],
+"समुद्यम्": [
+"raise",
+"verb"
+],
+"समुद्र": [
+"ocean",
+"noun"
+],
+"समुपस्था": [
+"approach",
+"verb"
+],
+"समुपागम्": [
+"come to",
+"verb"
+],
+"समुपे": [
+"come together",
+"verb"
+],
+"समूह": [
+"group",
+"noun"
+],
+"समृद्धि": [
+"prosperity",
+"noun"
+],
+"समृध्": [
+"prosper",
+"verb"
+],
+"समे": [
+"assemble",
+"verb"
+],
+"सम्पत्": [
+"meet",
+"verb"
+],
+"सम्पद्": [
+"succeed",
+"verb"
+],
+"सम्पूजय्": [
+"honour",
+"verb"
+],
+"सम्पृ": [
+"fill",
+"verb"
+],
+"सम्प्रति": [
+"now",
+"ind"
+],
+"सम्प्रवृत्": [
+"commence",
+"verb"
+],
+"सम्प्रहृष्": [
+"rejoice",
+"verb"
+],
+"सम्प्राप्": [
+"attain",
+"verb"
+],
+"सम्प्रेक्ष्": [
+"survey",
+"verb"
+],
+"सम्बन्ध": [
+"connection",
+"noun"
+],
+"सम्बन्धिन्": [
+"connected",
+"adj"
+],
+"सम्बाध": [
+"throng",
+"noun"
+],
+"सम्भव": [
+"origin",
+"noun"
+],
+"सम्भार": [
+"materials",
+"noun"
+],
+"सम्भावय्": [
+"consider",
+"verb"
+],
+"सम्भाष्": [
+"converse",
+"verb"
+],
+"सम्भू": [
+"arise",
+"verb"
+],
+"सम्भृ": [
+"collect",
+"verb"
+],
+"सम्भ्रम": [
+"agitation",
+"noun"
+],
+"सम्भ्रम्": [
+"be confused",
+"verb"
+],
+"सम्मन्": [
+"regard",
+"verb"
+],
+"सम्मन्त्रय्": [
+"consult",
+"verb"
+],
+"सम्यक्": [
+"properly",
+"ind"
+],
+"सरस्": [
+"lake",
+"noun"
+],
+"सरस्वती": [
+"Sarasvatī",
+"name"
+],
+"सरित्": [
+"river",
+"noun"
+],
+"सर्ग": [
+"creation",
+"noun"
+],
+"सर्प": [
+"snake",
+"noun"
+],
+"सर्पिस्": [
+"clarified butter",
+"noun"
+],
+"सर्व": [
+"all",
+"pron"
+],
+"सर्वज्ञ": [
+"omniscient",
+"adj"
+],
+"सर्वतस्": [
+"everywhere",
+"ind"
+],
+"सर्वतोदिशम्": [
+"in all directions",
+"ind"
+],
+"सर्वत्र": [
+"everywhere",
+"ind"
+],
+"सर्वथा": [
+"entirely",
+"ind"
+],
+"सर्वदा": [
+"always",
+"ind"
+],
+"सर्वशस्": [
+"wholly",
+"ind"
+],
+"सलिल": [
+"water",
+"noun"
+],
+"सवर्ण": [
+"similar",
+"adj"
+],
+"सवितृ": [
+"Savitṛ",
+"name"
+],
+"सव्य": [
+"left",
+"adj"
+],
+"सव्यसाचिन्": [
+"Savyasācin",
+"name"
+],
+"सस्य": [
+"grain",
+"noun"
+],
+"सह": [
+"with",
+"ind"
+],
+"सहज": [
+"innate",
+"adj"
+],
+"सहदेव": [
+"Sahadeva",
+"name"
+],
+"सहसा": [
+"suddenly",
+"ind"
+],
+"सहस्": [
+"strength",
+"noun"
+],
+"सहस्र": [
+"thousand",
+"num"
+],
+"सहस्रशस्": [
+"in thousands",
+"ind"
+],
+"सहस्राक्ष": [
+"Sahasrākṣa",
+"name"
+],
+"सहाय": [
+"helper",
+"noun"
+],
+"सहित": [
+"accompanied",
+"adj"
+],
+"सह्": [
+"endure",
+"verb"
+],
+"सांख्य": [
+"Sāṃkhya",
+"name"
+],
+"सांप्रतम्": [
+"now",
+"ind"
+],
+"साकम्": [
+"together",
+"ind"
+],
+"साक्षात्": [
+"directly",
+"ind"
+],
+"साक्षिन्": [
+"witness",
+"noun"
+],
+"सागर": [
+"ocean",
+"noun"
+],
+"सात्त्विक": [
+"sattvic",
+"adj"
+],
+"सात्यकि": [
+"Sātyaki",
+"name"
+],
+"सात्वत": [
+"Sātvata",
+"name"
+],
+"सादन": [
+"seat",
+"noun"
+],
+"सादिन्": [
+"rider",
+"noun"
+],
+"साधक": [
+"effective",
+"adj"
+],
+"साधन": [
+"means",
+"noun"
+],
+"साधय्": [
+"accomplish",
+"verb"
+],
+"साधु": [
+"good",
+"adj"
+],
+"साध्य": [
+"attainable",
+"adj"
+],
+"सानु": [
+"ridge",
+"noun"
+],
+"सान्त्व": [
+"conciliation",
+"noun"
+],
+"सान्त्वय्": [
+"console",
+"verb"
+],
+"सामन्": [
+"chant",
+"noun"
+],
+"सामर्थ्य": [
+"capacity",
+"noun"
+],
+"सामान्य": [
+"common",
+"adj"
+],
+"साम्ब": [
+"Sāmba",
+"name"
+],
+"साम्य": [
+"equality",
+"noun"
+],
+"सायक": [
+"arrow",
+"noun"
+],
+"सायम्": [
+"evening",
+"ind"
+],
+"सायुज्य": [
+"communion",
+"noun"
+],
+"सार": [
+"essence",
+"noun"
+],
+"सारथि": [
+"charioteer",
+"noun"
+],
+"सारस": [
+"crane",
+"noun"
+],
+"सारस्वत": [
+"Sārasvata",
+"name"
+],
+"सार्थ": [
+"caravan",
+"noun"
+],
+"सार्धम्": [
+"together",
+"ind"
+],
+"साल": [
+"sal tree",
+"noun"
+],
+"सावित्री": [
+"Sāvitrī",
+"name"
+],
+"साहस": [
+"rashness",
+"noun"
+],
+"साहस्र": [
+"thousand",
+"adj"
+],
+"साहाय्य": [
+"assistance",
+"noun"
+],
+"सिंह": [
+"lion",
+"noun"
+],
+"सिंहनाद": [
+"lion roar",
+"noun"
+],
+"सिच्": [
+"sprinkle",
+"verb"
+],
+"सित": [
+"white",
+"adj"
+],
+"सिद्ध": [
+"accomplished",
+"adj"
+],
+"सिद्धार्थ": [
+"Siddhārtha",
+"name"
+],
+"सिद्धि": [
+"success",
+"noun"
+],
+"सिध्": [
+"be accomplished",
+"verb"
+],
+"सिन्धु": [
+"river",
+"noun"
+],
+"सिन्धुराज": [
+"king of Sindh",
+"noun"
+],
+"सीता": [
+"Sītā",
+"name"
+],
+"सु": [
+"well",
+"ind"
+],
+"सुकुमार": [
+"delicate",
+"adj"
+],
+"सुकृत": [
+"good deed",
+"noun"
+],
+"सुख": [
+"happiness",
+"noun"
+],
+"सुखम्": [
+"happily",
+"ind"
+],
+"सुखिन्": [
+"happy",
+"adj"
+],
+"सुगन्धि": [
+"fragrant",
+"adj"
+],
+"सुग्रीव": [
+"Sugrīva",
+"name"
+],
+"सुत": [
+"son",
+"noun"
+],
+"सुता": [
+"daughter",
+"noun"
+],
+"सुदर्शन": [
+"Sudarśana",
+"name"
+],
+"सुधन्वन्": [
+"Sudhanvan",
+"name"
+],
+"सुधा": [
+"nectar",
+"noun"
+],
+"सुन्दर": [
+"beautiful",
+"adj"
+],
+"सुन्दरी": [
+"beautiful woman",
+"noun"
+],
+"सुपर्ण": [
+"Suparṇa",
+"name"
+],
+"सुबाहु": [
+"Subāhu",
+"name"
+],
+"सुभग": [
+"blessed",
+"adj"
+],
+"सुभद्रा": [
+"Subhadrā",
+"name"
+],
+"सुमध्यमा": [
+"slim-waisted woman",
+"noun"
+],
+"सुमनस्": [
+"flower",
+"noun"
+],
+"सुमन्त्र": [
+"Sumantra",
+"name"
+],
+"सुमित्रा": [
+"Sumitrā",
+"name"
+],
+"सुमेरु": [
+"Sumeru",
+"name"
+],
+"सुयोधन": [
+"Suyodhana",
+"name"
+],
+"सुर": [
+"god",
+"noun"
+],
+"सुरभि": [
+"fragrant",
+"adj"
+],
+"सुरा": [
+"liquor",
+"noun"
+],
+"सुरेश्वर": [
+"lord of gods",
+"noun"
+],
+"सुवर्ण": [
+"gold",
+"noun"
+],
+"सुव्रत": [
+"devout",
+"adj"
+],
+"सुशर्मन्": [
+"Suśarman",
+"name"
+],
+"सुश्रोणी": [
+"wide-hipped woman",
+"noun"
+],
+"सुषेण": [
+"Suṣeṇa",
+"name"
+],
+"सुहृद्": [
+"friend",
+"noun"
+],
+"सू": [
+"beget",
+"verb"
+],
+"सूक्ष्म": [
+"subtle",
+"adj"
+],
+"सूत": [
+"charioteer",
+"noun"
+],
+"सूतपुत्र": [
+"charioteer's son",
+"noun"
+],
+"सूत्र": [
+"thread",
+"noun"
+],
+"सूद": [
+"cook",
+"noun"
+],
+"सूदन": [
+"destroying",
+"adj"
+],
+"सूदय्": [
+"slay",
+"verb"
+],
+"सूनु": [
+"son",
+"noun"
+],
+"सूर्य": [
+"sun",
+"noun"
+],
+"सूर्यप्रभ": [
+"Sūryaprabha",
+"name"
+],
+"सृज्": [
+"create",
+"verb"
+],
+"सृञ्जय": [
+"Sṛñjaya",
+"name"
+],
+"सृष्टि": [
+"creation",
+"noun"
+],
+"सेतु": [
+"bridge",
+"noun"
+],
+"सेना": [
+"army",
+"noun"
+],
+"सेनापति": [
+"general",
+"noun"
+],
+"सेवा": [
+"service",
+"noun"
+],
+"सेव्": [
+"serve",
+"verb"
+],
+"सैनिक": [
+"soldier",
+"noun"
+],
+"सैन्धव": [
+"Saindhava",
+"name"
+],
+"सैन्य": [
+"army",
+"noun"
+],
+"सोम": [
+"moon",
+"noun"
+],
+"सोमक": [
+"Somaka",
+"name"
+],
+"सोमदत्त": [
+"Somadatta",
+"name"
+],
+"सोमप्रभा": [
+"Somaprabhā",
+"name"
+],
+"सौबल": [
+"Saubala",
+"name"
+],
+"सौभ": [
+"Saubha",
+"name"
+],
+"सौभद्र": [
+"Saubhadra",
+"name"
+],
+"सौभाग्य": [
+"good fortune",
+"noun"
+],
+"सौमदत्ति": [
+"Saumadatti",
+"name"
+],
+"सौमित्रि": [
+"Saumitri",
+"name"
+],
+"सौम्य": [
+"gentle",
+"adj"
+],
+"सौर": [
+"solar",
+"adj"
+],
+"सौवर्ण": [
+"golden",
+"adj"
+],
+"सौहृद": [
+"friendship",
+"noun"
+],
+"स्कन्द": [
+"Skanda",
+"name"
+],
+"स्कन्ध": [
+"shoulder",
+"noun"
+],
+"स्तन": [
+"breast",
+"noun"
+],
+"स्तनान्तर": [
+"chest",
+"noun"
+],
+"स्तम्भ": [
+"pillar",
+"noun"
+],
+"स्तव": [
+"praise",
+"noun"
+],
+"स्तु": [
+"praise",
+"verb"
+],
+"स्तुति": [
+"praise",
+"noun"
+],
+"स्तेन": [
+"thief",
+"noun"
+],
+"स्त्री": [
+"woman",
+"noun"
+],
+"स्थ": [
+"standing",
+"adj"
+],
+"स्थल": [
+"ground",
+"noun"
+],
+"स्थविर": [
+"elder",
+"adj"
+],
+"स्था": [
+"stand",
+"verb"
+],
+"स्थाणु": [
+"Sthāṇu",
+"name"
+],
+"स्थान": [
+"place",
+"noun"
+],
+"स्थापय्": [
+"establish",
+"verb"
+],
+"स्थावर": [
+"immobile",
+"adj"
+],
+"स्थिति": [
+"state",
+"noun"
+],
+"स्थिर": [
+"firm",
+"adj"
+],
+"स्थूल": [
+"thick",
+"adj"
+],
+"स्ना": [
+"bathe",
+"verb"
+],
+"स्नान": [
+"bathing",
+"noun"
+],
+"स्नापय्": [
+"bathe",
+"verb"
+],
+"स्निग्ध": [
+"smooth",
+"adj"
+],
+"स्नुषा": [
+"daughter in law",
+"noun"
+],
+"स्नेह": [
+"affection",
+"noun"
+],
+"स्पर्श": [
+"touch",
+"noun"
+],
+"स्पृध्": [
+"compete",
+"verb"
+],
+"स्पृश्": [
+"touch",
+"verb"
+],
+"स्पृहा": [
+"longing",
+"noun"
+],
+"स्फटिक": [
+"crystal",
+"noun"
+],
+"स्फीत": [
+"prosperous",
+"adj"
+],
+"स्फुर्": [
+"tremble",
+"verb"
+],
+"स्म": [
+"indeed",
+"ind"
+],
+"स्मर": [
+"love",
+"noun"
+],
+"स्मि": [
+"smile",
+"verb"
+],
+"स्मित": [
+"smile",
+"noun"
+],
+"स्मृ": [
+"remember",
+"verb"
+],
+"स्मृति": [
+"memory",
+"noun"
+],
+"स्यन्दन": [
+"chariot",
+"noun"
+],
+"स्रज्": [
+"garland",
+"noun"
+],
+"स्रष्टृ": [
+"creator",
+"noun"
+],
+"स्रु": [
+"flow",
+"verb"
+],
+"स्रोतस्": [
+"stream",
+"noun"
+],
+"स्व": [
+"own",
+"adj"
+],
+"स्वक": [
+"own",
+"adj"
+],
+"स्वधर्म": [
+"own dharma",
+"noun"
+],
+"स्वधा": [
+"ancestral offering",
+"noun"
+],
+"स्वन": [
+"sound",
+"noun"
+],
+"स्वप्": [
+"sleep",
+"verb"
+],
+"स्वप्न": [
+"dream",
+"noun"
+],
+"स्वभाव": [
+"nature",
+"noun"
+],
+"स्वयंवर": [
+"svayaṃvara",
+"noun"
+],
+"स्वयम्": [
+"oneself",
+"ind"
+],
+"स्वयम्भु": [
+"Svayambhū",
+"name"
+],
+"स्वर": [
+"sound",
+"noun"
+],
+"स्वरूप": [
+"own form",
+"noun"
+],
+"स्वर्": [
+"heaven",
+"noun"
+],
+"स्वर्ग": [
+"heaven",
+"noun"
+],
+"स्वर्ण": [
+"gold",
+"noun"
+],
+"स्वसृ": [
+"sister",
+"noun"
+],
+"स्वस्ति": [
+"blessing",
+"noun"
+],
+"स्वस्त्ययन": [
+"blessing",
+"noun"
+],
+"स्वस्थ": [
+"healthy",
+"adj"
+],
+"स्वागत": [
+"welcome",
+"noun"
+],
+"स्वादु": [
+"sweet",
+"adj"
+],
+"स्वाध्याय": [
+"Veda study",
+"noun"
+],
+"स्वामिन्": [
+"master",
+"noun"
+],
+"स्वायम्भुव": [
+"Svāyambhuva",
+"name"
+],
+"स्वाहा": [
+"svāhā",
+"noun"
+],
+"स्विद्": [
+"perhaps",
+"ind"
+],
+"स्वेद": [
+"sweat",
+"noun"
+],
+"स्वैर": [
+"wilful",
+"adj"
+],
+"ह": [
+"indeed",
+"ind"
+],
+"हंस": [
+"swan",
+"noun"
+],
+"हत्या": [
+"killing",
+"noun"
+],
+"हनुमन्त्": [
+"Hanumān",
+"name"
+],
+"हन्": [
+"kill",
+"verb"
+],
+"हन्त": [
+"well",
+"ind"
+],
+"हन्तृ": [
+"killing",
+"adj"
+],
+"हय": [
+"horse",
+"noun"
+],
+"हर": [
+"Hara",
+"name"
+],
+"हरण": [
+"taking away",
+"noun"
+],
+"हरि": [
+"Hari",
+"name"
+],
+"हरिण": [
+"deer",
+"noun"
+],
+"हर्तृ": [
+"taker",
+"noun"
+],
+"हर्म्य": [
+"mansion",
+"noun"
+],
+"हर्ष": [
+"joy",
+"noun"
+],
+"हर्षण": [
+"delighting",
+"adj"
+],
+"हर्षय्": [
+"delight",
+"verb"
+],
+"हविस्": [
+"oblation",
+"noun"
+],
+"हव्य": [
+"offering",
+"noun"
+],
+"हव्यवाहन": [
+"Havyavāhana",
+"name"
+],
+"हस्": [
+"laugh",
+"verb"
+],
+"हस्त": [
+"hand",
+"noun"
+],
+"हस्तिन्": [
+"elephant",
+"noun"
+],
+"हा": [
+"abandon",
+"verb"
+],
+"हार": [
+"necklace",
+"noun"
+],
+"हारिन्": [
+"taking away",
+"adj"
+],
+"हार्दिक्य": [
+"Hārdikya",
+"name"
+],
+"हास": [
+"laughter",
+"noun"
+],
+"हि": [
+"for",
+"ind"
+],
+"हिंसा": [
+"violence",
+"noun"
+],
+"हिंस्": [
+"harm",
+"verb"
+],
+"हित": [
+"beneficial",
+"adj"
+],
+"हिम": [
+"snow",
+"noun"
+],
+"हिमवन्त्": [
+"Himavat",
+"name"
+],
+"हिरण्मय": [
+"golden",
+"adj"
+],
+"हिरण्य": [
+"gold",
+"noun"
+],
+"हिरण्यकशिपु": [
+"Hiraṇyakaśipu",
+"name"
+],
+"हिरण्यगर्भ": [
+"Hiraṇyagarbha",
+"name"
+],
+"हु": [
+"offer",
+"verb"
+],
+"हुताशन": [
+"fire",
+"noun"
+],
+"हृ": [
+"take",
+"verb"
+],
+"हृदय": [
+"heart",
+"noun"
+],
+"हृद्": [
+"heart",
+"noun"
+],
+"हृषीकेश": [
+"Hṛṣīkeśa",
+"name"
+],
+"हृष्": [
+"rejoice",
+"verb"
+],
+"हे": [
+"O",
+"ind"
+],
+"हेतु": [
+"cause",
+"noun"
+],
+"हेमन्": [
+"gold",
+"noun"
+],
+"हैम": [
+"golden",
+"adj"
+],
+"होम": [
+"oblation",
+"noun"
+],
+"ह्रद": [
+"lake",
+"noun"
+],
+"ह्रस्व": [
+"short",
+"adj"
+],
+"ह्री": [
+"shame",
+"noun"
+],
+"ॐ": [
+"om",
+"ind"
+],
+"ॐकार": [
+"om",
+"noun"
+]
+}
+}

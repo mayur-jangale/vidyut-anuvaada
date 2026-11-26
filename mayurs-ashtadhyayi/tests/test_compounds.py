@@ -23,7 +23,7 @@ def test_dridhavrata_is_bahuvrihi():
     dridha = next(c for c in r.compounds if c.members[0] == 16)
     assert dridha.samasa == compounds.BAHUVRIHI
     dharmajna = next(c for c in r.compounds if c.members[0] == 9)
-    assert dharmajna.samasa == compounds.TATPURUSHA
+    assert dharmajna.samasa == compounds.UPAPADA  # ज्ञ: 3.2.3 आतोऽनुपसर्गे कः, 2.2.19
 
 
 def test_annotate_returns_new_object():

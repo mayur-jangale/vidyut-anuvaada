@@ -123,6 +123,8 @@ def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> l
         for entry in bridge.lookup(probe):
             if entry.entry == "basic" or (entry.entry == "krdanta" and entry.morph.krt != "क्त्वा"):
                 continue
+            if any(u in _GATI_WITH_KR for u in upasargas) and (entry.morph.root or entry.morph.lemma) != "कृ":
+                continue
             key = repr(bridge.dhatu_of(entry))
             if key in seen:
                 continue
@@ -137,10 +139,17 @@ def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> l
     return out
 
 
+# सत्, अलम् and नमस् are gatis only before कृ (1.4.63 आदरानादरयोः सदसती, 1.4.64 भूषणेऽलम्,
+# 1.4.74 साक्षात्प्रभृतीनि च): सत्कृत्य, अलंकृत, नमस्कृत्य; never सत् + गमय.
+_GATI_WITH_KR = frozenset({"सत्", "अलम्", "नमस्"})
+
+
 def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list[Morph]:
     out = _lyap_from_verbs(form, upasargas, remainder) if form.endswith("य") else []
     for entry in bridge.lookup(remainder):
         m = entry.morph
+        if any(u in _GATI_WITH_KR for u in upasargas) and (m.root or m.lemma) != "कृ":
+            continue
         if entry.entry == "tinanta":
             pada = bridge.prefixed_tinanta(entry, upasargas)
         elif entry.entry == "krdanta" and m.krt in _GOOD_KRT:

@@ -4,6 +4,13 @@
     python eval/eval_compounds.py --gold eval/review/gold_roles.json          (human corrections)
     python eval/eval_compounds.py --source ufal dcs vedic [--max-compounds 500]   (UD proxy, see below)
     python eval/eval_compounds.py --agreement fileA.json fileB.json
+    python eval/eval_compounds.py --claude <file> --gold-words [--verses 21-40] [--wrong-groups]
+
+``--gold-words`` isolates the compound layer: the Reading is built from the reference file's own words
+(gold split, lemma, feats, compound_member flags; the shared helper eval/gold_words.py, also used by
+eval/eval_roles.py) and only compounds.annotate runs, so type accuracy excludes split errors.
+``--verses`` keeps only those verse numbers of a --claude file (normal mode too).
+``--wrong-groups`` lists the most frequent kinds of our compounds whose members match no gold compound.
 
 NO open compound-TYPE dataset could be fetched (scripts/fetch_gold_external.py lists why: the Hyderabad
 samasa data forbids redistribution, SaCTI has no licence). The only machine-readable gold is therefore
@@ -42,9 +49,11 @@ def _load(name: str) -> Any:
 er = _load("eval_roles")
 
 # Label sets, explicit. Ours: mayur/compounds.py constants (अज्ञात = could not decide).
-OUR_TYPES = ("तत्पुरुष", "कर्मधारय", "द्वन्द्व", "बहुव्रीहि", "अव्ययीभाव", "नञ्-तत्पुरुष", "नञ्-बहुव्रीहि", "अज्ञात")
-GOLD_TYPES = OUR_TYPES[:-1] + ("उपपद-तत्पुरुष",)
+OUR_TYPES = ("तत्पुरुष", "कर्मधारय", "द्वन्द्व", "बहुव्रीहि", "अव्ययीभाव", "नञ्-तत्पुरुष", "नञ्-बहुव्रीहि",
+             "उपपद-तत्पुरुष", "द्विगु", "अज्ञात")
+GOLD_TYPES = OUR_TYPES[:-1]
 FAMILY = {"तत्पुरुष": "तत्पुरुष", "कर्मधारय": "तत्पुरुष", "नञ्-तत्पुरुष": "तत्पुरुष", "उपपद-तत्पुरुष": "तत्पुरुष",
+          "द्विगु": "तत्पुरुष",
           "बहुव्रीहि": "बहुव्रीहि", "नञ्-बहुव्रीहि": "बहुव्रीहि", "द्वन्द्व": "द्वन्द्व", "अव्ययीभाव": "अव्ययीभाव"}
 COORD_RELATIONS = {"conj", "compound:coord"}
 
@@ -72,9 +81,13 @@ def score_compounds(ours: dict[str, Any], gold: dict[str, Any]) -> dict[str, Any
     gold_sets = {frozenset(c["members"]): c for c in gold.get("compounds", [])}
     c: dict[str, Any] = {"gold_compounds": len(gold_sets), "our_compounds": len(ours["compounds"]), "found": 0,
                          "our_correct_group": 0, "typed": 0, "type_ok": 0, "family_ok": 0, "by_type": {}, "confusion": {}}
+    c["wrong_groups"] = {}
     for oc in ours["compounds"]:
         mapped = {mapping[i] for i in oc["members"] if i in mapping}
         if len(mapped) != len(oc["members"]) or frozenset(mapped) not in gold_sets:
+            kind = wrong_group_kind(mapped, len(oc["members"]), list(gold_sets), gold["words"])
+            forms = "-".join(ours["words"][i]["form"] for i in oc["members"])
+            c["wrong_groups"][f"{kind} || {gold.get('id', '')}: {forms}"] = 1
             continue
         gc = gold_sets[frozenset(mapped)]
         c["found"] += 1
@@ -90,6 +103,61 @@ def score_compounds(ours: dict[str, Any], gold: dict[str, Any]) -> dict[str, Any
             key = f"{gc['type']} -> {oc['type']}"
             c["confusion"][key] = c["confusion"].get(key, 0) + 1
     return c
+
+
+def wrong_group_kind(mapped: set[int], n: int, gold_sets: list[frozenset], gold_words: Sequence[dict]) -> str:
+    """Why one of our compounds matches no gold compound (a short Devanagari-free label)."""
+    if len(mapped) != n:
+        return "unaligned member"
+    over = [g for g in gold_sets if g & mapped]
+    if not over:
+        flagged = sum(bool(gold_words[i].get("compound_member")) for i in mapped)
+        return "no gold compound (gold: separate words)" if not flagged else "gold flags members but lists no compound"
+    if len(over) > 1:
+        return "spans several gold compounds"
+    g = over[0]
+    if mapped < g:
+        return "part of a longer gold compound"
+    if mapped > g:
+        return "longer than the gold compound"
+    return "overlaps a gold compound"
+
+
+def wrong_group_table(total: dict[str, Any], top: int = 30) -> str:
+    kinds = Counter(k.split(" || ")[0] for k in total.get("wrong_groups", {}))
+    rows = [f"wrong groups: {sum(kinds.values())}"]
+    for kind, n in kinds.most_common(top):
+        ex = [k.split(" || ")[1] for k in total["wrong_groups"] if k.startswith(kind + " ||")][:4]
+        rows.append(f"{n:>4}  {kind}:  " + "; ".join(ex))
+    return "\n".join(rows)
+
+
+def run_gold_words(verses: Iterable[dict[str, Any]]) -> dict[str, Any]:
+    """The compound layer alone on the reference's own words (see eval/gold_words.py)."""
+    sys.path.insert(0, str(ROOT / "eval"))
+    import gold_words
+    from mayur import compounds
+
+    total: dict[str, Any] = {}
+    n = errors = built = 0
+    for v in verses:
+        n += 1
+        try:
+            r, k = gold_words.reading_of(v)
+            built += k
+            s = treebank.verse_to_sentence(v, "reference")
+            total = add(total, score_compounds(er.our_view(compounds.annotate(r)), s))
+        except Exception:  # counted, like pipeline exceptions
+            errors += 1
+    total["morphs_from_feats"] = built
+    return {"sentences": n, "exceptions": errors, "counts": total}
+
+
+def wanted(verses: list[dict[str, Any]], spec: Optional[str]) -> list[dict[str, Any]]:
+    if not spec:
+        return verses
+    lo, _, hi = spec.partition("-")
+    return [v for v in verses if int(lo) <= int(v.get("number", 0)) <= int(hi or lo)]
 
 
 def add(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
@@ -119,7 +187,7 @@ def report(total: dict[str, Any], sentences: int, errors: int, label: str) -> st
              f" by family {f(total.get('family_ok', 0), total.get('typed', 0))}"]
     for t, d in sorted(total.get("by_type", {}).items(), key=lambda kv: -kv[1]["n"]):
         lines.append(f"  gold {t}: strict {f(d['ok'], d['n'])}; family {f(d['family_ok'], d['n'])}")
-    for k, n in sorted(total.get("confusion", {}).items(), key=lambda kv: -kv[1])[:12]:
+    for k, n in sorted(total.get("confusion", {}).items(), key=lambda kv: -kv[1])[:30]:
         lines.append(f"  {k}: {n}")
     return "\n".join(lines)
 
@@ -170,15 +238,26 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--agreement", nargs=2, metavar=("A", "B"), default=None)
     ap.add_argument("--max-compounds", type=int, default=500)
     ap.add_argument("--json", default=None)
+    ap.add_argument("--gold-words", action="store_true", help="compound layer alone on the reference words")
+    ap.add_argument("--verses", default=None, help="verse numbers of a --claude file, e.g. 21-40")
+    ap.add_argument("--wrong-groups", action="store_true", help="most frequent kinds of wrong groups")
     args = ap.parse_args(argv)
-    if args.agreement:
+    if args.gold_words:
+        verses = wanted(json.loads(Path(args.claude).read_text(encoding="utf-8"))["verses"], args.verses)
+        result = run_gold_words(verses)
+        label = f"reference {Path(args.claude).name}, gold words ({result['counts'].get('morphs_from_feats', 0)}"\
+                " Morphs built from feats)"
+    elif args.agreement:
         a, b = (treebank.read_claude(p) for p in args.agreement)
         result, label = agreement(a, b), f"agreement {Path(args.agreement[0]).name} vs {Path(args.agreement[1]).name}"
     else:
         from mayur.pipeline import analyze_verse
 
         if args.claude:
-            sents, label = treebank.read_claude(args.claude), f"reference {Path(args.claude).name}"
+            doc = json.loads(Path(args.claude).read_text(encoding="utf-8"))
+            keep = {str(v.get("id", v.get("number", ""))) for v in wanted(doc["verses"], args.verses)}
+            sents = [s for s in treebank.read_claude(args.claude) if s["id"] in keep]
+            label = f"reference {Path(args.claude).name}"
         elif args.gold:
             sents, label = treebank.read_gold_roles(args.gold), f"human gold {Path(args.gold).name}"
         else:
@@ -186,6 +265,8 @@ def main(argv: Optional[list[str]] = None) -> int:
             sents, label = ud_sentences(src), f"UD proxy ({'+'.join(src)}: only द्वन्द्व units are typed)"
         result = run(sents, analyze_verse, args.max_compounds)
     print(report(result["counts"], result["sentences"], result["exceptions"], label))
+    if args.wrong_groups:
+        print(wrong_group_table(result["counts"]))
     if args.json:
         Path(args.json).write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
     return 0

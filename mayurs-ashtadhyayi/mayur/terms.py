@@ -32,6 +32,7 @@ ROLES = {
     "कर्ता": "agent", "कर्म": "object", "करण": "instrument", "सम्प्रदान": "recipient", "अपादान": "source",
     "अधिकरण": "locus", "सम्बन्ध": "possessor", "क्रिया": "verb", "विशेषण": "qualifier", "विधेय": "predicate",
     "सम्बोधन": "address", "अव्यय": "particle", "पूर्वकालक्रिया": "prior action", "तुमर्थ": "purpose",
+    "भावलक्षण": "absolute (time or circumstance)",
     "समासपूर्वपद": "compound member", "": "",
 }
 

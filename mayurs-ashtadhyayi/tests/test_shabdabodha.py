@@ -25,7 +25,7 @@ def test_verse1_roles():
 
 def test_verse2_verbless():
     r = _resolve(verse2())
-    assert r.words[0].role == "" and r.words[0].head is None  # कस् is the subject
+    assert r.words[0].role == "कर्ता" and r.words[0].head is None  # कस् is the subject
     assert r.words[5].role == "विधेय" and r.words[17].role == "विधेय"
     assert r.words[4].role == "अधिकरण" and r.words[2].head == 4
     assert r.words[7].head == 6  # च joins the preceding कस्
@@ -107,7 +107,7 @@ def test_number_agreement_and_fear_verse4():
     assert _r(r, "कस्य") == ("सम्बन्ध", "बिभ्यति")  # षष्ठी शेषे (2.3.50): भी takes पञ्चमी by 1.4.25
     assert next(w for w in r.words if w.form == "कस्य").role_sutras == ("2.3.50",)
     first = [w for w in r.words if w.line == 0 and w.form == "कस्"][0]
-    assert first.role == "" and first.head is None  # line 1 is a nominal clause
+    assert first.role == "कर्ता" and first.head is None  # line 1 is a nominal clause
 
 
 def test_quoted_speech_verse6():
@@ -163,7 +163,7 @@ def test_named_subject_kept_verse8():
     r = _gold(8)
     assert _r(r, "रामस्") == ("कर्म", "श्रुतस्")  # the क्त predicate expresses its कर्म (3.4.70)
     assert next(w for w in r.words if w.form == "रामस्").role_sutras[:2] == ("1.4.49", "3.4.70")
-    assert _r(r, "वशी") == ("विधेय", "रामस्")
+    assert _r(r, "वशी") == ("विशेषण", "रामस्")  # qualifies the subject of the क्त predicate
 
 
 def test_relative_clause_yad_tad():
@@ -178,4 +178,91 @@ def test_relative_clause_yad_tad():
 
 def test_question_keeps_its_clause():
     r = _resolve(verse2())
-    assert r.words[0].role == "" and all(w.head != 0 or w.line == 0 for w in r.words)
+    assert r.words[0].role == "कर्ता" and all(w.head != 0 or w.line == 0 for w in r.words)
+
+
+# Round 2: sentence structure by rule (dev verses 21-79 only; 1-20 are the test set).
+
+def _ref(n):
+    """Verse n of the reference file, built from its own words and feats (eval/gold_words.py)."""
+    import json
+    import sys
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+    sys.path.insert(0, str(root / "eval"))
+    try:
+        import gold_words
+        doc = json.loads((root / "eval/review/claude/ramayana_bala1_041_079_A.json").read_text(encoding="utf-8"))
+        return _resolve(gold_words.reading_of(next(v for v in doc["verses"] if v["number"] == n))[0])
+    except Exception as e:  # reference file or lexicon unavailable
+        pytest.skip(f"reference unavailable: {e}")
+
+def _two_lines(line0, line1):
+    from syntax_fixtures import hand
+    r = hand(line0 + line1)
+    words = [type(w)(**{**w.__dict__, "line": 0 if k < len(line0) else 1}) for k, w in enumerate(r.words)]
+    return type(r)(words=words)
+
+
+def test_agent_in_the_other_half_verse():
+    from dataclasses import replace
+    from syntax_fixtures import nom, verb
+    r = _resolve(_two_lines([("देवास्", False, [nom("देवास्", "देव", "प्रथमा", vacana="बहुवचन")])],
+                            [("अभिगच्छन्ति", False, [replace(verb("अभिगच्छन्ति", "गम्", "लट्"), vacana="बहुवचन")]),
+                             ("तीर्थम्", False, [nom("तीर्थम्", "तीर्थ", "द्वितीया", "नपुंसकलिङ्ग")])]))
+    assert _r(r, "देवास्") == ("कर्ता", "अभिगच्छन्ति")  # the verb's line has no agreeing nominative
+    assert r.words[0].role_sutras[:3] == ("1.4.54", "3.4.69", "2.3.46")
+
+
+def test_particles_follow_their_word_or_verb_verse43():
+    r = _ref(43)  # गृध्रं च निहतं दृष्ट्वा हृतां श्रुत्वा च मैथिलीम्
+    ca = [i for i, w in enumerate(r.words) if w.form == "च"]
+    assert all(r.words[i].head == i - 1 for i in ca)
+
+
+def test_kta_predicates_of_a_verbless_clause_verse47():
+    r = _ref(47)  # शबर्या पूजितः सम्यग्रामो दशरथात्मजः । पम्पातीरे हनुमता संगतो वानरेण ह
+    assert _r(r, "पूजितस्")[0] == "क्रिया" and _r(r, "संगतस्")[0] == "क्रिया"
+    assert _r(r, "रामस्") == ("कर्म", "पूजितस्")  # the क्त of a transitive root expresses its कर्म (3.4.70)
+    assert _r(r, "आत्मजस्") == ("विशेषण", "रामस्")
+
+
+def test_participle_qualifies_unexpressed_agent_verse44():
+    r = _ref(44)  # … मार्गमाणो वने सीतां राक्षसं संददर्श ह
+    assert _r(r, "मार्गमाणस्") == ("विशेषण", "संददर्श")
+    assert any("unexpressed agent" in n for n in r.notes)
+    assert _r(r, "गृध्रम्")[0] == "कर्म" and _r(r, "जटायुषम्") == ("विशेषण", "गृध्रम्")
+
+
+def test_demonstrative_qualifies_verse48():
+    r = _ref(48)  # सुग्रीवाय च तत्सर्वं शंसद्रामो महाबलः
+    assert _r(r, "तत्") == ("विशेषण", "सर्वम्")
+
+
+def _sync(items):
+    from syntax_fixtures import hand
+    from mayur import vakya
+    return vakya.syncretic(hand(items).words)
+
+
+def test_syncretic_accusative_when_the_agent_is_there():
+    from syntax_fixtures import nom, verb
+    words, notes = _sync([("रामस्", False, [nom("रामस्", "राम", "प्रथमा")]),
+                          ("वनम्", False, [nom("वनम्", "वन", "प्रथमा", "नपुंसकलिङ्ग"),
+                                           nom("वनम्", "वन", "द्वितीया", "नपुंसकलिङ्ग")]),
+                          ("गच्छति", False, [verb("गच्छति", "गम्", "लट्")])])
+    assert words[1].morph.vibhakti == "द्वितीया" and "1.4.49" in notes[0]
+
+
+def test_syncretic_nominative_with_passive_and_not_in_a_question():
+    from syntax_fixtures import nom, verb
+    words, _ = _sync([("रामेण", False, [nom("रामेण", "राम", "तृतीया")]),
+                      ("वनम्", False, [nom("वनम्", "वन", "द्वितीया", "नपुंसकलिङ्ग"),
+                                       nom("वनम्", "वन", "प्रथमा", "नपुंसकलिङ्ग")]),
+                      ("दृश्यते", False, [verb("दृश्यते", "दृश्", "लट्", "कर्मणि")])])
+    assert words[1].morph.vibhakti == "प्रथमा"
+    words, notes = _sync([("किम्", False, [nom("किम्", "किम्", "प्रथमा", "नपुंसकलिङ्ग"),
+                                           nom("किम्", "किम्", "द्वितीया", "नपुंसकलिङ्ग")]),
+                          ("अहम्", False, [nom("अहम्", "अस्मद्", "प्रथमा", None)]),
+                          ("जाने", False, [verb("जाने", "ज्ञा", "लट्")])])
+    assert words[0].morph.vibhakti == "प्रथमा" and not notes  # a question: not decisive

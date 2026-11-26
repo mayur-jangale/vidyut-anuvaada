@@ -9,6 +9,7 @@ def test_own_table_first():
 
 
 def test_root_gloss_fallback_and_none(monkeypatch):
+    monkeypatch.setattr(gloss, "_draft", lambda: {})
     monkeypatch.setattr(gloss.resources, "derived", lambda n: {})
     m = Morph("x", "धाव्", "tinanta", root="धाव्", root_gloss="to run, to flow")
     assert gloss.lookup(m) == ("run", "vidyut-dhatupatha")
@@ -21,6 +22,7 @@ def test_dcs_order(monkeypatch):
         "dcs_dict.json": {"श्वन्": [{"grammar": "m", "meanings": "[ety]; a dog or hound of the village; x"}],
                           "प्रच्छ्": [{"grammar": "6.P.", "meanings": "m.; to ask"}]},
     }
+    monkeypatch.setattr(gloss, "_draft", lambda: {})
     monkeypatch.setattr(gloss.resources, "derived", lambda n: tables.get(n, {}))
     m = Morph("परिपप्रच्छ", "परिप्रच्छ्", "tinanta", root="प्रच्छ्", prefixes=("परि",))
     assert gloss.lookup(m) == ("ask", "dcs-sense")
@@ -54,6 +56,7 @@ def _reading(lemma: str = "रथ"):
 
 
 def test_in_context_falls_back_when_model_missing(monkeypatch):
+    monkeypatch.setattr(gloss, "_draft", lambda: {})
     monkeypatch.setattr(gloss.resources, "derived", lambda n: {"dcs_senses.json": {"रथ": "chariot"}}.get(n, {}))
     assert gloss.lookup_in_context(_reading(), 0) == ("chariot", "dcs-sense")
 
@@ -69,3 +72,14 @@ def test_in_context_own_table_first_then_sense(monkeypatch):
     own = _reading("च")
     own.words[0].analyses[0] = Morph("च", "च", "avyaya")
     assert gloss.lookup_in_context(own, 0) == ("and", "own")
+
+
+def test_drafted_table_by_kind_and_prefixed_verb(monkeypatch):
+    """The drafted table is read by word class; a prefixed verb it lacks takes its own dictionary entry."""
+    monkeypatch.setattr(gloss, "_draft", lambda: {"मद्": ["I", "pron"], "पाण्डव": ["Pāṇḍava", "name"], "इ": ["go", "verb"]})
+    tables = {"dcs_dict.json": {"समवे": [{"grammar": "2.P.", "meanings": "to come together; to assemble"}]}}
+    monkeypatch.setattr(gloss.resources, "derived", lambda n: tables.get(n, {}))
+    assert gloss.lookup(Morph("x", "पाण्डव", "subanta")) == ("Pāṇḍava", "own-draft")
+    assert gloss.lookup(Morph("x", "मद्", "tinanta", root="मद्", root_gloss="to rejoice")) == ("rejoice", "vidyut-dhatupatha")
+    prefixed = Morph("समवेतास्", "समवे", "subanta", stem="समवेत", root="इ", prefixes=("सम्", "अव"), krt="क्त")
+    assert gloss.lookup(prefixed) == ("come together", "dcs-dictionary")

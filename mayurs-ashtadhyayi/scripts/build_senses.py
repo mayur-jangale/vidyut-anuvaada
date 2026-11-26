@@ -19,7 +19,7 @@ from typing import Any, Callable, Iterable, Iterator, NamedTuple
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from mayur import dcs, resources, senses, ud  # noqa: E402
+from mayur import dcs, resources, senses  # noqa: E402
 from mayur.lipi import devanagari  # noqa: E402
 
 MIN_OCCURRENCES = 20  # annotated occurrences of an ambiguous lemma

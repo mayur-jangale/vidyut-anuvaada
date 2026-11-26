@@ -172,7 +172,8 @@ def test_upapada_sentences():
 def test_locative_absolute():
     r = _lex([("गते", False), ("रामे", False), ("सीता", False), ("रोदिति", False)])
     w = _w(r, "रामे")
-    assert w.morph.vibhakti == P7 and w.role_sutras == ("2.3.37",)
+    assert (w.role, w.morph.vibhakti, w.role_sutras) == ("भावलक्षण", P7, ("2.3.37",))
+    assert r.words[w.head].form == "रोदिति"
     assert karaka.verify(r) == []
 
 
