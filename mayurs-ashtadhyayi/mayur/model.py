@@ -78,6 +78,7 @@ class Word:
     start: int  # span [start, end) in the line's varna sequence, spaces not counted
     end: int
     in_compound: bool = False  # True => non-final member of a compound
+    space_after: Optional[bool] = None  # the text has a space after this word (None: not known)
     compound: Optional[int] = None  # id of the Compound this word belongs to, if any
     analyses: list[Morph] = field(default_factory=list)
     chosen: int = 0

@@ -27,9 +27,9 @@ def test_tag_and_keys_are_devanagari_values():
 def test_choose_new_api_uses_weights():
     cands, lines, cpd, forms = _verse()
     w = {"accV": {"Cद्वितीया": 1.0}}
-    assert tagger.choose_indices(cands, lines, cpd, forms, weights=w) == [0, 1, 0]
+    assert tagger.choose_indices(cands, lines, cpd, forms, weights=w, neural_bonus=[]) == [0, 1, 0]
     w = {"w=वनम्": {"Cप्रथमा": 1.0}}
-    assert tagger.choose_indices(cands, lines, cpd, forms, weights=w) == [0, 0, 0]
+    assert tagger.choose_indices(cands, lines, cpd, forms, weights=w, neural_bonus=[]) == [0, 0, 0]
 
 
 def test_decode_is_deterministic_and_handles_empty_candidates():
@@ -45,7 +45,7 @@ def test_perceptron_learns_a_toy_verse():
     cands, lines, cpd, forms = _verse()
     gold = [(0,), (1,), (0,)]
     w = tt.train([((cands, lines, cpd, forms, None), gold)], epochs=3)
-    assert tagger.choose_indices(cands, lines, cpd, forms, weights=w) == [0, 1, 0]
+    assert tagger.choose_indices(cands, lines, cpd, forms, weights=w, neural_bonus=[]) == [0, 1, 0]
 
 
 def test_model_file_is_optional(tmp_path):
@@ -58,7 +58,7 @@ def test_model_file_is_optional(tmp_path):
 @pytest.mark.skipif(not dcs.split_files("train"), reason="DCS split manifest missing")
 def test_tiny_training_beats_frequency_baseline():
     items = [it for _b, it in tt.load_train(4000)][:200]
-    data = [(tt.verse_args(it, tt.minus_of(it)), it["gold"]) for it in items]
+    data = [(tt.verse_args(it, tt.minus_of(it)), it["gold"], tt.verse_kw(it)) for it in items]
     w = tt.train(data, epochs=2)
 
     def acc(choose) -> float:
@@ -69,7 +69,7 @@ def test_tiny_training_beats_frequency_baseline():
                     n, ok = n + 1, ok + tt.correct(c[p], t)
         return ok / n
 
-    freq = lambda it: [tagger.Verse(*tt.verse_args(it)).top[i] if c else 0 for i, c in enumerate(it["cands"])]
+    freq = lambda it: [tagger.Verse(*tt.verse_args(it), **tt.verse_kw(it)).top[i] if c else 0 for i, c in enumerate(it["cands"])]
     assert acc(lambda it: tt.learned_choice(it, w, False)) > acc(freq)
 
 

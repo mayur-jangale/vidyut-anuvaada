@@ -36,12 +36,15 @@ def _upapada_head(words: list[Word], i: int) -> Optional[tuple[int, Licence]]:
 def _bhavalakshana(words: list[Word], i: int) -> bool:
     """Evidence for 2.3.37: a locative participle in the same case/number qualifies the word."""
     m = words[i].morph
+    # षष्ठी चानादरे (2.3.38) needs an action going on in disregard of someone: only a present
+    # participle shows that (पश्यतस् तस्य); सुप्तस्य सिंहस्य is an ordinary genitive phrase.
+    allowed = PARTICIPLES if m.vibhakti != P6 else PARTICIPLES & {"शतृ", "शानच्", "चानश्"}
     for j, w in enumerate(words):
         o = w.morph
-        if j != i and o is not None and (w.head == i or i == j + 1 or i == j - 1) and o.krt in PARTICIPLES \
+        if j != i and o is not None and (w.head == i or i == j + 1 or i == j - 1) and o.krt in allowed \
                 and (o.vibhakti, o.vacana) == (m.vibhakti, m.vacana) and o.kind == "subanta":
             return True
-    return m.krt in PARTICIPLES and any(words[j].head == i for j in range(len(words)))
+    return m.krt in allowed and any(words[j].head == i for j in range(len(words)))
 
 
 def _verbal_head(words: list[Word], i: int) -> Optional[int]:

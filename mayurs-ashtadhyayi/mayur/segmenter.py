@@ -407,6 +407,11 @@ def _prepare(line: str) -> tuple[Varnas, frozenset]:
     return tuple(text), frozenset(s for s in spaces if 0 < s < len(text))
 
 
+def spaces_of(line: str) -> frozenset:
+    """Positions in the line's varna sequence (as in ``SegWord.start``/``end``) before which the text has a space."""
+    return _prepare(line)[1]
+
+
 def segment_line(line: str, top_k: int = 12) -> Segmentation:
     """All valid splits of ``line`` (a half-verse), the best ``top_k`` listed."""
     text, spaces = _prepare(line)

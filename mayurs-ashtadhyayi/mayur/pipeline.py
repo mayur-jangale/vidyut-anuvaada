@@ -82,18 +82,30 @@ def _distinct(splits: Sequence[segmenter.Split]) -> list[segmenter.Split]:
     return out
 
 
-def _analyses(seg: segmenter.SegWord) -> list:
+# Prefixes that are never a word of their own: before a written space the form is something else
+# (स before a consonant is सस् with its ending dropped, 6.1.132).
+BOUND_PREFIXES = frozenset({"स", "सु", "अ", "अन्", "दुस्", "दुर्", "कु"})
+
+
+def _analyses(seg: segmenter.SegWord, space_after: bool = False) -> list:
     found = lexicon.stems(seg.form) if seg.in_compound else lexicon.padas(seg.form)
+    if space_after and seg.form in BOUND_PREFIXES:
+        free = [m for m in found if m.kind != "avyaya"]
+        found = free or found
     return list(found or lexicon.generated(seg.form))
 
 
-def _reading(splits: Sequence[segmenter.Split], best: float, temperature: float) -> Reading:
+def _reading(splits: Sequence[segmenter.Split], best: float, temperature: float,
+             spaces_by_line: Sequence[frozenset] = ()) -> Reading:
     words: list[Word] = []
     junctions: list[Junction] = []
     for line, split in enumerate(splits):
         offset = len(words)
-        words.extend(Word(form=seg.form, line=line, start=seg.start, end=seg.end,
-                          in_compound=seg.in_compound, analyses=_analyses(seg)) for seg in split.words)
+        spaces = spaces_by_line[line] if spaces_by_line else frozenset()
+        for seg in split.words:
+            spaced = seg.end in spaces
+            words.append(Word(form=seg.form, line=line, start=seg.start, end=seg.end, in_compound=seg.in_compound,
+                              space_after=spaced if spaces_by_line else None, analyses=_analyses(seg, spaced)))
         junctions.extend(replace(j, left=j.left + offset) for j in split.junctions)
     score = sum(split.score for split in splits)
     frequency = 0.0 if math.isinf(score) else math.exp((score - best) / temperature)
@@ -150,8 +162,9 @@ def candidate_readings(lines: Sequence[str]) -> tuple[list[segmenter.Segmentatio
     decoded = decoder.enabled() and any(seg.tier == 0 for seg in segmentations)
     temperature = TEMPERATURE_DECODER if decoded else TEMPERATURE_RULES
     candidates = []
+    spaces = [segmenter.spaces_of(line) for line in lines]
     for idx in _combinations(per_line, MAX_CANDIDATES):
-        reading = _reading([per_line[i][j] for i, j in enumerate(idx)], best, temperature)
+        reading = _reading([per_line[i][j] for i, j in enumerate(idx)], best, temperature, spaces)
         reading = shabdabodha.resolve(compounds.annotate(reading))
         candidates.append(_label_unproven(proof.check(reading, lines)))
     return segmentations, candidates, notes

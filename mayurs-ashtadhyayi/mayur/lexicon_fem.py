@@ -46,6 +46,8 @@ def _candidates(form: str) -> list[tuple[str, str]]:
                 base = form[: -len(ending)]
                 if "क" <= base[-1] <= "ह" and _known_base(base):
                     out.append((base + fem_end, base + fem_end))
+                if fem_end == "ा" and base.endswith("िक") and _known_base(base[:-2] + "क"):
+                    out.append((base + "ा", base + "ा"))  # बालक -> बालिका (7.3.44 प्रत्ययस्थात्कात्पूर्वस्यात इदाप्यसुपः)
                 if fem_end == "ी" and base.endswith("्व") and _known_base(base[:-2] + "ु"):
                     out.append((base + "ी", base[:-2] + "ु"))  # साधु -> साध्वी (4.1.44 वोतो गुणवचनात्)
     return list(dict.fromkeys(out))

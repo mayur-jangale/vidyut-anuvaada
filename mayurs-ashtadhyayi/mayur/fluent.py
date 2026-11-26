@@ -32,7 +32,6 @@ _MASS = {"water", "fire", "speech", "dharma", "truth", "joy", "anger", "grief", 
 _NOUN_SKIP = {"विशेषण", "समासपूर्वपद", "सम्बोधन", "क्रिया", "अव्यय", "सम्बन्ध"}
 _ADJ = {"विशेषण", "विधेय"}
 _AGENT_END = ("er", "or", "ist")
-_ADJ_END = ("ed", "ful", "ous", "ive", "ent", "ant", "al", "able", "ible", "ic", "less", "ish", "ary", "like", "est")
 _ADJ_WORDS = {"like", "equal", "good", "best", "great", "other", "dear", "fine", "firm", "such", "same", "all", "only",
               "noble", "wise", "high", "low", "steadfast", "clean", "well", "mahat", "large", "small", "many", "much"}
 _PREP_START = ("of", "in", "by", "to", "from", "with", "for", "on", "at", "like", "as")
@@ -54,7 +53,10 @@ def tokenize(reading: Reading) -> list[Tok]:
     text, out, pos = reading.translation, [], 0
     for a in sorted(reading.alignment, key=lambda x: x.start):
         out += [Tok(m) for m in _PIECE.findall(text[pos:a.start])]
-        out.append(Tok(text[a.start:a.end], a.word))
+        span = text[a.start:a.end]
+        if span[:1].isupper() and not reading.words[a.word].gloss[:1].isupper() and (pos or a.start == 0):
+            span = span[0].lower() + span[1:]  # a capital that only marks the sentence start
+        out.append(Tok(span, a.word))
         pos = a.end
     return out + [Tok(m) for m in _PIECE.findall(text[pos:])]
 
@@ -272,18 +274,32 @@ def questions(toks, reading):
     return [toks[0], toks[k]] + toks[1:k] + toks[k + 1:]
 
 
+def _phrase_start(toks, i, t, reading) -> int:
+    j = i
+    while j > 0 and toks[j - 1].word is not None and reading.words[toks[j - 1].word].head == t.word \
+            and reading.words[toks[j - 1].word].role == "विशेषण":
+        j -= 1
+    return j
+
+
 def articles(toks, reading):
     """'the' / 'a' before singular common-noun phrases; never before names, pronouns, plurals or mass nouns."""
     ins: dict[int, str] = {}
     for i, t in enumerate(toks):
         w = _w(reading, t)
         m = w.morph if w else None
-        if not (m and m.kind == "subanta" and w.gloss and not w.in_compound) or _pronoun(w) or _is_name(w):
+        if not (m and m.kind == "subanta" and w.gloss and not w.in_compound) or _pronoun(w):
             continue
+        if _is_name(w) and not (m.vacana == "बहुवचन" and t.text.endswith("s") and " " not in t.text):
+            continue  # a plural name takes "the" (the Pāṇḍavas); a single name never does
         g = w.gloss.lower().split()[0]
-        if m.krt or g in _ADJ_WORDS or (g.endswith(_ADJ_END) and not g.endswith(_AGENT_END)) or (g.endswith("ing") and len(g) > 6):
+        if m.krt or g in _ADJ_WORDS:
             continue
         if w.role == "विधेय" and not t.text.lower().endswith(_AGENT_END):
+            continue
+        plural_name = _is_name(w) and m.vacana == "बहुवचन"
+        if plural_name:
+            ins[_phrase_start(toks, i, t, reading)] = "the"
             continue
         if w.role in _NOUN_SKIP or m.vacana != "एकवचन" or w.gloss.lower() in _MASS or m.vibhakti == "सम्बोधन":
             continue

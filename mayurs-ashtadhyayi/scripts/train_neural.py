@@ -27,7 +27,9 @@ import torch  # noqa: E402
 import train_tagger as tt  # noqa: E402
 from mayur import dcs, neural, tagger, ud  # noqa: E402
 
-LAMBDAS = (0.05, 0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 2.0)
+# the perceptron's score differences between candidates are in the tens to hundreds (sums of averaged
+# weights over ~100 features), the neural Σ log P in units: λ is swept over that range
+LAMBDAS = (2.0, 5.0, 10.0, 20.0, 50.0, 100.0, 200.0, 500.0)
 
 
 def verse_record(verse: list[dict]) -> dict:
@@ -162,14 +164,7 @@ def neural_scores(model, meta: dict, items) -> list[list[list[float]]]:
 
 
 def choice(it: dict, w, bonus, use_enforce: bool = True) -> list[int]:
-    w1, w2 = w
-    pick = tagger.choose_indices(*tt.verse_args(it)[:4], weights=w1, weights2=w2, tables=tt.TABLES,
-                                 neural_bonus=bonus)
-    if not use_enforce:
-        return pick
-    idx = [tt.shabdabodha.candidates(x) if x.analyses else [] for x in it["words"]]
-    chosen = tagger.enforce(it["words"], [ix[k] if ix else 0 for ix, k in zip(idx, pick)], force=True)
-    return [ix.index(c) if c in ix else 0 for ix, c in zip(idx, chosen)]
+    return tt.learned_choice(it, w, use_enforce, bonus=bonus)
 
 
 def systems(items, scores, w, lam: float, enforce: bool, conf=None) -> dict:

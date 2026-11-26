@@ -193,6 +193,7 @@ def _load() -> Optional[tuple[Any, dict[str, int]]]:
         return None
     if not (MODEL_FILE.exists() and META_FILE.exists()):
         return None
+    torch.set_num_threads(1)  # one short line per call: threads only contend (≈200x slower on a busy machine)
     meta = json.loads(META_FILE.read_text(encoding="utf-8"))
     vocab = {v: i for i, v in enumerate(meta["vocab"])}
     net = build_model(len(vocab), **meta["arch"])

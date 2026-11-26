@@ -52,12 +52,16 @@ def _join(left: str, right: str) -> str:
         else:
             sub = "ः"
         text = text.replace("ः", sub, 1)
-    if left in _R_PREFIX and text[len(left):].startswith("न"):  # 8.4.14 उपसर्गादसमासेऽपि णोपदेशस्य
+    if left in _R_PREFIX and text[len(left):].startswith("न") and not right.startswith(_NA_UPADESHA):
+        # 8.4.14 उपसर्गादसमासेऽपि णोपदेशस्य: not for the roots taught with न (6.1.65 vārttika: नृति, नन्दि ...)
         text = text[: len(left)] + "ण" + text[len(left) + 1:]
     return text
 
 
 _VOWEL_INITIAL = frozenset("अआइईउऊऋॠऌएऐओऔ")
+_NA_UPADESHA = ("नृत्", "नन्द्", "नर्द्", "नक्क्", "नाट्", "नाथ्", "नाध्", "नॄ")
+# 6.1.137 सम्परिभ्यां करोतौ भूषणे (with 6.1.138 समवाये च): कृ takes सुट् after सम्/परि: संस्कृ, परिष्कृ
+_SUT = {"सम्": "संस्कृ", "परि": "परिष्कृ"}
 _VOICED = frozenset("गघङजझञडढणदधनबभमयरलवह")
 _SHATVA_ROOTS = ("स्था", "सद्", "सिच्", "सिध्", "सञ्ज्", "स्तु", "स्तम्भ्", "सेव्", "सो", "स्वप्", "सह्",
                  "सिव्", "सु", "सू", "स्यन्द्", "स्वञ्ज्", "स्वज्")
@@ -123,4 +127,10 @@ def _labial_m(text: str) -> str:
 def verbal_lemma(m: Morph) -> str:
     """The upasargas joined to the root by sandhi, in the corpus' citation form: प्र+आप् -> प्राप्,
     प्र+नम् -> प्रणम्, आ+इ -> ए, आ+सादि -> आसादय्. For ``mayur.ud.lemma``."""
-    return _labial_m(_verbal_lemma(tuple(m.prefixes), _suppletive_root(m, _dcs_root(m))))
+    root, prefixes = _suppletive_root(m, _dcs_root(m)), tuple(m.prefixes)
+    if root == "कृ" and prefixes and prefixes[-1] in _SUT and ("ष्क" in m.form or "स्क" in m.form):
+        out = _SUT[prefixes[-1]]
+        for p in reversed(prefixes[:-1]):
+            out = _join(p, out)
+        return _labial_m(out)
+    return _labial_m(_verbal_lemma(prefixes, root))

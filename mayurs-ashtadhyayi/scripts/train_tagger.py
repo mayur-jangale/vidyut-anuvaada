@@ -22,10 +22,11 @@ from typing import Callable, Optional, Sequence
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from mayur import dcs, lexicon, shabdabodha, tagger, terms, ud  # noqa: E402
+from mayur import dcs, lexicon, shabdabodha, tagger, tagger_siblings, terms, ud  # noqa: E402
 from mayur.model import Word  # noqa: E402
 
 MODEL = ROOT / "mayur/models/tagger.json"
+SIBLINGS = True  # candidates of sibling pada forms (मूढा / मूढास्) at the eligible words
 TABLES: dict = {}  # corpus-structure tables of the model being trained or evaluated
 _GENDER = {v: k for k, v in terms.UD_GENDER.items()}
 
@@ -112,8 +113,8 @@ def train(data: Sequence[tuple[tuple, Sequence[tuple[int, ...]]]], epochs: int, 
     for epoch in range(epochs):
         random.Random(seed + epoch).shuffle(order)
         for j in order:
-            args, gold = data[j]
-            p.update(tagger.Verse(*args, tables=TABLES), gold)
+            args, gold, kw = data[j] if len(data[j]) == 3 else (*data[j], {})
+            p.update(tagger.Verse(*args, tables=TABLES, **kw), gold)
         if on_epoch is not None:
             on_epoch(epoch, p.averaged())
     return p.averaged()
@@ -165,7 +166,24 @@ def analyse(verse: list[dict]) -> dict:
             ok = tuple(j for j, m in enumerate(ms) if correct(m, t))
             exact = tuple(j for j in ok if all(feature_ok(ms[j], t, key) for key in ("Case", "Gender")))
             gold.append(exact or ok)  # prefer the readings whose case and gender are also the gold ones
-    return {"words": words, "toks": toks, "cands": cands, "gold": gold}
+    item = {"words": words, "toks": toks, "cands": cands, "gold": gold, "own": [len(c) for c in cands]}
+    return with_siblings(item) if SIBLINGS else item
+
+
+def with_siblings(item: dict) -> dict:
+    """Add the sibling forms' candidates (``mayur.tagger_siblings``) and recompute the gold sets."""
+    w = item["words"]
+    cands, own, obs, var = tagger_siblings.extend(item["cands"], [x.form for x in w], [x.in_compound for x in w],
+                                                  tagger.sibling_candidates)
+    gold = []
+    for c, t, g, n in zip(cands, item["toks"], item["gold"], own):
+        extra = tuple(n + j for j, m in enumerate(c[n:]) if correct(m, t))
+        gold.append(g or extra)  # the own form's reading wins a tie: the gold form is the pada
+    return {**item, "cands": cands, "own": own, "obs": obs, "var": var, "gold": gold}
+
+
+def verse_kw(item: dict) -> dict:
+    return {"obs_forms": item.get("obs"), "variants": item.get("var")}
 
 
 def minus_of(item: dict) -> list[list[tuple[float, float]]]:
@@ -217,16 +235,17 @@ def load_eval() -> tuple[list, list]:
     return [(b, analyse(v)) for b, v in dev], [(b, analyse(v)) for b, v in test]
 
 
-def learned_choice(item: dict, weights, use_enforce: bool = True) -> list[int]:
+def learned_choice(item: dict, weights, use_enforce: bool = True, bonus=None) -> list[int]:
     """``weights``: first-pass weights, or a pair (first pass, second pass)."""
     w1, w2 = weights if isinstance(weights, tuple) else (weights, None)
-    pick = tagger.choose_indices(*verse_args(item)[:4], weights=w1, weights2=w2, tables=TABLES)
+    pick = tagger.choose_indices(*verse_args(item)[:4], weights=w1, weights2=w2, tables=TABLES,
+                                 neural_bonus=bonus, **verse_kw(item))
     if not use_enforce:
         return pick
-    words = item["words"]
+    words, own = item["words"], item.get("own") or [len(c) for c in item["cands"]]
     idx = [shabdabodha.candidates(x) if x.analyses else [] for x in words]
-    chosen = tagger.enforce(words, [ix[k] if ix else 0 for ix, k in zip(idx, pick)], force=True)
-    return [ix.index(c) if c in ix else 0 for ix, c in zip(idx, chosen)]
+    chosen = tagger.enforce(words, [ix[k] if ix and k < n else 0 for ix, k, n in zip(idx, pick, own)], force=True)
+    return [k if k >= n else (ix.index(c) if c in ix else 0) for ix, c, k, n in zip(idx, chosen, pick, own)]
 
 
 def rules_choice(item: dict) -> list[int]:
@@ -309,14 +328,23 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=4)
     ap.add_argument("--eval-only", action="store_true", help="re-evaluate the saved weights")
     ap.add_argument("--max-mb", type=float, default=14.0)
-    ap.add_argument("--passes", type=int, default=2, choices=(1, 2))
+    ap.add_argument("--passes", type=int, default=1, choices=(1, 2))
+    ap.add_argument("--no-siblings", action="store_true", help="no sibling-form candidates (मूढा / मूढास्)")
+    ap.add_argument("--out", default=str(MODEL), help="where to write the model")
     args = ap.parse_args()
+    global SIBLINGS
+    model_in, model_out = MODEL, Path(args.out)
+    if args.eval_only:
+        model_in = model_out
+        SIBLINGS = bool(json.loads(model_in.read_text(encoding="utf-8")).get("siblings"))
+    else:
+        SIBLINGS = not args.no_siblings
     t0 = time.time()
     dev, test = load_eval()
     log = lambda msg: print(f"[{time.time() - t0:5.0f}s] {msg}", file=sys.stderr, flush=True)
     log(f"dev {sum(len(i['toks']) for _, i in dev)} words, test {sum(len(i['toks']) for _, i in test)} words")
     if args.eval_only:
-        saved = json.loads(MODEL.read_text(encoding="utf-8"))
+        saved = json.loads(model_in.read_text(encoding="utf-8"))
         w = (saved["weights"], saved.get("weights2"))
         TABLES.update(saved.get("tables", {}))
         meta = {k: v for k, v in saved.items() if k not in ("weights", "weights2", "report", "enabled")}
@@ -325,7 +353,7 @@ def main() -> None:
         counts: tuple = ({}, {}, {})
         for _book_name, item in load_train(args.max_words):
             build_tables([item], acc=counts)
-            data.append((verse_args(item, minus_of(item)), item["gold"]))
+            data.append((verse_args(item, minus_of(item)), item["gold"], verse_kw(item)))
             unmatched += sum(1 for g in item["gold"] if not g)
             nwords += len(item["toks"])
         TABLES.update(build_tables([], acc=counts))
@@ -338,9 +366,9 @@ def main() -> None:
             for fold in (0, 1):  # jackknifed first-pass choices for the second pass's training data
                 wf = train([d for k, d in enumerate(data) if k % 2 != fold], args.epochs)
                 for k in range(fold, len(data), 2):
-                    priors[k] = [max(x, 0) for x in tagger.decode(tagger.Verse(*data[k][0], tables=TABLES), wf)]
+                    priors[k] = [max(x, 0) for x in tagger.decode(tagger.Verse(*data[k][0], tables=TABLES, **data[k][2]), wf)]
                 log(f"fold {fold} done")
-            data2 = [((*a, p), g) for (a, g), p in zip(data, priors)]
+            data2 = [((*a, p), g, kw) for (a, g, kw), p in zip(data, priors)]
             w2, e2 = train_early(data2, args.epochs, dev, lambda w: (w1, w), log, "pass 2")
             w = (w1, w2) if e2 > e1 else (w1, None)  # keep the second pass only when it helps on DEV
         limit = int(args.max_mb * 1e6 / (2 if w[1] else 1))
@@ -363,12 +391,12 @@ def main() -> None:
         print(f"{n:5}  {g}  ->  {p}")
     print("enabled" if enabled else "NOT enabled (not better on DEV)", "| enforce helps" if enforce else "")
     if not args.eval_only:
-        out = {**meta, "enabled": enabled, "enforce": enforce, "report": report, "tables": TABLES, "weights": w[0]}
+        out = {**meta, "enabled": enabled, "enforce": enforce, "siblings": SIBLINGS, "report": report,
+               "tables": TABLES, "weights": w[0]}
         if w[1]:
             out["weights2"] = w[1]
-        MODEL.write_text(json.dumps(out,
-                                    ensure_ascii=False), encoding="utf-8")
-        log(f"wrote {MODEL} ({MODEL.stat().st_size / 1e6:.1f} MB)")
+        model_out.write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+        log(f"wrote {model_out} ({model_out.stat().st_size / 1e6:.1f} MB)")
     log("done")
 
 

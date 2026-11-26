@@ -27,7 +27,16 @@ GERUNDIVE_KRT = frozenset({"तव्य", "अनीयर्", "यत्", "�
 VERBFORM_OF_NONFINITE = {"क्त्वा": "Conv", "ल्यप्": "Conv", "तुमुन्": "Inf"}
 
 # Lemmas that vidyut and DCS write differently: vidyut -> DCS.
-LEMMA_EQUIVALENCE = {"किम्": "क", "अस्मद्": "मद्", "युष्मद्": "त्वद्"}
+LEMMA_EQUIVALENCE = {"किम्": "क", "अस्मद्": "मद्", "युष्मद्": "त्वद्", "उभ": "उभ्"}  # DCS cites the dual उभ as उभ्
+# DCS cites the feminine of some pronouns under its own stem (ताम्, तया -> ता)
+FEMININE_PRONOUN = {"तद्": "ता", "यद्": "या", "एतद्": "एता"}
+# 3.4.83 विदो लटो वा, 3.4.84 ब्रुवः पञ्चानामादित आहो ब्रुवः: present tense with perfect endings, which
+# the corpus tags as Tense=Past (वेद, विदुः; आह, आत्थ)
+_PERFECT_ENDING_PRESENT = (("विद्", ("वेद", "वेत्थ", "विदुस्", "विदतुस्", "विदथुस्", "विद", "विद्व", "विद्म")),
+                           ("अह्", ("आह", "आहतुस्", "आहुस्", "आत्थ", "आहथुस्")))
+_CLASS_NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ्", "च": "ञ्", "छ": "ञ्", "ज": "ञ्", "झ": "ञ्",
+                "ट": "ण्", "ठ": "ण्", "ड": "ण्", "ढ": "ण्", "त": "न्", "थ": "न्", "द": "न्", "ध": "न्",
+                "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्"}
 
 
 def is_verbal_noun(m: Morph) -> bool:
@@ -53,6 +62,9 @@ def lemma(m: Morph) -> str:
 def canonical_lemma(text: str) -> str:
     """One spelling for citation variants: DCS cites some -मत्/-वत्/-अत् stems in their strong
     form (हनुमन्त्, हिमवन्त्, विवस्वन्त्); a final visarga-sound is written स्."""
+    if "ं" in text[:-1]:  # 8.4.59 वा पदान्तस्य: anusvara before a stop is also written as the class nasal
+        text = "".join(_CLASS_NASAL.get(text[i + 1], ch) if ch == "ं" and i + 1 < len(text) else ch
+                       for i, ch in enumerate(text))
     if text.endswith("न्त्"):
         return text[: -len("न्त्")] + "त्"
     if text.endswith(("ः", "र्")):
@@ -71,9 +83,23 @@ def _feminine_of(ours: str, gold: str) -> bool:
 def same_lemma(m: Morph, gold_lemma: str, gold_upos: str = "") -> bool:
     """Our analysis names the same lexeme as the gold lemma, under the conventions above."""
     want, ours = canonical_lemma(gold_lemma), canonical_lemma(lemma(m))
-    if ours == want or _feminine_of(ours, want):
+    if ours == want or _feminine_of(ours, want) or _citation_variant(m, ours, want):
         return True
-    return gold_upos in INDECLINABLE_UPOS and canonical_lemma(m.form) == want
+    if gold_upos in INDECLINABLE_UPOS:
+        word = canonical_lemma(m.form)
+        return word == want or (word.endswith("त्") and word[:-2] + "द्" == want)  # 8.2.39: चेत् = चेद्
+    return False
+
+
+def _citation_variant(m: Morph, ours: str, want: str) -> bool:
+    """Citation conventions where the corpus names the same lexeme by another stem."""
+    if m.linga == "स्त्रीलिङ्ग" and (FEMININE_PRONOUN.get(ours) == want or FEMININE_PRONOUN.get(want) == ours):
+        return True  # ताम् under ता or under तद्
+    # 1.2.48 गोस्त्रियोरुपसर्जनस्य: a feminine in -आ shortened as the final of a bahuvrīhi (शुभ्र-प्रभम्)
+    if m.kind == "subanta" and m.linga != "स्त्रीलिङ्ग" and want == ours + "ा":
+        return True
+    # 7.3.78: पश्य is the present-system substitute of दृश्; the corpus cites it under either root
+    return (m.kind == "tinanta" or is_verbal_noun(m)) and ours.endswith("पश्") and want == ours[:-3] + "दृश्"
 
 
 def compared_features(gold_upos: str, gold_feats: dict[str, str]) -> tuple[str, ...]:
@@ -94,7 +120,20 @@ def same_feats(m: Morph, gold_upos: str, gold_feats: dict[str, str]) -> bool:
     ours = feats(m)
     if gold_feats.get("VerbForm") == "Part" and gold_feats.get("Tense") == "Past" and m.krt in PAST_PARTICIPLE_KRT:
         ours = {**ours, "Tense": "Past"}  # the corpus marks the tense of क्त only now and then
+    if gold_feats.get("Tense") == "Past" and ours.get("Tense") == "Pres" and perfect_ending_present(m):
+        ours = {**ours, "Tense": "Past"}
     return all(ours.get(k) == v for k, v in gold_feats.items() if k in TAG_FEATS)
+
+
+def perfect_ending_present(m: Morph) -> bool:
+    """A लट् form of विद् or ब्रू with perfect endings (3.4.83, 3.4.84)."""
+    if m.kind != "tinanta" or m.lakara != "लट्":
+        return False
+    root = lemma(m)
+    form = m.form.replace("आ", "ा") if m.form[:1] != "आ" else m.form  # प्राह: the आ after an upasarga
+    return any((root.endswith(r) or root.endswith(r.replace("अ", "ा"))) and
+               (m.form.endswith(ends) or form.endswith(tuple(e.replace("आ", "ा") for e in ends)))
+               for r, ends in _PERFECT_ENDING_PRESENT)
 
 
 def feats(m: Morph) -> dict[str, str]:

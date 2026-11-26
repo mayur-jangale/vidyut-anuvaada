@@ -6,6 +6,8 @@ from dataclasses import replace
 from typing import Optional
 
 from . import english, lipi
+from .translate_compound import CompoundMixin
+from .translate_words import ADJ_FIRST as _ADJ_FIRST, FINAL as _FINAL, PAIRED as _PAIRED, WITH_WORDS, is_latin_binomial, is_motion, is_question_lemma, name_plural
 from .model import Alignment, Reading
 
 Piece = tuple[str, Optional[int], str]  # (text, word index or None, separator before it)
@@ -21,26 +23,11 @@ _PASSIVE = {"कर्मणि", "भावे"}
 _LIKE = {"सदृश", "सम", "तुल्य"}  # take their standard in the instrumental/genitive: "like X", "equal to X"
 _TO = {"सम", "तुल्य"}
 _AGENT_KRT = {"तृच्", "तृन्", "तृ"}
-_ADJ_FIRST = {"great", "good", "firm", "long", "big", "small", "excellent", "best", "white", "black",
-              "red", "very", "many", "beautiful", "noble", "mighty", "strong", "high", "broad", "large"}
-# final member of a compound -> (English head placed before its members, joiner, plural members)
-_FINAL = {
-    "निरत": ("devoted to", " and ", False), "रत": ("delighted in", " and ", False),
-    "वर": ("best of", " and ", True), "पुंगव": ("best of", " and ", True), "श्रेष्ठ": ("best of", " and ", True),
-    "उत्तम": ("best of", " and ", True), "सम्पन्न": ("endowed with", " and ", False),
-    "संपन्न": ("endowed with", " and ", False), "युक्त": ("endowed with", " and ", False),
-    "उपेत": ("endowed with", " and ", False), "वर्धन": ("increaser of", " and ", False),
-    "सदृश": ("like", " and ", False), "सम": ("equal to", " and ", False),
-    "प्रभव": ("born of", "-", False), "तुल्य": ("equal to", " and ", False),
-}
-_PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thigh", "cheek"}
-
-
 def _p(text: str, idx: Optional[int] = None, sep: str = " ") -> Piece:
     return (text, idx, sep)
 
 
-class _Renderer:
+class _Renderer(CompoundMixin):
     def __init__(self, reading: Reading) -> None:
         self.reading = reading
         self.words = reading.words
@@ -79,7 +66,9 @@ class _Renderer:
             return "⟨" + lipi.iast(w.form) + "⟩"
         if w.role == "विशेषण" and w.morph.lemma == "पर":
             return "supreme"
-        return w.gloss or lipi.iast(w.morph.stem or w.morph.lemma) or "⟨" + lipi.iast(w.form) + "⟩"
+        if w.gloss and not is_latin_binomial(w.gloss):
+            return w.gloss
+        return lipi.iast(w.morph.stem or w.morph.lemma) or "⟨" + lipi.iast(w.form) + "⟩"
 
     def members(self, i: int) -> list[int]:
         if self.words[i].in_compound:
@@ -114,13 +103,15 @@ class _Renderer:
         pron = english.pronoun(m.lemma, m.linga, m.vacana, m.vibhakti,
                                demonstrative=w.role == "विशेषण", force_acc=i in self.acc)
         if pron is not None:
-            return pron
+            return "what" if m.lemma in ("किम्", "क") and w.form == "किम्" and i not in self.acc else pron
         if m.krt and w.gloss_source != "own":
             if m.krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्") and self.members(i):
                 return g  # a noun that merely ends like a gerundive, inside a compound
             g = english.krt_form(m.krt, g)
             if m.krt not in _AGENT_KRT:
                 return g
+        if g[:1].isupper() and m.vacana == "बहुवचन" and " " not in g:
+            return name_plural(g)
         if (w.role in ("विशेषण", "विधेय") or g[:1].isupper() or g in _NO_PLURAL or " of " in g
                 or m.vacana not in ("बहुवचन", "द्विवचन") or (g.endswith("s") and not g.endswith("ss"))):
             return g
@@ -160,6 +151,14 @@ class _Renderer:
             if r == "विशेषण" and self.bahuvrihi(k):
                 after += self.np(k)
                 continue
+            if r == "विशेषण" and self.words[k].gloss[:1].isupper() and any(
+                    self.role(c) == "अव्यय" and self.text(c) == "and" for c in self.children.get(k, [])):
+                after += self.np(k)  # "X and Y": a coordinated name follows its partner
+                continue
+            if r == "अव्यय" and km is not None and km.lemma == "एव":
+                self.used.add(k)
+                after.append(_p("indeed", k))
+                continue
             if im is not None and im.lemma in _LIKE and r in ("करण", "सम्बन्ध", "सम्प्रदान", "कर्म"):
                 if self.members(i):
                     std += [_p("in")] + self.np(k)
@@ -189,6 +188,20 @@ class _Renderer:
                 core.append(_p(t, j, " " if n_ == 0 else joiner if joiner != "-" else "-"))
             return poss + adjs + core + std + after
         bv = self.bahuvrihi(i)
+        if bv and mem and self.words[mem[0]].morph and self.words[mem[0]].morph.lemma in ("स", "सह") \
+                and self.text(mem[0]) == "with":
+            self.used.add(mem[0])  # "together with X": the first member is a preposition
+            core.append(_p("with", mem[0]))
+            for j in mem[1:]:
+                self.used.add(j)
+                core.append(_p(self.text(j), j))
+            core.append(_p(self.noun_text(i), i))
+            return poss + adjs + core + std + after
+        ctype = self.samasa(i)
+        if mem and not bv and ctype in ("तत्पुरुष", "कर्मधारय", "द्वन्द्व") and self.nominal(i):
+            made = self.compound_pieces(i, mem, ctype)
+            if made:
+                return poss + adjs + made + std + after
         glue = " " if bv else "-"
         ed = bv and self.noun_text(i) in _PAIRED
         if bv and not ed:
@@ -216,6 +229,9 @@ class _Renderer:
         while lead < len(body) and body[lead][1] is not None and self.role(body[lead][1]) == "अव्यय" \
                 and body[lead][0] in _CONNECTIVES:
             lead += 1
+        if lead < len(body) and body[lead][1] is not None and self.role(body[lead][1]) == "अव्यय" \
+                and body[lead][0] in WITH_WORDS:
+            head = []  # सह / विना are the preposition: "with Sītā", never "by with Sītā"
         return body[:lead] + head + body[lead:]  # "and" goes before the whole phrase
 
     def nonfinite(self, i: int, mode: str) -> list[Piece]:
@@ -261,6 +277,9 @@ class _Renderer:
         is_be = "am" if p == 1 and sg else "is" if sg3 else "are"
         was = "was" if sg and p != 2 else "were"
         passive = (m.prayoga or "") in _PASSIVE
+        parts = g.split()
+        if len(parts) == 2 and parts[0] == "be" and parts[1].endswith(("ed", "en")):
+            g, passive = parts[1], True  # "be bewildered": already a passive participle
         isbe = g in ("be", "is", "are", "am")
         g = "be" if isbe else g
         aux, main, plain, let = "", g, "", False
@@ -351,14 +370,26 @@ class _Renderer:
         for k in prior:
             pre += self.nonfinite(k, "having")
         post: list[Piece] = []
+        motion = is_motion(self.text(v)) and m is not None
+        wh = next((k for k in objs if self.words[k].morph and is_question_lemma(self.words[k].morph.lemma)), None)
+        ask = (wh is not None and m is not None and m.kind == "tinanta" and neg is None and not let and not passive
+               and (m.lakara or "लट्") in ("लट्", "लङ्", "लिट्", "लुङ्") and self.text(v) not in ("be", "is"))
+        if ask:
+            objs = [k for k in objs if k != wh]
         for k in objs:
-            post += self.np(k)
+            to = motion and self.role(k) == "कर्म" and not english.is_pronoun((self.words[k].morph or m).lemma)
+            post += ([_p("to")] if to else []) + self.np(k)
         for k in agent:
             post += [_p("by")] + self.np(k)
         for k in rest:
             if k in prior:
                 continue
             post += self.nonfinite(k, "to") if self.role(k) == "तुमर्थ" else self.case_phrase(k)
+        if ask:  # "what did they do?": question word, auxiliary, subject, bare verb
+            sg3 = m.vacana not in ("बहुवचन", "द्विवचन") and m.purusha not in ("उत्तमपुरुष", "मध्यमपुरुष")
+            aux = "did" if m.lakara in _PAST else "does" if sg3 else "do"
+            vpieces = [_p(english.base(self.text(v)), v)]
+            return voc + conn + self.np(wh) + [_p(aux)] + spieces + adv + pre + vpieces + post
         head = [_p("let")] + spieces + adv + pre + vpieces if let else spieces + adv + pre + vpieces
         return voc + conn + head + post
 

@@ -22,13 +22,39 @@ _IRREGULAR: dict[str, tuple[str, str]] = {
     "swim": ("swam", "swum"), "fly": ("flew", "flown"), "beat": ("beat", "beaten"),
     "bind": ("bound", "bound"), "buy": ("bought", "bought"), "pay": ("paid", "paid"),
     "stay": ("stayed", "stayed"), "weep": ("wept", "wept"), "hide": ("hid", "hidden"), "beg": ("begged", "begged"), "extol": ("extolled", "extolled"),
-    "control": ("controlled", "controlled"), "compel": ("compelled", "compelled"),
+    "control": ("controlled", "controlled"), "arise": ("arose", "arisen"), "slay": ("slew", "slain"),
+    "begin": ("began", "begun"), "forget": ("forgot", "forgotten"), "shine": ("shone", "shone"),
+    "strike": ("struck", "struck"), "swear": ("swore", "sworn"), "shake": ("shook", "shaken"),
+    "drive": ("drove", "driven"), "ride": ("rode", "ridden"), "sing": ("sang", "sung"), "steal": ("stole", "stolen"),
+    "tear": ("tore", "torn"), "sink": ("sank", "sunk"), "lose": ("lost", "lost"), "feel": ("felt", "felt"),
+    "build": ("built", "built"), "teach": ("taught", "taught"), "seek": ("sought", "sought"),
+    "catch": ("caught", "caught"), "sell": ("sold", "sold"), "bend": ("bent", "bent"), "lay": ("laid", "laid"),
+    "shoot": ("shot", "shot"), "understand": ("understood", "understood"), "behold": ("beheld", "beheld"),
+    "beget": ("begot", "begotten"), "draw": ("drew", "drawn"), "dwell": ("dwelt", "dwelt"), "flee": ("fled", "fled"),
+    "hang": ("hung", "hung"), "overcome": ("overcame", "overcome"), "forgive": ("forgave", "forgiven"),
+    "spread": ("spread", "spread"), "split": ("split", "split"), "let": ("let", "let"), "read": ("read", "read"),
+    "hit": ("hit", "hit"), "cast": ("cast", "cast"), "mean": ("meant", "meant"), "spend": ("spent", "spent"), "compel": ("compelled", "compelled"),
 }
 _PLURALS = {"man": "men", "woman": "women", "child": "children", "foot": "feet", "tooth": "teeth",
             "mouse": "mice", "person": "people", "ox": "oxen", "wife": "wives", "life": "lives",
             "knife": "knives", "leaf": "leaves", "wolf": "wolves", "deer": "deer", "sheep": "sheep", "people": "people",
             "folk": "folk", "cattle": "cattle", "police": "police"}
 _VOWELS = "aeiou"
+
+
+_PARTICLES = {"into", "to", "about", "on", "off", "up", "out", "over", "away", "down", "back", "with", "for", "of",
+              "at", "from", "in", "around", "through", "along", "after", "together", "forth", "apart", "across",
+              "toward", "towards", "against", "upon", "by", "between", "among", "beyond", "within", "without"}
+
+
+def _split(phrase: str) -> tuple[str, str, str]:
+    """(words before, the word that inflects, words after): the last word, or the word before the
+    first particle of a phrasal verb or "X of Y" phrase ("dive into" -> inflect "dive")."""
+    words = phrase.split(" ")
+    for k in range(1, len(words)):
+        if words[k] in _PARTICLES:
+            return " ".join(words[:k - 1]) + (" " if k > 1 else ""), words[k - 1], " " + " ".join(words[k:])
+    return " ".join(words[:-1]) + (" " if len(words) > 1 else ""), words[-1], ""
 
 
 def _head(phrase: str) -> tuple[str, str]:
@@ -43,6 +69,8 @@ def _doubles(v: str) -> bool:
 
 
 def _ed(v: str) -> str:
+    if v.endswith("ed") and len(v) > 4:  # already a participle: "bewildered"
+        return v
     if v.endswith("e"):
         return v + "d"
     if v.endswith("y") and len(v) > 1 and v[-2] not in _VOWELS:
@@ -70,32 +98,35 @@ def base(verb: str) -> str:
 
 
 def past(verb: str) -> str:
-    verb = base(verb)
-    pre, v = _head(verb)
-    return pre + (_IRREGULAR[v][0] if v in _IRREGULAR else _ed(v))
+    pre, v, post = _split(base(verb))
+    return pre + (_IRREGULAR[v][0] if v in _IRREGULAR else _ed(v)) + post
 
 
 def participle(verb: str) -> str:
+    """Past participle of a bare verb; "be bewildered" -> "bewildered"."""
     verb = base(verb)
-    pre, v = _head(verb)
-    return pre + (_IRREGULAR[v][1] if v in _IRREGULAR else _ed(v))
+    if verb.startswith("be ") and verb.split(" ")[1].endswith(("ed", "en")):
+        return verb[3:]
+    pre, v, post = _split(verb)
+    return pre + (_IRREGULAR[v][1] if v in _IRREGULAR else _ed(v)) + post
 
 
 def third_singular(verb: str) -> str:
-    verb = base(verb)
-    pre, v = _head(verb)
+    pre, v, post = _split(base(verb))
     irregular = {"be": "is", "have": "has", "do": "does", "go": "goes"}
     if v in irregular:
-        return pre + irregular[v]
+        return pre + irregular[v] + post
     if v.endswith(("s", "x", "z", "ch", "sh", "o")):
-        return pre + v + "es"
+        return pre + v + "es" + post
     if v.endswith("y") and len(v) > 1 and v[-2] not in _VOWELS:
-        return pre + v[:-1] + "ies"
-    return pre + v + "s"
+        return pre + v[:-1] + "ies" + post
+    return pre + v + "s" + post
 
 
 def plural(noun: str) -> str:
-    pre, n = _head(noun)
+    pre, n, post = _split(noun)
+    if post:
+        return pre + plural(n) + post
     if n in _PLURALS:
         return pre + _PLURALS[n]
     if n.endswith(("s", "x", "z", "ch", "sh")):
@@ -106,13 +137,12 @@ def plural(noun: str) -> str:
 
 
 def present_participle(verb: str) -> str:
-    verb = base(verb)
-    pre, v = _head(verb)
+    pre, v, post = _split(base(verb))
     if v.endswith("ie"):
-        return pre + v[:-2] + "ying"
+        return pre + v[:-2] + "ying" + post
     if v.endswith("e") and not v.endswith(("ee", "ye")):
-        return pre + v[:-1] + "ing"
-    return pre + (v + v[-1] if _doubles(v) else v) + "ing"
+        return pre + v[:-1] + "ing" + post
+    return pre + (v + v[-1] if _doubles(v) else v) + "ing" + post
 
 
 # pronouns: lemma -> (singular forms, plural forms), each (nominative, accusative, genitive)

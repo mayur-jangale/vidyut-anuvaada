@@ -1,6 +1,6 @@
 """Train the in-lattice decoder (mayur/decoder.py): averaged structured perceptron, gold path forced.
 
-    python scripts/train_decoder.py [--lines 6000] [--epochs 5] [--dev-per-text 20] [--configs round2,unknown]
+    python scripts/train_decoder.py [--lines 6000] [--epochs 3] [--dev-per-text 20] [--unknown]
 
 TRAIN = split_files("train") (stratified by text). DEV = split_files("dev") + dev_pool sample
 (early stopping on DEV lenient word F1). TEST = split_files("test") (report only). sealed_test is
@@ -11,7 +11,6 @@ data/derived/decoder_cache/; epochs stream the shards, so memory stays bounded.
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import pickle
 import random
@@ -26,9 +25,10 @@ sys.path.insert(0, str(ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 sys.path.insert(0, str(ROOT / "eval"))
 
-from eval_dcs import lcs_pairs, normalize, prf, split_equal, word_matches  # noqa: E402
-from mayur import decoder, lexicon, ranker, ud  # noqa: E402
-from train_ranker import held_sets, tag_table, train_lines  # noqa: E402
+from eval_dcs import lcs_pairs, prf, split_equal, word_matches  # noqa: E402
+from decoder_data import code_key, digest, held_sets, prefix_table, tag_table, train_lines  # noqa: E402
+from mayur import decoder, lexicon, ud  # noqa: E402
+from mayur import decoder_words as dw  # noqa: E402
 
 CACHE = ROOT / "data/derived/decoder_cache"
 AUDIT = ROOT / "data/derived/audit_decoder_missing.txt"
@@ -41,8 +41,12 @@ def _morphs(form: str, samasa: bool) -> tuple:
 
 
 def matches(form: str, samasa: bool, g: dict, lenient: bool) -> bool:
-    """Forms agree after ``normalize`` (strict), or (lenient) any analysis has the gold lemma."""
-    lemma = ranker.lemma_of(form, samasa)
+    """Same compound-member flag, and forms agree after ``normalize`` (strict), or (lenient) any
+    analysis has the gold lemma. The flag matters: the corpus writes indeclinables (तथा, स, सु)
+    as free words, never as members, so a member edge for them is not the gold path."""
+    if samasa != bool(g["compound_member"]):
+        return False
+    lemma = dw.lemma_of(form, samasa)
     if word_matches(form, g["form"], g["lemma"], g["compound_member"], lemma, False):
         return True
     return lenient and any(ud.same_lemma(m, g["lemma"], g.get("upos", "")) for m in _morphs(form, samasa))
@@ -83,10 +87,10 @@ def oracle(g, match: tuple, n_gold: int, skip_unknown: bool = False) -> tuple[tu
 
 def _item(line: str, gold: list[dict], table: dict) -> dict | None:
     try:
-        lat = decoder.lattice(line, unknown=True)
+        lat = decoder.lattice(line, unknown=UNKNOWN)
         if lat is None:
             return {"line": line, "gold": gold, "g": None}
-        g, _ = decoder.build_graph(lat, table)
+        g, _ = decoder.build_graph(lat, table, PREFIX)
     except (Exception, MemoryError):  # noqa: BLE001 - a line the lattice cannot handle is skipped
         return None
     match = tuple(tuple(i for i, gw in enumerate(gold) if matches(e.form, e.samasa, gw, True)) for e in g.edges)
@@ -98,20 +102,19 @@ def _item(line: str, gold: list[dict], table: dict) -> dict | None:
             "missing": [w["form"] for j, w in enumerate(gold) if j not in present]}
 
 
-REUSE = False  # --reuse-cache: take the newest shard of each chunk even if mayur/*.py changed since
+UNKNOWN = False  # unknown-word edges (round 3: no DEV gain, off by default)
+PREFIX: dict = {}
 
 
 def shards(name: str, data: list, table: dict) -> list[Path]:
-    code = [p.stat().st_mtime_ns for p in sorted((ROOT / "mayur").glob("*.py")) if p.name != "ranker.py"]
-    tkey = hashlib.sha1(repr(sorted(table.items())).encode()).hexdigest()[:6]
+    """Pickle shards of compact lattices. The file name carries a key over the lines, the lattice and
+    feature code, the corpus tables and the tag/prefix tables, so a stale shard is never loaded."""
+    base = digest(code_key(), sorted(table.items()), sorted((k, sorted(v.items())) for k, v in PREFIX.items()),
+                  UNKNOWN)
     out = []
     for c in range(0, len(data), CHUNK):
         part = data[c:c + CHUNK]
-        key = hashlib.sha1(repr(([l for l, _ in part], code, tkey)).encode()).hexdigest()[:12]
-        path = CACHE / f"{name}_{c}_{key}.pkl"
-        old = sorted(CACHE.glob(f"{name}_{c}_*.pkl"), key=lambda q: q.stat().st_mtime) if REUSE else []
-        if old and not path.exists():
-            path = old[-1]
+        path = CACHE / f"{name}_{c}_{digest(base, [l for l, _ in part])}.pkl"
         if not path.exists():
             items = [x for x in (_item(l, g, table) for l, g in part) if x is not None]
             CACHE.mkdir(parents=True, exist_ok=True)
@@ -157,7 +160,7 @@ def scores(g, path: tuple, gold: list[dict]) -> tuple[float, float, bool]:
     ours = [(g.edges[i].form, g.edges[i].samasa) for i in path]
     strict = len(lcs_pairs(ours, gold, lambda o, w: matches(o[0], o[1], w, False)))
     lenient = len(lcs_pairs(ours, gold, lambda o, w: matches(o[0], o[1], w, True)))
-    exact = split_equal([(f, s, ranker.lemma_of(f, s)) for f, s in ours], gold)
+    exact = split_equal([(f, s, dw.lemma_of(f, s)) for f, s in ours], gold)
     return prf(strict, len(ours), len(gold))["f1"], prf(lenient, len(ours), len(gold))["f1"], exact
 
 
@@ -235,15 +238,18 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--lines", type=int, default=6000)
     ap.add_argument("--epochs", type=int, default=5)
     ap.add_argument("--dev-per-text", type=int, default=20)
-    ap.add_argument("--configs", default="", help="comma-separated substrings of config names to run")
-    ap.add_argument("--reuse-cache", action="store_true", help="reuse lattice shards built by older code")
+    ap.add_argument("--build-only", action="store_true", help="only build the lattice shards")
+    ap.add_argument("--unknown", action="store_true", help="offer unknown-word edges (round 3: no gain)")
+    ap.add_argument("--table-lines", type=int, default=40000, help="TRAIN lines for the prefix table")
     a = ap.parse_args(argv)
-    global REUSE
-    REUSE = a.reuse_cache
+    global UNKNOWN, PREFIX
+    UNKNOWN = a.unknown
     t0 = time.time()
     raw_train = train_lines(a.lines, seed=7)
-    table = tag_table([(l, g, None) for l, g in raw_train])
-    tid = decoder.register_table(table)
+    table = tag_table(raw_train)
+    PREFIX = prefix_table(train_lines(a.table_lines, seed=11))
+    print(f"prefix table: {len(PREFIX)} prefixes {sorted(PREFIX)[:20]}", flush=True)
+    tid = decoder.register_table(table, PREFIX)
     held = {n: shards(n, d, table) for n, d in held_sets(a.dev_per_text).items()}
     dev_p = [p for n, ps in held.items() if n.startswith("dev_") for p in ps]
     cov, ora, lines = audit(dev_p)
@@ -253,48 +259,60 @@ def main(argv: list[str] | None = None) -> int:
     n_tr = sum(1 for it in items(train_p) if it["g"] is not None)
     n_miss = sum(1 for it in items(train_p) if it["g"] is not None and not it["covered"])
     print(f"TRAIN lattices {n_tr}; gold not in lattice (max-overlap target) {n_miss}  [{time.time() - t0:.0f}s]")
+    if a.build_only:
+        return 0
     stats = stat_tables(train_p)
     print(f"boundary contexts {len(stats['boundary'])}, junction surfaces {len(stats['junction'])}", flush=True)
-    full = {"tag_bigram": table, **stats}
-    neural = decoder.neural_available()
-    no_unk = {"unknown": -1e6}
-    configs = {
-        "round2 (no unknown edges)": (full, lambda k: not k.startswith("unk"), "target_base", no_unk),
-        "+ unknown edges": (full, lambda k: True, "target", {}),
-        "+ unknown + neural boundary": ({**full, "neural": True}, lambda k: True, "target", {}),
-        "round2 + neural boundary": ({**full, "neural": True}, lambda k: not k.startswith("unk"), "target_base",
-                                     no_unk),
-    }
-    wanted = [c for c in configs if neural or "neural" not in c]
-    if a.configs:
-        wanted = [c for c in configs if any(x in c for x in a.configs.split(","))]
+    full = {"tag_bigram": table, "prefix": PREFIX, **stats}
+    fixed = {} if UNKNOWN else {"unknown": -1e6}
+    configs = {"without neural boundary": full}
+    if decoder.neural_available():
+        configs["with neural boundary"] = {**full, "neural": True}
+    else:
+        print("WARNING: neural boundary model unavailable: training without it", flush=True)
     results = {}
-    for name in wanted:
-        tabs, allow, target, fixed = configs[name]
+    for name, tabs in configs.items():
         print(f"config: {name}", flush=True)
-        results[name] = train(train_p, dev_p, tid, tabs, a.epochs, allow, target, fixed)
+        results[name] = train(train_p, dev_p, tid, tabs, a.epochs, lambda k: True, "target", fixed)
     for name, (_, m) in results.items():
-        print(f"ABLATION {name:30s} DEV strict {m['strict']:.4f} lenient {m['lenient']:.4f} exact {m['exact']:.3f}")
-    best_name = max(results, key=lambda n: results[n][1]["lenient"])
-    w, _ = results[best_name]
-    tabs = configs[best_name][0]
-    base = {"base": 1.0, **no_unk}
-    print(f"chosen: {best_name}")
-    b_dev, n_dev = evaluate(dev_p, base, tid, {}), evaluate(dev_p, w, tid, tabs)
-    for name, ps in held.items():
-        b, r = evaluate(ps, base, tid, {}), evaluate(ps, w, tid, tabs)
-        print(f"{name[:26]:26s} n={b['n']:4d} strict {b['strict']:.4f} -> {r['strict']:.4f}  lenient "
-              f"{b['lenient']:.4f} -> {r['lenient']:.4f}  exact {b['exact']:.3f} -> {r['exact']:.3f}", flush=True)
-    full = {**tabs}
-    on = n_dev["lenient"] > b_dev["lenient"]
-    print(f"DEV all strict {b_dev['strict']:.4f} -> {n_dev['strict']:.4f}  lenient {b_dev['lenient']:.4f} -> "
-          f"{n_dev['lenient']:.4f}  exact {b_dev['exact']:.3f} -> {n_dev['exact']:.3f}; enabled={on}")
-    model = {"source": SOURCE, "enabled": on, "train_lines": n_tr, "weights": {k: v for k, v in w.items() if v},
-             "config": best_name, "unknown_edges": "unknown edges" in best_name or best_name.startswith("+ unknown"),
-             **full, "dev": {"before": b_dev, "after": n_dev, "coverage": cov, "oracle_f1": ora}}
-    decoder.MODEL_FILE.write_text(json.dumps(model, ensure_ascii=False, sort_keys=True), encoding="utf-8")
-    print(f"wrote {decoder.MODEL_FILE} [{time.time() - t0:.0f}s]")
+        print(f"ABLATION {name:26s} DEV strict {m['strict']:.4f} lenient {m['lenient']:.4f} exact {m['exact']:.3f}")
+    base = {"base": 1.0, "unknown": -1e6}
+    b_dev = evaluate(dev_p, base, tid, {})
+    for name, (w, m) in results.items():
+        tabs = configs[name]
+        model = {"source": SOURCE, "enabled": m["lenient"] > b_dev["lenient"], "train_lines": n_tr,
+                 "weights": {k: v for k, v in w.items() if v}, "config": name, "unknown_edges": UNKNOWN,
+                 "neural": bool(tabs.get("neural")), "score_scale": 4 * median_gap(dev_p, w, tid, tabs),
+                 **tabs, "dev": {"before": b_dev, "after": m, "coverage": cov, "oracle_f1": ora}}
+        path = decoder.MODEL_FILE if name == max(results, key=lambda n: results[n][1]["lenient"]) else None
+        if not tabs.get("neural"):
+            decoder.FALLBACK_FILE.write_text(json.dumps(model, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+        if path:
+            path.write_text(json.dumps(model, ensure_ascii=False, sort_keys=True), encoding="utf-8")
+            print(f"chosen: {name}; score_scale {model['score_scale']:.1f}; enabled={model['enabled']}")
+            for hname, ps in held.items():
+                b, r = evaluate(ps, base, tid, {}), evaluate(ps, w, tid, tabs)
+                print(f"{hname[:26]:26s} n={b['n']:4d} strict {b['strict']:.4f} -> {r['strict']:.4f}  lenient "
+                      f"{b['lenient']:.4f} -> {r['lenient']:.4f}  exact {b['exact']:.3f} -> {r['exact']:.3f}",
+                      flush=True)
+            print(f"DEV all strict {b_dev['strict']:.4f} -> {m['strict']:.4f}  lenient {b_dev['lenient']:.4f} -> "
+                  f"{m['lenient']:.4f}  exact {b_dev['exact']:.3f} -> {m['exact']:.3f}")
+    print(f"wrote {decoder.MODEL_FILE} and {decoder.FALLBACK_FILE} [{time.time() - t0:.0f}s]")
     return 0
+
+
+def median_gap(paths: list[Path], w: dict, tid: int, tables: dict) -> float:
+    """Median score gap between the best and second-best distinct word sequences on DEV."""
+    gaps = []
+    for it in items(paths):
+        g = it["g"]
+        if g is None:
+            continue
+        res = decoder.order_alternatives(g, decoder.viterbi(g, w, tid, 6, extra=decoder.dynamic_features(g, tables)), 2)
+        if len(res) == 2:
+            gaps.append(res[0][0] - res[1][0])
+    gaps.sort()
+    return gaps[len(gaps) // 2] if gaps else 1.0
 
 
 if __name__ == "__main__":

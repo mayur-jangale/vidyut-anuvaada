@@ -17,298 +17,20 @@ alone. Weights: ``{observation: {conjunct key: weight}}``.
 from __future__ import annotations
 
 import json
-import math
 from functools import lru_cache
 from pathlib import Path
 from typing import Optional, Sequence
 
-from mayur.lipi import varnas
+from mayur import tagger_siblings
 from mayur.model import Morph
+from mayur.tagger_features import Obs, Verse, _sounds, keys, tag  # noqa: F401  (re-exported)
 
 MODEL_FILE = Path(__file__).resolve().parent / "models" / "tagger.json"
 BEAM = 8
 WINDOW = 4
 Weights = dict[str, dict[str, float]]
-Obs = list[str]
 _PARTICLES = frozenset({"च", "इव", "न", "तु", "हि", "वा", "एव", "अपि", "इति"})
 _PERSON = {"अस्मद्": "उत्तमपुरुष", "युष्मद्": "मध्यमपुरुष"}
-
-
-def _freq(fn: str, arg) -> float:
-    try:
-        from mayur import freq
-        return float(getattr(freq, fn)(arg) or 0)
-    except Exception:  # tables missing
-        return 0.0
-
-
-@lru_cache(maxsize=100_000)
-def _lemma_class(lemma: str) -> str:
-    try:
-        from mayur import freq
-        return freq.lemma_class(lemma) or ""
-    except Exception:
-        return ""
-
-
-@lru_cache(maxsize=200_000)
-def _sounds(form: str) -> tuple[str, ...]:
-    try:
-        return varnas(form)
-    except Exception:
-        return tuple(form)
-
-
-def _verbal(m: Morph) -> str:
-    krt = m.krt or ""
-    if krt in ("क्त्वा", "ल्यप्"):
-        return "abs"
-    if krt == "तुमुन्":
-        return "inf"
-    return "part" if krt else ""
-
-
-def tag(m: Morph) -> str:
-    """Signature of an analysis without its lemma: kind, case, number, gender, person, lakara, krt class."""
-    return "|".join((m.kind, m.vibhakti or "", m.vacana or "", m.linga or "", m.purusha or "", m.lakara or "",
-                     _verbal(m)))
-
-
-def keys(m: Morph) -> tuple[str, ...]:
-    """Conjunct keys: full tag, case only, gender only, number only."""
-    return ("T" + tag(m), "C" + (m.vibhakti or m.kind), "G" + (m.linga or ""), "N" + (m.vacana or ""))
-
-
-def _agree(a: Morph, b: Morph) -> bool:
-    return a.kind == b.kind == "subanta" and (a.vibhakti, a.vacana, a.linga) == (b.vibhakti, b.vacana, b.linga)
-
-
-def _fits(n: Morph, v: Morph) -> bool:
-    """Nominative ``n`` can be the agent of finite verb ``v``."""
-    return (n.kind == "subanta" and n.vibhakti == "प्रथमा" and v.kind == "tinanta" and n.vacana == v.vacana
-            and _PERSON.get(n.lemma, "प्रथमपुरुष") == (v.purusha or "प्रथमपुरुष"))
-
-
-@lru_cache(maxsize=200_000)
-def _lkey(m: Morph) -> str:
-    """Corpus lemma key of an analysis (the DCS citation form)."""
-    from mayur import ud
-    try:
-        return ud.canonical_lemma(ud.lemma(m))
-    except Exception:
-        return m.lemma
-
-
-def _bucket(x: float) -> str:
-    return str(min(15, int(math.log2(1.0 + max(0.0, x)))))
-
-
-class Verse:
-    """One sequence to tag: candidates per word, half-verse index, compound flag, form."""
-
-    def __init__(self, cands: Sequence[Sequence[Morph]], lines: Sequence[int], cpd: Sequence[bool],
-                 forms: Sequence[str], minus: Optional[Sequence[Sequence[tuple[float, float]]]] = None,
-                 prior: Optional[Sequence[int]] = None, tables: Optional[dict] = None):
-        self.tab = tables if tables is not None else (load() or {}).get("tables", {})
-        self.cands = [list(c) for c in cands]
-        self.lines, self.cpd, self.forms = list(lines), list(cpd), list(forms)
-        self.counts = [[(max(0.0, _freq("analysis_count", m) - (minus[i][k][0] if minus else 0.0)),
-                         max(0.0, _freq("lemma_count", m.lemma) - (minus[i][k][1] if minus else 0.0)))
-                        for k, m in enumerate(c)] for i, c in enumerate(self.cands)]
-        self.top = [max(range(len(c)), key=lambda k, i=i: (self.counts[i][k][0], self.cands[i][k].quality, -k))
-                    if c else -1 for i, c in enumerate(self.cands)]
-        # the other words' reference reading: pass-1 choice (second pass) or the most frequent one
-        self.ref = list(prior) if prior is not None else self.top
-        self.p2 = "P" if prior is not None else ""
-        self.static = []
-        for i, c in enumerate(self.cands):
-            wobs = self._word_obs(i) if c else []
-            self.static.append([wobs + self._static(i, k) for k in range(len(c))])
-
-    def _word_obs(self, i: int) -> Obs:
-        f, s, n = self.forms[i], _sounds(self.forms[i]), len(self.forms)
-        o = ["b", "w=" + f, "ncand=" + str(min(len(self.cands[i]), 6))]
-        o += ["s%d=%s" % (k, "".join(s[-k:])) for k in range(1, 6) if len(s) >= k]
-        o += ["p%d=%s" % (k, "".join(s[:k])) for k in range(1, 3) if len(s) >= k]
-        line = self.lines[i]
-        same = [j for j in range(n) if self.lines[j] == line]
-        if same and i == same[0]:
-            o.append("first")
-        if same and i == same[-1]:
-            o.append("last")
-        o.append("half=%d" % min(line % 2, 1))
-        for d, tagname in ((-1, "pw"), (1, "nw"), (-2, "pw2"), (2, "nw2")):
-            j = i + d
-            if 0 <= j < n:
-                g, gs = self.forms[j], _sounds(self.forms[j])
-                o.append(tagname + "=" + g)
-                if abs(d) == 1:
-                    o += ["%ss%d=%s" % (tagname, k, "".join(gs[-k:])) for k in range(1, 4) if len(gs) >= k]
-                    if self.cpd[j]:
-                        o.append(tagname + "cpd")
-            elif abs(d) == 1:
-                o.append(tagname + "=<>")
-        if i > 0 and self.cpd[i - 1] and not self.cpd[i]:
-            o.append("cpdfinal")
-            k = i - 1
-            while k > 0 and self.cpd[k - 1]:
-                k -= 1
-            o.append("cpdlen=%d" % min(i - k, 3))
-            o.append("cpdfirst=" + self.forms[k])
-        if self.cpd[i]:
-            o.append("incpd")
-        return o
-
-    def _static(self, i: int, k: int) -> Obs:
-        m, c = self.cands[i][k], self.cands[i]
-        ac, lc = self.counts[i][k]
-        tot = sum(x[0] for x in self.counts[i])
-        o = ["lm=" + m.lemma, "lc=" + _lemma_class(m.lemma), "ac=" + _bucket(ac), "lcnt=" + _bucket(lc),
-             "sh=%d" % int(4 * ac / tot) if tot else "sh=-", "q=%d" % m.quality, "src=" + m.source,
-             "kr=" + (m.krt or ""), "lmw=%s|%s" % (m.lemma, self.forms[i])]
-        if k == self.top[i]:
-            o.append("top")
-        if ac == 0:
-            o.append("ac0")
-        if m.quality == max(x.quality for x in c):
-            o.append("qtop")
-        return o + self._agreement(i, m)
-
-    def _agreement(self, i: int, m: Morph) -> Obs:
-        o: Obs = []
-        n, line = len(self.forms), self.lines[i]
-        others = [j for j in range(n) if j != i and self.lines[j] == line and not self.cpd[j] and self.cands[j]]
-        for j in others:
-            d = j - i
-            topj = self.cands[j][self.ref[j]]
-            if abs(d) <= WINDOW and m.kind == "subanta":
-                dd = "%+d" % d
-                if any(_agree(m, x) for x in self.cands[j]):
-                    o.append("agAny" + dd)
-                if _agree(m, topj):
-                    o.append("agTop" + dd)
-                if abs(d) == 1 and topj.kind == "subanta":
-                    o.append("nbNom%+d" % d)
-            if m.vibhakti == "प्रथमा":
-                if _fits(m, topj):
-                    o.append("vfitTop")
-                elif any(_fits(m, x) for x in self.cands[j]):
-                    o.append("vfitAny")
-            if m.kind == "tinanta" and _fits(topj, m):
-                o.append("kartaTop")
-            if abs(d) == 1:
-                o.append("nbT%+d=%s" % (d, tag(topj)))
-            if topj.kind == "tinanta" and m.kind == "subanta":
-                o.append("vlm=" + topj.lemma)
-                o.append("vpr=%s|%s" % (topj.prayoga or "", topj.vacana or ""))
-        if m.vibhakti == "द्वितीया":
-            verbal = any(self.cands[j][self.ref[j]].kind == "tinanta" or _verbal(self.cands[j][self.ref[j]])
-                         for j in others)
-            o.append("accV" if verbal else "accNoV")
-        if m.vibhakti == "प्रथमा" and not any(self.cands[j][self.ref[j]].kind == "tinanta" for j in others):
-            o.append("nomNoV")
-        return o + self._verse_level(i, m) + self._structural(i, m)
-
-    def _gender_prior(self, m: Morph) -> Optional[dict]:
-        key = _lkey(m)
-        return self.tab.get("g", {}).get(key) or self.tab.get("gs", {}).get("".join(_sounds(key)[-2:]))
-
-    def _structural(self, i: int, m: Morph) -> Obs:
-        """Corpus-learned structure: lemma gender priors, noun concord, verb valency, clause type."""
-        if m.kind != "subanta":
-            return []
-        o: Obs = []
-        gp = self._gender_prior(m)
-        if gp and m.linga:
-            o += ["gp=%d" % int(4 * gp.get(m.linga, 0.0)), "gpTop=%d" % (max(gp, key=gp.get) == m.linga)]
-        n, line = len(self.forms), self.lines[i]
-        refs = {j: self.cands[j][self.ref[j]] for j in range(n) if j != i and not self.cpd[j] and self.cands[j]}
-        if _lemma_class(m.lemma) != "noun":
-            for side, rng in (("L", range(i - 1, max(-1, i - WINDOW - 1), -1)), ("R", range(i + 1, min(n, i + WINDOW + 1)))):
-                for j in rng:
-                    if self.lines[j] != line or j not in refs:
-                        continue
-                    nouns = [x for x in self.cands[j] if _lemma_class(x.lemma) == "noun" and x.kind == "subanta"
-                             and (x.vibhakti, x.vacana) == (m.vibhakti, m.vacana)]
-                    pr = self._gender_prior(nouns[0]) if nouns else None
-                    if pr:
-                        o.append("nG%s=%d" % (side, max(pr, key=pr.get) == m.linga))
-                        break
-        verbs = [x for x in refs.values() if x.kind == "tinanta"]
-        nonfin = [x for x in refs.values() if _verbal(x) in ("abs", "inf")]
-        acc, dat = self.tab.get("acc", {}), self.tab.get("dat", {})
-        if m.vibhakti in ("प्रथमा", "द्वितीया"):
-            ps = [acc[_lkey(v)] for v in verbs + nonfin if _lkey(v) in acc]
-            o.append("vacc=%s" % (int(4 * max(ps)) if ps else "-"))
-            if not verbs and not nonfin:
-                o.append("noVerb")
-            for j, x in refs.items():
-                if x.krt in ("क्त", "क्तवतु") or _verbal(x) == "part" and x.krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्"):
-                    if _agree(m, x):
-                        o.append("ktaAg")
-                if abs(j - i) == 1 and (_verbal(x) in ("abs", "inf") or x.krt in ("शतृ", "शानच्")):
-                    o.append("gov%+d" % (j - i))
-            nxt = refs.get(i + 1)
-            if nxt is not None and nxt.kind == "tinanta" and any(_fits(x, nxt) for j, x in refs.items() if j < i):
-                o.append("preVnom")
-        if m.vibhakti in ("चतुर्थी", "षष्ठी", "पञ्चमी"):
-            ps = [dat[_lkey(v)] for v in verbs if _lkey(v) in dat]
-            o.append("vdat=%s" % (int(4 * max(ps)) if ps else "-"))
-        if m.vibhakti in ("सम्बोधन", "प्रथमा"):
-            o.append("v2p=%d" % any(v.purusha == "मध्यमपुरुष" for v in verbs))
-            o.append("voc2=%d" % any(x.vibhakti == "सम्बोधन" for x in refs.values()))
-        if m.krt == "तृच्" and any(refs.get(j) is not None and refs[j].vibhakti == "षष्ठी" for j in (i - 1, i + 1)):
-            o.append("trcGen")
-        if m.krt and m.linga == "स्त्रीलिङ्ग":
-            fem = any(x.linga == "स्त्रीलिङ्ग" and x.vibhakti == m.vibhakti and not x.krt and self.lines[j] == line
-                      for j, x in refs.items())
-            o.append("femPN=%d" % fem)
-        return o
-
-    def _verse_level(self, i: int, m: Morph) -> Obs:
-        """Verb–subject and object features across the whole verse (half-verse boundaries are arbitrary)."""
-        if m.kind not in ("subanta", "tinanta"):
-            return []
-        refs = [(j, self.cands[j][self.ref[j]]) for j in range(len(self.forms))
-                if j != i and not self.cpd[j] and self.cands[j]]
-        verbs = [x for _, x in refs if x.kind == "tinanta"]
-        o = ["Vverbs=%d" % min(len(verbs), 2)]
-        if m.vibhakti == "प्रथमा":
-            o.append("Vfit" if any(_fits(m, v) for v in verbs) else "Vnofit")
-            o += ["Vpr=" + (v.prayoga or "") for v in verbs[:2]]
-            if any(_agree(m, x) for _, x in refs):
-                o.append("VagNom")
-        if m.kind == "subanta" and m.vibhakti in ("प्रथमा", "द्वितीया"):
-            o += ["Vlm=" + v.lemma for v in verbs[:2]]
-            other_nom = [x for j, x in refs if all(c.vibhakti == "प्रथमा" for c in self.cands[j])
-                         and any(_fits(x, v) for v in verbs)]
-            if other_nom:
-                o.append("VsureNom")
-        if m.kind == "tinanta":
-            o.append("Vkarta" if any(_fits(x, m) for _, x in refs) else "Vnokarta")
-        if self.p2 and m.kind == "subanta":
-            o += ["Pag%+d" % max(-6, min(6, j - i)) for j, x in refs if _agree(m, x)]
-        return o
-
-    def history(self, i: int, k: int, path: Sequence[int]) -> Obs:
-        """Features that depend on the analyses already chosen for words 0..i-1."""
-        m = self.cands[i][k]
-        prev = [self.cands[j][path[j]] for j in (i - 2, i - 1) if j >= 0 and path[j] >= 0]
-        t1 = tag(prev[-1]) if prev else "<s>"
-        t2 = tag(prev[0]) if len(prev) == 2 else "<s>"
-        o = ["t1=" + t1, "t2=%s_%s" % (t2, t1)]
-        if i > 0 and self.lines[i - 1] != self.lines[i]:
-            o.append("t1line")
-        line = self.lines[i]
-        for j in range(max(0, i - WINDOW), i):
-            if self.lines[j] != line or self.cpd[j] or path[j] < 0:
-                continue
-            x = self.cands[j][path[j]]
-            if _agree(m, x):
-                o.append("hag%d" % (i - j))
-            if _fits(m, x) or _fits(x, m):
-                o.append("hfit")
-        return o
 
 
 def score_obs(w: Weights, obs: Obs, ks: tuple[str, ...]) -> float:
@@ -375,25 +97,70 @@ def enabled() -> bool:
 def choose_indices(cands: Sequence[Sequence[Morph]], lines: Sequence[int], compound_flags: Sequence[bool],
                    forms: Sequence[str], weights: Optional[Weights] = None,
                    weights2: Optional[Weights] = None, tables: Optional[dict] = None,
-                   neural_bonus: Optional[Sequence[Sequence[float]]] = None) -> list[int]:
+                   neural_bonus: Optional[Sequence[Sequence[float]]] = None,
+                   obs_forms: Optional[Sequence[str]] = None,
+                   variants: Optional[Sequence[Sequence[str]]] = None) -> list[int]:
     """Index of the chosen candidate per word (0 for a word without candidates). With second-pass
     weights the verse is decoded again, every word seeing the first-pass choices of the others.
-    ``neural_bonus``: λ-weighted neural score per candidate; None = from ``mayur.neural`` when enabled."""
+    ``neural_bonus``: λ-weighted neural score per candidate; None = from ``mayur.neural`` when enabled
+    (only when the saved model is used, i.e. ``weights`` is None)."""
     if weights is None:
         model = load() or {}
         weights, weights2, tables = model.get("weights", {}), model.get("weights2"), model.get("tables", {})
+        if neural_bonus is None:  # --- neural hook ---
+            neural_bonus = _neural_bonus(cands, lines, compound_flags, forms)
     if not cands:
         return []
-    if neural_bonus is None:  # --- neural hook ---
-        neural_bonus = _neural_bonus(cands, lines, compound_flags, forms)
-    v1 = Verse(cands, lines, compound_flags, forms, tables=tables)
+    extra = {"obs_forms": obs_forms, "variants": variants, "tables": tables}
+    v1 = Verse(cands, lines, compound_flags, forms, **extra)
     v1.neural_bonus = neural_bonus
     path = [max(k, 0) for k in decode(v1, weights)]
     if weights2:
-        v2 = Verse(cands, lines, compound_flags, forms, prior=path, tables=tables)
+        v2 = Verse(cands, lines, compound_flags, forms, prior=path, **extra)
         v2.neural_bonus = neural_bonus
         path = [max(k, 0) for k in decode(v2, weights2)]
     return path
+
+
+def sibling_candidates(form: str) -> list[Morph]:
+    """The pruned candidates (``shabdabodha.candidates``) of a sibling pada form."""
+    from mayur import lexicon, shabdabodha
+    from mayur.model import Word
+    w = Word(form=form, line=0, start=0, end=1, in_compound=False, analyses=list(lexicon.padas(form)))
+    return [w.analyses[i] for i in shabdabodha.candidates(w)] if w.analyses else []
+
+
+def choose_with_siblings(cands: Sequence[Sequence[Morph]], lines: Sequence[int], compound_flags: Sequence[bool],
+                         forms: Sequence[str], **kw) -> tuple[list[Morph | None], dict[int, str]]:
+    """Chosen analysis per word among its own candidates and those of its sibling form
+    (``mayur.tagger_siblings``), and ``{word index: sibling form}`` where a sibling's analysis won.
+    Without a model trained with siblings, siblings are not considered."""
+    use = kw.pop("siblings", None)
+    if use is None:
+        use = bool((load() or {}).get("siblings")) if kw.get("weights") is None else True
+    find = kw.pop("sibling_candidates", sibling_candidates)
+    if use:
+        ext, own, obs, var = tagger_siblings.extend(cands, forms, compound_flags, find)
+    else:
+        ext, own, obs, var = [list(c) for c in cands], [len(c) for c in cands], None, None
+    if kw.get("neural_bonus") is None and kw.get("weights") is None:
+        kw["neural_bonus"] = _neural_bonus(ext, lines, compound_flags, forms)
+    path = choose_indices(ext, lines, compound_flags, forms, obs_forms=obs, variants=var, **kw)
+    chosen = [c[k] if c else None for c, k in zip(ext, path)]
+    swaps = {i: m.form for i, (m, k) in enumerate(zip(chosen, path)) if m is not None and k >= own[i]}
+    return chosen, swaps
+
+
+def sibling_forms(words) -> dict[int, str]:
+    """For ``shabdabodha``'s words: ``{index: form}`` where the tagger prefers the analysis of the word's
+    sibling pada form (मूढा -> मूढास् before a voiced sound, भीष्मे -> भीष्मस् before a vowel)."""
+    from mayur.shabdabodha import candidates
+    if load() is None or not (load() or {}).get("siblings"):
+        return {}
+    cands = [[w.analyses[j] for j in candidates(w)] if w.analyses else [] for w in words]
+    _, swaps = choose_with_siblings(cands, [w.line for w in words], [w.in_compound for w in words],
+                                    [w.form for w in words])
+    return swaps
 
 
 def _neural_bonus(cands, lines, compound_flags, forms) -> list:

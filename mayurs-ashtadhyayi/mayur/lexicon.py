@@ -102,9 +102,34 @@ def spelling_variants(form: str) -> tuple[str, ...]:
     return tuple(dict.fromkeys(n for f in final_variants(form) for n in nasal_variants(f)))
 
 
-def _kosha_morphs(form: str) -> list[Morph]:
+_STOPS = frozenset("कखगघचछजझटठडढतथदधपफबभ")
+_AFTER_GEMINATE = frozenset("यरलव")
+GEMINATE_NOTE = ("the text writes {form}; the derived form is {derived}, with the doubled consonant that is "
+                 "commonly written single (पत्र for पत्त्र, तत्व for तत्त्व)")
+
+
+def geminate_variants(form: str) -> tuple[str, ...]:
+    """Spellings of ``form`` with one stop doubled before a semivowel: पत्रम् -> पत्त्रम्, छात्र ->
+    छात्त्र, तत्वम् -> तत्त्वम्, उज्वल -> उज्ज्वल. Derivation gives the doubled form (पत् + त्र);
+    manuscripts and print usually write one consonant. Used only when the written form is unknown."""
     out = []
-    for variant in spelling_variants(form):
+    for i in range(len(form) - 2):
+        c = form[i]
+        if c in _STOPS and form[i + 1] == "्" and form[i + 2] in _AFTER_GEMINATE and (i == 0 or form[i - 1] != "्"):
+            out.append(form[:i] + c + "्" + form[i:])
+    return tuple(out)
+
+
+def _kosha_morphs(form: str) -> list[Morph]:
+    out = _kosha_morphs_of(form, spelling_variants(form))
+    if not any(m.quality >= 2 for m in out):  # unknown as written: the spelling with a doubled stop
+        out += _kosha_morphs_of(form, geminate_variants(form))
+    return out
+
+
+def _kosha_morphs_of(form: str, variants: tuple[str, ...]) -> list[Morph]:
+    out = []
+    for variant in variants:
         for entry in bridge.lookup(variant):
             m = replace(entry.morph, form=form, quality=_quality(entry))
             if entry.entry == "basic" and m.lemma in _LEMMA_ALIAS:
@@ -241,6 +266,9 @@ def stems(form: str) -> tuple[Morph, ...]:
 
         out.extend(kta_stems(form))
     if not out:
+        for variant in geminate_variants(form):  # पत्र- for पत्त्र-
+            out.extend(_as_stem(entry, form) for entry in bridge.lookup(variant) if _stem_entry_ok(entry, variant))
+    if not out:
         from mayur.lexicon_gen import nanj_stems
 
         out.extend(nanj_stems(form, stems))
@@ -283,7 +311,7 @@ def generated(form: str) -> tuple[Morph, ...]:
 
 def _matching(handle, target: str) -> tuple[bool, str, list[SutraStep]]:
     ders = bridge.derive(handle)
-    targets = set(nasal_variants(target))
+    targets = set(nasal_variants(target)) | set(geminate_variants(target))
     if not any(d.text in targets for d in ders):
         alt = bridge.matup_subanta(handle)
         if alt is not None:
@@ -342,6 +370,16 @@ def _prove_member(m: Morph, stem_handle) -> WordProof:
 
 
 def prove(m: Morph) -> WordProof:
+    """Proof of one analysis; says so when the derived form differs from the text by a doubled stop."""
+    proof = _prove(m)
+    derived = proof.derived_form
+    if proof.derivable and derived and derived != m.form and derived in geminate_variants(m.form):
+        note = GEMINATE_NOTE.format(form=m.form, derived=derived)
+        return replace(proof, note=f"{proof.note}; {note}" if proof.note else note)
+    return proof
+
+
+def _prove(m: Morph) -> WordProof:
     """Forward derivation of ``m``; derivable only if vidyut yields exactly the expected text."""
     h = m.handle
     if h is None:
@@ -360,7 +398,7 @@ def prove(m: Morph) -> WordProof:
         return _prove_member(m, h[1])
     ok, text, trace = _matching(h, m.form)
     note = ""
-    if ok and text != m.form:
+    if ok and text != m.form and text in nasal_variants(m.form):
         note = f"derived spelling {text}; {m.form} differs only in writing the nasal"
     method = "vidyut-prakriya"
     if not ok:

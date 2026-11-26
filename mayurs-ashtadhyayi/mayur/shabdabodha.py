@@ -187,7 +187,8 @@ def resolve(reading: Reading) -> Reading:
     """New Reading with ``chosen``, ``role`` and ``head`` set and shabdabodha scores."""
     chosen = choose(reading.words)
     words = [replace(w, chosen=c) if w.analyses else w for w, c in zip(reading.words, chosen)]
-    from mayur.vakya import assign_roles, syncretic
+    from mayur.vakya import assign_roles
+    from mayur.vakya_case import syncretic
 
     words, case_notes = syncretic(words)  # प्रथमा/द्वितीया only where the kāraka rules decide it
     words, notes = assign_roles(words)

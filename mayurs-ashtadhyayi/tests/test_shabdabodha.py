@@ -241,8 +241,8 @@ def test_demonstrative_qualifies_verse48():
 
 def _sync(items):
     from syntax_fixtures import hand
-    from mayur import vakya
-    return vakya.syncretic(hand(items).words)
+    from mayur import vakya_case
+    return vakya_case.syncretic(hand(items).words)
 
 
 def test_syncretic_accusative_when_the_agent_is_there():

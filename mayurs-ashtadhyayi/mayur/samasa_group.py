@@ -35,15 +35,30 @@ def _free_bound(words: list[Word], i: int) -> bool:
     if w.in_compound or i + 1 >= len(words) or (m is not None and m.kind in ("subanta", "tinanta")):
         return False
     nxt = words[i + 1].morph
-    if w.form == "सह":
-        return nxt is not None and nxt.kind == "subanta" and nxt.vibhakti not in ("तृतीया", None)
+    if w.form == "सह":  # free सह governs a तृतीया on either side (2.3.19): रामेण सह, सह रामेण
+        governs = any(o.line == w.line and o.morph is not None and o.morph.vibhakti == "तृतीया" for o in words)
+        return not governs and nxt is not None and nxt.kind == "subanta" and nxt.vibhakti is not None
     return w.form in BOUND and nxt is not None and nxt.kind in ("subanta", "stem")
 
 
+def _nominal_final(w: Word, k: int) -> bool:
+    """Analysis ``k`` of ``w`` can end a compound: an inflected nominal that is not अस्मद्/युष्मद्."""
+    a = w.analyses[k]
+    return a.kind == "subanta" and st.stem_of(replace(w, chosen=k)) not in st.PERSONAL
+
+
 def _bad_final(w: Word) -> bool:
-    m = w.morph
-    return m is not None and (m.kind == "tinanta" or m.kind == "avyaya" or st.stem_of(w) in st.PERSONAL
-                              or w.form.endswith(("चित्", "चन")))
+    """No analysis of the word can end a compound (it is only a finite verb, an indeclinable or a
+    personal pronoun). स्थस् (also "you two are") and त्वम् (also "you") can: they stay finals."""
+    if w.form.endswith(("चित्", "चन")):
+        return True
+    return bool(w.analyses) and not any(_nominal_final(w, k) for k in range(len(w.analyses)))
+
+
+def _as_final(w: Word) -> Word:
+    """The final word of a kept compound, with only the analyses that can end one."""
+    keep = [a for k, a in enumerate(w.analyses) if _nominal_final(w, k)]
+    return w if len(keep) == len(w.analyses) or not keep else replace(w, analyses=keep, chosen=0, proof=None)
 
 
 def _bad_member(w: Word) -> bool:
@@ -98,6 +113,8 @@ def regroup(words: list[Word]) -> tuple[list[Word], list[list[int]], list[str]]:
                 run = rest
                 break
         if len(run) >= 2 or (run and out[run[-1]].in_compound):
+            if not out[run[-1]].in_compound:
+                out[run[-1]] = _as_final(out[run[-1]])
             kept.append(run)
     return out, kept, notes
 

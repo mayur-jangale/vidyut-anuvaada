@@ -79,3 +79,40 @@ def test_neural_features_mapping():
     f = dict(neural_features(g, e, lps))
     assert f["nb_junc"] == -3.0
     assert abs(f["nb_inside"] - (-0.1) * (e.end - 1 - e.start)) < 1e-9
+
+
+def test_member_indeclinable_flag():
+    from mayur import decoder_words as dw
+
+    assert dict(dw.word_features("तथा", True)).get("w_member_indeclinable") == 1.0
+    assert "w_member_indeclinable" not in dict(dw.word_features("राम", True))
+
+
+def test_prefix_features_use_counts_not_lists():
+    from mayur import decoder_words as dw
+
+    table = {"स": {"गुण": 7}}
+    f = dict(dw.prefix_features("सगुणस्", False, table))
+    if dw.lemma_of("सगुणस्", False) == "सगुण":
+        assert "prefix_split_logratio" in f
+    assert dw.prefix_features("सगुणस्", False, {}) == ()
+    assert dw.prefix_pair_features("स", "गुणस्", {}) == ()
+
+
+def test_neural_model_refused_without_neural(monkeypatch, tmp_path):
+    import json
+
+    main, fallback = tmp_path / "m.json", tmp_path / "b.json"
+    main.write_text(json.dumps({"enabled": True, "neural": True, "weights": {"base": 1.0}, "score_scale": 9.0}))
+    fallback.write_text(json.dumps({"enabled": True, "neural": False, "weights": {"base": 1.0}, "score_scale": 5.0}))
+    monkeypatch.setattr(decoder, "MODEL_FILE", main)
+    monkeypatch.setattr(decoder, "FALLBACK_FILE", fallback)
+    monkeypatch.setattr(decoder, "neural_available", lambda: False)
+    decoder._model.cache_clear()
+    try:
+        import pytest
+
+        with pytest.warns(RuntimeWarning):
+            assert decoder.score_scale() == 5.0
+    finally:
+        decoder._model.cache_clear()
