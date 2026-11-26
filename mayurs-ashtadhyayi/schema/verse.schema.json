@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/mayur/verse.schema.json",
+  "title": "Mayur verse analysis",
+  "description": "Public JSON output of `mayur analyze` for one verse (mayur.jsonout.to_json).",
+  "type": "object",
+  "required": ["id", "input", "lines", "metre", "split_counts", "status", "notes", "reading_status", "sandhi_ok",
+               "scores", "padaccheda", "words", "compounds", "anvaya", "gloss", "translation", "alignment",
+               "reading_notes", "alternatives"],
+  "properties": {
+    "id": {"type": "string", "description": "Verse identifier, e.g. 1.1."},
+    "input": {"type": "string", "description": "The verse exactly as given (any script)."},
+    "lines": {"type": "array", "description": "Half-verses of the input.", "items": {"$ref": "#/$defs/scripts"}},
+    "metre": {"type": "object", "description": "Metre detection result (free-form)."},
+    "split_counts": {"type": "array", "description": "Number of valid sandhi splits found per line.",
+                     "items": {"type": "integer", "minimum": 0}},
+    "status": {"$ref": "#/$defs/status", "description": "Verse-level status."},
+    "notes": {"type": "array", "items": {"type": "string"}, "description": "Verse-level notes."},
+    "reading_status": {"$ref": "#/$defs/status", "description": "Status of the chosen reading."},
+    "sandhi_ok": {"type": "boolean", "description": "True if the chosen split re-joins to the input exactly."},
+    "scores": {"type": "object", "additionalProperties": {"type": "number"},
+               "description": "Score breakdown of the chosen reading."},
+    "padaccheda": {"type": "array", "description": "Sandhi split per line; compound members joined by '-'.",
+                   "items": {"$ref": "#/$defs/scripts"}},
+    "words": {"type": "array", "items": {"$ref": "#/$defs/word"}, "description": "Words of the chosen reading."},
+    "compounds": {"type": "array", "items": {"$ref": "#/$defs/compound"}},
+    "anvaya": {
+      "type": "object", "description": "Prose word order.",
+      "required": ["order", "devanagari", "iast"],
+      "properties": {
+        "order": {"type": "array", "items": {"type": "integer", "minimum": 0}, "description": "Word indices."},
+        "devanagari": {"type": "string"}, "iast": {"type": "string"}
+      }
+    },
+    "gloss": {"type": "array", "description": "Word-by-word gloss.", "items": {
+      "type": "object", "required": ["word", "iast", "devanagari", "gloss"],
+      "properties": {"word": {"type": "string"}, "iast": {"type": "string"}, "devanagari": {"type": "string"},
+                     "gloss": {"type": "string"}}}},
+    "translation": {"type": "string", "description": "Literal English translation."},
+    "alignment": {"type": "array", "description": "Spans of the translation aligned to words.", "items": {
+      "type": "object", "required": ["word", "start", "end", "text"],
+      "properties": {"word": {"type": "integer", "minimum": 0}, "start": {"type": "integer", "minimum": 0},
+                     "end": {"type": "integer", "minimum": 0}, "text": {"type": "string"}}}},
+    "reading_notes": {"type": "array", "items": {"type": "string"}},
+    "alternatives": {"type": "array", "description": "Lower-ranked readings.", "items": {
+      "type": "object", "required": ["rank", "padaccheda", "scores", "status", "sandhi_ok", "notes", "translation"],
+      "properties": {
+        "rank": {"type": "integer", "minimum": 1},
+        "padaccheda": {"type": "array", "items": {"$ref": "#/$defs/scripts"}},
+        "scores": {"type": "object", "additionalProperties": {"type": "number"}},
+        "status": {"$ref": "#/$defs/status"},
+        "sandhi_ok": {"type": "boolean"},
+        "notes": {"type": "array", "items": {"type": "string"}},
+        "translation": {"type": "string"},
+        "words": {"type": "array", "items": {"$ref": "#/$defs/word"}, "description": "Only with --full."}
+      }}}
+  },
+  "$defs": {
+    "status": {"enum": ["verified", "unverified"], "description": "verified = every check passed."},
+    "scripts": {
+      "type": "object", "description": "Text in three scripts.",
+      "required": ["slp1", "devanagari", "iast"],
+      "properties": {"slp1": {"type": "string"}, "devanagari": {"type": "string"}, "iast": {"type": "string"}}
+    },
+    "analysis": {
+      "type": "object", "description": "One grammatical analysis of a word.",
+      "required": ["lemma", "kind", "description"],
+      "properties": {
+        "lemma": {"type": "string"}, "lemma_iast": {"type": "string"},
+        "kind": {"enum": ["subanta", "tinanta", "avyaya", "stem", "unknown"]},
+        "gender": {"type": ["string", "null"]}, "case": {"type": ["string", "null"]},
+        "number": {"type": ["string", "null"]}, "person": {"type": ["string", "null"]},
+        "tense_mood": {"type": ["string", "null"]}, "voice": {"type": ["string", "null"]},
+        "root": {"type": ["string", "null"]}, "prefixes": {"type": "array", "items": {"type": "string"}},
+        "krt": {"type": ["string", "null"]}, "source": {"type": "string"},
+        "description": {"type": "string", "description": "English description of the grammar."}
+      }
+    },
+    "word": {
+      "type": "object", "description": "A word of the reading with its grammar and proof.",
+      "required": ["index", "form", "line", "span", "in_compound", "compound", "analysis", "other_analyses",
+                   "verified", "verified_reason", "sutra_trace", "role", "head", "gloss", "gloss_source", "arsha"],
+      "properties": {
+        "index": {"type": "integer", "minimum": 0}, "form": {"$ref": "#/$defs/scripts"},
+        "line": {"type": "integer", "minimum": 0},
+        "span": {"type": "array", "items": {"type": "integer"}, "minItems": 2, "maxItems": 2},
+        "in_compound": {"type": "boolean"}, "compound": {"type": ["integer", "null"]},
+        "analysis": {"$ref": "#/$defs/analysis"},
+        "other_analyses": {"type": "array", "items": {"$ref": "#/$defs/analysis"}},
+        "verified": {"type": "boolean", "description": "True if the form was derived by Panini's rules."},
+        "verified_reason": {"type": "string"},
+        "sutra_trace": {"type": "array", "items": {
+          "type": "object", "required": ["source", "code", "result"],
+          "properties": {"source": {"type": "string"}, "code": {"type": "string"}, "result": {"type": "string"}}}},
+        "role": {"type": "string"}, "head": {"type": ["integer", "null"]}, "gloss": {"type": "string"},
+        "gloss_source": {"type": "string"},
+        "arsha": {"type": "boolean", "description": "Labelled as non-Paninian (arsha) usage."}
+      }
+    },
+    "compound": {
+      "type": "object", "required": ["id", "members", "member_indices", "stem", "type", "vigraha", "basis"],
+      "properties": {
+        "id": {"type": "integer"}, "members": {"type": "array", "items": {"$ref": "#/$defs/scripts"}},
+        "member_indices": {"type": "array", "items": {"type": "integer"}},
+        "stem": {"$ref": "#/$defs/scripts"}, "type": {"type": "string", "description": "Compound type."},
+        "vigraha": {"$ref": "#/$defs/scripts", "description": "Dissolved paraphrase."},
+        "basis": {"type": "string", "description": "How the type was decided (e.g. heuristic)."}
+      }
+    }
+  }
+}
