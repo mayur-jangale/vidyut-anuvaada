@@ -139,3 +139,40 @@ def test_sibling_swap_keeps_the_proof():
     verse = pipeline.analyze_verse("मूढा जना न जानन्ति")
     assert verse.status == "verified"
     assert verse.readings[0].words[0].morph.vacana == "बहुवचन"
+
+
+@pytest.mark.parametrize("form, root", [("शृणुष्व", "श्रु"), ("अहनत्", "हन्"), ("अभ्यहनन्", "हन्")])
+def test_more_epic_finite_forms(form, root):
+    found = [m for m in lexicon.padas(form) if m.kind == "tinanta" and m.root == root]
+    assert found and found[0].source == "arsha" and not lexicon.prove(found[0]).derivable
+
+
+@pytest.mark.parametrize("form, lemma", [("युध्यतोस्", "युध्"), ("कामयानस्य", "कामय्")])
+def test_epic_participles_in_other_cases(form, lemma):
+    found = [m for m in lexicon.padas(form) if m.krt in ("शतृ", "शानच्") and ud.lemma(m) == lemma]
+    assert found and found[0].source == "arsha"
+
+
+def test_prefixless_absolutive_by_its_prefixed_sibling():
+    found = [m for m in lexicon.padas("गृह्य") if m.krt == "ल्यप्" and m.root == "ग्रह्"]
+    assert found and "प्रगृह्य" in lexicon.prove(found[0]).note
+
+
+@pytest.mark.parametrize("form, lemma", [("आदीनि", "आदि"), ("वारीणि", "वारि")])
+def test_neuter_plural_has_its_accusative(form, lemma):
+    found = [m for m in lexicon.padas(form) if m.lemma == lemma and m.vibhakti == "द्वितीया"]
+    assert found
+    proof = lexicon.prove(found[0])
+    assert proof.derivable and "7.1.20" in proof.method
+
+
+@pytest.mark.parametrize("form, lemma", [("विनिःसृतस्", "विनिःसृ"), ("निर्णीयते", "निर्णी"), ("अभिषेचय", "अभिषेचय्"),
+                                          ("दूषितम्", "दूषय्"), ("उज्जहार", "उद्धृ")])
+def test_cited_lemma_of_prefixed_verbs(form, lemma):
+    assert lemma in {ud.lemma(m) for m in lexicon.padas(form) if m.root}
+
+
+def test_participle_cited_under_its_own_stem_is_the_same_word():
+    participle = next(m for m in lexicon.padas("भूतम्") if m.krt == "क्त" and m.root == "भू")
+    assert ud.same_lemma(participle, "भूत", "NOUN") and ud.same_lemma(participle, "भू", "VERB")
+    assert not ud.same_lemma(participle, "गत", "NOUN")

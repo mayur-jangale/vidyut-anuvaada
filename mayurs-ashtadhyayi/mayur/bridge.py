@@ -398,6 +398,25 @@ def kta_pratipadika(dhatu_entry: Any, upasargas: tuple[str, ...]) -> Any:
         return None
 
 
+def as_accusative(handle: Any) -> Any:
+    """The द्वितीया pada of a kosha subanta entry (same stem, gender, number), or None."""
+    from vidyut.prakriya import Pada, Pratipadika, Vibhakti
+
+    pe = getattr(handle, "pratipadika_entry", None)
+    if pe is None:
+        return None
+    try:
+        if _kind_of(pe) == "krdanta":
+            if str(getattr(pe, "prayoga", "kartari")) not in ("kartari", "None"):
+                return None
+            prati = Pratipadika.krdanta(pe.dhatu_entry.dhatu, pe.krt)
+        else:
+            prati = pe.pratipadika
+        return Pada.Subanta(pratipadika=prati, linga=handle.linga, vibhakti=Vibhakti.Dvitiya, vacana=handle.vacana)
+    except Exception:  # noqa: BLE001
+        return None
+
+
 def subanta_like(pratipadika: Any, entry: Entry) -> Any:
     """A Pada.Subanta of ``pratipadika`` in the linga/vibhakti/vacana of the kosha ``entry``."""
     from vidyut.prakriya import Pada

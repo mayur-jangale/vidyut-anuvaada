@@ -36,13 +36,15 @@ def _join(left: str, right: str) -> str:
         return lipi.from_varnas(lipi.varnas(left) + lipi.varnas(right))  # सम् + आसद् -> समासद्
     if left in ("निर्", "दुर्"):  # the upasarga is निस् / दुस् (र् is its sandhi form)
         left = left[:-2] + "स्"
+    if left in ("निस्", "दुस्") and right[:1] in "सशष":  # निःसृ, दुःसह (8.3.36 वा शरि: the visarga stays)
+        return left[:-2] + "ः" + right
     if left in ("निस्", "दुस्") and right[:1] in _VOWEL_INITIAL:
         return lipi.from_varnas(lipi.varnas(left[:-2] + "र्") + lipi.varnas(right))
     outs = sandhi.outcomes(left, right)
     # within a word the samhita rules are obligatory (1.4.109 with 6.1.72): prefer an outcome that applied one
     applied = [o for o in outs if o.sutras and "पादान्त-विराम" not in o.sutras]
     text = (applied or list(outs))[0].text if outs else left + right
-    if "ः" in text and right[:1] not in _VOWEL_INITIAL:  # निस्/दुस् before a voiced sound: निर्, दुर्
+    if left in ("निस्", "दुस्") and "ः" in text and right[:1] not in _VOWEL_INITIAL:  # before a voiced sound: निर्, दुर्
         if right[:1] in _VOICED:
             sub = "र्"
         elif right[:1] in "कखपफ" and left[-3:-2] in ("ि", "ु"):  # 8.3.41 इदुदुपधस्य चाप्रत्ययस्य
@@ -66,7 +68,8 @@ _NA_UPADESHA = ("नृत्", "नन्द्", "नर्द्", "नक्
 _SUT = {"सम्": "संस्कृ", "परि": "परिष्कृ"}
 _VOICED = frozenset("गघङजझञडढणदधनबभमयरलवह")
 _SHATVA_ROOTS = ("स्था", "सद्", "सिच्", "सिध्", "सञ्ज्", "स्तु", "स्तम्भ्", "सेव्", "सो", "स्वप्", "सह्",
-                 "सिव्", "सु", "सू", "स्यन्द्", "स्वञ्ज्", "स्वज्")
+                 "सिव्", "सु", "सू", "स्यन्द्", "स्वञ्ज्", "स्वज्",
+                 "सेचय्", "सादय्", "सेधय्", "स्तावय्", "स्तम्भय्", "सञ्जय्")  # and their causatives (अभिषेचय्)
 
 
 def _dcs_root(m: Morph) -> str:
@@ -79,7 +82,7 @@ def _dcs_root(m: Morph) -> str:
         short = root.replace("ा", "", 1)
         if short != root and short[:-1] in m.form and root[:-1] not in m.form:  # 6.4.92 मितां ह्रस्वः
             root = short
-        return root[:-1] + "य्"
+        return _CITED_ROOT.get(root[:-1] + "य्", root[:-1] + "य्")
     if root and "क" <= root[-1] <= "ह":  # a sanādi stem in -अ (जिगीष, विधित्स): cited with virāma
         return root + "्"
     return _CITED_ROOT.get(root, root.replace("ॄ", "ृ"))  # the corpus cites कॄ, स्तॄ as कृ, स्तृ
@@ -87,7 +90,9 @@ def _dcs_root(m: Morph) -> str:
 
 # How the corpus cites roots that vidyut names by their Dhatupatha form (ध्यै -> ध्या, 6.1.45)
 _CITED_ROOT = {"स्वञ्ज्": "स्वज्", "ऋच्छ्": "ऋछ्", "पूर्": "पृ", "क्षी": "क्षि",  # the corpus has no पूर्, क्षी
-               "तॄ": "तृ", "ध्मा": "धम्", "वेप्": "विप्", "सिव्": "सीव्", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
+               "तॄ": "तृ", "कृप्": "कॢप्", "ध्मा": "धम्", "वेप्": "विप्", "सिव्": "सीव्",
+               "दोषय्": "दूषय्",  # 6.4.90 दोषो णौ: दूषयति
+               "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
                "दै": "दा", "वे": "वा", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
 # 3.1.31 आयादय आर्धधातुके वा: without आय the corpus cites the bare root (गुप्त -> गुप्)
 _AYA_ROOT = {"गोपाय": "गुप्", "धूपाय": "धूप्", "पणाय": "पण्", "पनाय": "पन्", "विच्छाय": "विच्छ्"}

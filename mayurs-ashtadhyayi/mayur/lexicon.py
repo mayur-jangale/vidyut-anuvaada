@@ -155,7 +155,41 @@ def _kosha_morphs_of(form: str, variants: tuple[str, ...]) -> list[Morph]:
             out.append(m)
             if m.krt in _ADJECTIVAL_KRT and m.stem and m.kind == "subanta":
                 out.append(_as_adjective(m))
+    return out + _neuter_accusatives(out)
+
+
+def _neuter_accusatives(morphs: list[Morph]) -> list[Morph]:
+    """वारीणि, आदीनि: the kosha lists the neuter plural of an इ-stem as प्रथमा only. A neuter has one
+    form for प्रथमा and द्वितीया (7.1.20 जश्शसोः शिः, 7.1.23 स्वमोर्नपुंसकात्), so the द्वितीया is added when
+    vidyut derives exactly this form for it."""
+    key = lambda m: (m.lemma, m.stem, m.krt, m.vacana)  # noqa: E731
+    have = {key(m) for m in morphs if m.linga == "नपुंसकलिङ्ग" and m.vibhakti == "द्वितीया"}
+    out = []
+    for m in morphs:
+        if m.kind != "subanta" or m.linga != "नपुंसकलिङ्ग" or m.vibhakti != "प्रथमा" or key(m) in have:
+            continue
+        pada = bridge.as_accusative(m.handle)
+        if pada is None:
+            continue
+        derived = bridge.derived_texts(pada)
+        if set(derived) & set(nasal_variants(m.form)):
+            out.append(replace(m, vibhakti="द्वितीया", handle=pada))
+        else:  # vidyut gives आदिनि for the द्वितीया: it does not lengthen before शि from शस् (1.1.42, 6.4.8)
+            out.append(replace(m, vibhakti="द्वितीया", handle=("as-nominative", m.handle, ", ".join(derived))))
+        have.add(key(m))
     return out
+
+
+NEUTER_NOTE = ("a neuter has one form for प्रथमा and द्वितीया: शि replaces both जस् and शस् (7.1.20 जश्शसोः शिः) and is "
+               "सर्वनामस्थान (1.1.42), so the stem is lengthened alike (6.4.8). The trace is vidyut's derivation of the "
+               "प्रथमा; for the द्वितीया vidyut gives {derived}")
+
+
+def _prove_as_nominative(m: Morph, nominative: object, derived: str) -> WordProof:
+    inner = _prove(replace(m, vibhakti="प्रथमा", handle=nominative))
+    step = SutraStep("अष्टाध्यायी", "7.1.20", m.form)
+    return WordProof(derivable=inner.derivable, method="vidyut-prakriya (प्रथमा) + 7.1.20", derived_form=inner.derived_form,
+                     trace=[*inner.trace, step], note=NEUTER_NOTE.format(derived=derived or "nothing"))
 
 
 def feminine_stem(stem: str, form: str) -> str:
@@ -462,6 +496,8 @@ def _prove(m: Morph) -> WordProof:
         return WordProof(derivable=False, method="special", note=h[1])
     if isinstance(h, tuple) and h and h[0] == "particle":
         return _prove_with_particle(m, h[1], h[2])
+    if isinstance(h, tuple) and h and h[0] == "as-nominative":
+        return _prove_as_nominative(m, h[1], h[2])
     if isinstance(h, tuple) and h and h[0] == "gati":  # गति + verb form: the verb form is what is derived
         inner = prove(h[2])
         return WordProof(derivable=inner.derivable, method="vidyut-prakriya + sandhi",

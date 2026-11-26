@@ -71,6 +71,8 @@ def canonical_lemma(text: str) -> str:
     text = text.replace("ॄ", "ृ")  # the corpus cites most roots in long ॠ with the short vowel (तृ, कृ), a few not
     if text.endswith("न्त्"):
         return text[: -len("न्त्")] + "त्"
+    if text.endswith("ध्यै"):  # the corpus cites ध्यै mostly as ध्या, with prefixes also as अभिध्यै
+        return text[: -len("ै")] + "ा"
     if text.endswith("क्षण्"):  # the corpus cites क्षणु हिंसायाम् (क्षत, विक्षत) as क्षन्
         return text[: -len("ण्")] + "न्"
     if text.endswith(("ः", "र्")):
@@ -120,6 +122,8 @@ def _citation_variant(m: Morph, ours: str, want: str) -> bool:
         return True
     if m.krt == "शतृ" and ours == "अस्" and want == "सत्":
         return True  # सन्, सन्तः: the participle of अस्, which the corpus also cites as the adjective सत्
+    if is_verbal_noun(m) and m.stem and want == canonical_lemma(m.stem):
+        return True  # भूतम्, अर्हन्: a participle the corpus cites under its own stem (भूत, अर्हन्त्) — one word
     if (m.kind == "tinanta" or m.root) and ours.endswith("धु") and want == ours[:-1] + "ू":
         return True  # धुञ् / धूञ् कम्पने: one root with a short and a long vowel (धुनोति, धूनोति)
     # 7.3.78: पश्य is the present-system substitute of दृश्; the corpus cites it under either root
