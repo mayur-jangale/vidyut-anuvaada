@@ -78,3 +78,12 @@ def test_features_the_gold_omits_are_not_scored():
     pronoun = Morph(form="अहम्", lemma="अस्मद्", kind="subanta", linga="पुंलिङ्ग", vibhakti="प्रथमा", vacana="एकवचन")
     assert ud.same_feats(pronoun, "PRON", {"Case": "Nom", "Number": "Sing"})
     assert not ud.same_feats(pronoun, "PRON", {"Case": "Acc", "Number": "Sing"})
+
+
+def test_past_participle_tense_is_optional_in_the_gold():
+    ppp = Morph(form="उक्तस्", lemma="वच्", kind="subanta", stem="उक्त", root="वच्", krt="क्त",
+                linga="पुंलिङ्ग", vibhakti="प्रथमा", vacana="एकवचन")
+    gold = {"Case": "Nom", "Gender": "Masc", "Number": "Sing", "VerbForm": "Part"}
+    assert ud.same_feats(ppp, "VERB", gold)
+    assert ud.same_feats(ppp, "VERB", {**gold, "Tense": "Past"})
+    assert not ud.same_feats(ppp, "VERB", {**gold, "Tense": "Pres"})

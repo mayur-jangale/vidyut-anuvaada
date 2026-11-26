@@ -22,6 +22,7 @@ LAKARA_TENSE_MOOD = {
     "लृङ्": ("Fut", "Cond"), "आशीर्लिङ्": ("Past", "Prec"), "लेट्": ("Pres", "Sub"),
 }
 PARTICIPLE_TENSE = {"शतृ": "Pres", "शानच्": "Pres", "क्वसु": "Past", "कानच्": "Past"}
+PAST_PARTICIPLE_KRT = frozenset({"क्त", "क्तवतु"})
 GERUNDIVE_KRT = frozenset({"तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्"})
 VERBFORM_OF_NONFINITE = {"क्त्वा": "Conv", "ल्यप्": "Conv", "तुमुन्": "Inf"}
 
@@ -83,6 +84,8 @@ def same_feats(m: Morph, gold_upos: str, gold_feats: dict[str, str]) -> bool:
     if gold_upos in INDECLINABLE_UPOS:
         return True
     ours = feats(m)
+    if gold_feats.get("VerbForm") == "Part" and gold_feats.get("Tense") == "Past" and m.krt in PAST_PARTICIPLE_KRT:
+        ours = {**ours, "Tense": "Past"}  # the corpus marks the tense of क्त only now and then
     return all(ours.get(k) == v for k, v in gold_feats.items() if k in TAG_FEATS)
 
 

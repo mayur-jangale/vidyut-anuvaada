@@ -59,7 +59,8 @@ def _surfaces(upasarga: str) -> tuple[tuple[str, tuple[str, ...]], ...]:
         out.append((v[:-1] + ("ऐ",), (("ए",), ("ऐ",))))
         out.append((v[:-1] + ("औ",), (("ओ",), ("औ",))))
     if last in ("इ", "उ"):
-        out.append((v[:-1] + ("ई" if last == "इ" else "ऊ",), (("इ",) if last == "इ" else ("उ",),)))
+        long_ = "ई" if last == "इ" else "ऊ"
+        out.append((v[:-1] + (long_,), ((last,), (long_,))))  # परि + ईक्ष् -> परीक्ष्
     return tuple((lipi.from_varnas(p), tuple(lipi.from_varnas(s) for s in starts)) for p, starts in out)
 
 
@@ -104,16 +105,24 @@ def _lemma(upasargas: tuple[str, ...], root: str) -> str:
 def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> list[Morph]:
     """परित्यज्य: the kosha lacks त्यज्य, so find the dhatu through a present (त्यजति / चिन्तयति)
     and forward-derive its ल्यप् with the upasargas."""
-    if not remainder.endswith("्य"):
+    if remainder.endswith("्य"):
+        base = remainder[: -len("्य")]
+        probes: tuple[str, ...] = (base + "ति", base + "यति", base + "ते", base + "यते")
+    elif remainder.endswith("य") and len(remainder) > 2:  # ज्ञाय: a vowel-final root, find it via ज्ञात्वा
+        base = remainder[:-1]
+        probes = (base + "त्वा", base + "ति", base + "यति")
+    else:
         return []
-    base = remainder[: -len("्य")]
     out: list[Morph] = []
     seen: set[str] = set()
-    for probe in (base + "ति", base + "यति", base + "ते", base + "यते"):
+    for probe in probes:
         for entry in bridge.lookup(probe):
-            if entry.entry != "tinanta" or repr(entry.morph.handle.dhatu_entry.dhatu) in seen:
+            if entry.entry == "basic" or (entry.entry == "krdanta" and entry.morph.krt != "क्त्वा"):
                 continue
-            seen.add(repr(entry.morph.handle.dhatu_entry.dhatu))
+            key = repr(bridge.dhatu_of(entry))
+            if key in seen:
+                continue
+            seen.add(key)
             pada = bridge.ktva_of_verb(entry, upasargas)
             if pada is not None and any(t == form for t in bridge.derived_texts(pada)):
                 m = entry.morph
@@ -125,7 +134,7 @@ def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> l
 
 
 def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list[Morph]:
-    out = _lyap_from_verbs(form, upasargas, remainder) if form.endswith("्य") else []
+    out = _lyap_from_verbs(form, upasargas, remainder) if form.endswith("य") else []
     for entry in bridge.lookup(remainder):
         m = entry.morph
         if entry.entry == "tinanta":
@@ -212,114 +221,5 @@ def generated_nominals(form: str) -> tuple[Morph, ...]:
     return tuple(found)
 
 
-# अन्वादेश substitutes of इदम् / एतद् (2.4.34 द्वितीयाटौस्स्वेनः): form -> (लिङ्ग, विभक्ति, वचन) list
-_P, _S, _N = "पुंलिङ्ग", "स्त्रीलिङ्ग", "नपुंसकलिङ्ग"
-_ENA = {
-    "एनम्": ((_P, "द्वितीया", "एकवचन"),), "एनाम्": ((_S, "द्वितीया", "एकवचन"),),
-    "एनत्": ((_N, "द्वितीया", "एकवचन"),), "एनद्": ((_N, "द्वितीया", "एकवचन"),),
-    "एनौ": ((_P, "द्वितीया", "द्विवचन"),), "एने": ((_S, "द्वितीया", "द्विवचन"), (_N, "द्वितीया", "द्विवचन")),
-    "एनान्": ((_P, "द्वितीया", "बहुवचन"),), "एनास्": ((_S, "द्वितीया", "बहुवचन"),),
-    "एनानि": ((_N, "द्वितीया", "बहुवचन"),),
-    "एनेन": ((_P, "तृतीया", "एकवचन"), (_N, "तृतीया", "एकवचन")), "एनया": ((_S, "तृतीया", "एकवचन"),),
-    "एनयोस्": tuple((g, v, "द्विवचन") for g in (_P, _S, _N) for v in ("षष्ठी", "सप्तमी")),
-}
-ENA_NOTE = ("अन्वादेश substitute एन by 2.4.34 (द्वितीयाटौस्स्वेनः); vidyut's Python API does not apply "
-            "2.4.34, so no derivation was run")
-
-
-def anvadesha(form: str) -> tuple[Morph, ...]:
-    """एनम् etc.: special-table analyses as इदम् / एतद् (no vidyut derivation exists)."""
-    feats = _ENA.get(form, ())
-    return tuple(Morph(form=form, lemma=lemma, kind="subanta", linga=g, vibhakti=v, vacana=n,
-                       source="special", quality=3, handle=("special", ENA_NOTE))
-                 for lemma in ("इदम्", "एतद्", "एनद्") for g, v, n in feats)
-
-
-SA_NOTE = ("सु is elided after सस् / एषस् before a consonant (6.1.132 एतत्तदोः सुलोपोऽकोरनञ्समासे हलि); "
-           "this is a sentence-level rule vidyut's Python API does not apply; the pada {base} is kosha-listed")
-
-
-def sa_esha(form: str) -> tuple[Morph, ...]:
-    """स / एष: तद् / एतद् प्रथमा एकवचन पुंलिङ्ग with सु-lopa (6.1.132)."""
-    if form not in ("स", "एष"):
-        return ()
-    lemma = "तद्" if form == "स" else "एतद्"
-    return (Morph(form=form, lemma=lemma, kind="subanta", linga=_P, vibhakti="प्रथमा", vacana="एकवचन",
-                  source="special", quality=3, handle=("special", SA_NOTE.format(base=form + "स्"))),)
-
-
-_PARTICLES = ("चित्", "चिद्", "चन")
-_INDEF_BASES = frozenset({"किम्", "क", "क्व", "कदा", "कथम्", "कुत्र", "कुतस्", "कति"})
-# the junction reversed: कश्+चित् <- कस्, किं+चित् <- किम्, कञ्+चन? (कं) <- कम्
-_JUNCTION = (("ंश्", "न्"), ("श्", "स्"), ("ं", "म्"), ("ञ्", "म्"))
-
-
-def indefinite(form: str, lookup) -> tuple[Morph, ...]:
-    """कश्चित्, केचिद्, क्वचित्, किंचन ...: the किम् form (looked up with ``lookup``) + particle."""
-    out: list[Morph] = []
-    for part in _PARTICLES:
-        if not form.endswith(part) or len(form) <= len(part):
-            continue
-        head = form[: -len(part)]
-        bases = [head] + [head[: -len(a)] + b for a, b in _JUNCTION if head.endswith(a)]
-        for base in bases:
-            for m in lookup(base):
-                if m.lemma not in _INDEF_BASES or m.quality < 2:
-                    continue
-                if m.kind == "subanta":
-                    lemma = "कश्चन" if part == "चन" else "कश्चित्"
-                else:
-                    lemma = head + ("चन" if part == "चन" else "चिद्")  # cited as क्वचिद्, कदाचिद्
-                out.append(replace(m, form=form, lemma=lemma, source="generated", quality=3,
-                                   handle=("particle", m, part)))
-    return tuple(out)
-
-
-_PARTICLE_ENDS = (("अपि", ("पि",)), ("तु", ("तु",)), ("च", ("च",)), ("उ", ("ु", "उ")))
-_YATHA = ("यथा", "प्रति", "अनु", "उप", "सह")  # avyayibhava first members (2.1.6-2.1.7)
-AVYAYA_NOTE = ("indeclinable compound of kosha-listed members ({parts}); the joining (avyayībhāva 2.1.6 "
-               "or a particle in samhita) is not derived through vidyut's Python API")
-
-
-_VOWELS = frozenset({"अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ओ"})
-_PRONOMINAL = frozenset({"किम्", "क", "क्व", "कदा", "कथम्", "यद्", "तद्"})
-
-
-def _avyaya(form: str, parts: str) -> Morph:
-    return Morph(form=form, lemma=form, kind="avyaya", source="generated", quality=3,
-                 handle=("special", AVYAYA_NOTE.format(parts=parts)))
-
-
-def avyaya_compound(form: str, pada_lookup, stem_lookup) -> tuple[Morph, ...]:
-    """किंतु, किंच, क्वापि, किमु, यथाशक्ति, यथाक्रमम्: members are looked up, the join is re-run forward
-    with ``mayur.sandhi``; lemma = the word (as the corpus cites it)."""
-    from mayur import sandhi
-
-    out: list[Morph] = []
-    for particle, ends in _PARTICLE_ENDS:
-        if not form.endswith(ends) or len(form) < 3:
-            continue
-        sounds = lipi.varnas(form)
-        plen = len(lipi.varnas(particle))
-        for cut in range(max(1, len(sounds) - plen - 1), min(len(sounds), len(sounds) - plen + 2)):
-            base = sounds[:cut]
-            heads = [base]
-            if base[-1] in _VOWELS:
-                heads += [base[:-1] + (v,) for v in ("अ", "आ") if v != base[-1]]
-            for hv in heads:
-                h = lipi.from_varnas(hv)
-                h = h[:-1] + "म्" if h.endswith("ं") else h
-                if h == form or not any(m.kind == "avyaya" or m.lemma in _PRONOMINAL
-                                        for m in pada_lookup(h) if m.quality >= 2):
-                    continue
-                if any(o.text == form for o in sandhi.outcomes(h, particle)):
-                    out.append(_avyaya(form, h + " + " + particle))
-        if out:
-            return tuple(out[:1])
-    for first in _YATHA:
-        if form.startswith(first) and len(form) > len(first) + 1:
-            rest = form[len(first):]
-            bare = rest[:-2] if rest.endswith("म्") else rest
-            if stem_lookup(bare):
-                return (_avyaya(form, first + " + " + bare),)
-    return ()
+from mayur.lexicon_special import (  # noqa: E402,F401  (re-exported)
+    anvadesha, avyaya_compound, indefinite, nanj_stems, numerals, sa_esha, tasi_forms)

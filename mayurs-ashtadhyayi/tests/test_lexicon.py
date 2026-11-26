@@ -181,3 +181,54 @@ def test_retroflexed_prefixed_roots(form, lemma):
 
     ms = [m for m in L.padas(form) if ud.lemma(m) == lemma]
     assert ms and L.prove(ms[0]).derivable
+
+
+@pytest.mark.parametrize("form", ["किंतु", "किंच", "क्वापि", "कदापि", "किमु", "यथाशक्ति", "यथाक्रमम्"])
+def test_avyaya_compounds(form):
+    ms = [m for m in L.padas(form) if m.kind == "avyaya" and m.lemma == form]
+    assert ms and ms[0].source == "generated"
+    proof = L.prove(ms[0])
+    assert not proof.derivable and proof.trace == [] and "not derived" in proof.note
+
+
+@pytest.mark.parametrize("form,lemma", [("उन्नत", "उन्नम्"), ("प्रदीप्त", "प्रदीप्"), ("जनित", "जनय्")])
+def test_participle_stems_in_compounds(form, lemma):
+    from mayur import ud
+
+    ms = [m for m in L.stems(form) if ud.lemma(m) == lemma]
+    assert ms and L.prove(ms[0]).derivable
+
+
+def test_prefix_joins():
+    assert [L._join(a, b) for a, b in (("निस्", "क्रम्"), ("निर्", "चि"), ("निर्", "गम्"), ("उद्", "नम्"),
+                                        ("अनु", "स्था"), ("पुरस्", "कृ"))] == \
+        ["निष्क्रम्", "निश्चि", "निर्गम्", "उन्नम्", "अनुष्ठा", "पुरस्कृ"]
+
+
+def test_tasi_ablative():
+    ms = [m for m in L.padas("अनुरागतस्") if m.vibhakti == "पञ्चमी"]
+    assert ms and ms[0].lemma == "अनुराग" and L.prove(ms[0]).derivable
+    assert not [m for m in L.padas("इतस्") if m.lemma == "इ" and m.source == "generated"]
+
+
+def test_nanj_stem():
+    m = L.stems("अमित")[0]
+    assert m.lemma == "अमित" and m.source == "generated"
+    proof = L.prove(m)
+    assert not proof.derivable and "नञ्" in proof.note and proof.trace
+
+
+def test_n_numerals():
+    from mayur import ud
+
+    assert "पञ्चन्" in {ud.lemma(m) for m in L.padas("पञ्च")}
+    m = [m for m in L.padas("पञ्चभिस्") if m.lemma == "पञ्चन्"][0]
+    assert m.vibhakti == "तृतीया" and L.prove(m).derivable
+    assert "पञ्चन्" in {m.lemma for m in L.stems("पञ्च")}
+
+
+def test_lyap_of_vowel_roots_and_long_vowel_prefix():
+    from mayur import ud
+
+    assert "परिज्ञा" in {ud.lemma(m) for m in L.padas("परिज्ञाय")}
+    assert "परीक्ष्" in {ud.lemma(m) for m in L.padas("परीक्षेत")}

@@ -20,7 +20,7 @@ import json
 import math
 from functools import lru_cache
 from pathlib import Path
-from typing import Callable, Optional, Sequence
+from typing import Optional, Sequence
 
 from mayur.lipi import varnas
 from mayur.model import Morph
@@ -97,7 +97,8 @@ class Verse:
     """One sequence to tag: candidates per word, half-verse index, compound flag, form."""
 
     def __init__(self, cands: Sequence[Sequence[Morph]], lines: Sequence[int], cpd: Sequence[bool],
-                 forms: Sequence[str], minus: Optional[Sequence[Sequence[tuple[float, float]]]] = None):
+                 forms: Sequence[str], minus: Optional[Sequence[Sequence[tuple[float, float]]]] = None,
+                 prior: Optional[Sequence[int]] = None):
         self.cands = [list(c) for c in cands]
         self.lines, self.cpd, self.forms = list(lines), list(cpd), list(forms)
         self.counts = [[(max(0.0, _freq("analysis_count", m) - (minus[i][k][0] if minus else 0.0)),
@@ -105,6 +106,9 @@ class Verse:
                         for k, m in enumerate(c)] for i, c in enumerate(self.cands)]
         self.top = [max(range(len(c)), key=lambda k, i=i: (self.counts[i][k][0], self.cands[i][k].quality, -k))
                     if c else -1 for i, c in enumerate(self.cands)]
+        # the other words' reference reading: pass-1 choice (second pass) or the most frequent one
+        self.ref = list(prior) if prior is not None else self.top
+        self.p2 = "P" if prior is not None else ""
         self.static = []
         for i, c in enumerate(self.cands):
             wobs = self._word_obs(i) if c else []
@@ -165,7 +169,7 @@ class Verse:
         others = [j for j in range(n) if j != i and self.lines[j] == line and not self.cpd[j] and self.cands[j]]
         for j in others:
             d = j - i
-            topj = self.cands[j][self.top[j]]
+            topj = self.cands[j][self.ref[j]]
             if abs(d) <= WINDOW and m.kind == "subanta":
                 dd = "%+d" % d
                 if any(_agree(m, x) for x in self.cands[j]):
@@ -187,11 +191,36 @@ class Verse:
                 o.append("vlm=" + topj.lemma)
                 o.append("vpr=%s|%s" % (topj.prayoga or "", topj.vacana or ""))
         if m.vibhakti == "द्वितीया":
-            verbal = any(self.cands[j][self.top[j]].kind == "tinanta" or _verbal(self.cands[j][self.top[j]])
+            verbal = any(self.cands[j][self.ref[j]].kind == "tinanta" or _verbal(self.cands[j][self.ref[j]])
                          for j in others)
             o.append("accV" if verbal else "accNoV")
-        if m.vibhakti == "प्रथमा" and not any(self.cands[j][self.top[j]].kind == "tinanta" for j in others):
+        if m.vibhakti == "प्रथमा" and not any(self.cands[j][self.ref[j]].kind == "tinanta" for j in others):
             o.append("nomNoV")
+        return o + self._verse_level(i, m)
+
+    def _verse_level(self, i: int, m: Morph) -> Obs:
+        """Verb–subject and object features across the whole verse (half-verse boundaries are arbitrary)."""
+        if m.kind not in ("subanta", "tinanta"):
+            return []
+        refs = [(j, self.cands[j][self.ref[j]]) for j in range(len(self.forms))
+                if j != i and not self.cpd[j] and self.cands[j]]
+        verbs = [x for _, x in refs if x.kind == "tinanta"]
+        o = ["Vverbs=%d" % min(len(verbs), 2)]
+        if m.vibhakti == "प्रथमा":
+            o.append("Vfit" if any(_fits(m, v) for v in verbs) else "Vnofit")
+            o += ["Vpr=" + (v.prayoga or "") for v in verbs[:2]]
+            if any(_agree(m, x) for _, x in refs):
+                o.append("VagNom")
+        if m.kind == "subanta" and m.vibhakti in ("प्रथमा", "द्वितीया"):
+            o += ["Vlm=" + v.lemma for v in verbs[:2]]
+            other_nom = [x for j, x in refs if all(c.vibhakti == "प्रथमा" for c in self.cands[j])
+                         and any(_fits(x, v) for v in verbs)]
+            if other_nom:
+                o.append("VsureNom")
+        if m.kind == "tinanta":
+            o.append("Vkarta" if any(_fits(x, m) for _, x in refs) else "Vnokarta")
+        if self.p2 and m.kind == "subanta":
+            o += ["Pag%+d" % max(-6, min(6, j - i)) for j, x in refs if _agree(m, x)]
         return o
 
     def history(self, i: int, k: int, path: Sequence[int]) -> Obs:
@@ -258,70 +287,6 @@ def decode(v: Verse, w: Weights, gold: Optional[Sequence[tuple[int, ...]]] = Non
     return best if gold is None else (best, list(gpath))
 
 
-def phi(v: Verse, path: Sequence[int]) -> dict[tuple[str, str], float]:
-    """Feature counts of a (prefix) path."""
-    out: dict[tuple[str, str], float] = {}
-    for i, k in enumerate(path):
-        if k < 0:
-            continue
-        ks = keys(v.cands[i][k])
-        for o in v.static[i][k] + v.history(i, k, path):
-            for key in ks:
-                out[(o, key)] = out.get((o, key), 0.0) + 1.0
-    return out
-
-
-class Perceptron:
-    """Averaged perceptron over nested weights (avg = w - u / t)."""
-
-    def __init__(self) -> None:
-        self.w: Weights = {}
-        self.u: Weights = {}
-        self.t = 1
-
-    def update(self, v: Verse, gold: Sequence[tuple[int, ...]]) -> bool:
-        pred, gpath = decode(v, self.w, gold)
-        self.t += 1
-        if pred == gpath:
-            return False
-        diff = phi(v, gpath)
-        for f, x in phi(v, pred).items():
-            diff[f] = diff.get(f, 0.0) - x
-        for (o, key), x in diff.items():
-            if x:
-                d, du = self.w.setdefault(o, {}), self.u.setdefault(o, {})
-                d[key] = d.get(key, 0.0) + x
-                du[key] = du.get(key, 0.0) + self.t * x
-        return True
-
-    def averaged(self, min_abs: float = 1e-3, ndigits: int = 3) -> Weights:
-        out: Weights = {}
-        for o, d in self.w.items():
-            du = self.u[o]
-            row = {k: round(x - du[k] / self.t, ndigits) for k, x in d.items()}
-            row = {k: x for k, x in row.items() if abs(x) >= min_abs}
-            if row:
-                out[o] = row
-        return out
-
-
-def train(data: Sequence[tuple[tuple, Sequence[tuple[int, ...]]]], epochs: int, seed: int = 0,
-          on_epoch: Optional[Callable[[int, Weights], None]] = None) -> Weights:
-    """Averaged perceptron with early update over ``(Verse arguments, gold index sets)`` pairs.
-    Verses are rebuilt on each pass (their feature strings are not kept, to bound memory)."""
-    import random
-    p = Perceptron()
-    order = list(range(len(data)))
-    for epoch in range(epochs):
-        random.Random(seed + epoch).shuffle(order)
-        for j in order:
-            args, gold = data[j]
-            p.update(Verse(*args), gold)
-        if on_epoch is not None:
-            on_epoch(epoch, p.averaged())
-    return p.averaged()
-
-
 @lru_cache(maxsize=1)
 def load(path: Optional[str] = None) -> Optional[dict]:
     p = Path(path) if path else MODEL_FILE
@@ -336,13 +301,19 @@ def enabled() -> bool:
 
 
 def choose_indices(cands: Sequence[Sequence[Morph]], lines: Sequence[int], compound_flags: Sequence[bool],
-                   forms: Sequence[str], weights: Optional[Weights] = None) -> list[int]:
-    """Index of the chosen candidate per word (0 for a word without candidates)."""
-    w = weights if weights is not None else (load() or {}).get("weights", {})
+                   forms: Sequence[str], weights: Optional[Weights] = None,
+                   weights2: Optional[Weights] = None) -> list[int]:
+    """Index of the chosen candidate per word (0 for a word without candidates). With second-pass
+    weights the verse is decoded again, every word seeing the first-pass choices of the others."""
+    if weights is None:
+        model = load() or {}
+        weights, weights2 = model.get("weights", {}), model.get("weights2")
     if not cands:
         return []
-    path = decode(Verse(cands, lines, compound_flags, forms), w)
-    return [max(k, 0) for k in path]
+    path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms), weights)]
+    if weights2:
+        path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms, prior=path), weights2)]
+    return path
 
 
 def choose(words, candidates=None, compound_flags=None, forms=None):
@@ -363,9 +334,12 @@ def choose(words, candidates=None, compound_flags=None, forms=None):
     return [ix[k] if ix else x.chosen for x, ix, k in zip(words, idx, pick)]
 
 
-def enforce(words, chosen: list[int]) -> list[int]:
+def enforce(words, chosen: list[int], force: bool = False) -> list[int]:
     """Hard constraints on a learned choice: a तृच् noun over an equally likely लुट् verb, and
-    a finite verb without an agreeing nominative takes the nearest word that has one."""
+    a finite verb without an agreeing nominative takes the nearest word that has one.
+    Applied only when the saved model says they help on DEV (or with ``force``)."""
+    if not force and not (load() or {}).get("enforce", True):
+        return list(chosen)
     from mayur.shabdabodha import PRATHAMA, _agent_noun_preferred, candidates, is_case, is_finite, karta_agrees
     out = list(chosen)
     for i, w in enumerate(words):

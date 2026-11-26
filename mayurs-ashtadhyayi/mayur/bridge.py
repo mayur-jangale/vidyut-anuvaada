@@ -288,12 +288,20 @@ def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...], as_ktva: bool = F
         return None
 
 
+def dhatu_of(entry: Entry) -> Any:
+    """The vidyut Dhatu of a tinanta or kṛdanta kosha entry (opaque)."""
+    e = entry.morph.handle
+    de = getattr(e, "dhatu_entry", None) or getattr(getattr(e, "pratipadika_entry", None), "dhatu_entry", None)
+    return de.dhatu if de is not None else None
+
+
 def ktva_of_verb(entry: Entry, upasargas: tuple[str, ...]) -> Any:
-    """A Pada for the क्त्वा/ल्यप् absolutive of a kosha tinanta's dhatu with ``upasargas``."""
+    """A Pada for the क्त्वा/ल्यप् absolutive of a kosha entry's dhatu with ``upasargas``."""
     from vidyut.prakriya import Krt, Linga, Pada, Pratipadika, Vacana, Vibhakti
 
-    e = entry.morph.handle
-    dhatu = e.dhatu_entry.dhatu
+    dhatu = dhatu_of(entry)
+    if dhatu is None:
+        return None
     codes = [UPASARGA_CODE[u] for u in upasargas] + list(getattr(dhatu, "prefixes", None) or [])
     try:
         stem = Pratipadika.krdanta(dhatu.with_prefixes(codes), Krt.ktvA)
@@ -305,3 +313,14 @@ def ktva_of_verb(entry: Entry, upasargas: tuple[str, ...]) -> Any:
 def pratipadika_of(handle: Any) -> Any:
     """The pratipadika inside a Pada.Subanta handle (its own derivation gives the stem)."""
     return getattr(handle, "pratipadika", None)
+
+
+def tasi_pada(stem: str) -> Any:
+    """Pada of ``stem`` + तसि (5.4.44 प्रतियोगे पञ्चम्यास्तसिः): अनुराग -> अनुरागतस्."""
+    from vidyut.prakriya import Linga, Pada, Pratipadika, Taddhita, Vacana, Vibhakti
+
+    try:
+        t = Pratipadika.taddhitanta(Pratipadika.basic(lipi.to_code(stem)), Taddhita.tasi)
+        return Pada.Subanta(pratipadika=t, linga=Linga.Napumsaka, vibhakti=Vibhakti.Prathama, vacana=Vacana.Eka)
+    except Exception:  # noqa: BLE001
+        return None

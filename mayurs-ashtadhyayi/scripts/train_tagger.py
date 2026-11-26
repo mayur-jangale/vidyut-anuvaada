@@ -17,6 +17,7 @@ import sys
 import time
 from collections import Counter
 from pathlib import Path
+from typing import Callable, Optional, Sequence
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
@@ -25,6 +26,69 @@ from mayur import dcs, lexicon, shabdabodha, tagger, ud  # noqa: E402
 from mayur.model import Word  # noqa: E402
 
 MODEL = ROOT / "mayur/models/tagger.json"
+
+
+def phi(v: tagger.Verse, path: Sequence[int]) -> dict[tuple[str, str], float]:
+    """Feature counts of a (prefix) path."""
+    out: dict[tuple[str, str], float] = {}
+    for i, k in enumerate(path):
+        if k < 0:
+            continue
+        ks = keys(v.cands[i][k])
+        for o in v.static[i][k] + v.history(i, k, path):
+            for key in ks:
+                out[(o, key)] = out.get((o, key), 0.0) + 1.0
+    return out
+
+
+class Perceptron:
+    """Averaged perceptron over nested weights (avg = w - u / t)."""
+
+    def __init__(self) -> None:
+        self.w: dict = {}
+        self.u: dict = {}
+        self.t = 1
+
+    def update(self, v: tagger.Verse, gold: Sequence[tuple[int, ...]]) -> bool:
+        pred, gpath = tagger.decode(v, self.w, gold)
+        self.t += 1
+        if pred == gpath:
+            return False
+        diff = phi(v, gpath)
+        for f, x in phi(v, pred).items():
+            diff[f] = diff.get(f, 0.0) - x
+        for (o, key), x in diff.items():
+            if x:
+                d, du = self.w.setdefault(o, {}), self.u.setdefault(o, {})
+                d[key] = d.get(key, 0.0) + x
+                du[key] = du.get(key, 0.0) + self.t * x
+        return True
+
+    def averaged(self, min_abs: float = 1e-3, ndigits: int = 3) -> dict:
+        out: dict = {}
+        for o, d in self.w.items():
+            du = self.u[o]
+            row = {k: round(x - du[k] / self.t, ndigits) for k, x in d.items()}
+            row = {k: x for k, x in row.items() if abs(x) >= min_abs}
+            if row:
+                out[o] = row
+        return out
+
+
+def train(data: Sequence[tuple[tuple, Sequence[tuple[int, ...]]]], epochs: int, seed: int = 0,
+          on_epoch: Optional[Callable[[int, dict], None]] = None) -> dict:
+    """Averaged perceptron with early update over ``(Verse arguments, gold index sets)`` pairs.
+    Verses are rebuilt on each pass (their feature strings are not kept, to bound memory)."""
+    p = Perceptron()
+    order = list(range(len(data)))
+    for epoch in range(epochs):
+        random.Random(seed + epoch).shuffle(order)
+        for j in order:
+            args, gold = data[j]
+            p.update(tagger.Verse(*args), gold)
+        if on_epoch is not None:
+            on_epoch(epoch, p.averaged())
+    return p.averaged()
 
 
 def correct(m, tok: dict) -> bool:
@@ -126,12 +190,14 @@ def load_eval() -> tuple[list, list]:
 
 
 def learned_choice(item: dict, weights, use_enforce: bool = True) -> list[int]:
-    pick = tagger.choose_indices(*verse_args(item)[:4], weights=weights)
+    """``weights``: first-pass weights, or a pair (first pass, second pass)."""
+    w1, w2 = weights if isinstance(weights, tuple) else (weights, None)
+    pick = tagger.choose_indices(*verse_args(item)[:4], weights=w1, weights2=w2)
     if not use_enforce:
         return pick
     words = item["words"]
     idx = [shabdabodha.candidates(x) if x.analyses else [] for x in words]
-    chosen = tagger.enforce(words, [ix[k] if ix else 0 for ix, k in zip(idx, pick)])
+    chosen = tagger.enforce(words, [ix[k] if ix else 0 for ix, k in zip(idx, pick)], force=True)
     return [ix.index(c) if c in ix else 0 for ix, c in zip(idx, chosen)]
 
 
@@ -177,7 +243,7 @@ def prune(w: dict, max_bytes: int) -> dict:
     while True:
         out = {o: {k: x for k, x in d.items() if abs(x) >= thr} for o, d in w.items()}
         out = {o: d for o, d in out.items() if d}
-        if len(json.dumps(out, ensure_ascii=False)) <= max_bytes:
+        if len(json.dumps(out, ensure_ascii=False).encode("utf-8")) <= max_bytes:
             return out
         thr *= 1.6
 
@@ -195,12 +261,27 @@ def report_rows(report: dict) -> None:
             print(f"{split:5} OVERALL {when:6} n={n} {acc}")
 
 
+def train_early(data, epochs: int, dev, wrap, log, name: str):
+    """Train, evaluating DEV after each epoch; returns the best weights and their epoch."""
+    best = {"acc": -1.0, "w": {}, "epoch": 0}
+
+    def on_epoch(epoch: int, w: dict) -> None:
+        acc = micro(evaluate(dev, lambda it: learned_choice(it, wrap(w), False)))
+        log(f"{name} epoch {epoch + 1}: DEV all {acc:.4f}")
+        if acc > best["acc"]:
+            best.update(acc=acc, w=w, epoch=epoch + 1)
+
+    train(data, epochs, on_epoch=on_epoch)
+    return best["w"], best["acc"]
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-words", type=int, default=150_000)
     ap.add_argument("--epochs", type=int, default=4)
     ap.add_argument("--eval-only", action="store_true", help="re-evaluate the saved weights")
     ap.add_argument("--max-mb", type=float, default=14.0)
+    ap.add_argument("--passes", type=int, default=2, choices=(1, 2))
     args = ap.parse_args()
     t0 = time.time()
     dev, test = load_eval()
@@ -208,7 +289,8 @@ def main() -> None:
     log(f"dev {sum(len(i['toks']) for _, i in dev)} words, test {sum(len(i['toks']) for _, i in test)} words")
     if args.eval_only:
         saved = json.loads(MODEL.read_text(encoding="utf-8"))
-        w, meta = saved["weights"], {k: v for k, v in saved.items() if k not in ("weights", "report", "enabled")}
+        w = (saved["weights"], saved.get("weights2"))
+        meta = {k: v for k, v in saved.items() if k not in ("weights", "weights2", "report", "enabled")}
     else:
         data, unmatched, nwords = [], 0, 0
         for _book_name, item in load_train(args.max_words):
@@ -216,19 +298,23 @@ def main() -> None:
             unmatched += sum(1 for g in item["gold"] if not g)
             nwords += len(item["toks"])
         log(f"train {len(data)} verses, {nwords} words ({unmatched} without a matching candidate)")
-        best = {"acc": -1.0, "w": {}, "epoch": 0}
-
-        def on_epoch(epoch: int, w: dict) -> None:
-            acc = micro(evaluate(dev, lambda it: learned_choice(it, w, False)))
-            log(f"epoch {epoch + 1}: DEV all {acc:.4f}")
-            if acc > best["acc"]:
-                best.update(acc=acc, w=w, epoch=epoch + 1)
-
-        tagger.train(data, args.epochs, on_epoch=on_epoch)
-        w = prune(best["w"], int(args.max_mb * 1e6))
+        w1, e1 = train_early(data, args.epochs, dev, lambda w: w, log, "pass 1")
+        w = (w1, None)
+        if args.passes == 2:
+            priors: list = [None] * len(data)
+            for fold in (0, 1):  # jackknifed first-pass choices for the second pass's training data
+                wf = train([d for k, d in enumerate(data) if k % 2 != fold], args.epochs)
+                for k in range(fold, len(data), 2):
+                    priors[k] = [max(x, 0) for x in tagger.decode(tagger.Verse(*data[k][0]), wf)]
+                log(f"fold {fold} done")
+            data2 = [((*a, p), g) for (a, g), p in zip(data, priors)]
+            w2, e2 = train_early(data2, args.epochs, dev, lambda w: (w1, w), log, "pass 2")
+            w = (w1, w2) if e2 > e1 else (w1, None)  # keep the second pass only when it helps on DEV
+        limit = int(args.max_mb * 1e6 / (2 if w[1] else 1))
+        w = (prune(w[0], limit), prune(w[1], limit) if w[1] else None)
         meta = {"source": "trained on Digital Corpus of Sanskrit annotations (Oliver Hellwig), CC BY 4.0",
                 "command": "python scripts/train_tagger.py " + " ".join(sys.argv[1:]),
-                "train_verses": len(data), "train_words": nwords, "epochs_kept": best["epoch"]}
+                "train_verses": len(data), "train_words": nwords, "passes": args.passes}
     conf: Counter = Counter()
     report = {}
     for name, items in (("dev", dev), ("test", test)):
@@ -244,7 +330,10 @@ def main() -> None:
         print(f"{n:5}  {g}  ->  {p}")
     print("enabled" if enabled else "NOT enabled (not better on DEV)", "| enforce helps" if enforce else "")
     if not args.eval_only:
-        MODEL.write_text(json.dumps({**meta, "enabled": enabled, "report": report, "weights": w},
+        out = {**meta, "enabled": enabled, "enforce": enforce, "report": report, "weights": w[0]}
+        if w[1]:
+            out["weights2"] = w[1]
+        MODEL.write_text(json.dumps(out,
                                     ensure_ascii=False), encoding="utf-8")
         log(f"wrote {MODEL} ({MODEL.stat().st_size / 1e6:.1f} MB)")
     log("done")
