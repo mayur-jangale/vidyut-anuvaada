@@ -1,0 +1,1042 @@
+{
+ "summary": {
+  "verses": 20,
+  "failures": 0,
+  "lines": 40,
+  "lines_exact": 15,
+  "lines_same_words": 17,
+  "verses_exact": 4,
+  "gold_in_readings": 5,
+  "verses_verified": 18,
+  "gold_words": 341,
+  "our_words": 353,
+  "matched_words": 296,
+  "precision": 0.8385269121813032,
+  "recall": 0.8680351906158358,
+  "f1": 0.8530259365994236,
+  "proof_words": 353,
+  "proof_verified": 352,
+  "morphology": {
+   "feat_VerbForm_total": 28,
+   "feat_Person": 16,
+   "feat_Mood": 16,
+   "feat_Case_total": 144,
+   "words": 195,
+   "feat_Case": 140,
+   "feat_Tense": 20,
+   "feat_Gender": 126,
+   "feat_Tense_total": 21,
+   "all_features": 169,
+   "feat_Number_total": 161,
+   "lemma": 173,
+   "feat_Gender_total": 144,
+   "feat_Mood_total": 17,
+   "feat_Number": 161,
+   "feat_VerbForm": 25,
+   "feat_Person_total": 17
+  }
+ },
+ "verses": [
+  {
+   "verse": 1,
+   "id": "कुमारसम्भव १.१",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    false,
+    true
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    true
+   ],
+   "gold_in_readings": false,
+   "matched": 14,
+   "morphology": {
+    "words": 11,
+    "lemma": 11,
+    "all_features": 9,
+    "feat_Case_total": 7,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 2,
+    "feat_Case": 5,
+    "feat_Number": 8,
+    "feat_Gender": 7,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "अस्ति उत्तरस्याम् दिशि देवता आत्मा हिम आलयस् नाम नगाधिराजस्",
+     "gold": "अस्ति उत्तरायाम् दिशि देवता आत्मा हिमालयस् नाम नग अधिराजस्"
+    }
+   ]
+  },
+  {
+   "verse": 2,
+   "id": "कुमारसम्भव १.२",
+   "n_lines": 2,
+   "gold_words": 19,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 14,
+   "morphology": {
+    "words": 12,
+    "lemma": 11,
+    "all_features": 11,
+    "feat_Case_total": 9,
+    "feat_Number_total": 10,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 9,
+    "feat_Number": 10,
+    "feat_Gender": 9,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "यम् सर्व शैलास् परिकल्प्य वत्सम् मेरौ स्थिते दोग्धरि दोहत् अक्षे",
+     "gold": "यम् सर्व शैलास् परिकल्प्य वत्सम् मेरौ स्थिते दोग्ध्रि दोह दक्षे"
+    },
+    {
+     "line": 1,
+     "ours": "भास्वन्ति रत्नानि महौषधीस् च पृथु उपदिष्टाम् दुदुहुस् धरित्रीम्",
+     "gold": "भास्वन्ति रत्नानि महा औषधीस् च पृथु उपदिष्टाम् दुदुहुस् धरित्रीम्"
+    }
+   ]
+  },
+  {
+   "verse": 3,
+   "id": "कुमारसम्भव १.३",
+   "n_lines": 2,
+   "gold_words": 19,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    false,
+    true
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    true
+   ],
+   "gold_in_readings": false,
+   "matched": 17,
+   "morphology": {
+    "words": 14,
+    "lemma": 14,
+    "all_features": 14,
+    "feat_Case_total": 10,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 10,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 10,
+    "feat_Number": 11,
+    "feat_Gender": 10,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "अनन्त रत्न प्रभवस्य यस्य हिमम् न सौभाग्यविलोपि जातम्",
+     "gold": "अनन्त रत्न प्रभवस्य यस्य हिमम् न सौभाग्य विलोपि जातम्"
+    }
+   ]
+  },
+  {
+   "verse": 4,
+   "id": "कुमारसम्भव १.४",
+   "n_lines": 2,
+   "gold_words": 17,
+   "error": "",
+   "our_words": 17,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 17,
+   "morphology": {
+    "words": 10,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 7,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 7,
+    "feat_Number": 8,
+    "feat_Gender": 5,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 17,
+   "proof_verified": 17,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 5,
+   "id": "कुमारसम्भव १.५",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 14,
+   "morphology": {
+    "words": 12,
+    "lemma": 8,
+    "all_features": 11,
+    "feat_Case_total": 9,
+    "feat_Number_total": 10,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 2,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 9,
+    "feat_Number": 10,
+    "feat_Gender": 9,
+    "feat_Tense": 2,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 16,
+   "proof_verified": 16,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "उद्वेजि तास् वृष्टिभिस् आश्रयन्ते शृङ्गाणि यस्य आतपवन्ति सिद्धास्",
+     "gold": "उद्वेजितास् वृष्टिभिस् आश्रयन्ते शृङ्गाणि यस्य आतपवन्ति सिद्धास्"
+    }
+   ]
+  },
+  {
+   "verse": 6,
+   "id": "कुमारसम्भव १.६",
+   "n_lines": 2,
+   "gold_words": 19,
+   "error": "",
+   "our_words": 20,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": true,
+   "matched": 18,
+   "morphology": {
+    "words": 11,
+    "lemma": 10,
+    "all_features": 9,
+    "feat_Case_total": 8,
+    "feat_Number_total": 9,
+    "feat_Gender_total": 8,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 8,
+    "feat_Number": 9,
+    "feat_Gender": 6,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 20,
+   "proof_verified": 20,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "विदन्ति मार्गम् नख रन्ध्र मुक्तैस् मुक्ता फलैस् केसरिणाम् किरातास्",
+     "gold": "विदन्ति मार्गम् नख रन्ध्र मुक्तैस् मुक्ताफलैस् केसरिणाम् किरातास्"
+    }
+   ]
+  },
+  {
+   "verse": 7,
+   "id": "कुमारसम्भव १.७",
+   "n_lines": 2,
+   "gold_words": 17,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 13,
+   "morphology": {
+    "words": 7,
+    "lemma": 6,
+    "all_features": 4,
+    "feat_Case_total": 5,
+    "feat_Number_total": 6,
+    "feat_Gender_total": 5,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 5,
+    "feat_Number": 6,
+    "feat_Gender": 2,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 16,
+   "proof_verified": 16,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "न्यस्त अक्षरास् धातु रसेन यत्र भूर्ज त्वचस् कुञ्जर बिन्दु शोणास्",
+     "gold": "न्यस्त अक्षरा धातु रसेण यत्र भूर्ज त्वचस् कुञ्जर बिन्दु शोणास्"
+    },
+    {
+     "line": 1,
+     "ours": "व्रजन्ति विद्याधर सुन्दरीणाम् अनङ्गलेख क्रियया उपयोगम्",
+     "gold": "व्रजन्ति विद्याधर सुन्दरीणाम् अनङ्ग लेख क्रियया उपयोगम्"
+    }
+   ]
+  },
+  {
+   "verse": 8,
+   "id": "कुमारसम्भव १.८",
+   "n_lines": 2,
+   "gold_words": 16,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 16,
+   "morphology": {
+    "words": 11,
+    "lemma": 8,
+    "all_features": 9,
+    "feat_Case_total": 8,
+    "feat_Number_total": 9,
+    "feat_Gender_total": 8,
+    "feat_Tense_total": 3,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 7,
+    "feat_Number": 9,
+    "feat_Gender": 7,
+    "feat_Tense": 2,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 3
+   },
+   "proof_words": 16,
+   "proof_verified": 15,
+   "status": "unverified",
+   "verified": false,
+   "mismatches": []
+  },
+  {
+   "verse": 9,
+   "id": "कुमारसम्भव १.९",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 13,
+   "morphology": {
+    "words": 9,
+    "lemma": 7,
+    "all_features": 9,
+    "feat_Case_total": 7,
+    "feat_Number_total": 7,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 7,
+    "feat_Number": 7,
+    "feat_Gender": 7,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 3
+   },
+   "proof_words": 16,
+   "proof_verified": 16,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "कपोल कण्डूस् करिभिस् विनेतुम् विघट्टितानाम् सरल द्रुमाणाम्",
+     "gold": "कपोल  करिभिस् विनेतुम् विघट्टितानाम् सरल द्रुमाणाम्"
+    },
+    {
+     "line": 1,
+     "ours": "यत्र स्रुत क्षीर तया प्रसूतस् सानूनि गन्धस् सुरभी करोति",
+     "gold": "यत्र स्रुत क्षीर तया प्रसूतस् सानूनि गन्धस् सुरभीकरोति"
+    }
+   ]
+  },
+  {
+   "verse": 10,
+   "id": "कुमारसम्भव १.१०",
+   "n_lines": 2,
+   "gold_words": 16,
+   "error": "",
+   "our_words": 15,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 8,
+   "morphology": {
+    "words": 3,
+    "lemma": 3,
+    "all_features": 2,
+    "feat_Case_total": 2,
+    "feat_Number_total": 3,
+    "feat_Gender_total": 2,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 2,
+    "feat_Number": 3,
+    "feat_Gender": 1,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 15,
+   "proof_verified": 15,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "वनेचराणाम् वनितासखानाम् दरी गृह उत्सङ्ग निषक्त भा सस्",
+     "gold": "वनेचराणाम् वनिता सखानाम् दरी गृह उत्सङ्ग निषक्त भासस्"
+    },
+    {
+     "line": 1,
+     "ours": "भवन्ति यत्र ओषधयस् रजन्याम् अ तैलपूरास् सुरतप्रदीपास्",
+     "gold": "भवन्ति यत्र औषधयस् रजन्याम् अतैल पूरास् सुरत प्रदीपास्"
+    }
+   ]
+  },
+  {
+   "verse": 11,
+   "id": "कुमारसम्भव १.११",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 18,
+   "morphology": {
+    "words": 12,
+    "lemma": 11,
+    "all_features": 11,
+    "feat_Case_total": 7,
+    "feat_Number_total": 9,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 2,
+    "feat_Mood_total": 2,
+    "feat_Person_total": 2,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 7,
+    "feat_Number": 9,
+    "feat_Gender": 7,
+    "feat_Tense": 2,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 12,
+   "id": "कुमारसम्भव १.१२",
+   "n_lines": 2,
+   "gold_words": 19,
+   "error": "",
+   "our_words": 20,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 18,
+   "morphology": {
+    "words": 16,
+    "lemma": 15,
+    "all_features": 14,
+    "feat_Case_total": 10,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 10,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 10,
+    "feat_Number": 11,
+    "feat_Gender": 9,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 3
+   },
+   "proof_words": 20,
+   "proof_verified": 20,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "क्षुद्रे अपि नूनम् शरणम् प्रपन्ने मम त्वम् उच्चैस् शिरसाम् सती इव",
+     "gold": "क्षुद्रे अपि नूनम् शरणम् प्रपन्ने ममत्वम् उच्चैस् शिरसाम् सती इव"
+    }
+   ]
+  },
+  {
+   "verse": 13,
+   "id": "कुमारसम्भव १.१३",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 19,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 17,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 6,
+    "feat_Case_total": 7,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 7,
+    "feat_Number": 8,
+    "feat_Gender": 5,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 19,
+   "proof_verified": 19,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "यस्य अर्थ युक्तम् गिरि राज शब्दम् कुर्वन्ति वाल व्यजनैस् चमर्यस्",
+     "gold": "यस्य अर्थ युक्तम् गिरिराज शब्दम् कुर्वन्ति वाल व्यजनैस् चमर्यस्"
+    }
+   ]
+  },
+  {
+   "verse": 14,
+   "id": "कुमारसम्भव १.१४",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 15,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 15,
+   "morphology": {
+    "words": 7,
+    "lemma": 5,
+    "all_features": 6,
+    "feat_Case_total": 6,
+    "feat_Number_total": 7,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 6,
+    "feat_Number": 7,
+    "feat_Gender": 5,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 15,
+   "proof_verified": 15,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 15,
+   "id": "कुमारसम्भव १.१५",
+   "n_lines": 2,
+   "gold_words": 16,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 14,
+   "morphology": {
+    "words": 8,
+    "lemma": 7,
+    "all_features": 8,
+    "feat_Case_total": 6,
+    "feat_Number_total": 7,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 6,
+    "feat_Number": 7,
+    "feat_Gender": 6,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "भागीरथी निर्झर सी कराणाम् वोढा मुहुर् कम्पित देवदारुस्",
+     "gold": "भागीरथी निर्झर सीकराणाम् वोढा मुहुर् कम्पित देवदारुस्"
+    },
+    {
+     "line": 1,
+     "ours": "यत् वायुस् अनु इष्ट मृगैस् किरातैस् आसेव्यते भिन्न शिखण्डि बर्हस्",
+     "gold": "यत् वायुस् अन्विष्ट मृगैस् किरातैस् आसेव्यते भिन्न शिखण्डि बर्हस्"
+    }
+   ]
+  },
+  {
+   "verse": 16,
+   "id": "कुमारसम्भव १.१६",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 12,
+   "morphology": {
+    "words": 7,
+    "lemma": 7,
+    "all_features": 7,
+    "feat_Case_total": 6,
+    "feat_Number_total": 6,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 6,
+    "feat_Number": 6,
+    "feat_Gender": 6,
+    "feat_Tense": 1,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 16,
+   "proof_verified": 16,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "सप्तर्षि हस्त अवचित अवशेषाणि अधस् विवस्वान् परिवर्तमानस्",
+     "gold": "सप्तर्षि हस्त अवचित अवशेषाणि अधस् विवस्वन्त् परिवर्तमानस्"
+    },
+    {
+     "line": 1,
+     "ours": "पद्मानि यस्य अग्र सरोरुहाणि प्रबोध यति ऊर्ध्व मुखैस् मयूखैस्",
+     "gold": "पद्मानि यस्य अग्र सरोरुहानि प्रबोधयति ऊर्ध्व मुखैस् मयूखैस्"
+    }
+   ]
+  },
+  {
+   "verse": 17,
+   "id": "कुमारसम्भव १.१७",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 20,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 15,
+   "morphology": {
+    "words": 8,
+    "lemma": 6,
+    "all_features": 4,
+    "feat_Case_total": 6,
+    "feat_Number_total": 6,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 5,
+    "feat_Number": 6,
+    "feat_Gender": 2,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 20,
+   "proof_verified": 20,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "यज्ञ अङ्ग योनि त्वम् अवेक्ष्य यस्य सारम् धरित्री धरण क्षमम् च",
+     "gold": "यज्ञाङ्ग योनि त्वम् अवेक्ष्य यस्य सारम् धरित्री धरण क्षमम् च"
+    },
+    {
+     "line": 1,
+     "ours": "प्रजापतिस् कल्पित यज्ञ भागम् शैल अधिपत्यम् स्वयम् अनु अतिष्ठत्",
+     "gold": "प्रजापतिस् कल्पित यज्ञ भागम् शैल आधिपत्यम् स्वयम् अन्वतिष्ठत्"
+    }
+   ]
+  },
+  {
+   "verse": 18,
+   "id": "कुमारसम्भव १.१८",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 20,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 15,
+   "morphology": {
+    "words": 12,
+    "lemma": 12,
+    "all_features": 12,
+    "feat_Case_total": 11,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 11,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 11,
+    "feat_Number": 11,
+    "feat_Gender": 11,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 20,
+   "proof_verified": 20,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "सस् मानसीम् मेरु सखस् पितॄणाम् कन्याम् कुलस्य स्थितये स्थिति ज्ञस्",
+     "gold": "सस् मानसाम् मेरु सखस् पितॄणाम् कन्याम् कुलस्य स्थितये स्थिति ज्ञस्"
+    },
+    {
+     "line": 1,
+     "ours": "मेनाम् मुनीनाम् अपि मा अननीयाम् आत्म अनुरूपाम् विधिना उपय इमे",
+     "gold": "मेनाम् मुनीनाम् अपि माननीयाम् आत्म अनुरूपाम् विधिना उपयेमे"
+    }
+   ]
+  },
+  {
+   "verse": 19,
+   "id": "कुमारसम्भव १.१९",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 17,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    true
+   ],
+   "gold_in_readings": false,
+   "matched": 15,
+   "morphology": {
+    "words": 9,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 7,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 7,
+    "feat_Number": 8,
+    "feat_Gender": 7,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 17,
+   "proof_verified": 17,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "काल क्रमेण अथ तयोस् प्रवृत्ते स्व रूप योग्ये सुरतप्रसङ्गे",
+     "gold": "काल क्रमेण अथ तयोस् प्रवृत्ते स्व रूप योग्ये सुरत प्रसङ्गे"
+    },
+    {
+     "line": 1,
+     "ours": "मनोरमम् यौवनम् उद्वहन्त्या गर्भस् अभवत् भूधर राज पत्न्यास्",
+     "gold": "मनोरमम् यौवनम् उद्वहत्यास् गर्भस् अभवत् भूधर राज पत्न्यास्"
+    }
+   ]
+  },
+  {
+   "verse": 20,
+   "id": "कुमारसम्भव १.२०",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 20,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 13,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 7,
+    "feat_Case_total": 6,
+    "feat_Number_total": 7,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 2,
+    "feat_Case": 6,
+    "feat_Number": 7,
+    "feat_Gender": 5,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 20,
+   "proof_verified": 20,
+   "status": "unverified",
+   "verified": false,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "क्रुद्धे अपि पक्ष छिदि वृत्र शत्रु अ वेदना ज्ञम् कुलिश क्षतानाम्",
+     "gold": "क्रुद्धे अपि पक्षच्छिदि वृत्रशत्रौ कुलिश क्षतानाम्"
+    }
+   ]
+  }
+ ]
+}

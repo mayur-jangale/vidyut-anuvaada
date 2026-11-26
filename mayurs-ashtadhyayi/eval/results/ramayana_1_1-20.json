@@ -1,0 +1,978 @@
+{
+ "summary": {
+  "verses": 20,
+  "failures": 0,
+  "lines": 41,
+  "lines_exact": 28,
+  "lines_same_words": 30,
+  "verses_exact": 10,
+  "gold_in_readings": 14,
+  "verses_verified": 18,
+  "gold_words": 295,
+  "our_words": 284,
+  "matched_words": 270,
+  "precision": 0.9507042253521126,
+  "recall": 0.9152542372881356,
+  "f1": 0.9326424870466321,
+  "proof_words": 284,
+  "proof_verified": 282,
+  "morphology": {
+   "all_features": 200,
+   "feat_Tense": 10,
+   "feat_Number_total": 175,
+   "feat_VerbForm": 17,
+   "feat_VerbForm_total": 18,
+   "lemma": 201,
+   "feat_Person": 10,
+   "feat_Case": 163,
+   "feat_Tense_total": 10,
+   "words": 211,
+   "feat_Number": 175,
+   "feat_Gender_total": 161,
+   "feat_Person_total": 10,
+   "feat_Case_total": 165,
+   "feat_Mood": 10,
+   "feat_Gender": 157,
+   "feat_Mood_total": 10
+  }
+ },
+ "verses": [
+  {
+   "verse": 1,
+   "id": "रामायण १.१.१",
+   "n_lines": 2,
+   "gold_words": 12,
+   "error": "",
+   "our_words": 12,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 12,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 7,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 7,
+    "feat_Number": 8,
+    "feat_Gender": 7,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 12,
+   "proof_verified": 12,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 2,
+   "id": "रामायण १.१.२",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 18,
+   "morphology": {
+    "words": 15,
+    "lemma": 13,
+    "all_features": 14,
+    "feat_Case_total": 10,
+    "feat_Number_total": 10,
+    "feat_Gender_total": 10,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 10,
+    "feat_Number": 10,
+    "feat_Gender": 10,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 3,
+   "id": "रामायण १.१.३",
+   "n_lines": 2,
+   "gold_words": 18,
+   "error": "",
+   "our_words": 18,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 17,
+   "morphology": {
+    "words": 14,
+    "lemma": 14,
+    "all_features": 13,
+    "feat_Case_total": 11,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 11,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 11,
+    "feat_Number": 11,
+    "feat_Gender": 10,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 18,
+   "proof_verified": 18,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "विद्वान् कस् कस् समर्थस् च कस् च एक प्रिय दर्शनस्",
+     "gold": "विद्वास् कस् कस् समर्थस् च कस् च एक प्रिय दर्शनस्"
+    }
+   ]
+  },
+  {
+   "verse": 4,
+   "id": "रामायण १.१.४",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 14,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 14,
+   "morphology": {
+    "words": 12,
+    "lemma": 12,
+    "all_features": 12,
+    "feat_Case_total": 10,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 10,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 10,
+    "feat_Number": 11,
+    "feat_Gender": 10,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 14,
+   "proof_verified": 14,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 5,
+   "id": "रामायण १.१.५",
+   "n_lines": 2,
+   "gold_words": 16,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    false,
+    true
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": false,
+   "matched": 15,
+   "morphology": {
+    "words": 14,
+    "lemma": 14,
+    "all_features": 10,
+    "feat_Case_total": 9,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 2,
+    "feat_Mood_total": 2,
+    "feat_Person_total": 2,
+    "feat_VerbForm_total": 2,
+    "feat_Case": 7,
+    "feat_Number": 11,
+    "feat_Gender": 5,
+    "feat_Tense": 2,
+    "feat_Mood": 2,
+    "feat_Person": 2,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 16,
+   "proof_verified": 15,
+   "status": "unverified",
+   "verified": false,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "एतत् इच्छामि अहम् श्रोतुम् परम् कौतूहलम् हि मे",
+     "gold": "एतत् इच्छामि अहम् श्रोतुम् परम् कौतूहलम् हि मम"
+    }
+   ]
+  },
+  {
+   "verse": 6,
+   "id": "रामायण १.१.६",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 15,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 15,
+   "morphology": {
+    "words": 13,
+    "lemma": 11,
+    "all_features": 12,
+    "feat_Case_total": 6,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 2,
+    "feat_Mood_total": 2,
+    "feat_Person_total": 2,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 6,
+    "feat_Number": 8,
+    "feat_Gender": 6,
+    "feat_Tense": 2,
+    "feat_Mood": 2,
+    "feat_Person": 2,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 15,
+   "proof_verified": 15,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 7,
+   "id": "रामायण १.१.७",
+   "n_lines": 2,
+   "gold_words": 16,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 16,
+   "morphology": {
+    "words": 16,
+    "lemma": 15,
+    "all_features": 14,
+    "feat_Case_total": 11,
+    "feat_Number_total": 13,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 2,
+    "feat_Mood_total": 2,
+    "feat_Person_total": 2,
+    "feat_VerbForm_total": 3,
+    "feat_Case": 11,
+    "feat_Number": 13,
+    "feat_Gender": 9,
+    "feat_Tense": 2,
+    "feat_Mood": 2,
+    "feat_Person": 2,
+    "feat_VerbForm": 3
+   },
+   "proof_words": 16,
+   "proof_verified": 16,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 8,
+   "id": "रामायण १.१.८",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 14,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 14,
+   "morphology": {
+    "words": 10,
+    "lemma": 10,
+    "all_features": 10,
+    "feat_Case_total": 9,
+    "feat_Number_total": 9,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 9,
+    "feat_Number": 9,
+    "feat_Gender": 9,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 14,
+   "proof_verified": 14,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 9,
+   "id": "रामायण १.१.९",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 13,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": true,
+   "matched": 12,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 8,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 8,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 8,
+    "feat_Number": 8,
+    "feat_Gender": 8,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 13,
+   "proof_verified": 13,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "विपुल अंसस् महा बाहुस् कम्बुग्रीवस् महा हनुस्",
+     "gold": "विपुल अंसस् महा बाहुस् कम्बु ग्रीवस् महा हनुस्"
+    }
+   ]
+  },
+  {
+   "verse": 10,
+   "id": "रामायण १.१.१०",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 13,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 11,
+   "morphology": {
+    "words": 6,
+    "lemma": 6,
+    "all_features": 6,
+    "feat_Case_total": 6,
+    "feat_Number_total": 6,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 6,
+    "feat_Number": 6,
+    "feat_Gender": 6,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 13,
+   "proof_verified": 13,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "महोरस्कस् महा इष्वासस् गूढ जत्रुस् अरिन्दमस्",
+     "gold": "महा उरस्कस् महा इष्वासस् गूढ जत्रुस् अरिंदमस्"
+    },
+    {
+     "line": 1,
+     "ours": "आजानुबाहुस् सु शिरास् सु ललाटस् सु विक्रमस्",
+     "gold": "आजानु बाहुस् सु शिरास् सु ललाटस् सु विक्रमस्"
+    }
+   ]
+  },
+  {
+   "verse": 11,
+   "id": "रामायण १.१.११",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 14,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 14,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 8,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 8,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 8,
+    "feat_Number": 8,
+    "feat_Gender": 8,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 14,
+   "proof_verified": 14,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 12,
+   "id": "रामायण १.१.१२",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 16,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": true,
+   "matched": 14,
+   "morphology": {
+    "words": 11,
+    "lemma": 10,
+    "all_features": 11,
+    "feat_Case_total": 9,
+    "feat_Number_total": 9,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 2,
+    "feat_Case": 9,
+    "feat_Number": 9,
+    "feat_Gender": 9,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 16,
+   "proof_verified": 16,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "यशस्वी ज्ञान सम्पन्नस् शुचिस् वश्यस् समाधि मान्",
+     "gold": "यशस्वी ज्ञान सम्पन्नस् शुचिस् वश्यस् समाधिमान्"
+    }
+   ]
+  },
+  {
+   "verse": 13,
+   "id": "रामायण १.१.१३",
+   "n_lines": 2,
+   "gold_words": 11,
+   "error": "",
+   "our_words": 8,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 7,
+   "morphology": {
+    "words": 7,
+    "lemma": 6,
+    "all_features": 7,
+    "feat_Case_total": 6,
+    "feat_Number_total": 6,
+    "feat_Gender_total": 6,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 6,
+    "feat_Number": 6,
+    "feat_Gender": 6,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 8,
+   "proof_verified": 8,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "वेदवेदाङ्गतत्त्वज्ञस् धनुर्वेदे च निष्ठितस्",
+     "gold": "वेद वेदाङ्ग तत्त्व ज्ञस् धनुर्वेदे च निष्ठितस्"
+    }
+   ]
+  },
+  {
+   "verse": 14,
+   "id": "रामायण १.१.१४",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 15,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 15,
+   "morphology": {
+    "words": 7,
+    "lemma": 7,
+    "all_features": 7,
+    "feat_Case_total": 7,
+    "feat_Number_total": 7,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 7,
+    "feat_Number": 7,
+    "feat_Gender": 7,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 15,
+   "proof_verified": 15,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 15,
+   "id": "रामायण १.१.१५",
+   "n_lines": 2,
+   "gold_words": 15,
+   "error": "",
+   "our_words": 15,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 15,
+   "morphology": {
+    "words": 10,
+    "lemma": 9,
+    "all_features": 9,
+    "feat_Case_total": 7,
+    "feat_Number_total": 7,
+    "feat_Gender_total": 7,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 7,
+    "feat_Number": 7,
+    "feat_Gender": 7,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 15,
+   "proof_verified": 15,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 16,
+   "id": "रामायण १.१.१६",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 12,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 10,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 5,
+    "feat_Number_total": 5,
+    "feat_Gender_total": 5,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 5,
+    "feat_Number": 5,
+    "feat_Gender": 5,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 12,
+   "proof_verified": 12,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "सस् च सर्वगुणोपेतस् कौसल्या आनन्द वर्धनस्",
+     "gold": "सस् च सर्व गुण उपेतस् कौसल्या आनन्द वर्धनस्"
+    },
+    {
+     "line": 1,
+     "ours": "समुद्रस् इव गाम्भीर्ये धैर्येण हिमवान् इव",
+     "gold": "समुद्रस् इव गाम्भीर्ये धैर्येण हिमवन्त् इव"
+    }
+   ]
+  },
+  {
+   "verse": 17,
+   "id": "रामायण १.१.१७",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 12,
+   "lines_exact": [
+    false,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    false,
+    false
+   ],
+   "gold_in_readings": false,
+   "matched": 10,
+   "morphology": {
+    "words": 8,
+    "lemma": 8,
+    "all_features": 8,
+    "feat_Case_total": 8,
+    "feat_Number_total": 8,
+    "feat_Gender_total": 8,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 8,
+    "feat_Number": 8,
+    "feat_Gender": 8,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 12,
+   "proof_verified": 12,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 0,
+     "ours": "विष्णुना सदृशस् वीर्ये सोमवत् प्रिय दर्शनस्",
+     "gold": "विष्णुना सदृशस् वीर्ये सोम वत् प्रिय दर्शनस्"
+    },
+    {
+     "line": 1,
+     "ours": "कालाग्नि सदृशस् क्रोधे क्षमया पृथिवी समस्",
+     "gold": "काल अग्नि सदृशस् क्रोधे क्षमया पृथिवी समस्"
+    }
+   ]
+  },
+  {
+   "verse": 18,
+   "id": "रामायण १.१.१८",
+   "n_lines": 2,
+   "gold_words": 14,
+   "error": "",
+   "our_words": 12,
+   "lines_exact": [
+    true,
+    false
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    false
+   ],
+   "gold_in_readings": true,
+   "matched": 11,
+   "morphology": {
+    "words": 10,
+    "lemma": 10,
+    "all_features": 9,
+    "feat_Case_total": 9,
+    "feat_Number_total": 9,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 0,
+    "feat_Mood_total": 0,
+    "feat_Person_total": 0,
+    "feat_VerbForm_total": 0,
+    "feat_Case": 9,
+    "feat_Number": 9,
+    "feat_Gender": 8,
+    "feat_Tense": 0,
+    "feat_Mood": 0,
+    "feat_Person": 0,
+    "feat_VerbForm": 0
+   },
+   "proof_words": 12,
+   "proof_verified": 12,
+   "status": "verified",
+   "verified": true,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "तम् एवङ्गुणसम्पन्नम् रामम् सत्य पराक्रमम्",
+     "gold": "तम् एवम् गुण सम्पन्नम् रामम् सत्य पराक्रमम्"
+    }
+   ]
+  },
+  {
+   "verse": 19,
+   "id": "रामायण १.१.१९",
+   "n_lines": 2,
+   "gold_words": 12,
+   "error": "",
+   "our_words": 12,
+   "lines_exact": [
+    true,
+    true
+   ],
+   "verse_exact": true,
+   "lines_same_words": [
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 12,
+   "morphology": {
+    "words": 11,
+    "lemma": 10,
+    "all_features": 11,
+    "feat_Case_total": 9,
+    "feat_Number_total": 10,
+    "feat_Gender_total": 9,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 2,
+    "feat_Case": 9,
+    "feat_Number": 10,
+    "feat_Gender": 9,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 2
+   },
+   "proof_words": 12,
+   "proof_verified": 12,
+   "status": "verified",
+   "verified": true,
+   "mismatches": []
+  },
+  {
+   "verse": 20,
+   "id": "रामायण १.१.२०",
+   "n_lines": 3,
+   "gold_words": 19,
+   "error": "",
+   "our_words": 19,
+   "lines_exact": [
+    true,
+    false,
+    true
+   ],
+   "verse_exact": false,
+   "lines_same_words": [
+    true,
+    true,
+    true
+   ],
+   "gold_in_readings": true,
+   "matched": 18,
+   "morphology": {
+    "words": 15,
+    "lemma": 14,
+    "all_features": 15,
+    "feat_Case_total": 10,
+    "feat_Number_total": 11,
+    "feat_Gender_total": 10,
+    "feat_Tense_total": 1,
+    "feat_Mood_total": 1,
+    "feat_Person_total": 1,
+    "feat_VerbForm_total": 1,
+    "feat_Case": 10,
+    "feat_Number": 11,
+    "feat_Gender": 10,
+    "feat_Tense": 1,
+    "feat_Mood": 1,
+    "feat_Person": 1,
+    "feat_VerbForm": 1
+   },
+   "proof_words": 19,
+   "proof_verified": 18,
+   "status": "unverified",
+   "verified": false,
+   "mismatches": [
+    {
+     "line": 1,
+     "ours": "पूर्वम् दत्त वरास् देवी वरम् एनम् अयाचत",
+     "gold": "पूर्वम् दत्त वरा देवी वरम् एनम् अयाचत"
+    }
+   ]
+  }
+ ]
+}

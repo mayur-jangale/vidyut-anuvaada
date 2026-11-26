@@ -47,7 +47,26 @@ Bālakāṇḍa 1.1–20 is in `docs/index.html`.
 
 ## Measured results
 
-RESULTS_PLACEHOLDER
+Measured with `eval/eval_dcs.py` against the Digital Corpus of Sanskrit (DCS) annotation, on verses
+1–20 of each chapter. The input is the compact text; the evaluation chapter of the Rāmāyaṇa is held
+out of every frequency table, and the Kumārasaṃbhava is not used for the tables at all (verses 21–60
+of its first chapter were used to tune ranking weights). Full output: `eval/results/`.
+
+| Measure | Rāmāyaṇa, Bāla 1.1–20 | Kumārasaṃbhava 1.1–20 (other book) |
+|---|---|---|
+| Half-verses split exactly as DCS | 28/41 (68.3%) | 15/40 (37.5%) |
+| Half-verses with the same words (lemma match) | 30/41 (73.2%) | 17/40 (42.5%) |
+| Verses split exactly | 10/20 | 4/20 |
+| DCS split among the kept readings | 14/20 | 5/20 |
+| Words: precision / recall / F1 | 95.1% / 91.5% / 0.933 | 83.9% / 86.8% / 0.853 |
+| Lemma correct (aligned words) | 201/211 (95.3%) | 173/195 (88.7%) |
+| All grammar features correct (aligned words) | 200/211 (94.8%) | 169/195 (86.7%) |
+| Words proof-verified by vidyut-prakriya | 282/284 (99.3%) | 352/353 (99.7%) |
+| Verses with status `verified` | 18/20 | 18/20 |
+
+Most split differences are compounds that the dictionary lists as one word and DCS divides
+(महोरस्कः / महा-उरस्कः), or forms DCS reconstructs differently from the text (मम for मे).
+The test sentence `श्वेतो धावति` returns both `श्वेतः धावति` and `श्वा इतः धावति`, each proof-verified.
 
 ## Known limits
 
