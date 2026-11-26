@@ -104,6 +104,10 @@ def verse_level(v, i: int, m: Morph) -> Obs:
             o.append("VsureNom")
     if m.kind == "tinanta":
         o.append("Vkarta" if any(_f()._fits(x, m) for _, x in refs) else "Vnokarta")
+    # रामो लक्ष्मणश्च वनं गच्छतः: two singular nominatives joined by च agree with a dual (1.2.64, 2.2.29)
+    sg_noms = sum(1 for _, x in refs if x.vibhakti == "प्रथमा" and x.vacana == "एकवचन")
+    if sg_noms >= 2 and "च" in v.forms:
+        o.append("coord2=" + (m.vacana or "") + ("V" if m.kind == "tinanta" else ""))
     if v.p2 and m.kind == "subanta":
         o += ["Pag%+d" % max(-6, min(6, j - i)) for j, x in refs if _f()._agree(m, x)]
     return o

@@ -113,3 +113,13 @@ def test_choose_with_siblings_returns_the_swap():
     chosen, swaps = tagger.choose_with_siblings([[fem], [v]], [0, 0], [False, False], ["मूढा", "नरास्"],
                                                 weights={}, sibling_candidates=lambda f: [pl] if f == "मूढास्" else [])
     assert chosen[0] is fem and swaps == {}
+
+
+def test_coordinated_nominatives_feature_marks_the_dual_verb():
+    rama, laksmana = nom("रामस्", "राम", "प्रथमा"), nom("लक्ष्मणस्", "लक्ष्मण", "प्रथमा")
+    ca = tagger.Morph(form="च", lemma="च", kind="avyaya")
+    dual = dataclasses.replace(verb("गच्छतस्", "गम्", "लट्"), vacana="द्विवचन")
+    gen = nom("गच्छतस्", "गम्", "षष्ठी", krt="शतृ")
+    v = tagger.Verse([[rama], [laksmana], [ca], [dual, gen]], [0] * 4, [False] * 4,
+                     ["रामस्", "लक्ष्मणस्", "च", "गच्छतस्"], tables={})
+    assert "coord2=द्विवचनV" in v.static[3][0] and "coord2=द्विवचनV" not in v.static[3][1]
