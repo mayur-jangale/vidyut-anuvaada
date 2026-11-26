@@ -69,6 +69,8 @@ def _key(m: Morph) -> tuple:
 def candidates(word: Word) -> list[int]:
     """Indices into ``word.analyses`` worth considering (distinct, quality ≥ 2 if any)."""
     good = [i for i, m in enumerate(word.analyses) if m.quality >= 2] or list(range(len(word.analyses)))
+    if any(is_finite(m) and m.lakara == "लुट्" for m in word.analyses):  # keep the तृच् rival of a लुट् form
+        good += [i for i, m in enumerate(word.analyses) if m.krt == "तृच्" and i not in good]
     seen: set[tuple] = set()
     out = []
     for i in good:
@@ -153,7 +155,7 @@ def _agent_noun_preferred(word: Word, m: Morph) -> bool:
     if not (is_finite(m) and m.lakara == "लुट्"):
         return False
     agents = [a for a in word.analyses if a.krt == "तृच्" and is_case(a, PRATHAMA)]
-    return bool(agents) and _freq("analysis_count", m) <= max(_freq("analysis_count", a) for a in agents)
+    return bool(agents) and _freq("analysis_count", m) <= 2 * max(_freq("analysis_count", a) for a in agents)
 
 
 def choose(words: list[Word]) -> list[int]:
@@ -291,7 +293,6 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
                 verb, role = _pick(passive, words, head), "कर्म"
             else:
                 sub_role = "विधेय"
-                notes.append(f"nominal clause: {words[head].form} is the subject, agreeing nominatives are विधेय")
         elif case == DVITIYA:
             free = [v for v in rverbs + verbals if v not in has_karma]
             verb = _pick(free, words, head)
@@ -361,8 +362,8 @@ def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[
             for i in idx:  # every nominative, including qualifiers of a non-subject, is विधेय
                 if is_case(words[i].morph, PRATHAMA) and i != main and (i in subjects or words[i].role == "विधेय"):
                     _set(words, i, "विधेय", main)
-            if main is None:
-                notes.append("nominal clause: subject not expressed; all nominatives are विधेय")
+            notes.append("nominal clause: subject not expressed; all nominatives are विधेय" if main is None
+                         else f"nominal clause: {words[main].form} is the subject, agreeing nominatives are विधेय")
             predicates = [i for i in idx if is_case(words[i].morph, PRATHAMA) and not words[i].in_compound]
             for i in idx:  # epithet lists: local attachment to the nearest predicate in the line
                 if words[i].role in LOCAL and words[i].role != "सम्बन्ध" or (words[i].role == "सम्बन्ध" and

@@ -18,24 +18,16 @@ _MODAL = {"लृट्": "will", "लुट्": "will", "विधिलिङ
           "लेट्": "shall"}
 _PAST = {"लिट्", "लङ्", "लुङ्"}
 _PASSIVE = {"कर्मणि", "भावे"}
+_LIKE = {"सदृश", "सम", "तुल्य"}  # take their standard in the instrumental/genitive: "like X", "equal to X"
+_TO = {"सम", "तुल्य"}
+_AGENT_KRT = {"तृच्", "तृन्", "तृ"}
+_ADJ_FIRST = {"great", "good", "firm", "long", "big", "small", "excellent", "best", "white", "black",
+              "red", "very", "many", "beautiful", "noble", "mighty", "strong", "high", "broad", "large"}
+_PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thigh", "cheek"}
 
 
 def _p(text: str, idx: Optional[int] = None, sep: str = " ") -> Piece:
     return (text, idx, sep)
-
-
-def _krt(krt: Optional[str], g: str) -> str:
-    if krt == "क्त":
-        return english.participle(g)
-    if krt == "क्तवतु":
-        return english.past(g)
-    if krt in ("शतृ", "शानच्"):
-        return english.present_participle(g)
-    if krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्"):
-        return "to be " + english.participle(g)
-    if krt in ("क्वसु", "कानच्"):
-        return "having " + english.participle(g)
-    return g
 
 
 class _Renderer:
@@ -86,6 +78,17 @@ class _Renderer:
                 return [m for m in c.members[:-1]]
         return []
 
+    def bahuvrihi(self, i: int) -> bool:
+        """True for the final member of a bahuvrihi whose first member is an adjective or prefix."""
+        w = self.words[i]
+        if w.compound is None or w.in_compound:
+            return False
+        for c in self.reading.compounds:
+            if c.id == w.compound and c.samasa == "bahuvrihi" and len(c.members) > 1 and c.members[-1] == i:
+                f = self.words[c.members[0]]
+                return bool(f.morph and (f.morph.kind == "avyaya" or f.gloss in _ADJ_FIRST))
+        return False
+
     def noun_text(self, i: int) -> str:
         w = self.words[i]
         m = w.morph
@@ -97,7 +100,9 @@ class _Renderer:
         if pron is not None:
             return pron
         if m.krt and w.gloss_source != "own":
-            return _krt(m.krt, g)
+            g = english.krt_form(m.krt, g)
+            if m.krt not in _AGENT_KRT:
+                return g
         if (w.role in ("विशेषण", "विधेय") or g[:1].isupper() or g in _NO_PLURAL or " of " in g
                 or m.vacana not in ("बहुवचन", "द्विवचन")):
             return g
@@ -123,6 +128,12 @@ class _Renderer:
             if r == "विशेषण" and pron_head:
                 after += [_p(",", None, "")] + self.np(k)
                 continue
+            if r == "विशेषण" and self.bahuvrihi(k):
+                after += self.np(k)
+                continue
+            if im is not None and im.lemma in _LIKE and r in ("करण", "सम्बन्ध", "सम्प्रदान", "कर्म"):
+                after += ([_p("to")] if im.lemma in _TO else []) + self.np(k)
+                continue
             if r == "कर्ता" and participle:
                 after += [_p("by")] + self.np(k)
                 continue
@@ -134,10 +145,17 @@ class _Renderer:
             else:
                 after += self.case_phrase(k)
         core: list[Piece] = []
+        bv = self.bahuvrihi(i)
+        glue = " " if bv else "-"
+        if bv:
+            core.append(_p("of"))
         for j in mem:
             self.used.add(j)
-            core.append(_p(self.text(j), j, "-" if core else " "))
-        core.append(_p(self.noun_text(i), i, "-" if core else " "))
+            core.append(_p(self.text(j), j, glue if core and not (bv and len(core) == 1) else " "))
+        last = self.noun_text(i)
+        if bv and last in _PAIRED:
+            last = english.plural(last)
+        core.append(_p(last, i, glue if core and not (bv and len(core) == 1) else " "))
         return poss + adjs + core + after
 
     def case_phrase(self, i: int) -> list[Piece]:
@@ -183,7 +201,7 @@ class _Renderer:
         m = w.morph
         g = self.text(v)
         if m is None or w.arsha or m.kind != "tinanta":
-            txt = g if (m is None or w.arsha or not m.krt) else _krt(m.krt, g)
+            txt = g if (m is None or w.arsha or not m.krt) else english.krt_form(m.krt, g)
             return ([_p(txt, v)] + ([_p("not", neg)] if neg is not None else [])), False
         p = {"उत्तमपुरुष": 1, "मध्यमपुरुष": 2}.get(m.purusha or "", 3)
         sg = m.vacana not in ("बहुवचन", "द्विवचन")
@@ -224,7 +242,7 @@ class _Renderer:
         out.append(_p(main, v))
         return out, let
 
-    def clause(self, v: int) -> list[Piece]:
+    def clause(self, v: int, keep_conn: bool = True) -> list[Piece]:
         self.used.add(v)
         m = self.words[v].morph
         passive = m is not None and (m.prayoga or "") in _PASSIVE
@@ -247,7 +265,8 @@ class _Renderer:
                     self.used.add(k)
                 elif g in _CONNECTIVES:
                     self.used.add(k)
-                    conn.append(_p(g, k))
+                    if keep_conn:  # a clause-initial 'and' of the first clause would dangle
+                        conn.append(_p(g, k))
                 else:
                     self.used.add(k)
                     adv.append(_p(g, k))
@@ -334,7 +353,11 @@ def _copular(r: "_Renderer", top) -> list[Piece]:
     sm = r.words[subj[0]].morph if subj else None
     if pred:
         pl = bool(sm and sm.vacana in ("बहुवचन", "द्विवचन"))
-        out.append(_p("[are]" if pl or (sm and sm.purusha == "मध्यमपुरुष") else "[am]"
+        if not subj:
+            out.append(_p("[They are]" if any(r.words[k].morph and r.words[k].morph.vacana == "बहुवचन"
+                                              for k in pred) else "[He is]"))
+        else:
+            out.append(_p("[are]" if pl or (sm and sm.purusha == "मध्यमपुरुष") else "[am]"
                       if sm and sm.lemma == "अस्मद्" else "[is]"))
     pred.sort(key=lambda k: r.pos[k])
     prev_pron = True
@@ -375,10 +398,8 @@ def render(reading: Reading) -> Reading:
                 r.children.setdefault(first, []).append(i)
         for ch in r.children.values():
             ch.sort(key=lambda k: r.pos[k])
-        clauses = [r.clause(v) for v in verbs]
-        order = sorted(range(len(verbs)), key=lambda n: r.pos[verbs[n]])
-        for n, ci in enumerate(order):
-            pieces += ([_p(";", None, "")] if n else []) + clauses[ci]
+        for n, v in enumerate(sorted(verbs, key=lambda k: r.pos[k])):
+            pieces += ([_p(";", None, "")] if n else []) + r.clause(v, keep_conn=n > 0)
     else:
         pieces += _copular(r, top)
     for i in r.order:  # anything not yet consumed still appears, in prose order

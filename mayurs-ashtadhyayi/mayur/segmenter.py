@@ -137,7 +137,7 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 # compound members back off generously to their lemma counts (which include member uses).
 W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -1.0, "stem": 0.0, "samasa": 0.0,
      "elide": 3.0, "vocative": 1.5, "unseen": 0.0005, "aas": 1.5,
-     "inner": 0.0, "short": 0.0}
+     "inner": 1.0, "short": 1.5, "q3len": 0.0}
 
 
 # Particles that never stand as the first member of a compound.
@@ -210,7 +210,11 @@ def word_score(form: str, stem: bool, tier_used: int = 0) -> Optional[tuple[floa
     if c > 0:
         s = math.log((c + 0.5) / n)
     else:
-        s = math.log((W["lemma_w_stem" if stem else "lemma_w"] * lc + W["unseen"]) / n)
+        # Unseen form: lemma counts, plus a pseudo-count growing with length for a quality-3 word,
+        # so that a long well-formed word not in this corpus is not chopped into frequent scraps.
+        syll = sum(1 for v in sd.varnas(form) if sd.is_vowel(v))
+        pseudo = W["unseen"] + (W["q3len"] * syll if best >= 3 and not stem else 0.0)
+        s = math.log((W["lemma_w_stem" if stem else "lemma_w"] * lc + pseudo) / n)
     if best <= 1:
         s -= W["q0"] if best == 0 else W["q1"]
     good = [m for m in ms if m.quality >= 2]
