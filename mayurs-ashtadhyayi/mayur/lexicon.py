@@ -23,7 +23,7 @@ _NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ्", "�
           "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्", "न": "न्", "म": "म्"}
 # pada-final spellings (8.2.30, 8.2.39, 8.4.56): a stem's final consonant as it stands at a pada end
 _FINAL = {"द्": ("त्",), "ग्": ("क्",), "ड्": ("ट्",), "ब्": ("प्",), "च्": ("क्",), "ज्": ("क्", "ट्"),
-          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्")}
+          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्"), "ध्": ("त्",), "भ्": ("प्",)}
 
 
 def _quality(entry: bridge.Entry) -> int:
@@ -113,10 +113,10 @@ def _kosha_morphs(form: str) -> list[Morph]:
 @lru_cache(maxsize=200_000)
 def padas(form: str) -> tuple[Morph, ...]:
     """All analyses of ``form`` as a complete pada, best first; () if none."""
-    found = _kosha_morphs(form)
-    if not any(m.quality >= 2 for m in found):
-        from mayur.lexicon_gen import prefixed
+    from mayur.lexicon_gen import anvadesha, indefinite, prefixed
 
+    found = _kosha_morphs(form) + list(anvadesha(form)) + list(indefinite(form, padas))
+    if not any(m.quality >= 2 for m in found):
         found.extend(prefixed(form))
     return _rank(found)
 
@@ -164,7 +164,8 @@ def stems(form: str) -> tuple[Morph, ...]:
         for entry in bridge.lookup(variant):
             if _stem_entry_ok(entry, variant):
                 out.append(_as_stem(entry, form))
-        for key in final_variants(variant)[1:]:  # a stem cited as such: वाच् (pada वाक्)
+        # a stem cited as such: वाच् (pada वाक्), वधू (pada वधूस्)
+        for key in final_variants(variant)[1:] + (variant + "स्",):
             for entry in bridge.lookup(key):
                 if entry.entry == "basic" and entry.pratipadika == variant:
                     out.append(_as_stem(entry, form))
@@ -207,6 +208,14 @@ def prove(m: Morph) -> WordProof:
     h = m.handle
     if h is None:
         return WordProof(derivable=False, method="none", note="no vidyut arguments for this analysis")
+    if isinstance(h, tuple) and h and h[0] == "special":
+        return WordProof(derivable=False, method="special", note=h[1])
+    if isinstance(h, tuple) and h and h[0] == "particle":
+        base = prove(h[1])
+        return WordProof(derivable=base.derivable, method="vidyut-prakriya (base) + अव्यय",
+                         derived_form=base.derived_form, trace=base.trace,
+                         note=(f"{h[2]} is a particle (अव्यय) added to the derived form {h[1].form}; the "
+                               f"junction sandhi (e.g. 8.4.40) was not run through vidyut. {base.note}").strip())
     if isinstance(h, tuple) and h and h[0] == "stem":
         if h[1] is None:
             return WordProof(derivable=False, method="stem", note="no stem derivation available")
@@ -223,9 +232,14 @@ def prove(m: Morph) -> WordProof:
     note = ""
     if ok and text != m.form:
         note = f"derived spelling {text}; {m.form} differs only in writing the nasal"
+    method = "vidyut-prakriya"
     if not ok:
         note = f"vidyut derived {text or 'nothing'}, not {m.form}"
-        if m.lemma in ("अस्मद्", "युष्मद्") and m.form in _ENCLITIC:
-            note += ("; listed in the kosha: the enclitic substitute (8.1.20-8.1.24) depends on the "
-                     "sentence and is not applied by vidyut-prakriya")
-    return WordProof(derivable=ok, method="vidyut-prakriya", derived_form=text, trace=trace, note=note)
+        if m.source == "kosha":
+            method = "kosha-listed"
+            if m.lemma in ("अस्मद्", "युष्मद्") and m.form in _ENCLITIC:
+                note = "listed in vidyut-kosha; enclitic by 8.1.20–23, which vidyut's Python API does not derive"
+            else:
+                note = (f"listed in vidyut-kosha; not reproduced by vidyut's derivation "
+                        f"(it derived {text or 'nothing'})")
+    return WordProof(derivable=ok, method=method, derived_form=text, trace=trace, note=note)

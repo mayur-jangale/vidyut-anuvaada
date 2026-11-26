@@ -19,7 +19,10 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 DCS_REPO = "https://github.com/OliverHellwig/sanskrit.git"
-DCS_PATHS = ("/dcs/data/conllu/files/Rāmāyaṇa/", "/dcs/data/conllu/lookup/", "/dcs/data/conllu/readme.md")
+# The Ramayana feeds the frequency tables; the Kumarasambhava is fetched only as an unseen
+# second book for evaluation and is never counted.
+DCS_PATHS = ("/dcs/data/conllu/files/Rāmāyaṇa/", "/dcs/data/conllu/files/Kumārasaṃbhava/",
+             "/dcs/data/conllu/lookup/", "/dcs/data/conllu/readme.md")
 MW_URL = "https://raw.githubusercontent.com/sanskrit-lexicon/csl-orig/master/v02/mw/mw.txt"
 
 

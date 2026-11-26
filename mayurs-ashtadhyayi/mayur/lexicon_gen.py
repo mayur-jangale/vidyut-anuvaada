@@ -135,3 +135,53 @@ def generated_nominals(form: str) -> tuple[Morph, ...]:
                 if any(d.text == form for d in bridge.derive(pada)):
                     found.append(replace(template, form=form))
     return tuple(found)
+
+
+# अन्वादेश substitutes of इदम् / एतद् (2.4.34 द्वितीयाटौस्स्वेनः): form -> (लिङ्ग, विभक्ति, वचन) list
+_P, _S, _N = "पुंलिङ्ग", "स्त्रीलिङ्ग", "नपुंसकलिङ्ग"
+_ENA = {
+    "एनम्": ((_P, "द्वितीया", "एकवचन"),), "एनाम्": ((_S, "द्वितीया", "एकवचन"),),
+    "एनत्": ((_N, "द्वितीया", "एकवचन"),), "एनद्": ((_N, "द्वितीया", "एकवचन"),),
+    "एनौ": ((_P, "द्वितीया", "द्विवचन"),), "एने": ((_S, "द्वितीया", "द्विवचन"), (_N, "द्वितीया", "द्विवचन")),
+    "एनान्": ((_P, "द्वितीया", "बहुवचन"),), "एनास्": ((_S, "द्वितीया", "बहुवचन"),),
+    "एनानि": ((_N, "द्वितीया", "बहुवचन"),),
+    "एनेन": ((_P, "तृतीया", "एकवचन"), (_N, "तृतीया", "एकवचन")), "एनया": ((_S, "तृतीया", "एकवचन"),),
+    "एनयोस्": tuple((g, v, "द्विवचन") for g in (_P, _S, _N) for v in ("षष्ठी", "सप्तमी")),
+}
+ENA_NOTE = ("अन्वादेश substitute एन by 2.4.34 (द्वितीयाटौस्स्वेनः); vidyut's Python API does not apply "
+            "2.4.34, so no derivation was run")
+
+
+def anvadesha(form: str) -> tuple[Morph, ...]:
+    """एनम् etc.: special-table analyses as इदम् / एतद् (no vidyut derivation exists)."""
+    feats = _ENA.get(form, ())
+    return tuple(Morph(form=form, lemma=lemma, kind="subanta", linga=g, vibhakti=v, vacana=n,
+                       source="special", quality=3, handle=("special", ENA_NOTE))
+                 for lemma in ("इदम्", "एतद्") for g, v, n in feats)
+
+
+_PARTICLES = ("चित्", "चिद्", "चन")
+_INDEF_BASES = frozenset({"किम्", "क", "क्व", "कदा", "कथम्", "कुत्र", "कुतस्", "कति"})
+# the junction reversed: कश्+चित् <- कस्, किं+चित् <- किम्, कञ्+चन? (कं) <- कम्
+_JUNCTION = (("श्", "स्"), ("ं", "म्"), ("ञ्", "म्"))
+
+
+def indefinite(form: str, lookup) -> tuple[Morph, ...]:
+    """कश्चित्, केचिद्, क्वचित्, किंचन ...: the किम् form (looked up with ``lookup``) + particle."""
+    out: list[Morph] = []
+    for part in _PARTICLES:
+        if not form.endswith(part) or len(form) <= len(part):
+            continue
+        head = form[: -len(part)]
+        bases = [head] + [head[: -len(a)] + b for a, b in _JUNCTION if head.endswith(a)]
+        for base in bases:
+            for m in lookup(base):
+                if m.lemma not in _INDEF_BASES or m.quality < 2:
+                    continue
+                if m.kind == "subanta":
+                    lemma = "कश्चन" if part == "चन" else "कश्चित्"
+                else:
+                    lemma = head + ("चन" if part == "चन" else "चित्")
+                out.append(replace(m, form=form, lemma=lemma, source="generated", quality=3,
+                                   handle=("particle", m, part)))
+    return tuple(out)

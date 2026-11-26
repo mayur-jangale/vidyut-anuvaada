@@ -227,16 +227,22 @@ def _translation(data: dict[str, Any]) -> str:
     return f'<h2>Translation</h2><p>{"".join(out)}</p>'
 
 
+MAX_ALTERNATIVES_SHOWN = 5
+
+
 def _alternatives(data: dict[str, Any]) -> str:
+    """The next-best readings, each with its split in the summary line; the rest stay in the JSON."""
     items = []
-    for alt in data["alternatives"]:
+    for alt in data["alternatives"][:MAX_ALTERNATIVES_SHOWN]:
         split = " । ".join(" ".join(esc(w["devanagari"]) for w in line) for line in alt["padaccheda"])
         scores = ", ".join(f"{esc(k)} {v:.2f}" for k, v in alt["scores"].items())
         items.append(
-            f'<details><summary>Reading {alt["rank"]} {_badge(alt["status"])}</summary>'
-            f'<p class="sa">{split}</p><p class="small">scores: {scores or "—"}</p>'
-            f'<p>{esc(alt["translation"])}</p></details>'
+            f'<details><summary>{alt["rank"]}. <span class="sa">{split}</span> {_badge(alt["status"])}</summary>'
+            f'<p class="small">scores: {scores or "—"}</p><p>{esc(alt["translation"])}</p></details>'
         )
+    more = len(data["alternatives"]) - len(items)
+    if more > 0:
+        items.append(f'<p class="small">{more} more readings are kept in the JSON output.</p>')
     return f'<h2>Alternatives</h2>{"".join(items)}' if items else ""
 
 

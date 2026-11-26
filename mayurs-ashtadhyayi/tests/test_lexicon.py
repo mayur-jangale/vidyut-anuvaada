@@ -87,3 +87,34 @@ def test_generated():
     ms = L.generated("रामेण")
     assert ms and ms[0].source == "generated" and ms[0].vibhakti == "तृतीया"
     assert L.prove(ms[0]).derivable
+
+
+def test_anvadesha_special():
+    ms = L.padas("एनम्")
+    assert {m.lemma for m in ms} >= {"इदम्", "एतद्"}
+    assert (ms[0].linga, ms[0].vibhakti, ms[0].vacana) == ("पुंलिङ्ग", "द्वितीया", "एकवचन")
+    proof = L.prove(ms[0])
+    assert not proof.derivable and proof.trace == [] and "2.4.34" in proof.note
+
+
+@pytest.mark.parametrize("form,lemma", [("कश्चित्", "कश्चित्"), ("केचिद्", "कश्चित्"), ("काचित्", "कश्चित्"),
+                                        ("कस्यचित्", "कश्चित्"), ("क्वचित्", "क्वचित्"), ("कश्चन", "कश्चन")])
+def test_indefinites(form, lemma):
+    m = L.padas(form)[0]
+    assert m.lemma == lemma and m.source == "generated"
+    proof = L.prove(m)
+    assert proof.derivable and "अव्यय" in proof.note
+
+
+def test_kosha_listed_method():
+    proof = L.prove(L.padas("मे")[0])
+    assert proof.method == "kosha-listed"
+    assert proof.note == "listed in vidyut-kosha; enclitic by 8.1.20–23, which vidyut's Python API does not derive"
+
+
+def test_more_stems_and_participles():
+    assert L.stems("समिध्")[0].lemma == "समिध्"
+    assert L.stems("वधू")[0].lemma == "वधू"
+    m = L.padas("उद्वहन्त्यास्")[0]
+    assert m.krt == "शतृ" and L.prove(m).derivable
+    assert L.prove(L.padas("विवस्वान्")[0]).derivable
