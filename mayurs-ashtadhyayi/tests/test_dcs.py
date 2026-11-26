@@ -21,7 +21,7 @@ def test_pada_form_visarga_and_anusvara():
 
 
 def test_compact_orthography():
-    assert compact_orthography("ko nv asmin sAmpratam loke") == "ko nvasmin sAmpratam loke"
+    assert compact_orthography("ko nv asmin sAmpratam loke") == "ko nvasminsAmpratamloke"
     assert compact_orthography("kaS ca vIryavAn") == "kaSca vIryavAn"
     assert compact_orthography("nAradaM paripapracCa vAlmIkir munipuMgavam") == \
         "nAradaM paripapracCa vAlmIkirmunipuMgavam"

@@ -16,7 +16,7 @@ from mayur.dcs import iter_sentences, pada_form  # noqa: E402
 from mayur.translit import iast_to_slp1  # noqa: E402
 
 HELD_OUT = ["Rām, Bā, 1"]
-CONLLU = Path("dcs/sanskrit/dcs/data/conllu")
+
 
 
 def build(data_dir: Path) -> dict:

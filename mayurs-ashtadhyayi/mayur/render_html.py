@@ -8,8 +8,7 @@ from typing import Any
 from mayur.jsonout import to_json
 from mayur.model import VerseAnalysis
 
-TITLE = "Mayur's Ashtadhyayi – Vālmīki Rāmāyaṇa, Bāḷakāṇḍa 1".replace(
-    "Bāḷakāṇḍa", "Bālakāṇḍa")
+TITLE = "Mayur's Ashtadhyayi – Vālmīki Rāmāyaṇa, Bālakāṇḍa 1"
 
 CSS = """
 :root{--bg:#fbfaf7;--fg:#222;--mut:#6b675f;--line:#e4e0d6;--card:#fff;--acc:#a4491f;--ok:#2d7a46;--bad:#b3392b;
