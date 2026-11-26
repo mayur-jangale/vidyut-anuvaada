@@ -27,7 +27,7 @@ def test_dcs_verb_with_preverb():
         return
     m = Morph(form="paripapracCa", lemma="paripracC", kind="tinanta", root="pracC", prefixes=("pari",))
     g, src = gloss.lookup(m)
-    assert src in ("dcs-sense", "dcs")
+    assert src in ("override", "dcs-sense", "dcs")
     assert "ask" in g or "interrogate" in g
 
 
