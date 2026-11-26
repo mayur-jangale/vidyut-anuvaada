@@ -5,6 +5,7 @@ The IAST of the corpus is converted exactly once, here, with ``mayur.lipi.devana
 
 from __future__ import annotations
 
+from functools import lru_cache
 from pathlib import Path
 from typing import Iterator
 
@@ -16,6 +17,7 @@ _ANUSVARA = "ं"
 _R_LEMMAS = frozenset({"पुनर्", "अन्तर्", "प्रातर्"})
 
 
+@lru_cache(maxsize=500_000)
 def _deva(text: str) -> str:
     return devanagari(text, "iast") if text and text != "_" else ""
 

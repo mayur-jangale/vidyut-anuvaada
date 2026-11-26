@@ -2,7 +2,7 @@
 
     python scripts/build_tables.py [--data-dir DIR]
 
-Chapter ``chapter_id`` 1067 (Bala 1) is held out for evaluation and never counted.
+Every fetched text is counted except the held-out chapters (HELD_OUT_IDS).
 """
 
 from __future__ import annotations
@@ -20,11 +20,13 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from mayur import dcs  # noqa: E402
 from mayur.lipi import devanagari  # noqa: E402
 
-HELD_OUT_IDS = ("1067",)  # DCS chapter_id of Ramayana, Balakanda, sarga 1
+# DCS chapter_ids that are never counted: Ramayana Balakanda 1, Kumarasambhava 1, Bhagavad Gita 1 and 2
+# (= Mahabharata 6 BhaGi 1, 2).
+HELD_OUT_IDS = ("1067", "7305", "7242", "7243")
+MIN_BIGRAM = 2
 TAG_FEATS = ("Case", "Gender", "Number", "Person", "Tense", "Mood", "VerbForm")
 CLASS_OF_UPOS = {"NOUN": "noun", "PROPN": "noun", "ADJ": "adjective", "NUM": "adjective", "PRON": "pronoun",
                  "DET": "pronoun", "VERB": "verb", "AUX": "verb"}
-RAMAYANA_TEXT_ID = "143"  # DCS text_id of the Ramayana
 
 
 def tag_key(lemma: str, upos: str, feats: dict[str, str]) -> str:
@@ -35,18 +37,24 @@ def tag_key(lemma: str, upos: str, feats: dict[str, str]) -> str:
 def count_sentences(sentences, held_out=HELD_OUT_IDS) -> dict:
     """Counts over an iterable of sentence dicts (``dcs.iter_sentences``)."""
     forms: Counter = Counter()
+    bigrams: Counter = Counter()
+    members: Counter = Counter()
     lemmas: Counter = Counter()
     tags: dict[str, Counter] = defaultdict(Counter)
     senses: dict[str, Counter] = defaultdict(Counter)
     upos: dict[str, Counter] = defaultdict(Counter)
     held, tokens = set(), 0
     for sent in sentences:
-        if sent["text_id"] != RAMAYANA_TEXT_ID:
+        if not sent["tokens"]:
             continue
         if sent["chapter_id"] in held_out:
             held.add(sent["chapter"])
             continue
+        seq = [t["form"] for t in sent["tokens"]]
+        bigrams.update(zip(seq, seq[1:]))
         for tok in sent["tokens"]:
+            if tok["compound_member"]:
+                members[tok["form"]] += 1
             feats = dict(tok["feats"])
             if tok["compound_member"]:
                 feats["Case"] = "Cpd"
@@ -58,7 +66,7 @@ def count_sentences(sentences, held_out=HELD_OUT_IDS) -> dict:
             if tok["word_sem"]:
                 senses[tok["lemma"]][tok["word_sem"]] += 1
     return {"forms": forms, "lemmas": lemmas, "tags": tags, "senses": senses, "upos": upos,
-            "tokens": tokens, "held_out": sorted(held)}
+            "tokens": tokens, "held_out": sorted(held), "bigrams": bigrams, "members": members}
 
 
 def sense_labels(path: Path) -> dict[str, str]:
@@ -86,6 +94,8 @@ def tables(counted: dict, labels: dict[str, str], dictionary_rows: dict) -> dict
     return {
         "freq.json": {"forms": dict(counted["forms"]), "lemmas": dict(counted["lemmas"]),
                       "tokens": counted["tokens"], "held_out": counted["held_out"]},
+        "bigrams.json": {f"{a}\t{b}": n for (a, b), n in counted["bigrams"].items() if n >= MIN_BIGRAM},
+        "member_counts.json": dict(counted["members"]),
         "form_tags.json": {f: dict(c) for f, c in counted["tags"].items()},
         "dcs_senses.json": {lm: labels.get(top(c), "") for lm, c in counted["senses"].items()},
         "dcs_dict.json": dictionary_rows,
@@ -94,7 +104,7 @@ def tables(counted: dict, labels: dict[str, str], dictionary_rows: dict) -> dict
 
 
 def chapter_files(root: Path) -> list[Path]:
-    return sorted((root / "files").glob("*/*.conllu"))
+    return sorted((root / "files").glob("*/*.conllu"))  # not the *.conllu_parsed files
 
 
 def build(data_dir: Path) -> dict[str, int]:

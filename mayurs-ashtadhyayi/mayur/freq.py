@@ -36,3 +36,13 @@ def analysis_count(m: Morph) -> int:
     """Corpus count of ``m.form`` with the lemma and the features that ``m`` asserts."""
     want_lemma, want_feats = ud.lemma(m), ud.feats(m)
     return sum(n for lm, fs, n in _parsed(m.form) if lm == want_lemma and ud.feats_agree(want_feats, fs))
+
+
+def bigram_count(a: str, b: str) -> int:
+    """Corpus count of ``a`` immediately followed by ``b`` in one half-verse (pairs seen at least twice)."""
+    return int(derived("bigrams.json").get(f"{a}\t{b}", 0))
+
+
+def member_count(form: str) -> int:
+    """Corpus count of ``form`` as a non-final compound member."""
+    return int(derived("member_counts.json").get(form, 0))

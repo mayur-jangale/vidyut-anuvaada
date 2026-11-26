@@ -72,21 +72,19 @@ class _Renderer:
         return w.gloss or lipi.iast(w.morph.stem or w.morph.lemma) or "⟨" + lipi.iast(w.form) + "⟩"
 
     def members(self, i: int) -> list[int]:
-        w = self.words[i]
-        if w.compound is None or w.in_compound:
+        if self.words[i].in_compound:
             return []
         for c in self.reading.compounds:
-            if c.id == w.compound and c.members and c.members[-1] == i:
-                return [m for m in c.members[:-1]]
+            if c.members and c.members[-1] == i:
+                return list(c.members[:-1])
         return []
 
     def bahuvrihi(self, i: int) -> bool:
         """True for the final member of a bahuvrihi whose first member is an adjective or prefix."""
-        w = self.words[i]
-        if w.compound is None or w.in_compound:
+        if self.words[i].in_compound:
             return False
         for c in self.reading.compounds:
-            if c.id == w.compound and c.samasa == "bahuvrihi" and len(c.members) > 1 and c.members[-1] == i:
+            if c.samasa in ("बहुव्रीहि", "bahuvrihi") and len(c.members) > 1 and c.members[-1] == i:
                 f = self.words[c.members[0]]
                 return bool(f.morph and (f.morph.kind == "avyaya" or f.gloss in _ADJ_FIRST))
         return False
@@ -102,6 +100,8 @@ class _Renderer:
         if pron is not None:
             return pron
         if m.krt and w.gloss_source != "own":
+            if m.krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्") and self.members(i):
+                return g  # a noun that merely ends like a gerundive, inside a compound
             g = english.krt_form(m.krt, g)
             if m.krt not in _AGENT_KRT:
                 return g
@@ -122,6 +122,7 @@ class _Renderer:
         im = self.words[i].morph
         pron_head = im is not None and english.is_pronoun(im.lemma)
         participle = im is not None and im.krt in ("क्त", "क्तवतु")
+        std: list[Piece] = []
         for k in (self.children.get(i, []) if kids is None else kids):
             r = self.role(k)
             km = self.words[k].morph
@@ -138,7 +139,7 @@ class _Renderer:
                 after += self.np(k)
                 continue
             if im is not None and im.lemma in _LIKE and r in ("करण", "सम्बन्ध", "सम्प्रदान", "कर्म"):
-                after += ([_p("to")] if im.lemma in _TO else []) + self.np(k)
+                std += ([_p("to")] if im.lemma in _TO else []) + self.np(k)
                 continue
             if r == "कर्ता" and participle:
                 after += [_p("by")] + self.np(k)
@@ -166,7 +167,7 @@ class _Renderer:
         if ed and len(core) == 0:
             pass
         core.append(_p(last, i, glue if core and not (bv and not ed and len(core) == 1) else " "))
-        return poss + adjs + core + after
+        return poss + adjs + core + std + after
 
     def case_phrase(self, i: int) -> list[Piece]:
         r = self.role(i)

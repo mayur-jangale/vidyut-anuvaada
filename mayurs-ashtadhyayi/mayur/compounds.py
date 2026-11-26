@@ -169,8 +169,7 @@ def classify(reading: Reading, members: list[int]) -> tuple[str, str, str]:
         vig = _bahuvrihi_vigraha(words) or hyphen
         return BAHUVRIHI, vig, "heuristic: सु/दुस्/महा + noun used as an epithet of an external head (2.2.24)"
     governs = _final_governs(final)
-    if final_stem in _UPAPADA or final_stem.endswith(("ज्ञ", "विद्", "कृत्", "हन्", "भृत्", "जित्")) and len(words) == 2 \
-            and not _external_head(reading, members[-1]) or final_stem in _UPAPADA:
+    if final_stem in _UPAPADA or (len(words) == 2 and final_stem.endswith(("ज्ञ", "विद्", "कृत्", "हन्", "भृत्"))):
         return TATPURUSHA, hyphen, "heuristic: root-noun/kṛt agent final governs the first member, उपपद (2.2.19)"
     if governs == "kta" and final_stem in _KTA_RELATION:
         rel = relation(final_stem)
