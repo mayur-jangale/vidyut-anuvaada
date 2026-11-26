@@ -34,7 +34,7 @@ SOURCE = "trained on Digital Corpus of Sanskrit annotations (CC BY 4.0)"
 def _held_out(path: Path) -> bool:
     n = path.name
     return ("Rāmāyaṇa-0000-" in n or n.startswith("Kumārasaṃbhava-0000-")
-            or "MBh, 6, 23-" in n or "MBh, 6, 24-" in n)
+            or "BhaGī 1-" in n or "BhaGī 2-" in n)
 
 
 def _text_of(entry: dict) -> str:
@@ -42,7 +42,6 @@ def _text_of(entry: dict) -> str:
 
 
 def _lines(entries: list[dict], limit: int | None = None, seed: int = 0) -> list[tuple[str, list[dict]]]:
-    entries = [e for e in entries if "sealed" not in e["file"] and not (_held_out(Path(e["file"])) and e.get("_train"))]
     return [(g["compact"], [{"form": w["form"], "lemma": w["lemma"], "compound_member": w["compound_member"]}
                             for w in g["words"]])
             for g in dcs.gold_lines(entries, limit=limit, seed=seed) if g["words"]]

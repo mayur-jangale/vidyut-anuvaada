@@ -1,6 +1,9 @@
 """Audit mayur.lexicon against the DCS corpus.
 
-    python scripts/audit_lexicon.py [--books Rāmāyaṇa,Kumārasaṃbhava] [--max-files N]
+    python scripts/audit_lexicon.py [--split train] [--per-text N] [--books A,B] [--max-files N]
+
+With --split (default "train") the files come from ``mayur.dcs.split_files`` only (never the sealed
+pools); --per-text caps the files sampled from each text, so every text is represented.
 
 For every distinct (form, lemma, UPOS, feats, compound member) of the chosen books: is the form
 analysed, is the gold analysis among ours (mayur.ud), is that analysis proven by vidyut.
@@ -23,17 +26,42 @@ from mayur.resources import data_dir, derived_dir  # noqa: E402
 FILES = data_dir() / "dcs" / "sanskrit" / "dcs" / "data" / "conllu" / "files"
 
 
-def collect(books: list[str], max_files: int) -> Counter:
-    counts: Counter = Counter()
-    for book in books:
-        for path in sorted((FILES / book).glob("*.conllu"))[: max_files or None]:
-            for sent in dcs.iter_sentences(path):
-                for t in sent["tokens"]:
-                    if not t["form"] or t["form"] == "_":
-                        continue
-                    feats = tuple(sorted(t["feats"].items()))
-                    counts[(t["form"], t["lemma"], t["upos"], feats, t["compound_member"])] += 1
-    return counts
+def _text_of(path: str) -> str:
+    return Path(path).parent.name
+
+
+def choose_files(split: str, books: list[str], max_files: int, per_text: int, seed: int) -> list[dict]:
+    if books:
+        return [{"file": str(p), "verses": None} for b in books
+                for p in sorted((FILES / b).glob("*.conllu"))[: max_files or None]]
+    import random
+
+    by_text: dict[str, list[dict]] = {}
+    for e in dcs.split_files(split):
+        by_text.setdefault(_text_of(e["file"]), []).append(e)
+    rng = random.Random(seed)
+    out = []
+    for text in sorted(by_text):
+        entries = by_text[text]
+        out.extend(rng.sample(entries, min(per_text, len(entries))) if per_text else entries)
+    return out
+
+
+def collect(entries: list[dict]) -> dict[str, Counter]:
+    """text -> Counter of (form, lemma, upos, feats, compound member)."""
+    out: dict[str, Counter] = {}
+    for e in entries:
+        counts = out.setdefault(_text_of(e["file"]), Counter())
+        lo, hi = e["verses"] or (None, None)
+        for sent in dcs.iter_sentences(e["file"]):
+            if lo is not None and not lo <= sent["sent_counter"] <= hi:
+                continue
+            for t in sent["tokens"]:
+                if not t["form"] or t["form"] == "_":
+                    continue
+                feats = tuple(sorted(t["feats"].items()))
+                counts[(t["form"], t["lemma"], t["upos"], feats, t["compound_member"])] += 1
+    return out
 
 
 def judge(form: str, lemma: str, feats: dict[str, str], cpd: bool) -> str:
@@ -58,12 +86,27 @@ def _pattern(upos: str, feats: dict[str, str], cpd: bool) -> str:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--books", default="Rāmāyaṇa")
+    ap.add_argument("--split", default="train")
+    ap.add_argument("--per-text", type=int, default=20)
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--books", default="")
     ap.add_argument("--max-files", type=int, default=0)
     ap.add_argument("--top", type=int, default=300)
     ap.add_argument("--out", default=str(derived_dir() / "audit_lexicon_failures.txt"))
     args = ap.parse_args()
-    counts = collect(args.books.split(","), args.max_files)
+    entries = choose_files(args.split, [b for b in args.books.split(",") if b], args.max_files, args.per_text,
+                           args.seed)
+    per_text = collect(entries)
+    counts: Counter = Counter()
+    for c in per_text.values():
+        counts.update(c)
+    verdicts = {key: judge(key[0], key[1], dict(key[3]), key[4]) for key in counts}
+    print("per text (tokens: analysed / correct / proven):")
+    for text, c in sorted(per_text.items(), key=lambda kv: -sum(kv[1].values())):
+        n = sum(c.values())
+        rates = [sum(k2 for key, k2 in c.items() if verdicts[key] in ok) / n * 100
+                 for ok in (("ok", "unproved", "wrong"), ("ok", "unproved"), ("ok",))]
+        print(f"  {text:24s} {n:7d}  " + "  ".join(f"{r:5.1f}%" for r in rates))
     tok = Counter()
     typ = Counter()
     classes: dict[str, Counter] = {}
@@ -71,7 +114,7 @@ def main() -> None:
     fails: list[tuple[int, str]] = []
     for (form, lemma, upos, feats_t, cpd), n in counts.items():
         feats = dict(feats_t)
-        verdict = judge(form, lemma, feats, cpd)
+        verdict = verdicts[(form, lemma, upos, feats_t, cpd)]
         for r in ("analysed", "correct", "proven"):
             hit = {"analysed": verdict != "none", "correct": verdict in ("ok", "unproved"),
                    "proven": verdict == "ok"}[r]

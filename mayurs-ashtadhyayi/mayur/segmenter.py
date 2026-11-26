@@ -397,7 +397,7 @@ def segment_line(line: str, top_k: int = 12) -> Segmentation:
 def contains(line: str, forms, flags) -> bool:
     """Whether the split ``forms`` (with compound flags) is a path of the line's lattice, at any tier ≤ 1."""
     text, spaces = _prepare(line)
-    forms, flags = list(forms), list(flags)
+    forms, flags = [_norm(f) for f in forms], list(flags)
     for tier in (0, 1):
         lat = _Lattice(text, spaces, tier)
         frontier = {_START}
@@ -406,7 +406,7 @@ def contains(line: str, forms, flags) -> bool:
             nxt = set()
             for state in frontier:
                 for e in lat.edges(state):
-                    if e[0] == form and e[2].samasa == bool(flags[n]) and ((e[5] == _END) == last):
+                    if _norm(e[0]) == form and e[2].samasa == bool(flags[n]) and ((e[5] == _END) == last):
                         nxt.add(e[5])
             frontier = nxt
             if not frontier:
@@ -414,3 +414,11 @@ def contains(line: str, forms, flags) -> bool:
         if _END in frontier:
             return True
     return False
+
+
+def _norm(form: str) -> str:
+    """Comparison key for a word: canon spelling, final stop unvoiced (8.2.39/8.4.56 make both)."""
+    v = sd.canon_varnas(form)
+    if v and v[-1] in sd.STOPS:
+        v = v[:-1] + (sd.VARGAS[sd.VARGA_OF[v[-1]][0]][0],)
+    return from_varnas(v)

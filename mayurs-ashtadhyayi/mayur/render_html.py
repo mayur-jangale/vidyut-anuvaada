@@ -159,13 +159,28 @@ def _padaccheda(data: dict[str, Any]) -> str:
     return f"<h2>पदच्छेदः <span>word split</span></h2>{''.join(lines)}{table}"
 
 
+def _mark(c: dict[str, Any]) -> str:
+    return '<span class="ok">✓</span>' if c.get("derivable") else '<span class="no">✗</span>'
+
+
+def _chain(c: dict[str, Any]) -> str:
+    """The compound's rule chain as a collapsible table."""
+    steps = c.get("sutra_trace") or []
+    if not steps:
+        return ""
+    rows = "".join(f"<tr><td>{esc(s['code'])}</td><td>{_sa(s['sutra'])}</td><td>{_sa(s['result'])}</td></tr>"
+                   for s in steps)
+    return (f"<details><summary>rule chain ({len(steps)} steps)</summary><div class='scroll'><table>"
+            f"<tr><th>Rule</th><th>Sūtra</th><th>State</th></tr>{rows}</table></div></details>")
+
+
 def _compounds(data: dict[str, Any]) -> str:
     if not data["compounds"]:
         return ""
     rows = "".join(
         f"<tr><td>{' + '.join(_sa(m) for m in c['member_forms'])}</td>"
         f"<td>{esc(c['type']['devanagari'])}<span class='en'>{esc(c['type']['english'])}</span></td>"
-        f"<td>{_sa(c['vigraha'])}</td><td class='small'>{esc(c['basis'])}</td></tr>"
+        f"<td>{_sa(c['vigraha'])}</td><td class='small'>{_mark(c)} {esc(c['basis'])}{_chain(c)}</td></tr>"
         for c in data["compounds"]
     )
     return (f'<h2>समासः <span>compounds</span></h2><div class="scroll"><table><tr><th>Members</th><th>Type</th>'

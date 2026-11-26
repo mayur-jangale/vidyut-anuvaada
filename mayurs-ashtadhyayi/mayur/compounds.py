@@ -1,16 +1,20 @@
 """Compound (samasa) grouping and heuristic classification.
 
-vidyut's Python API has no samasa derivation, so every type assigned here is a
-heuristic; ``Compound.basis`` always starts with "heuristic:". Sutra numbers cited in
-``basis`` name the general rule the heuristic targets, not a derivation.
+vidyut's Python API has no samasa derivation, so the TYPE assigned here is a heuristic and
+``Compound.basis`` always starts with "heuristic:". Given that type, ``mayur.samasa`` runs an
+explicit forward rule chain (type rule, 1.2.46, 2.4.71, internal sandhi, final inflection by
+vidyut); ``Compound.derivable`` says whether that chain reproduced the text.
 """
 
 from __future__ import annotations
 
 from dataclasses import replace
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from mayur.model import Compound, Morph, Reading, Word
+
+if TYPE_CHECKING:
+    from mayur import samasa
 
 TATPURUSHA = "तत्पुरुष"
 KARMADHARAYA = "कर्मधारय"
@@ -253,7 +257,8 @@ def _with_chain(reading: Reading, comp: Compound) -> Compound:
     codes = ", ".join(dict.fromkeys(t.code for t in d.trace if t.source == "अष्टाध्यायी"))[:200]
     status = "derivable" if d.derivable else "not derivable: " + d.note
     vig = vigraha(reading, comp) or comp.vigraha
-    return replace(comp, vigraha=vig, basis=f"{comp.basis}; rule chain {codes} ({status})")
+    return replace(comp, vigraha=vig, basis=f"{comp.basis}; rule chain {codes} ({status})",
+                   trace=list(d.trace), derivable=d.derivable, note=d.note)
 
 
 def _inflected(stem: str, linga: Optional[str], vibhakti: str, vacana: str) -> str:

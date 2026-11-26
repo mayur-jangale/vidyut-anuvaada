@@ -135,14 +135,17 @@ def _analysis(m: Morph) -> dict[str, Any]:
     return {"form": sk(m.form), "grammar": grammar(m), "description": describe(m), "source": m.source}
 
 
-def _trace(word: Word) -> list[dict[str, Any]]:
-    if word.proof is None:
-        return []
+def _steps(trace) -> list[dict[str, Any]]:
+    """Derivation steps for readers: rule number, rule text and resulting state."""
     return [
         {"code": rule_number(s.code)["devanagari"], "number": rule_number(s.code), "source": sk(s.source),
          "sutra": sk(rule_text(s.source, s.code)), "result": sk(s.result)}
-        for s in word.proof.trace
+        for s in trace
     ]
+
+
+def _trace(word: Word) -> list[dict[str, Any]]:
+    return _steps(word.proof.trace) if word.proof is not None else []
 
 
 def word_json(reading: Reading, index: int, full: bool) -> dict[str, Any]:
@@ -208,7 +211,8 @@ def compound_json(reading: Reading, c: Compound) -> dict[str, Any]:
         "id": c.id, "members": list(c.members),
         "member_forms": [sk(display(reading.words[i].form)) for i in c.members if i < len(reading.words)],
         "stem": sk(c.stem), "type": {"devanagari": deva, "english": eng},
-        "vigraha": sk(c.vigraha), "basis": c.basis,
+        "vigraha": sk(" ".join(display(w) for w in c.vigraha.split())), "basis": c.basis,
+        "derivable": c.derivable, "note": c.note, "sutra_trace": _steps(c.trace),
     }
 
 

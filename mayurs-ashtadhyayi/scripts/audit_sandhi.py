@@ -27,19 +27,20 @@ RAMAYANA = ROOT / "data/dcs/sanskrit/dcs/data/conllu/files/Rāmāyaṇa"
 
 
 def gold_lines(limit: int, seed: int = 1):
-    if hasattr(dcs, "gold_lines"):
-        try:
-            lines = list(dcs.gold_lines())
-            random.Random(seed).shuffle(lines)
-            return lines[:limit]
-        except Exception:  # noqa: BLE001 - fall back to the Ramayana files
-            pass
+    """A seeded sample of train-split gold lines across all texts (Ramayana files as fallback)."""
+    files = dcs.split_files("train") if hasattr(dcs, "split_files") else []
+    if not files:
+        files = sorted(glob.glob(str(RAMAYANA / "*.conllu")))
+    files = list(files)
+    random.Random(seed).shuffle(files)
     out = []
-    for path in sorted(glob.glob(str(RAMAYANA / "*.conllu"))):
-        for s in dcs.iter_sentences(path):
-            words = [(t["form"], t["compound_member"]) for t in s["tokens"] if t["form"]]
-            if words:
-                out.append({"compact": dcs.compact(s["text"]), "words": words})
+    for entry in files:
+        if len(out) >= 4 * limit:
+            break
+        path = entry["file"] if isinstance(entry, dict) else entry
+        book = Path(path).parent.name
+        for line in dcs.gold_lines([entry]):
+            out.append({**line, "book": book})
     random.Random(seed).shuffle(out)
     return out[:limit]
 
@@ -108,16 +109,22 @@ def _first_bad(forms, flags, target: str) -> int:
 def audit(lines) -> None:
     ok = anomalies = 0
     groups: dict[tuple, list] = defaultdict(list)
+    per_book: dict[str, list] = defaultdict(lambda: [0, 0])
     for line in lines:
+        book = line.get("book", "")
         words = _words(line)
         forms, flags = [w[0] for w in words], [w[1] for w in words]
         target = sandhi.canon(line["compact"])
         if _ok(forms, flags, target):
             ok += 1
+            per_book[book][0] += 1
+            per_book[book][1] += 1
             continue
         if _anomalous(forms, target) or _dcs_variant_ok(forms, flags, target):
             anomalies += 1
+            line["anomaly"] = True
             continue
+        per_book[book][1] += 1
         m = _first_bad(forms, flags, target)
         left = varnas(forms[m])[-2:]
         right = varnas(forms[m + 1])[:1] if m + 1 < len(forms) else ("<end>",)
@@ -126,6 +133,8 @@ def audit(lines) -> None:
     n = len(lines)
     clean = n - anomalies
     print(f"re-join pass: {ok}/{n}; non-anomalous {ok}/{clean} = {ok / max(clean, 1):.2%}; anomalies {anomalies}")
+    for book, (good, tot) in sorted(per_book.items(), key=lambda kv: kv[1][0] / max(kv[1][1], 1)):
+        print(f"   {book}: {good}/{tot}")
     for key, ex in sorted(groups.items(), key=lambda kv: -len(kv[1]))[:40]:
         print(f"{len(ex):5d}  ...{key[0]} + {key[1]}  compound={key[2]}")
         for e in ex[:3]:
@@ -165,7 +174,7 @@ def main() -> None:
     lines = gold_lines(args.limit)
     audit(lines)
     if args.lattice:
-        lattice(list(itertools.islice(lines, args.lattice)), ROOT / "data/derived/audit_lexicon_misses.txt")
+        lattice([ln for ln in lines if not ln.get("anomaly")][: args.lattice], ROOT / "data/derived/audit_lexicon_misses.txt")
 
 
 if __name__ == "__main__":

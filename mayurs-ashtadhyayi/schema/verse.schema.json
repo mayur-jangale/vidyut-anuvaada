@@ -601,6 +601,20 @@
         },
         "basis": {
           "type": "string"
+        },
+        "derivable": {
+          "type": "boolean",
+          "description": "True if the compound's forward rule chain (internal sandhi, then the final inflection by vidyut) reproduces the text. The compound type itself is a heuristic choice."
+        },
+        "note": {
+          "type": "string"
+        },
+        "sutra_trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trace_step"
+          },
+          "description": "Rule chain of the compound: type rule, 1.2.46, 2.4.71, internal sandhi, final inflection."
         }
       },
       "additionalProperties": false

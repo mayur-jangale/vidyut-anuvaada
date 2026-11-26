@@ -111,6 +111,9 @@ class Compound:
     samasa: str = ""  # tatpurusha | karmadharaya | dvandva | bahuvrihi | avyayibhava | unknown
     vigraha: str = ""  # dissolved paraphrase
     basis: str = ""  # how the type was decided; always says when it is a heuristic
+    trace: list[SutraStep] = field(default_factory=list)  # forward rule chain of the compound
+    derivable: bool = False  # the chain's sandhi and the final inflection (vidyut) reproduce the text
+    note: str = ""
 
 
 @dataclass

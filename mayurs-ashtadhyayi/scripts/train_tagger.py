@@ -2,8 +2,9 @@
 
     python scripts/train_tagger.py [--max-train 12000] [--epochs 5]
 
-TRAIN: Rāmāyaṇa and Kumārasaṃbhava chapters except the held-out ones (Rām Bā 1, KumSaṃ 1).
-DEV:   Rām Bā 1 verses 21-79, KumSaṃ 1 verses 21-60.  TEST (report only): verses 1-20 of both.
+TRAIN: a per-text stratified sample of ``mayur.dcs.split_files("train")`` (all texts).
+DEV:   Rām Bā 1 verses 21-79, KumSaṃ 1 verses 21-60, and the "dev_pool" split when present.
+TEST (report only): verses 1-20 of Rām Bā 1 and KumSaṃ 1.  The sealed_test pool is never read.
 Writes mayur/models/tagger.json.
 """
 
@@ -60,22 +61,54 @@ def chapter_files(book: str) -> list[Path]:
     return sorted((FILES / book).glob("*.conllu"))
 
 
-def load_sets(max_train: int):
-    train, dev, test = [], [], []
+def _book(path: str) -> str:
+    return Path(path).parent.name
+
+
+def _sentences(entry: dict):
+    span = entry.get("verses")
+    for s in dcs.iter_sentences(entry["file"]):
+        if not span or span[0] <= s["sent_counter"] <= span[1]:
+            yield s
+
+
+def load_train(max_train: int, per_text: int) -> list[tuple[str, dict]]:
+    """Stratified sample of ``split_files("train")``: up to ``per_text`` half-verses from each text."""
+    by_text: dict[str, list[dict]] = {}
+    for e in dcs.split_files("train"):
+        by_text.setdefault(_book(e["file"]), []).append(e)
+    rng = random.Random(0)
+    out: list[tuple[str, dict]] = []
+    for book in sorted(by_text):
+        files = by_text[book][:]
+        rng.shuffle(files)
+        taken: list[dict] = []
+        for e in files:
+            taken.extend(_sentences(e))
+            if len(taken) >= per_text:
+                break
+        out.extend((book, s) for s in taken[:per_text])
+    rng.shuffle(out)
+    return out[:max_train]
+
+
+def load_sets(max_train: int, per_text: int = 1500):
+    """TRAIN from the train split; DEV = old DEV verses + dev_pool; TEST = verses 1-20 (report only).
+    The sealed_test pool is never read."""
+    dev, test = [], []
     for book, dev_range in (("Rāmāyaṇa", (21, 79)), ("Kumārasaṃbhava", (21, 60))):
         for path in chapter_files(book):
-            held = any(path.name.startswith(h) for h in HELD_OUT)
+            if not any(path.name.startswith(h) for h in HELD_OUT):
+                continue
             for s in dcs.iter_sentences(path):
-                if held:
-                    n = s["sent_counter"]
-                    if n <= 20:
-                        test.append((book, s))
-                    elif dev_range[0] <= n <= dev_range[1]:
-                        dev.append((book, s))
-                else:
-                    train.append((book, s))
-    random.Random(0).shuffle(train)
-    return train[:max_train], dev, test
+                n = s["sent_counter"]
+                if n <= 20:
+                    test.append((book, s))
+                elif dev_range[0] <= n <= dev_range[1]:
+                    dev.append((book, s))
+    for e in dcs.split_files("dev_pool"):
+        dev.extend(("pool:" + _book(e["file"]), s) for s in _sentences(e))
+    return load_train(max_train, per_text), dev, test
 
 
 def train(data, epochs: int) -> dict[str, float]:
@@ -121,13 +154,33 @@ def evaluate(items, choose) -> dict[str, dict[str, float]]:
     return {b: {k: round(v / s["n"], 4) if k != "n" else v for k, v in s.items()} for b, s in stats.items()}
 
 
+def write_missing(items) -> None:
+    """Classes of gold analyses absent from the candidates (for the lexicon audit)."""
+    from collections import Counter, defaultdict
+    counts: Counter = Counter()
+    examples: dict[str, list[str]] = defaultdict(list)
+    for _b, toks, cands, gold, _w in items:
+        for t, g in zip(toks, gold):
+            if g is None and not t["compound_member"]:
+                f = t["feats"]
+                key = "|".join([t["upos"]] + [f"{k}={f[k]}" for k in ("VerbForm", "Tense", "Case") if k in f])
+                counts[key] += 1
+                if len(examples[key]) < 6:
+                    examples[key].append(f"{t['form']} ({t['lemma']})")
+    total = sum(counts.values())
+    lines = [f"# gold analyses missing from the candidates on DEV: {total} tokens", ""]
+    lines += [f"{n:5}  {k}: {', '.join(examples[k])}" for k, n in counts.most_common(40)]
+    (ROOT / "data/derived/audit_tagger_missing.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--max-train", type=int, default=12000)
     ap.add_argument("--epochs", type=int, default=5)
+    ap.add_argument("--per-text", type=int, default=1500)
     args = ap.parse_args()
     t0 = time.time()
-    tr, dev, test = load_sets(args.max_train)
+    tr, dev, test = load_sets(args.max_train, args.per_text)
     prep = lambda sets: [(b, s["tokens"], *(lambda a: (a[1], a[2], a[0]))(analyse(s))) for b, s in sets]
     tr_items, dev_items, test_items = prep(tr), prep(dev), prep(test)
     unmatched = sum(g is None for *_, cands, gold, _w in tr_items for g in gold)
@@ -147,6 +200,7 @@ def main() -> None:
             out.append(next((j for j, x in enumerate(c) if x is m), 0))
         return out
 
+    write_missing(dev_items)
     report = {name: {"before": evaluate(items, baseline), "after": evaluate(items, learned)}
               for name, items in (("dev", dev_items), ("test", test_items))}
     before, after = report["dev"]["before"], report["dev"]["after"]
