@@ -242,6 +242,12 @@ NOMINAL_ENDINGS: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     ("I", "in", ("Pum",)), ("inam", "in", ("Pum",)), ("An", "at", ("Pum",)),
     ("antam", "at", ("Pum",)), ("Antam", "at", ("Pum",)),
 )
+NOMINAL_ENDINGS = NOMINAL_ENDINGS + (("AnAm", "a", ("Pum", "Napumsaka")), ("eByas", "a", ("Pum",)),
+                                     ("ezu", "a", ("Pum", "Napumsaka")), ("ayA", "A", ("Stri",)))
+# 8.4.2 Ratva after r/z in the stem: the same endings with R.
+NOMINAL_ENDINGS = NOMINAL_ENDINGS + tuple(
+    (e.replace("n", "R"), st.replace("n", "R"), lg) for e, st, lg in NOMINAL_ENDINGS if "n" in e
+)
 MAX_NOMINAL_CANDIDATES = 6
 
 
