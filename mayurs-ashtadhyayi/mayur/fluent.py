@@ -51,7 +51,7 @@ def tokenize(reading: Reading) -> list[Tok]:
         span = text[a.start:a.end]
         if span[:1].isupper() and not reading.words[a.word].gloss[:1].isupper() and (pos or a.start == 0):
             span = span[0].lower() + span[1:]  # a capital that only marks the sentence start
-        out.append(Tok(span, a.word))
+        out.append(Tok(span, a.word, glue=bool(out) and a.start == pos and out[-1].word is not None))
         pos = a.end
     return out + [Tok(m) for m in _PIECE.findall(text[pos:])]
 
@@ -60,7 +60,7 @@ def render(toks: list[Tok]) -> tuple[str, list[Alignment]]:
     """Text and exact spans of the aligned tokens."""
     out, spans = "", []
     for i, t in enumerate(toks):
-        glued = i == 0 or t.text in PUNCT or t.text == "-" or toks[i - 1].text == "-"
+        glued = i == 0 or t.glue or t.text in PUNCT or t.text == "-" or toks[i - 1].text == "-"
         out += ("" if glued else " ")
         if t.word is not None:
             spans.append(Alignment(t.word, len(out), len(out) + len(t.text)))

@@ -43,7 +43,9 @@ class NounPhraseMixin:
     def qual_slot(self, k: int, head_name: bool) -> str:
         km = self.words[k].morph
         g = (self.words[k].gloss or "").lower()
-        if self.heavy(k):
+        if self.heavy(k) or self.final_pattern(k) is not None:
+            return "trail"
+        if head_name and km is not None and km.krt in ("शतृ", "शानच्", "क्त", "क्तवतु"):
             return "trail"
         if km is not None and english.is_pronoun(km.lemma):
             return "dem"
@@ -69,13 +71,17 @@ class NounPhraseMixin:
         std: list[Piece] = []
         kidlist = self.children.get(i, []) if kids is None else kids
         quals = [k for k in kidlist if self.role(k) == "विशेषण" and k not in self.used]
-        plain = [k for k in quals if self.qual_slot(k, head_name) == "adj"]
+        plain = [k for k in quals if self.qual_slot(k, head_name) in ("adj", "title")]
         appose = len(plain) > 2 and head_name and not pron_head
         inner: list[Piece] = []
         for k in kidlist:
             r = self.role(k)
             km = self.words[k].morph
             if k in self.used:
+                continue
+            if r == "विशेषण" and im is not None and im.lemma == "यद्" and km is not None and km.lemma == "तद्":
+                self.used.add(k)  # "he who": the correlative stands before the relative pronoun
+                dems.append(_p(english.pronoun("तद्", km.linga, km.vacana, "प्रथमा") or "he", k))
                 continue
             if r == "विशेषण" and (appose or pron_head):
                 after += [_p(",", None, "")] + self.np(k)
@@ -85,7 +91,7 @@ class NounPhraseMixin:
                 after.append(_p("by name", k))
                 continue
             if r == "विशेषण" and self.bahuvrihi(k):
-                after += self.np(k)
+                (adjs if self.noun_text(k) in _PAIRED else after).extend(self.np(k))
                 continue
             if r == "विशेषण" and self.words[k].gloss[:1].isupper() and not head_name and not self.heavy(k) \
                     and not self.members(k):
@@ -141,13 +147,12 @@ class NounPhraseMixin:
         if pat is not None:
             head_text, joiner, plur = pat
             core.append(_p(head_text, i))
-            for n_, j in enumerate(mem):
-                self.used.add(j)
-                t = self.text(j)
-                if plur and n_ == len(mem) - 1 and not t[:1].isupper():
-                    t = english.plural(t)
-                core.append(_p(t, j, " " if n_ == 0 else joiner if joiner != "-" else "-"))
+            core += self.left_pieces(i, mem, "dv" if joiner == " and " else "det")
+            if plur and core and core[-1][0][:1].islower():
+                core[-1] = (english.plural(core[-1][0]), core[-1][1], core[-1][2])
             return front + core + std + after
+        if self.adi(i):
+            return front + self.adi_pieces(i, mem) + std + after
         bv = self.bahuvrihi(i)
         if bv and mem and self.words[mem[0]].morph and self.words[mem[0]].morph.lemma in ("स", "सह") \
                 and self.text(mem[0]) == "with":
@@ -159,7 +164,7 @@ class NounPhraseMixin:
             core.append(_p(self.noun_text(i), i))
             return front + core + std + after
         ctype = self.samasa(i)
-        if mem and not bv and ctype in ("तत्पुरुष", "कर्मधारय", "द्वन्द्व", "तद्धित") and self.nominal(i):
+        if mem and not bv and ctype in ("तत्पुरुष", "कर्मधारय", "द्वन्द्व", "तद्धित") and (self.nominal(i) or ctype == "तद्धित"):
             made = self.compound_pieces(i, mem, ctype, inner)
             if made:
                 return front + made + std + after

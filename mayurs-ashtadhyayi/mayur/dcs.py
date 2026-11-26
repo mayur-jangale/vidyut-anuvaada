@@ -18,9 +18,12 @@ _ANUSVARA = "ं"
 _R_LEMMAS = frozenset({"पुनर्", "अन्तर्", "प्रातर्"})
 
 
+_BROKEN = str.maketrans({"\uffb1": "ḷ"})  # the corpus files write vocalic ḷ (कॢप्त) with this stray character
+
+
 @lru_cache(maxsize=500_000)
 def _deva(text: str) -> str:
-    return devanagari(text, "iast") if text and text != "_" else ""
+    return devanagari(text.translate(_BROKEN), "iast") if text and text != "_" else ""
 
 
 def _visarga_is_r(unsandhied: str, lemma: str, feats: dict[str, str]) -> bool:

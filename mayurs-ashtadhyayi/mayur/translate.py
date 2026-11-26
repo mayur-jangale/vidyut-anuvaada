@@ -18,13 +18,15 @@ def _compose(pieces: list[Piece]) -> tuple[str, list[Alignment]]:
         text = " ".join(text.split()) if text else ""
         if not text or (idx is not None and idx in spans):
             continue
+        if text in (",", ";") and out.endswith((",", ";")):
+            continue  # a participial phrase closes with a comma that another comma already supplies
         if out:
             out += sep
         start = len(out)
         out += text
         if idx is not None and idx not in spans:
             spans[idx] = Alignment(idx, start, len(out))
-    return out, sorted(spans.values(), key=lambda a: a.start)
+    return out.rstrip(",; "), sorted(spans.values(), key=lambda a: a.start)
 
 
 def _copular(r: "_Renderer", top) -> list[Piece]:

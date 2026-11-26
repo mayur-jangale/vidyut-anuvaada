@@ -117,6 +117,9 @@ def geminate_variants(form: str) -> tuple[str, ...]:
         c = form[i]
         if c in _STOPS and form[i + 1] == "्" and form[i + 2] in _AFTER_GEMINATE and (i == 0 or form[i - 1] != "्"):
             out.append(form[:i] + c + "्" + form[i:])
+    for i in range(1, len(form)):  # छ after a vowel is च्छ (6.1.73 छे च): चिछेद for चिच्छेद
+        if form[i] == "छ" and form[i - 1] != "्":
+            out.append(form[:i] + "च्" + form[i:])
     return tuple(out)
 
 
@@ -172,7 +175,21 @@ def _kosha_ranked(form: str) -> tuple[Morph, ...]:
 
 @lru_cache(maxsize=200_000)
 def padas(form: str) -> tuple[Morph, ...]:
-    """All analyses of ``form`` as a complete pada, best first; () if none."""
+    """All analyses of ``form`` as a complete pada, best first; () if none. A form unknown as
+    written is tried in its other nasal spelling (किन्तु = किंतु)."""
+    found = _padas(form)
+    if found:
+        return found
+    for variant in nasal_variants(form)[1:]:
+        other = _padas(variant)
+        if other:
+            return tuple(replace(m, form=form) for m in other)
+    return ()
+
+
+@lru_cache(maxsize=200_000)
+def _padas(form: str) -> tuple[Morph, ...]:
+    """Analyses of ``form`` exactly as spelled."""
     from mayur.lexicon_iyan import iyan_uvan
     from mayur.lexicon_paradigm import closed_paradigms
     from mayur.lexicon_gen import (anvadesha, avyaya_compound, indefinite, looks_verbal, prefixed, sa_esha,

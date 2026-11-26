@@ -156,8 +156,10 @@ def _stem_ok(form: str, ms: tuple) -> bool:
         return True
     if form in _PARTICLES:
         return False
-    if form.endswith("न्"):
+    if form.endswith("न्") and form != "अन्":  # (अन् is नञ् before a vowel, 6.3.74)
         return False  # a stem in -न् loses the न् inside a compound (8.2.7): राज-, आत्म-, never राजन्-
+    if any(m.quality >= 3 for m in ms):
+        return True  # a dictionary stem that happens to look like a verb form too: कुरु-, आदि-
     padas = [m for m in _analyses(form, False) if m.quality >= 2]
     verb = any(m.kind == "tinanta" for m in padas)
     return not verb or any(m.kind == "subanta" and m.quality >= 3 for m in padas)
@@ -431,7 +433,9 @@ def segment_line(line: str, top_k: int = 12) -> Segmentation:
 
 
 def contains(line: str, forms, flags) -> bool:
-    """Whether the split ``forms`` (with compound flags) is a path of the line's lattice, at any tier ≤ 1."""
+    """Whether the split ``forms`` (with compound flags) is a path of the line's lattice, at any tier ≤ 1.
+    A flag of None accepts the word either as a compound member or as a free word (the corpus
+    tags glued prefixes such as स-, अन्- as free words)."""
     text, spaces = _prepare(line)
     forms, flags = [_norm(f) for f in forms], list(flags)
     for tier in (0, 1):
@@ -442,7 +446,8 @@ def contains(line: str, forms, flags) -> bool:
             nxt = set()
             for state in frontier:
                 for e in lat.edges(state):
-                    if _norm(e[0]) == form and e[2].samasa == bool(flags[n]) and ((e[5] == _END) == last):
+                    if _norm(e[0]) == form and (flags[n] is None or e[2].samasa == bool(flags[n])) \
+                            and ((e[5] == _END) == last):
                         nxt.add(e[5])
             frontier = nxt
             if not frontier:

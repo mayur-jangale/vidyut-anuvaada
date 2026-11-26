@@ -22,6 +22,11 @@ FINAL = {
     "उपेत": ("endowed with", " and ", False), "वर्धन": ("increaser of", " and ", False),
     "सदृश": ("like", " and ", False), "सम": ("equal to", " and ", False),
     "प्रभव": ("born of", "-", False), "तुल्य": ("equal to", " and ", False),
+    "समन्वित": ("accompanied by", " and ", False), "सहित": ("together with", " and ", False),
+    "निभ": ("like", " and ", False), "संनिभ": ("like", " and ", False), "सन्निभ": ("like", " and ", False),
+    "उपम": ("like", " and ", False), "आकार": ("like", " and ", False), "प्रख्य": ("like", " and ", False),
+    "अर्थ": ("for the sake of", "-", False), "हीन": ("devoid of", " and ", False),
+    "विहीन": ("devoid of", " and ", False), "मय": ("full of", " and ", False),
 }
 PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thigh", "cheek"}
 

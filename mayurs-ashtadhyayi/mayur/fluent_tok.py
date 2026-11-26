@@ -15,6 +15,7 @@ PUNCT = {",", ";", ".", "?", "!", ":"}
 class Tok:
     text: str
     word: Optional[int] = None
+    glue: bool = False  # written against the previous token with no space ("great" + "ness")
 
 
 
