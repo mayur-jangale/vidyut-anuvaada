@@ -26,6 +26,10 @@ INDECLINABLE = ("ADV", "PART", "CONJ", "CCONJ", "SCONJ", "ADP", "INTJ")
 
 
 def analysis_available(w: dict) -> bool:
+    form = w["form"]
+    if form.endswith("र्") and not w["compound_member"] and not lexicon.padas(form):
+        form = form[:-2] + "स्"  # the corpus sometimes writes the visarga of गीर्भिः as it sounds before a voiced sound
+    w = {**w, "form": form}
     ms = lexicon.stems(w["form"]) if w["compound_member"] else lexicon.padas(w["form"])
     if w["compound_member"]:
         return bool(ms)

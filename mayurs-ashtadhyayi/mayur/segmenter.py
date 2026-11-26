@@ -284,6 +284,33 @@ def _unmarked_elision(jn: _Jn) -> bool:
     return jn.right_head == ("अ",) and sd.AVAGRAHA not in jn.surface and "६.१.१०९" in jn.sutras
 
 SPACE_BLOCKS_MERGE = True
+# Some editions print the members of a compound apart (रत्न भाजः, सर्व भूत हिते). A bare stem before a
+# space is no pada (1.4.14 सुप्तिङन्तं पदम्) unless it is a vocative, so it is read as a member when the
+# corpus knows the stem as a member at least SPACED_MIN times and SPACED_RATIO times more often than as a
+# word of its own (राम, वेद, द्वादश stay words).
+SPACED_MEMBERS = True
+SPACED_MIN, SPACED_RATIO = 5, 20
+SPACED = 2  # the lattice state's "after a compound member" flag when that member was printed apart
+
+
+@lru_cache(maxsize=100_000)
+def _plain_nominal(form: str) -> bool:
+    """``form`` has a case form other than the vocative among its analyses and no finite verb."""
+    ms = [m for m in _analyses(form, False) if m.quality >= 2]
+    from mayur import freq
+
+    listed_verb = any(m.kind == "tinanta" and m.source == "kosha" for m in ms)
+    case_form = any(m.kind == "subanta" and m.vibhakti != "सम्बोधन" and freq.lemma_class(m.lemma) != "pronoun" for m in ms)
+    return case_form and not listed_verb  # (a pronoun does not end such a compound: never अहि मे)
+
+
+@lru_cache(maxsize=100_000)
+def _spaced_member(form: str) -> bool:
+    from mayur.lexicon import nasal_variants
+
+    table = resources_derived("member_counts.json")
+    members = sum(int(table.get(f, 0)) for f in nasal_variants(form))
+    return members >= SPACED_MIN and (_form_count(form) - members) * SPACED_RATIO <= members
 CHUNK_TIER = 1  # the fallback tier from which a whole written chunk may stand as one unknown word
 
 
@@ -315,8 +342,8 @@ class _Lattice:
                 if not jn.right_head and self.t[j] not in jn.rights:
                     continue
                 inner = [s for s in self.sp if k <= s <= j]
-                if jn.samasa and inner:
-                    continue
+                if jn.samasa and inner and not (SPACED_MEMBERS and length == 0 and not jn.left_tail and not jn.right_head):
+                    continue  # (a plain join at a written space may be a printed-apart compound: see edges)
                 if sd.PADA_HIATUS in jn.sutras and (jn.samasa or not inner):
                     continue
                 if SPACE_BLOCKS_MERGE and jn.right_head and j in self.sp and not _unmarked_elision(jn):
@@ -346,7 +373,15 @@ class _Lattice:
                     continue
                 if after_samasa and not _can_follow_samasa(form, jn.samasa):
                     continue
-                nxt = _END if j < 0 else (j, jn.right_head, jn.samasa)
+                # (the member must be the written chunk itself: it starts at a space with nothing carried over)
+                spaced = jn.samasa and j == k and k in self.sp and not head and (i == 0 or i in self.sp)
+                if jn.samasa and j == k and k in self.sp and not spaced:
+                    continue
+                if spaced and not _spaced_member(form):
+                    continue  # रत्न भाजः: a space inside a compound only after a stem that is hardly ever a word
+                if after_samasa == SPACED and not jn.samasa and not _plain_nominal(form):
+                    continue  # ... and only before a word that is a case form and no verb (never सर्व गच्छ)
+                nxt = _END if j < 0 else (j, jn.right_head, SPACED if spaced else jn.samasa)
                 pen = (W["samasa"] if jn.samasa else 0.0) + (W["elide"] if _unmarked_elision(jn) else 0.0)
                 if "८.३.२२" in jn.sutras:
                     pen += W["aas"]

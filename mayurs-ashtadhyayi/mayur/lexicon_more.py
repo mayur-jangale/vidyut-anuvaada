@@ -104,6 +104,12 @@ def arsha_voice(form: str, padas: Lookup) -> tuple[Morph, ...]:
             if (m.lakara, m.purusha, m.vacana) == ("लोट्", _P2, _SG):
                 note = ARSHA_NOTE.format(got="आत्मनेपद", want="परस्मैपद", regular=regular)
                 out.append(replace(m, form=form, source=ARSHA, quality=1, handle=("special", note)))
+    if len(sounds) > 3 and sounds[-1] == "अ":  # समुत्तिष्ठ: the rule form is समुत्तिष्ठस्व (1.3.22 समवप्रविभ्यः स्थः)
+        regular = form + "स्व"
+        for m in _finite(regular) or (_prefixed_finite(regular, padas) if _has_prefix(form) else []):
+            if (m.lakara, m.purusha, m.vacana) == ("लोट्", _P2, _SG):
+                note = ARSHA_NOTE.format(got="परस्मैपद", want="आत्मनेपद", regular=regular)
+                out.append(replace(m, form=form, source=ARSHA, quality=1, handle=("special", note)))
     return tuple(dict.fromkeys(out))
 
 

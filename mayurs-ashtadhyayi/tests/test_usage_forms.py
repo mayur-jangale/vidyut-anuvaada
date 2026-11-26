@@ -120,7 +120,7 @@ def test_dictionary_stem_with_a_consonant_or_nasal_spelling(form, lemma, case):
 def test_listed_root_noun_is_a_word():
     found = [m for m in lexicon.padas("गीर्भिस्") if m.stem == "गिर्"]
     assert found and found[0].quality >= 2
-    assert lexicon.padas("गीर्भिर्")  # as written before a voiced sound
+    assert not lexicon.padas("रतर्")  # a final visarga is स् unless the stem ends in र्: रतः is never रतर्
 
 
 def test_doubled_consonant_spelling():
@@ -195,3 +195,22 @@ def test_rule_forms_are_not_relabelled():
 def test_more_voice_pairs(form):
     found = [m for m in lexicon.padas(form) if m.kind == "tinanta"]
     assert found and found[0].source == "arsha"
+
+
+def _split(text):
+    reading = pipeline.analyze_verse(text).readings[0]
+    return [w.form + ("-" if w.in_compound else "") for w in reading.words]
+
+
+@pytest.mark.parametrize("text, want", [
+    ("रत्न भाजः हि राजानः", ["रत्न-", "भाजस्", "हि", "राजानस्"]),          # a member-only stem printed apart
+    ("धर्म क्षेत्रे कुरु क्षेत्रे", ["धर्म-", "क्षेत्रे", "कुरु", "क्षेत्रे"]),
+    ("हे राम गच्छ", ["हे", "राम", "गच्छ"]),                                # a vocative stays a word
+    ("सर्व गच्छन्ति जनाः", ["सर्व", "गच्छन्ति", "जनास्"]),                 # never a member before a verb
+])
+def test_compound_printed_with_a_space(text, want):
+    assert _split(text) == want
+
+
+def test_adverb_with_final_visarga_is_not_respelled():
+    assert _split("हिते रतः") == ["हिते", "रतस्"]

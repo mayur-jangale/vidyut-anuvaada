@@ -23,8 +23,7 @@ _NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ्", "�
           "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्", "न": "न्", "म": "म्"}
 # pada-final spellings (8.2.30, 8.2.39, 8.4.56): a stem's final consonant as it stands at a pada end
 _FINAL = {"द्": ("त्",), "ग्": ("क्",), "ड्": ("ट्",), "ब्": ("प्",), "च्": ("क्",), "ज्": ("क्", "ट्"),
-          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्"), "ध्": ("त्",), "भ्": ("प्",),
-          "र्": ("स्",)}  # गीर्भिर् as written before a voiced sound: the pada is गीर्भिस् (8.2.66)
+          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्"), "ध्": ("त्",), "भ्": ("प्",)}
 
 
 def _quality(entry: bridge.Entry) -> int:
@@ -167,6 +166,8 @@ def _neuter_accusatives(morphs: list[Morph]) -> list[Morph]:
     out = []
     for m in morphs:
         if m.kind != "subanta" or m.linga != "नपुंसकलिङ्ग" or m.vibhakti != "प्रथमा" or key(m) in have:
+            continue
+        if m.vacana != "बहुवचन":  # the kosha's gap is the plural in -ईनि only; elsewhere it lists both cases
             continue
         pada = bridge.as_accusative(m.handle)
         if pada is None:

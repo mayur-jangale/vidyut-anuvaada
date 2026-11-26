@@ -267,7 +267,9 @@ def main(argv: list[str] | None = None) -> int:
     full = {"tag_bigram": table, "prefix": PREFIX, **stats}
     # an all-indeclinable compound member never competes with the free word: the corpus never tags
     # an indeclinable as a member, and the evaluation scores ours as free words (round 4, class 3)
-    fixed = {"w_member_indeclinable": -1000.0, **({} if UNKNOWN else {"unknown": -1e6})}
+    # ... and a member-only stem printed before a space is a member (decoder.SPACED_MEMBER, never in training)
+    fixed = {"w_member_indeclinable": -1000.0, decoder.SPACED_MEMBER: decoder.SPACED_MEMBER_WEIGHT,
+             **({} if UNKNOWN else {"unknown": -1e6})}
     configs = {"without neural boundary": full}
     if decoder.neural_available():
         configs["with neural boundary"] = {**full, "neural": True}

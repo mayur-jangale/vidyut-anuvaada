@@ -78,6 +78,11 @@ def _endings(form: str, samasa: bool) -> dict[str, float]:
     return {f"end{n}:{''.join(v[-n:])}|{role}": 1.0 for n in (1, 2, 3) if len(v) > n}
 
 
+# A fixed weight, never trained (the training texts print compounds solid): a member-only stem before a
+# written space is read as a member rather than as a vocative. Stored in the model file's fixed_weights.
+SPACED_MEMBER, SPACED_MEMBER_WEIGHT = "j_member_spaced", 2000.0  # about one score scale of the trained model
+
+
 def edge_features(lat: Any, state: tuple, e: tuple, table: Mapping[str, float],
                   prefix: Optional[dict] = None) -> dict[str, float]:
     """Generic static features of one lattice edge (word + its right junction)."""
@@ -99,6 +104,8 @@ def edge_features(lat: Any, state: tuple, e: tuple, table: Mapping[str, float],
         f["j_aas_as_aa"] = 1.0
     if after_samasa and not jn.samasa:
         f["cpd_final"] = 1.0
+    if jn.samasa and k in lat.sp and nxt != sg._END and nxt[0] == k:
+        f[SPACED_MEMBER] = 1.0  # रत्न भाजः: a member printed apart (the segmenter admits member-only stems here)
     if not jn.left_ctx and base <= -40.0:
         f["chunk_fallback"] = 1.0
     if not plain:
