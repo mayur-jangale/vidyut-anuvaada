@@ -147,6 +147,22 @@ W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -1.0, 
 _PARTICLES = frozenset(("हि", "च", "वा", "तु", "इव", "एव", "नु", "ह", "अपि", "इति", "न", "स्म", "खलु", "किल"))
 
 
+def resources_derived(name: str):
+    from mayur import resources
+
+    return resources.derived(name)
+
+
+@lru_cache(maxsize=100_000)
+def _gendered_stem(form: str) -> bool:
+    """The kosha lists ``form`` itself as a nominal stem with a gender."""
+    from mayur import bridge
+
+    listed = any(e.entry == "basic" and e.lingas and e.pratipadika == form for e in bridge.lookup(form))
+    # a homograph of a verb form counts only if the corpus has it as a compound member at all (not अस्ति-)
+    return listed and int(resources_derived("member_counts.json").get(form, 0)) > 0
+
+
 def _stem_ok(form: str, ms: tuple) -> bool:
     """A finite verb or a particle is never a compound member, even if the kosha lists the form as a stem.
 
@@ -158,8 +174,8 @@ def _stem_ok(form: str, ms: tuple) -> bool:
         return False
     if form.endswith("न्") and form != "अन्":  # (अन् is नञ् before a vowel, 6.3.74)
         return False  # a stem in -न् loses the न् inside a compound (8.2.7): राज-, आत्म-, never राजन्-
-    if any(m.quality >= 3 for m in ms):
-        return True  # a dictionary stem that happens to look like a verb form too: कुरु-, आदि-
+    if _gendered_stem(form):
+        return True  # a nominal stem that happens to look like a verb form too: कुरु-, आदि- (not अस्ति)
     padas = [m for m in _analyses(form, False) if m.quality >= 2]
     verb = any(m.kind == "tinanta" for m in padas)
     return not verb or any(m.kind == "subanta" and m.quality >= 3 for m in padas)

@@ -214,8 +214,8 @@ def test_tasi_ablative():
 
 
 def test_nanj_stem():
-    m = L.stems("अमित")[0]
-    assert m.lemma == "अमित" and m.source == "generated"
+    m = next(s for s in L.stems("अमित") if s.lemma == "अमित")  # beside अम् + क्त, also a valid reading
+    assert m.source == "generated"
     proof = L.prove(m)
     assert not proof.derivable and "नञ्" in proof.note and proof.trace
 

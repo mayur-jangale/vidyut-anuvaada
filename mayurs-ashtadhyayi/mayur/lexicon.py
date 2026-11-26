@@ -215,6 +215,10 @@ def _base_padas(form: str) -> tuple[Morph, ...]:
     from mayur.lexicon_closed import closed_forms
 
     found.extend(closed_forms(form))
+    if not any(m.quality >= 2 for m in found):
+        from mayur.lexicon_dict import dictionary_padas
+
+        found.extend(dictionary_padas(form))
     from mayur.lexicon_fem import feminine_padas
 
     have = {m.lemma for m in found if m.linga == "स्त्रीलिङ्ग"}
@@ -291,14 +295,18 @@ def stems(form: str) -> tuple[Morph, ...]:
                     out.append(_as_stem(entry, form))
     known = set(out)
     out.extend(m for m in _prefixed_stems(form) if m not in known)
-    if out and not any(m.krt == "क्त" for m in out):  # a basic stem the kosha does not see as क्त
+    if not any(m.krt == "क्त" for m in out):  # a क्त stem the kosha does not list as a stem (क्लिष्ट-)
         from mayur.lexicon_kta import kta_stems
 
         out.extend(kta_stems(form))
     if not out:
         for variant in geminate_variants(form):  # पत्र- for पत्त्र-
             out.extend(_as_stem(entry, form) for entry in bridge.lookup(variant) if _stem_entry_ok(entry, variant))
-    if not out:
+    if not any(m.quality >= 2 for m in out):
+        from mayur.lexicon_dict import dictionary_stems
+
+        out.extend(dictionary_stems(form))
+    if not any(m.source in ("kosha", "dictionary") for m in out):  # (also beside a क्त reading: अमित)
         from mayur.lexicon_gen import nanj_stems
 
         out.extend(nanj_stems(form, stems))
@@ -422,6 +430,10 @@ def _prove(m: Morph) -> WordProof:
         return WordProof(derivable=False, method="special", note=h[1])
     if isinstance(h, tuple) and h and h[0] == "particle":
         return _prove_with_particle(m, h[1], h[2])
+    if isinstance(h, tuple) and h and h[0] == "gati":  # गति + verb form: the verb form is what is derived
+        inner = prove(h[2])
+        return WordProof(derivable=inner.derivable, method="vidyut-prakriya + sandhi",
+                         derived_form=m.form if inner.derivable else inner.derived_form, trace=inner.trace, note=h[1])
     if isinstance(h, tuple) and h and h[0] == "nanj":
         inner = prove(replace(m, handle=("stem", h[1]), stem="", lemma=m.lemma[1:] if m.lemma[1:2] != "न" else m.lemma[2:]))
         return WordProof(derivable=False, method="नञ्-समास (member derived)", derived_form=inner.derived_form,

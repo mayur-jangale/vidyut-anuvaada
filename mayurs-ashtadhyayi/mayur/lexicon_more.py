@@ -89,6 +89,52 @@ def arsha_participle(form: str, generated: Lookup, padas: Lookup) -> tuple[Morph
     return tuple(dict.fromkeys(out))
 
 
+# Words that join a verb as गति: प्रादुस्, आविस्, नमस् … before कृ, भू, अस् (1.4.61 ऊर्यादिच्विडाचश्च,
+# 1.4.74 साक्षात्प्रभृतीनि च); तिरस्, अन्तर् also before धा (1.4.71), अस्तम् before गम्/इ (1.4.68).
+GATI_ROOTS = {"प्रादुस्": ("कृ", "भू", "अस्"), "आविस्": ("कृ", "भू", "अस्"), "नमस्": ("कृ",), "अलम्": ("कृ",),
+              "सत्": ("कृ",), "साक्षात्": ("कृ",), "तिरस्": ("कृ", "भू", "धा"), "अन्तर्": ("धा", "भू", "इ", "गम्"),
+              "अस्तम्": ("गम्", "इ", "या"), "पुरस्": ("कृ",)}
+CVI_ROOTS = ("कृ", "भू", "अस्")
+GATI_NOTE = "{gati} is a गति ({rule}) joined to the verb form {verb} by sandhi; the verb form is derived by vidyut"
+
+
+def _verbal(form: str, roots: Sequence[str], padas: Lookup) -> list[Morph]:
+    return [m for m in padas(form) if m.root in roots and m.quality >= 2 and (m.kind == "tinanta" or m.krt)]
+
+
+def gati_verbs(form: str, padas: Lookup, is_stem: Callable[[str], bool]) -> tuple[Morph, ...]:
+    """प्रादुरासीत्, नमश्चकार, आविर्भूत; च्वि: वशीकृत, शुक्लीभवति (5.4.50, 7.4.32 अस्य च्वौ)."""
+    from mayur import sandhi
+
+    sounds = lipi.varnas(form)
+    out: list[Morph] = []
+    for gati, roots in GATI_ROOTS.items():
+        gv = lipi.varnas(gati)
+        if sounds[: len(gv) - 1] != gv[:-1]:
+            continue
+        for n in (len(gv) - 1, len(gv), len(gv) + 1):
+            rest = lipi.from_varnas(sounds[n:]) if 1 < n < len(sounds) - 1 else ""
+            if rest and sandhi.rejoin_matching([gati, rest], [True], form) is not None:
+                for m in _verbal(rest, roots, padas):
+                    note = GATI_NOTE.format(gati=gati, rule="1.4.61, 1.4.74", verb=rest)
+                    out.append(replace(m, form=form, prefixes=(gati,) + tuple(m.prefixes), source="generated",
+                                       quality=2, handle=("gati", note, m)))
+    for i, v in enumerate(sounds):
+        if v != "ई" or i < 2 or i > len(sounds) - 3:
+            continue
+        base = [lipi.from_varnas(sounds[:i] + (end,)) for end in ("अ", "आ", "इ", "ई")]
+        stem = next((b for b in base if is_stem(b)), None)
+        if stem is None:
+            continue
+        rest = lipi.from_varnas(sounds[i + 1:])
+        for m in _verbal(rest, CVI_ROOTS, padas):
+            cvi = lipi.from_varnas(sounds[: i + 1])
+            note = GATI_NOTE.format(gati=f"{cvi} ({stem} + च्वि, 5.4.50, 7.4.32)", rule="1.4.61", verb=rest)
+            out.append(replace(m, form=form, prefixes=(cvi,) + tuple(m.prefixes), source="generated", quality=2,
+                               handle=("gati", note, m)))
+    return tuple(dict.fromkeys(out))
+
+
 def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) -> tuple[Morph, ...]:
     """Extra analyses for ``form`` given what the lexicon already ``found``."""
     out: list[Any] = []
@@ -98,4 +144,7 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
     out += [m for m in arsha_voice(form, padas) if (m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) not in have]
     if not any(m.quality >= 2 for m in found):
         out += arsha_participle(form, generated, padas)
+        from mayur import lexicon
+
+        out += gati_verbs(form, padas, lexicon.is_stem)
     return tuple(out)
