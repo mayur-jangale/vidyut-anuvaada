@@ -59,6 +59,17 @@ def _finite(form: str) -> list[Morph]:
     return [e.morph for e in bridge.lookup(form) if e.entry == "tinanta"]
 
 
+def _has_prefix(form: str) -> bool:
+    from mayur.lexicon_gen import _splits
+
+    return bool(_splits(form))
+
+
+def _prefixed_finite(form: str, padas: Lookup) -> list[Morph]:
+    """Finite analyses of a prefixed verb form (forward-generated with its upasargas)."""
+    return [m for m in padas(form) if m.kind == "tinanta" and m.quality >= 2]
+
+
 def arsha_voice(form: str, padas: Lookup) -> tuple[Morph, ...]:
     """Finite forms and शानच् participles with the other voice's endings (see the module docstring)."""
     sounds = lipi.varnas(form)
@@ -67,7 +78,8 @@ def arsha_voice(form: str, padas: Lookup) -> tuple[Morph, ...]:
         for old, new, got, want in ((atmane, parasmai, "आत्मनेपद", "परस्मैपद"), (parasmai, atmane, "परस्मैपद", "आत्मनेपद")):
             if len(sounds) > len(old) + 1 and sounds[-len(old):] == old:
                 regular = _swap(sounds, old, new)
-                for m in _finite(regular):
+                siblings = _finite(regular) or (_prefixed_finite(regular, padas) if _has_prefix(form) else [])
+                for m in siblings:
                     note = ARSHA_NOTE.format(got=got, want=want, regular=lipi.pausa(regular))
                     out.append(replace(m, form=form, source=ARSHA, quality=1, handle=("special", note)))
     return tuple(dict.fromkeys(out))

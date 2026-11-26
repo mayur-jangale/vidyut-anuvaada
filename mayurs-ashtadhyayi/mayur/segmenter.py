@@ -158,9 +158,17 @@ def _gendered_stem(form: str) -> bool:
     """The kosha lists ``form`` itself as a nominal stem with a gender."""
     from mayur import bridge
 
-    listed = any(e.entry == "basic" and e.lingas and e.pratipadika == form for e in bridge.lookup(form))
-    # a homograph of a verb form counts only if the corpus has it as a compound member at all (not अस्ति-)
-    return listed and int(resources_derived("member_counts.json").get(form, 0)) > 0
+    from mayur.lexicon_dict import genders
+
+    listed = any(e.entry == "basic" and e.lingas and e.pratipadika == form for e in bridge.lookup(form)) \
+        or bool(genders(form)) or (form.endswith("ि") and bool(genders(form + "न्")))  # उपवासि- of उपवासिन्
+    if not listed:
+        return False
+    # a homograph the corpus knows as a finite verb but never as a compound member is the verb (अस्ति)
+    from mayur import freq
+
+    as_verb = sum(n for _, upos, feats, n in freq._parsed(form) if upos == "VERB" and "Person" in feats)
+    return int(resources_derived("member_counts.json").get(form, 0)) > 0 or as_verb == 0
 
 
 def _stem_ok(form: str, ms: tuple) -> bool:

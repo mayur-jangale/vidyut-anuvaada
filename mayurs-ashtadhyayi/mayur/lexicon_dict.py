@@ -30,10 +30,11 @@ def genders(stem: str) -> tuple[str, ...]:
 
 def dictionary_stems(form: str) -> tuple[Morph, ...]:
     """``form`` as a compound member: a stem the corpus dictionary lists."""
-    if not genders(form) or any(e.entry == "tinanta" for e in bridge.lookup(form)):
-        return ()  # (a finite verb form is not taken as a stem on the dictionary's word alone)
-    return (Morph(form=form, lemma=form, kind="stem", stem=form, source="dictionary", quality=2,
-                  handle=("stem", bridge.basic_pratipadika_handle(form))),)
+    stem = form if genders(form) else form + "न्" if form.endswith("ि") and genders(form + "न्") else ""
+    if not stem:  # (उपवासि- is the member form of उपवासिन्: 8.2.7 नलोपः प्रातिपदिकान्तस्य)
+        return ()
+    return (Morph(form=form, lemma=stem, kind="stem", stem=stem, source="dictionary", quality=2,
+                  handle=("stem", bridge.basic_pratipadika_handle(stem))),)
 
 
 @lru_cache(maxsize=4096)

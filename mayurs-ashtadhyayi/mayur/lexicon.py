@@ -216,9 +216,11 @@ def _base_padas(form: str) -> tuple[Morph, ...]:
 
     found.extend(closed_forms(form))
     if not any(m.quality >= 2 for m in found):
+        from mayur.lexicon_closed import kap_padas
         from mayur.lexicon_dict import dictionary_padas
 
         found.extend(dictionary_padas(form))
+        found.extend(kap_padas(form, is_stem))
     from mayur.lexicon_fem import feminine_padas
 
     have = {m.lemma for m in found if m.linga == "स्त्रीलिङ्ग"}
@@ -306,6 +308,9 @@ def stems(form: str) -> tuple[Morph, ...]:
         from mayur.lexicon_dict import dictionary_stems
 
         out.extend(dictionary_stems(form))
+    if not out:  # वशीकृत-, शेखरीकृत-: the क्त stem of a गति/च्वि + verb composite
+        out.extend(replace(m, form=form, kind="stem", linga=None, vibhakti=None, vacana=None, handle=("stem", None))
+                   for m in padas(form + "स्") if m.krt == "क्त" and isinstance(m.handle, tuple) and m.handle[0] == "gati")
     if not any(m.source in ("kosha", "dictionary") for m in out):  # (also beside a क्त reading: अमित)
         from mayur.lexicon_gen import nanj_stems
 
