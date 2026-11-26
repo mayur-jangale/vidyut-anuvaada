@@ -19,9 +19,15 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 DCS_REPO = "https://github.com/OliverHellwig/sanskrit.git"
-# The Ramayana feeds the frequency tables; the Kumarasambhava is fetched only as an unseen
-# second book for evaluation and is never counted.
-DCS_PATHS = ("/dcs/data/conllu/files/Rāmāyaṇa/", "/dcs/data/conllu/files/Kumārasaṃbhava/",
+# Directory names of DCS texts (epic, kavya, purana, narrative, sastra). Everything fetched is
+# counted into the frequency tables except the held-out chapters named in build_tables.py.
+DCS_TEXTS = (
+    "Mahābhārata", "Rāmāyaṇa", "Harivaṃśa", "Kumārasaṃbhava", "Kirātārjunīya", "Buddhacarita",
+    "Meghadūta", "Bhāgavatapurāṇa", "Viṣṇupurāṇa", "Matsyapurāṇa", "Liṅgapurāṇa", "Kathāsaritsāgara",
+    "Hitopadeśa", "Tantrākhyāyikā", "Manusmṛti", "Bodhicaryāvatāra", "Aṣṭāvakragīta", "Gītagovinda",
+    "Saundarānanda", "Ṛtusaṃhāra", "Śatakatraya", "Yājñavalkyasmṛti", "Śukasaptati", "Vetālapañcaviṃśatikā",
+)
+DCS_PATHS = (*(f"/dcs/data/conllu/files/{t}/" for t in DCS_TEXTS),
              "/dcs/data/conllu/lookup/", "/dcs/data/conllu/readme.md")
 MW_URL = "https://raw.githubusercontent.com/sanskrit-lexicon/csl-orig/master/v02/mw/mw.txt"
 

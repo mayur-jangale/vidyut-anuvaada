@@ -117,6 +117,39 @@ def _bahuvrihi_vigraha(members: list[Word]) -> str:
     return ""
 
 
+_KTA_RELATION = {"रत": "सप्तमी", "निरत": "सप्तमी", "युक्त": "तृतीया", "उपेत": "तृतीया", "सम्पन्न": "तृतीया",
+                 "गत": "द्वितीया", "प्राप्त": "द्वितीया", "आपन्न": "द्वितीया", "सदृश": "तृतीया", "सम": "तृतीया"}
+_UPAPADA = ("ज्ञ", "विद्", "कृत्", "हन्", "द", "ग", "स्थ", "धर", "कर", "हर", "भृत्", "जित्")
+
+
+def relation(final_stem: str) -> str:
+    """Vibhakti of the first member as decided by the final member (षष्ठी by default)."""
+    for key, rel in _KTA_RELATION.items():
+        if final_stem == key or final_stem.endswith(key) and len(key) > 1:
+            return rel
+    return "षष्ठी"
+
+
+def samasa_key(samasa: str, basis: str) -> str:
+    """Key into ``samasa.TYPE_RULE`` for a (samasa, basis) pair."""
+    if samasa in (NAN_TATPURUSHA, NAN_BAHUVRIHI):
+        return "नञ्" if samasa == NAN_TATPURUSHA else BAHUVRIHI
+    if samasa == TATPURUSHA and "उपपद" in basis:
+        return "उपपद"
+    return samasa
+
+
+def derivation(reading: Reading, comp: Compound) -> "samasa.SamasaDerivation":
+    """Forward rule chain (mayur.samasa) for ``comp``; inner द्वन्द्व is noted in basis."""
+    from mayur import samasa
+    words = [reading.words[i] for i in comp.members]
+    morphs = [w.morph or Morph(form=w.form, lemma=w.form, kind="stem") for w in words]
+    final = morphs[-1]
+    rel = relation(_lemma(words[-1])) if comp.samasa == TATPURUSHA and "उपपद" not in comp.basis else ""
+    return samasa.derive(morphs, final, samasa_key(comp.samasa, comp.basis), relation=rel,
+                         surface=comp.stem, forms=[w.form for w in words])
+
+
 def classify(reading: Reading, members: list[int]) -> tuple[str, str, str]:
     """(samasa, vigraha, basis) for the compound made of ``members``."""
     words = [reading.words[i] for i in members]
@@ -136,6 +169,13 @@ def classify(reading: Reading, members: list[int]) -> tuple[str, str, str]:
         vig = _bahuvrihi_vigraha(words) or hyphen
         return BAHUVRIHI, vig, "heuristic: सु/दुस्/महा + noun used as an epithet of an external head (2.2.24)"
     governs = _final_governs(final)
+    if final_stem in _UPAPADA or final_stem.endswith(("ज्ञ", "विद्", "कृत्", "हन्", "भृत्", "जित्")) and len(words) == 2 \
+            and not _external_head(reading, members[-1]) or final_stem in _UPAPADA:
+        return TATPURUSHA, hyphen, "heuristic: root-noun/kṛt agent final governs the first member, उपपद (2.2.19)"
+    if governs == "kta" and final_stem in _KTA_RELATION:
+        rel = relation(final_stem)
+        inner = " [inner द्वन्द्व of the non-final members, 2.2.29]" if len(words) > 2 else ""
+        return TATPURUSHA, hyphen, f"heuristic: क्त final {final_stem} takes {rel} (table){inner}"
     if governs == "kta":
         rel = "सप्तमी or तृतीया" if len(words) > 2 else "तृतीया/सप्तमी"
         note = " (non-final members coordinated: द्वन्द्व inside)" if len(words) > 2 else ""
@@ -187,4 +227,14 @@ def annotate(reading: Reading) -> Reading:
         samasa, vigraha, basis = classify(base, members)
         stem = "".join(base.words[i].form if base.words[i].in_compound else _lemma(base.words[i]) for i in members)
         compounds.append(Compound(id=cid, members=list(members), stem=stem, samasa=samasa, vigraha=vigraha, basis=basis))
-    return replace(base, compounds=compounds)
+    return replace(base, compounds=[_with_chain(base, c) for c in compounds])
+
+
+def _with_chain(reading: Reading, comp: Compound) -> Compound:
+    try:
+        d = derivation(reading, comp)
+    except Exception as e:  # noqa: BLE001 - derivation unavailable: keep the heuristic only
+        return replace(comp, basis=f"{comp.basis}; rule chain failed ({e})")
+    codes = ", ".join(dict.fromkeys(t.code for t in d.trace if t.source == "अष्टाध्यायी"))[:200]
+    status = "derivable" if d.derivable else "not derivable: " + d.note
+    return replace(comp, basis=f"{comp.basis}; rule chain {codes} ({status})")

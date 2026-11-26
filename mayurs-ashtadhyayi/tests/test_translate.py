@@ -105,7 +105,7 @@ def test_passive_and_verbless_and_arsha():
     v = Reading(words=[noun("कस्", "क", "कर्ता", None, "who"),
                        noun("गुणवान्", "गुणवत्", "विधेय", None, "virtuous")], anvaya=[0, 1])
     o = translate.render(v)
-    assert o.translation == "Who [is] virtuous." and len(o.alignment) == 2
+    assert o.translation == "Who [is] virtuous?" and len(o.alignment) == 2
     a = Word("रामा", 0, 0, 0, role="कर्ता", arsha=True, analyses=[Morph("रामा", "राम", "subanta")])
     o = translate.render(Reading(words=[a]))
     assert o.translation.startswith("⟨") and len(o.alignment) == 1
@@ -141,7 +141,7 @@ def test_verse_two_no_duplication():
     assert len(ids) == len(set(ids)) == 15
     check(out)
     assert out.translation == ("Who now currently in this world [is] virtuous, and who valorous, and "
-                               "dharma-knowing, and grateful, truthful, firm in vows.")
+                               "dharma-knowing, and grateful, truthful, firm in vows?")
 
 
 def test_pronoun_cases_and_apposition_and_participle_agent():
@@ -154,7 +154,7 @@ def test_pronoun_cases_and_apposition_and_participle_agent():
     assert translate.render(r).translation.startswith("[He] gave to me")
     r = Reading(words=[pr("कस्य", "क", "सम्बन्ध", 1, "षष्ठी"), noun("पुत्रस्", "पुत्र", "कर्ता", 2, "son"),
                        verb("गच्छति", "गम्", "go")], anvaya=[0, 1, 2])
-    assert translate.render(r).translation == "Whose son goes."
+    assert translate.render(r).translation == "Whose son goes?"
     r = Reading(words=[pr("त्वम्", "युष्मद्", "कर्ता", 3, "प्रथमा", "you"),
                        noun("समर्थस्", "समर्थ", "विशेषण", 0, "capable"),
                        noun("स्तुतस्", "स्तु", "विधेय", None, "extol", krt="क्त", vib="प्रथमा", src="dcs-sense"),
@@ -211,7 +211,7 @@ def test_bahuvrihi_of_phrase():
     words[0].compound = words[1].compound = 0
     out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="bahuvrihi")],
                                    anvaya=[2, 0, 1]))
-    assert out.translation == "[He is] Rāma of great arms."
+    assert out.translation == "[He is] Rāma great-armed."
     check(out)
 
 
@@ -241,3 +241,34 @@ def test_no_dangling_conjunction_and_semicolon_and():
     assert not out.translation.startswith("And")
     assert out.translation == "Gods fear; and [they] bow."
     check(out)
+
+
+def test_and_before_whole_phrase_and_nama_and_heard():
+    r = Reading(words=[_c("तपसा", "तपस्", "करण", 3, "austerity", vib="तृतीया", linga="नपुंसकलिङ्ग"),
+                       W("च", "च", "avyaya", "अव्यय", 2, "and"),
+                       _c("चारित्रेण", "चारित्र", "करण", 3, "conduct", vib="तृतीया", linga="नपुंसकलिङ्ग"),
+                       verb("युज्यते", "युज्", "join")], anvaya=[0, 1, 2, 3])
+    out = translate.render(r).translation
+    assert "by austerity and by conduct" in out or "by austerity, and by conduct" in out or "and by conduct" in out
+    assert "by and" not in out
+    r = Reading(words=[_c("रामस्", "राम", "विधेय", None, "Rāma"),
+                       W("नाम", "नाम", "avyaya", "अव्यय", 0, "by name"),
+                       _c("श्रुतस्", "श्रु", "विधेय", None, "listen", krt="क्त", src="dcs-sense")], anvaya=[0, 1, 2])
+    assert translate.render(r).translation == "[He is] Rāma by name, heard."
+
+
+def test_copula_order_and_infinitive():
+    r = Reading(words=[_c("त्वम्", "युष्मद्", "कर्ता", 2, "you"), _c("समर्थस्", "समर्थ", "विधेय", 0, "capable"),
+                       verb("असि", "अस्", "be", p="मध्यमपुरुष"),
+                       W("ज्ञातुम्", "ज्ञा", "avyaya", "तुमर्थ", 2, "know", krt="तुमुन्")], anvaya=[0, 2, 1, 3])
+    assert translate.render(r).translation == "You are capable to know."
+
+
+def test_name_sense_prefers_common(monkeypatch):
+    from mayur import gloss
+    from mayur.model import Morph as M
+    tables = {"dcs_senses.json": {"महर्षि": "name of Śiva"},
+              "dcs_dict.json": {"महर्षि": [{"grammar": "m", "meanings": "name of a god; a great seer"}]}}
+    monkeypatch.setattr(gloss.resources, "derived", lambda n: tables.get(n, {}))
+    monkeypatch.setattr(gloss, "_own", lambda: {})
+    assert gloss.lookup(M("x", "महर्षि", "subanta")) == ("great seer", "dcs-dictionary")

@@ -157,7 +157,20 @@ def anvadesha(form: str) -> tuple[Morph, ...]:
     feats = _ENA.get(form, ())
     return tuple(Morph(form=form, lemma=lemma, kind="subanta", linga=g, vibhakti=v, vacana=n,
                        source="special", quality=3, handle=("special", ENA_NOTE))
-                 for lemma in ("इदम्", "एतद्") for g, v, n in feats)
+                 for lemma in ("इदम्", "एतद्", "एनद्") for g, v, n in feats)
+
+
+SA_NOTE = ("सु is elided after सस् / एषस् before a consonant (6.1.132 एतत्तदोः सुलोपोऽकोरनञ्समासे हलि); "
+           "this is a sentence-level rule vidyut's Python API does not apply; the pada {base} is kosha-listed")
+
+
+def sa_esha(form: str) -> tuple[Morph, ...]:
+    """स / एष: तद् / एतद् प्रथमा एकवचन पुंलिङ्ग with सु-lopa (6.1.132)."""
+    if form not in ("स", "एष"):
+        return ()
+    lemma = "तद्" if form == "स" else "एतद्"
+    return (Morph(form=form, lemma=lemma, kind="subanta", linga=_P, vibhakti="प्रथमा", vacana="एकवचन",
+                  source="special", quality=3, handle=("special", SA_NOTE.format(base=form + "स्"))),)
 
 
 _PARTICLES = ("चित्", "चिद्", "चन")

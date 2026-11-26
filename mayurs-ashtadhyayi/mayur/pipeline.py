@@ -14,6 +14,7 @@ from mayur.model import UNVERIFIED, VERIFIED, Junction, Reading, VerseAnalysis, 
 LINE_BREAK = re.compile(r"[।॥|/\n]+")
 NOISE = re.compile(r"[0-9०-९.,;:!?\"“”‘’()\[\]-]+")
 SPLITS_PER_LINE = 12
+RERANK_POOL = 60  # valid splits per line handed to the trained ranker
 MAX_CANDIDATES = 16
 FREQUENCY_TEMPERATURE = 5.0
 
@@ -41,6 +42,15 @@ def _combinations(per_line: Sequence[Sequence[segmenter.Split]], limit: int) -> 
             if nxt[i] < len(per_line[i]) and nxt not in seen:
                 seen.add(nxt)
                 heapq.heappush(heap, (-total(nxt), nxt))
+
+
+def _reranked(seg: segmenter.Segmentation) -> list[segmenter.Split]:
+    """The best valid splits of a line, reordered by the trained ranker when one is installed."""
+    try:
+        from mayur import ranker
+    except ImportError:
+        return list(seg.splits[:SPLITS_PER_LINE])
+    return list(ranker.rerank(seg.line, seg.splits))[:SPLITS_PER_LINE]
 
 
 def _analyses(seg: segmenter.SegWord) -> list:
@@ -97,10 +107,10 @@ def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
     lines = to_lines(text, script)
     if not lines:
         return VerseAnalysis(id=verse_id, input=text, notes=["empty input"])
-    segmentations = [segmenter.segment_line(line, top_k=SPLITS_PER_LINE) for line in lines]
+    segmentations = [segmenter.segment_line(line, top_k=RERANK_POOL) for line in lines]
     notes = [f"line {i + 1}: no dictionary-only split; fallback tier {seg.tier} used"
              for i, seg in enumerate(segmentations) if seg.tier]
-    per_line = [seg.splits for seg in segmentations]
+    per_line = [_reranked(seg) for seg in segmentations]
     best = sum(splits[0].score for splits in per_line)
 
     candidates = []

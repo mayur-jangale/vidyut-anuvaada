@@ -52,6 +52,9 @@ UPASARGA_CODE = {"प्र": "pra", "परा": "parA", "अप": "apa", "स�
                  "अभि": "aBi", "प्रति": "prati", "परि": "pari", "उप": "upa"}
 
 
+_UPASARGA_OF_CODE = {"AN": "आ", "nis": "निस्", "dus": "दुस्"}
+
+
 def _term(table: dict[str, str], value: Any) -> Optional[str]:
     if value is None:
         return None
@@ -74,7 +77,7 @@ def _kind_of(obj: Any) -> str:
 
 def _dhatu_fields(dhatu_entry: Any) -> dict[str, Any]:
     dhatu = dhatu_entry.dhatu
-    prefixes = tuple(lipi.from_code(p) for p in (getattr(dhatu, "prefixes", None) or []))
+    prefixes = tuple(_UPASARGA_OF_CODE.get(p, lipi.from_code(p)) for p in (getattr(dhatu, "prefixes", None) or []))
     plain = dhatu.with_prefixes([]) if prefixes else dhatu
     root_code = _root_code(plain)
     return {

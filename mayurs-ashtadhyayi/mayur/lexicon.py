@@ -113,9 +113,9 @@ def _kosha_morphs(form: str) -> list[Morph]:
 @lru_cache(maxsize=200_000)
 def padas(form: str) -> tuple[Morph, ...]:
     """All analyses of ``form`` as a complete pada, best first; () if none."""
-    from mayur.lexicon_gen import anvadesha, indefinite, prefixed
+    from mayur.lexicon_gen import anvadesha, indefinite, prefixed, sa_esha
 
-    found = _kosha_morphs(form) + list(anvadesha(form)) + list(indefinite(form, padas))
+    found = _kosha_morphs(form) + list(anvadesha(form)) + list(sa_esha(form)) + list(indefinite(form, padas))
     if not any(m.quality >= 2 for m in found):
         found.extend(prefixed(form))
     return _rank(found)
@@ -171,7 +171,7 @@ def stems(form: str) -> tuple[Morph, ...]:
                     out.append(_as_stem(entry, form))
     if form in _SPECIAL_STEMS:
         lemma, _ = _SPECIAL_STEMS[form]
-        out.append(Morph(form=form, lemma=lemma, kind="stem", stem=form, source="special", quality=3,
+        out.append(Morph(form=form, lemma=lemma, kind="stem", source="special", quality=3,
                          handle=("stem", bridge.basic_pratipadika_handle(lemma))))
     return _rank(out)
 

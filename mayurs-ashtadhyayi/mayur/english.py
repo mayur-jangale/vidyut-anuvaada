@@ -198,10 +198,14 @@ def agent(verb: str) -> str:
     return pre + (v + v[-1] if _doubles(v) else v) + "er"
 
 
+_PARTICIPLE_TABLE = {"listen": "heard", "hear": "heard", "see": "seen", "tell": "told", "know": "known",
+                     "say": "said", "speak": "spoken", "tell of": "told"}
+
+
 def krt_form(krt: str | None, g: str) -> str:
     """English for a krdanta suffix applied to a verb gloss."""
     if krt == "क्त":
-        return participle(g)
+        return _PARTICIPLE_TABLE.get(base(g), participle(g))
     if krt == "क्तवतु":
         return past(g)
     if krt in ("शतृ", "शानच्"):

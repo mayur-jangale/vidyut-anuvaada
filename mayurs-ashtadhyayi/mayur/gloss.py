@@ -87,6 +87,15 @@ def _keys(m: Morph) -> list[str]:
     return [k for k in keys if k]
 
 
+def _common(entries: list, verb: bool) -> str:
+    for entry in entries or []:
+        for part in str(entry.get("meanings", "")).split(";"):
+            g = first_sense(part, verb)
+            if g and not g.lower().startswith("name") and not g[:1].isupper():
+                return g
+    return ""
+
+
 def lookup(m: Morph) -> tuple[str, str]:
     """(gloss, source) for one analysis; ("", "none") when nothing is known."""
     keys = _keys(m)
@@ -96,11 +105,16 @@ def lookup(m: Morph) -> tuple[str, str]:
         if k in own:
             return own[k], "own"
     senses = resources.derived("dcs_senses.json") or {}
+    dictionary = resources.derived("dcs_dict.json") or {}
     for k in keys:
         g = first_sense(str(senses.get(k, "")), verb)
+        if g.lower().startswith("name") or g[:1].isupper():  # proper-noun reading: prefer a common sense
+            common = _common(dictionary.get(k, []), verb)
+            if common:
+                return common, "dcs-dictionary"
+            continue
         if g:
             return g, "dcs-sense"
-    dictionary = resources.derived("dcs_dict.json") or {}
     for k in keys:
         for entry in dictionary.get(k, []) or []:
             g = first_sense(str(entry.get("meanings", "")), verb)
