@@ -265,13 +265,20 @@ def _notes(data: dict[str, Any]) -> str:
     return f'<h2>Notes</h2><ul class="notes">{"".join(f"<li>{esc(n)}</li>" for n in notes)}</ul>'
 
 
+def _count(total: int, plain: int) -> str:
+    """A split count for display: exact when small, a power of ten when huge."""
+    def short(n: int) -> str:
+        return str(n) if n < 100_000 else f"≈10^{len(str(n)) - 1}"
+    return f"{short(total)} ({short(plain)})"
+
+
 def _card(a: VerseAnalysis) -> str:
     data = jsonout.to_json(a)
     lines = "<br>".join(esc(x["devanagari"]) for x in data["lines"]) or esc(data["input"]["devanagari"])
     iast = "<br>".join(esc(x["iast"]) for x in data["lines"])
-    splits = " × ".join(str(n) for n in data["split_counts"]) or "—"
+    splits = " · ".join(_count(n, m) for n, m in zip(data["split_counts"], data["split_counts_plain"])) or "—"
     meta = (f'<span>{esc(data["id"])}</span><span class="sa">{_metre(data["metre"])}</span>'
-            f'{_badge(data["status"])}<span>valid splits: {esc(splits)}</span>')
+            f'{_badge(data["status"])}<span title="per half-verse: all dictionary words (ordinary words only)">valid splits: {esc(splits)}</span>')
     body = [_padaccheda(data), _compounds(data), _grammar(data), _anvaya(data), _gloss(data),
             _translation(data), _alternatives(data), _traces(data), _notes(data)]
     return (f'<article class="card" id="v-{esc(data["id"])}"><p class="verse sa">{lines}</p>'

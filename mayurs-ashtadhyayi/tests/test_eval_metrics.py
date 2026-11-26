@@ -75,3 +75,11 @@ def test_summarize_counts_failures():
 def test_parse_range():
     assert ev.parse_range("1-3", 79) == [1, 2, 3] and ev.parse_range("5", 79) == [5]
     assert ev.parse_range(None, 3) == [1, 2, 3]
+
+
+def test_word_matches_by_lemma():
+    assert ev.word_matches("वाक्", "वाच्", "वाच्", True, lemma="वाच्") is True
+    assert ev.word_matches("मे", "मम", "मद्", False, lemma="मद्") is False
+    assert ev.word_matches("मे", "मम", "मद्", False, lemma="मद्", lenient=True) is True
+    assert ev.split_equal([("मे", False, "मद्")], [{"form": "मम", "lemma": "मद्", "compound_member": False}],
+                          lenient=True)

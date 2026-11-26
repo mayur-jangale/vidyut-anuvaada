@@ -238,7 +238,8 @@ def to_json(analysis: VerseAnalysis, *, full: bool = False) -> dict[str, Any]:
     out: dict[str, Any] = {
         "id": analysis.id, "input": _input_text(analysis.input),
         "lines": [sk(x) for x in analysis.lines], "metre": dict(analysis.metre),
-        "status": analysis.status, "split_counts": list(analysis.split_counts), "notes": list(analysis.notes),
+        "status": analysis.status, "split_counts": list(analysis.split_counts),
+        "split_counts_plain": list(analysis.split_counts_plain), "notes": list(analysis.notes),
     }
     best = analysis.readings[0] if analysis.readings else Reading(words=[])
     out.update({

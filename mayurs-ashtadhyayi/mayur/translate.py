@@ -6,7 +6,7 @@ from dataclasses import replace
 from typing import Optional
 
 from . import english, lipi
-from .model import Alignment, Reading, Word
+from .model import Alignment, Reading
 
 Piece = tuple[str, Optional[int], str]  # (text, word index or None, separator before it)
 

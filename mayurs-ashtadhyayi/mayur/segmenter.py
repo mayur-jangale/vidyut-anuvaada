@@ -136,7 +136,7 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 # Seen corpus counts dominate: an unseen whole form gets only a tiny lemma pseudo-count, while
 # compound members back off generously to their lemma counts (which include member uses).
 W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -1.0, "stem": 0.0, "samasa": 0.0,
-     "elide": 3.0, "vocative": 1.5, "unseen": 0.0005, "aas": 0.5}
+     "elide": 3.0, "vocative": 1.5, "unseen": 0.0005, "aas": 1.5}
 
 
 # Particles that never stand as the first member of a compound.

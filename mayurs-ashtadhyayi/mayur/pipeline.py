@@ -63,15 +63,19 @@ def _reading(splits: Sequence[segmenter.Split], best: float) -> Reading:
 
 
 def _label_unproven(reading: Reading) -> Reading:
-    """Mark words that could not be analysed or derived; they are never forced into a parse."""
+    """Say why a word is unproven. Only words unknown to the dictionary are labelled ārṣa."""
     words, notes = [], list(reading.notes)
     for w in reading.words:
         unproven = not w.analyses or (w.proof is not None and not w.proof.derivable)
-        if unproven:
+        listed = bool(w.morph) and w.morph.source in ("kosha", "special")
+        if unproven and listed:
+            notes.append(f"{lipi.pausa(w.form)}: listed in the dictionary, but vidyut did not derive it "
+                         f"({w.proof.note}); left unverified")
+        elif unproven:
             reason = "no analysis found" if not w.analyses else w.proof.note
             notes.append(f"{lipi.pausa(w.form)}: not derived by Panini's rules as implemented in vidyut "
                          f"({reason}); possibly ārṣa; left unverified")
-        words.append(replace(w, arsha=unproven))
+        words.append(replace(w, arsha=unproven and not listed))
     return replace(reading, words=words, notes=notes)
 
 
@@ -113,6 +117,7 @@ def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
         lines=lines,
         metre=metre.identify(lines),
         split_counts=[seg.count for seg in segmentations],
+        split_counts_plain=[seg.count_plain for seg in segmentations],
         readings=readings,
         status=readings[0].status if readings else UNVERIFIED,
         notes=notes,

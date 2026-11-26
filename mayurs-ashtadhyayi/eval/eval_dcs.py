@@ -6,8 +6,10 @@
 Every number is printed as n/N. The metric functions are pure and unit-tested.
 Normalisation used when comparing word forms: an internal nasal consonant with virama before a
 consonant of its own varga is written as anusvara (साम्प्रतम् == सांप्रतम्), and a compound member
-counts as correct if it equals the gold form OR the gold lemma (DCS writes some members as the
-lemma: वाच् where the text has वाक्).
+counts as correct if its form or lemma equals the gold form or lemma (DCS writes some members as
+the lemma: वाच् where the text has वाक्). That is the strict "split exact" number. A second,
+lenient number ("same words") also accepts any word whose lemma equals the gold lemma, because
+DCS sometimes reconstructs a different surface form than the text has (मम for मे, विद्वास् for विद्वान्).
 """
 
 from __future__ import annotations
@@ -42,11 +44,24 @@ def normalize(form: str) -> str:
     return "".join(out)
 
 
-def word_matches(form: str, gold_form: str, gold_lemma: str = "", compound_member: bool = False) -> bool:
+def word_matches(form: str, gold_form: str, gold_lemma: str = "", compound_member: bool = False,
+                 lemma: str = "", lenient: bool = False) -> bool:
     f = normalize(form)
     if f == normalize(gold_form):
         return True
-    return bool(compound_member and gold_lemma and f == normalize(gold_lemma))
+    same_lemma = bool(lemma and gold_lemma and normalize(lemma) == normalize(gold_lemma))
+    if compound_member and gold_lemma and (f == normalize(gold_lemma) or same_lemma):
+        return True
+    return lenient and same_lemma
+
+
+def _parts(ours_word: Sequence[Any]) -> tuple[str, str]:
+    """(form, lemma) of one of our words given as (form, in_compound[, lemma])."""
+    return ours_word[0], (ours_word[2] if len(ours_word) > 2 else "")
+
+
+def our_word(w: Any) -> tuple[str, bool, str]:
+    return w.form, w.in_compound, (ud.lemma(w.morph) if w.morph is not None else "")
 
 
 def lcs_pairs(a: Sequence[Any], b: Sequence[Any], eq: Callable[[Any, Any], bool]) -> list[tuple[int, int]]:
@@ -75,15 +90,16 @@ def prf(matched: int, n_ours: int, n_gold: int) -> dict[str, float]:
     return {"precision": p, "recall": r, "f1": f}
 
 
-def split_equal(ours: Sequence[tuple[str, bool]], gold_words: Sequence[dict]) -> bool:
-    """Our (form, in_compound) sequence equals the gold word sequence (after normalisation)."""
+def split_equal(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict], lenient: bool = False) -> bool:
+    """Our (form, in_compound[, lemma]) sequence equals the gold word sequence (after normalisation)."""
     return len(ours) == len(gold_words) and all(
-        word_matches(f, g["form"], g["lemma"], g["compound_member"]) for (f, _), g in zip(ours, gold_words))
+        word_matches(_parts(o)[0], g["form"], g["lemma"], g["compound_member"], _parts(o)[1], lenient)
+        for o, g in zip(ours, gold_words))
 
 
-def align_words(ours: Sequence[tuple[str, bool]], gold_words: Sequence[dict]) -> list[tuple[int, int]]:
-    return lcs_pairs(ours, gold_words,
-                     lambda o, g: word_matches(o[0], g["form"], g["lemma"], g["compound_member"]))
+def align_words(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict]) -> list[tuple[int, int]]:
+    return lcs_pairs(ours, gold_words, lambda o, g: word_matches(
+        _parts(o)[0], g["form"], g["lemma"], g["compound_member"], _parts(o)[1]))
 
 
 def morphology_counts(pairs: Sequence[tuple[Any, dict]]) -> dict[str, int]:
@@ -122,12 +138,13 @@ def evaluate_verse(g: dict[str, Any], analyze: Callable[..., Any]) -> dict[str, 
     if not analysis.readings:
         raise ValueError("analysis has no readings")
     reading = analysis.readings[0]
-    ours_lines = [[(w.form, w.in_compound) for w in line_words(reading, i)] for i in range(len(gold_lines))]
+    ours_lines = [[our_word(w) for w in line_words(reading, i)] for i in range(len(gold_lines))]
     res["our_words"] = sum(map(len, ours_lines))
     res["lines_exact"] = [split_equal(o, gl) for o, gl in zip(ours_lines, gold_lines)]
     res["verse_exact"] = all(res["lines_exact"])
+    res["lines_same_words"] = [split_equal(o, gl, lenient=True) for o, gl in zip(ours_lines, gold_lines)]
     res["gold_in_readings"] = any(
-        all(split_equal([(w.form, w.in_compound) for w in line_words(r, i)], gl) for i, gl in enumerate(gold_lines))
+        all(split_equal([our_word(w) for w in line_words(r, i)], gl) for i, gl in enumerate(gold_lines))
         for r in analysis.readings)
     matched, pairs, mismatches = 0, [], []
     for i, (o, gl) in enumerate(zip(ours_lines, gold_lines)):
@@ -136,7 +153,7 @@ def evaluate_verse(g: dict[str, Any], analyze: Callable[..., Any]) -> dict[str, 
         words = line_words(reading, i)
         pairs += [(words[a].morph, gl[b]) for a, b in al if not words[a].in_compound and not gl[b]["compound_member"]]
         if not res["lines_exact"][i]:
-            mismatches.append({"line": i, "ours": " ".join(f for f, _ in o), "gold": " ".join(x["form"] for x in gl)})
+            mismatches.append({"line": i, "ours": " ".join(x[0] for x in o), "gold": " ".join(x["form"] for x in gl)})
     res["matched"] = matched
     res["morphology"] = morphology_counts(pairs)
     res["proof_words"] = len(reading.words)
@@ -151,7 +168,8 @@ def failed_result(g: dict[str, Any], exc: BaseException) -> dict[str, Any]:
     number = g["number"]
     return {"verse": number, "id": g["id"], "n_lines": len(g["lines"]),
             "gold_words": sum(len(ln["words"]) for ln in g["lines"]), "our_words": 0, "matched": 0,
-            "lines_exact": [False] * len(g["lines"]), "verse_exact": False, "gold_in_readings": False,
+            "lines_exact": [False] * len(g["lines"]), "lines_same_words": [False] * len(g["lines"]),
+            "verse_exact": False, "gold_in_readings": False,
             "morphology": {}, "proof_words": 0, "proof_verified": 0, "status": "error", "verified": False,
             "mismatches": [], "error": "".join(traceback.format_exception_only(type(exc), exc)).strip()}
 
@@ -168,6 +186,7 @@ def summarize(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
     return {
         "verses": n, "failures": sum(1 for r in results if r["error"]),
         "lines": lines, "lines_exact": sum(sum(r["lines_exact"]) for r in results),
+        "lines_same_words": sum(sum(r.get("lines_same_words", [])) for r in results),
         "verses_exact": sum(r["verse_exact"] for r in results),
         "gold_in_readings": sum(r["gold_in_readings"] for r in results),
         "verses_verified": sum(r["verified"] for r in results),
@@ -184,6 +203,7 @@ def report(results: Sequence[dict[str, Any]], s: dict[str, Any]) -> str:
     out = [f"verses evaluated: {s['verses']}  (exceptions: {s['failures']})",
            f"split exact, half-verses: {_frac(s['lines_exact'], s['lines'])}",
            f"split exact, verses:      {_frac(s['verses_exact'], s['verses'])}",
+           f"same words (lemma match), half-verses: {_frac(s['lines_same_words'], s['lines'])}",
            f"gold split among readings: {_frac(s['gold_in_readings'], s['verses'])}",
            f"tokens: precision {_frac(s['matched_words'], s['our_words'])}, recall "
            f"{_frac(s['matched_words'], s['gold_words'])}, F1 {s['f1']:.3f}"]

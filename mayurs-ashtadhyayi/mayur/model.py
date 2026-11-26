@@ -142,6 +142,7 @@ class VerseAnalysis:
     lines: list[str] = field(default_factory=list)  # half-verses in Devanagari
     metre: dict[str, Any] = field(default_factory=dict)
     split_counts: list[int] = field(default_factory=list)  # number of valid splits per line
+    split_counts_plain: list[int] = field(default_factory=list)  # same, ordinary words only
     readings: list[Reading] = field(default_factory=list)  # ranked; [0] is the chosen one
     status: str = UNVERIFIED
     notes: list[str] = field(default_factory=list)
