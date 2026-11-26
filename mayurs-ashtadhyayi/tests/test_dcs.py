@@ -42,6 +42,9 @@ def test_parse_sentences():
 def test_pada_form():
     assert dcs.pada_form("रामः", "राम") == "रामस्"
     assert dcs.pada_form("पुनः", "पुनर्") == "पुनर्"
+    assert dcs.pada_form("गीः", "गिर्") == "गीर्"  # the stem's own र् (8.2.76 lengthens the vowel)
+    assert dcs.pada_form("गिरः", "गिर्") == "गिरस्"  # the ending's स्, though the lemma ends in र्
+    assert dcs.pada_form("चेरुः", "चर्") == "चेरुस्" and dcs.pada_form("चत्वारः", "चतुर्") == "चत्वारस्"
     assert dcs.pada_form("कविः", "कवि") == "कविस्"
     assert dcs.pada_form("वाल्मीकिः", "वाल्मीकि") == "वाल्मीकिस्"
     assert dcs.pada_form("पितरः", "पितृ") == "पितरस्"

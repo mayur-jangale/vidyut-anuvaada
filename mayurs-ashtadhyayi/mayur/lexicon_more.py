@@ -232,7 +232,9 @@ def kram_short(form: str) -> tuple[Morph, ...]:
 def _labelled(form: str, padas: Lookup, generated: Lookup) -> list[Morph]:
     """The labelled (not derived) verbal analyses of an unprefixed form."""
     found = padas(form)
-    out = [*kram_participle(form), *kram_short(form), *arsha_voice(form, padas)]
+    regular = {(m.lemma, m.lakara, m.purusha, m.vacana) for m in found if m.kind == "tinanta" and m.quality >= 2}
+    voice = [m for m in arsha_voice(form, padas) if (m.lemma, m.lakara, m.purusha, m.vacana) not in regular]
+    out = [*kram_participle(form), *kram_short(form), *voice]  # (गमय is a rule form: no label for it)
     if not any(m.quality >= 2 for m in found):
         out += [*arsha_participle(form, generated, padas), *arsha_shatr(form), *arsha_shatr_oblique(form)]
     if not any(m.kind == "tinanta" for m in found):
@@ -246,13 +248,14 @@ def _labelled(form: str, padas: Lookup, generated: Lookup) -> list[Morph]:
 def prefixed_labelled(form: str, padas: Lookup, generated: Lookup) -> tuple[Morph, ...]:
     """अतिक्रमेत्, अतिक्रामन्: one or two upasargas before a verb form that is itself only labelled."""
     from mayur.lexicon_gen import _GATI_WITH_KR, _splits
+    from mayur.lexicon_usage import _joins
 
     out: list[Morph] = []
     for u1, rest in _splits(form):
         inner = [((u1,), rest), *(((u1, u2), rest2) for u2, rest2 in _splits(rest))]
         for prefixes, base in inner:
-            if any(u in _GATI_WITH_KR for u in prefixes):
-                continue
+            if any(u in _GATI_WITH_KR for u in prefixes) or not _joins(prefixes, base, form):
+                continue  # (the upasarga must give this very form by sandhi: सम् + गमय is संगमय, not सद्गमय)
             for m in _labelled(base, padas, generated):
                 if m.root and (m.kind == "tinanta" or m.krt in ("शतृ", "शानच्")):
                     out.append(replace(m, form=form, lemma="".join(prefixes) + m.lemma,
@@ -264,8 +267,12 @@ def prefixed_augmentless(form: str, padas: Lookup) -> tuple[Morph, ...]:
     """अवशातयत्, व्यपरोपयत्: upasarga + a past form without its augment (regular अवाशातयत्)."""
     from mayur.lexicon_usage import prefix_splits
 
+    from mayur.lexicon_usage import _joins
+
     out: list[Morph] = []
     for prefixes, rest in prefix_splits(form):
+        if not _joins(prefixes, rest, form):
+            continue
         out += [replace(m, form=form, lemma="".join(prefixes) + m.lemma, prefixes=prefixes + tuple(m.prefixes),
                         source=ARSHA, quality=1, handle=("special", AUGMENT_ARSHA_NOTE))
                 for m in augmentless(rest, padas)]

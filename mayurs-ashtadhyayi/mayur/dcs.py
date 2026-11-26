@@ -27,11 +27,18 @@ def _deva(text: str) -> str:
     return devanagari(text.translate(_BROKEN), "iast") if text and text != "_" else ""
 
 
+_SHORTEN = str.maketrans({"ी": "ि", "ू": "ु", "ई": "इ", "ऊ": "उ"})  # 8.2.76 lengthens: गिर् -> गीर्, पुर् -> पूर्
+
+
 def _visarga_is_r(unsandhied: str, lemma: str, feats: dict[str, str]) -> bool:
     """The final visarga stands for र्: र्-final words (पुनर्, गिर्), and of ऋ-stems the forms in
     -उः (पितुर्, 6.1.111 with 8.2.24) and the vocative singular (पितर्)."""
-    if lemma.endswith("र्") or lemma in _R_LEMMAS:
+    if lemma in _R_LEMMAS:
         return True
+    if lemma.endswith("र्"):
+        # only where the visarga is the stem's own र्: पुनः of पुनर्, गीः of गिर्. In गिरः, चत्वारः, चेरुः
+        # (lemmas गिर्, चतुर्, चर्) the visarga is the ending's स्.
+        return (unsandhied[:-1] + "र्").translate(_SHORTEN) == lemma.translate(_SHORTEN)
     if lemma.endswith(("ऋ", "ृ")) and feats.get("Number") == "Sing":  # nominal forms only
         case = feats.get("Case")
         return case == "Voc" or (case in ("Gen", "Abl") and unsandhied.endswith("ु" + _VISARGA))
