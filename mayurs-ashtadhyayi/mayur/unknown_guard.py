@@ -98,4 +98,7 @@ def guard(line: str, splits: Sequence[Split], top_k: int, m: Mapping[str, Any]) 
     fixed = rewrite(line, splits[0])
     if fixed is splits[0]:
         return list(splits)
+    # the whole-chunk reading must also stay first when readings are compared by score later on:
+    # it sits one score scale above the shredded reading it replaces
+    fixed = Split(fixed.words, splits[0].score + float(m.get("score_scale", 1.0)), fixed.junctions)
     return [fixed, *splits][:top_k]

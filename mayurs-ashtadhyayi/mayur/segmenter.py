@@ -160,15 +160,19 @@ def _gendered_stem(form: str) -> bool:
 
     from mayur.lexicon_dict import genders
 
-    listed = any(e.entry == "basic" and e.lingas and e.pratipadika == form for e in bridge.lookup(form)) \
-        or bool(genders(form)) or (form.endswith("ि") and bool(genders(form + "न्")))  # उपवासि- of उपवासिन्
+    from mayur.lexicon import nasal_variants
+
+    spellings = nasal_variants(form)  # सन्धि = संधि: the kosha and the dictionary write one of the two
+    listed = any(e.entry == "basic" and e.lingas and e.pratipadika in spellings for e in bridge.lookup(form)) \
+        or any(genders(f) for f in spellings) or (form.endswith("ि") and bool(genders(form + "न्")))  # उपवासि- of उपवासिन्
     if not listed:
         return False
     # a homograph the corpus knows as a finite verb but never as a compound member is the verb (अस्ति)
     from mayur import freq
 
     as_verb = sum(n for _, upos, feats, n in freq._parsed(form) if upos == "VERB" and "Person" in feats)
-    return int(resources_derived("member_counts.json").get(form, 0)) > 0 or as_verb == 0
+    members = resources_derived("member_counts.json")
+    return any(int(members.get(f, 0)) > 0 for f in spellings) or as_verb == 0
 
 
 def _stem_ok(form: str, ms: tuple) -> bool:

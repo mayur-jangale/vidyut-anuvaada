@@ -21,7 +21,10 @@ LAKARA_TENSE_MOOD = {
     "लृट्": ("Fut", "Ind"), "लुट्": ("Fut", "Ind"), "लिट्": ("Past", "Ind"), "लुङ्": ("Past", "Ind"),
     "लृङ्": ("Fut", "Cond"), "आशीर्लिङ्": ("Past", "Prec"), "लेट्": ("Pres", "Sub"),
 }
-PARTICIPLE_TENSE = {"शतृ": "Pres", "शानच्": "Pres", "क्वसु": "Past", "कानच्": "Past"}
+# चानश् (3.2.129 ताच्छील्यवयोवचनशक्तिषु चानश्) has the form of शानच् on any root (मार्गमाण, काङ्क्षमाण);
+# the corpus tags it as the present participle
+CANASH = "चानश्"
+PARTICIPLE_TENSE = {"शतृ": "Pres", "शानच्": "Pres", CANASH: "Pres", "क्वसु": "Past", "कानच्": "Past"}
 PAST_PARTICIPLE_KRT = frozenset({"क्त", "क्तवतु"})
 GERUNDIVE_KRT = frozenset({"तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्"})
 VERBFORM_OF_NONFINITE = {"क्त्वा": "Conv", "ल्यप्": "Conv", "तुमुन्": "Inf"}
@@ -41,7 +44,7 @@ _CLASS_NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ�
 
 def is_verbal_noun(m: Morph) -> bool:
     krt = m.krt or ""
-    return bool(m.root) and (krt in terms.PARTICIPLE_KRT or krt in terms.NONFINITE_KRT)
+    return bool(m.root) and (krt in terms.PARTICIPLE_KRT or krt in terms.NONFINITE_KRT or krt == CANASH)
 
 
 # DCS word classes that are indeclinable: any case/number tag on them is ignored, and DCS often
@@ -67,6 +70,8 @@ def canonical_lemma(text: str) -> str:
                        for i, ch in enumerate(text))
     if text.endswith("न्त्"):
         return text[: -len("न्त्")] + "त्"
+    if text.endswith("क्षण्"):  # the corpus cites क्षणु हिंसायाम् (क्षत, विक्षत) as क्षन्
+        return text[: -len("ण्")] + "न्"
     if text.endswith(("ः", "र्")):
         return text[:-1 if text.endswith("ः") else -2] + "स्"
     return text
@@ -77,6 +82,8 @@ def _feminine_of(ours: str, gold: str) -> bool:
     if len(ours) < 2 or ours[-1] not in ("ी", "ा"):
         return False
     base = ours[:-1]
+    if ours[-1] == "ी" and gold == base + "्":  # सुदती of सुदत्, बलवती of बलवत् (4.1.5, 4.1.6)
+        return True
     return gold == base or (ours[-1] == "ा" and len(base) > 2 and base[-2] == "ि" and gold == base[:-2] + base[-1])
 
 
@@ -85,6 +92,8 @@ def same_lemma(m: Morph, gold_lemma: str, gold_upos: str = "") -> bool:
     want, ours = canonical_lemma(gold_lemma), canonical_lemma(lemma(m))
     if ours == want or _feminine_of(ours, want) or _citation_variant(m, ours, want) or _causative_citation(ours, want):
         return True
+    if (m.kind == "tinanta" or is_verbal_noun(m)) and _causative_citation(want, ours):
+        return True  # the other way round: गुम्फित under गुम्फ्, नीनशस् under नश्, where we name the stem in -अय्
     if gold_upos in INDECLINABLE_UPOS:
         word = canonical_lemma(m.form)
         return word == want or (word.endswith("त्") and word[:-2] + "द्" == want)  # 8.2.39: चेत् = चेद्
@@ -108,6 +117,10 @@ def _citation_variant(m: Morph, ours: str, want: str) -> bool:
     # 1.2.48 गोस्त्रियोरुपसर्जनस्य: a feminine in -आ shortened as the final of a bahuvrīhi (शुभ्र-प्रभम्)
     if m.kind == "subanta" and m.linga != "स्त्रीलिङ्ग" and want == ours + "ा":
         return True
+    if m.krt == "शतृ" and ours == "अस्" and want == "सत्":
+        return True  # सन्, सन्तः: the participle of अस्, which the corpus also cites as the adjective सत्
+    if (m.kind == "tinanta" or m.root) and ours.endswith("धु") and want == ours[:-1] + "ू":
+        return True  # धुञ् / धूञ् कम्पने: one root with a short and a long vowel (धुनोति, धूनोति)
     # 7.3.78: पश्य is the present-system substitute of दृश्; the corpus cites it under either root
     return (m.kind == "tinanta" or is_verbal_noun(m)) and ours.endswith("पश्") and want == ours[:-3] + "दृश्"
 
@@ -132,6 +145,8 @@ def same_feats(m: Morph, gold_upos: str, gold_feats: dict[str, str]) -> bool:
         ours = {**ours, "Tense": "Past"}  # the corpus marks the tense of क्त only now and then
     if gold_feats.get("Tense") == "Past" and ours.get("Tense") == "Pres" and perfect_ending_present(m):
         ours = {**ours, "Tense": "Past"}
+    if gold_feats.get("Mood") == "Jus" and m.kind == "tinanta" and m.lakara in ("लुङ्", "लङ्") and m.form[:1] != "अ":
+        ours = {**ours, "Mood": "Jus"}  # the injunctive: an aorist or imperfect without its augment (मा भूत्, 6.4.74)
     return all(ours.get(k) == v for k, v in gold_feats.items() if k in TAG_FEATS)
 
 
@@ -144,6 +159,12 @@ def perfect_ending_present(m: Morph) -> bool:
     return any((root.endswith(r) or root.endswith(r.replace("अ", "ा"))) and
                (m.form.endswith(ends) or form.endswith(tuple(e.replace("आ", "ा") for e in ends)))
                for r, ends in _PERFECT_ENDING_PRESENT)
+
+
+def _future_participle(m: Morph) -> bool:
+    """भविष्यत्, करिष्यमाण: शतृ / शानच् in place of लृट् (3.3.14 लृटः सद्वा), as the kosha entry records it."""
+    entry = getattr(m.handle, "pratipadika_entry", None)
+    return str(getattr(entry, "lakara", "")) == "lf~w"
 
 
 def feats(m: Morph) -> dict[str, str]:
@@ -161,13 +182,13 @@ def feats(m: Morph) -> dict[str, str]:
         return out
     if m.root and krt in VERBFORM_OF_NONFINITE:
         return {"VerbForm": VERBFORM_OF_NONFINITE[krt]}
-    if m.root and krt in terms.PARTICIPLE_KRT:
+    if m.root and (krt in terms.PARTICIPLE_KRT or krt == CANASH):
         if krt in GERUNDIVE_KRT:
             out["VerbForm"] = "Gdv"
         else:
             out["VerbForm"] = "Part"
             if krt in PARTICIPLE_TENSE:
-                out["Tense"] = PARTICIPLE_TENSE[krt]
+                out["Tense"] = "Fut" if _future_participle(m) else PARTICIPLE_TENSE[krt]
     for key, value, table in (("Case", m.vibhakti, terms.UD_CASE), ("Gender", m.linga, terms.UD_GENDER),
                               ("Number", m.vacana, terms.UD_NUMBER)):
         if value in table:

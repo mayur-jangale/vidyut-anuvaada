@@ -33,9 +33,11 @@ def _quality(entry: bridge.Entry) -> int:
         return 3
     if entry.entry == "krdanta":
         if m.krt in _JUNK_KRT:  # the kosha builds a root noun for every root; the listed ones are words
-            from mayur.lexicon_dict import genders
+            from mayur import freq
 
-            return 2 if m.stem and genders(m.stem) else 0  # गिर्, राज्, युध्
+            return 2 if m.stem and freq.lemma_class(m.stem) == "noun" else 0  # गिर्, पुर्, त्विष्: nouns in the corpus
+        if m.krt == "चानश्":  # मार्गमाण: the participle in -मान of a परस्मैपद root (3.2.129)
+            return 2
         return 3 if m.krt in _GOOD_KRT else 1
     if not entry.lingas or m.linga in entry.lingas:
         return 3
@@ -111,6 +113,10 @@ GEMINATE_NOTE = ("the text writes {form}; the derived form is {derived}, with th
                  "commonly written single (पत्र for पत्त्र, तत्व for तत्त्व)")
 
 
+DOUBLED_NOTE = ("the text writes {form}, with the consonant doubled after a vowel (8.4.47 अनचि च, optional); the "
+                "derived form is {derived}")
+
+
 def geminate_variants(form: str) -> tuple[str, ...]:
     """Spellings of ``form`` with one stop doubled before a semivowel: पत्रम् -> पत्त्रम्, छात्र ->
     छात्त्र, तत्वम् -> तत्त्वम्, उज्वल -> उज्ज्वल. Derivation gives the doubled form (पत् + त्र);
@@ -120,6 +126,10 @@ def geminate_variants(form: str) -> tuple[str, ...]:
         c = form[i]
         if c in _STOPS and form[i + 1] == "्" and form[i + 2] in _AFTER_GEMINATE and (i == 0 or form[i - 1] != "्"):
             out.append(form[:i] + c + "्" + form[i:])
+    for i in range(len(form) - 4):  # the other way: मित्त्र for मित्र (8.4.47 अनचि च doubles after a vowel)
+        c = form[i]
+        if c in _STOPS and form[i + 1: i + 4] == "्" + c + "्" and form[i + 4] in _AFTER_GEMINATE:
+            out.append(form[:i] + form[i + 2:])
     for i in range(1, len(form)):  # छ after a vowel is च्छ (6.1.73 छे च): चिछेद for चिच्छेद
         if form[i] == "छ" and form[i - 1] != "्":
             out.append(form[:i] + "च्" + form[i:])
@@ -438,7 +448,7 @@ def prove(m: Morph) -> WordProof:
                        note=f"the stem {m.stem or m.lemma} is not in the dictionary; only its inflection follows the rules")
     derived = proof.derived_form
     if proof.derivable and derived and derived != m.form and derived in geminate_variants(m.form):
-        note = GEMINATE_NOTE.format(form=m.form, derived=derived)
+        note = (GEMINATE_NOTE if len(derived) > len(m.form) else DOUBLED_NOTE).format(form=m.form, derived=derived)
         return replace(proof, note=f"{proof.note}; {note}" if proof.note else note)
     return proof
 
@@ -470,6 +480,11 @@ def _prove(m: Morph) -> WordProof:
         note = f"derived spelling {text}; {m.form} differs only in writing the nasal"
     method = "vidyut-prakriya"
     if not ok:
+        from mayur import lexicon_passive
+
+        passive = lexicon_passive.prove(m)  # क्रियमाणः: the Python API derives a participle stem in कर्तरि only
+        if passive is not None:
+            return passive
         note = f"vidyut derived {text or 'nothing'}, not {m.form}"
         if m.source == "kosha":
             method = "kosha-listed"

@@ -90,6 +90,8 @@ def test_miss_stays_cheap():
     import time
 
     L.padas("रामस्")
+    L.padas("ख्घ्रट्लक")  # one unknown form first: the tables an unknown form needs are loaded once
+    L.stems("ख्घ्रट्लक")
     forms = ["ग्घ्रप्ल" + c for c in "कखगघचजटडतदनपबमयरलवशसह"]
     start = time.perf_counter()
     for f in forms:

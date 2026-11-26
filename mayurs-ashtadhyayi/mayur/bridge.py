@@ -126,7 +126,7 @@ def _convert(code_form: str, form: str, e: Any) -> Optional[Entry]:
     vac = _term(_VACANA, e.vacana)
     if _kind_of(pe) == "krdanta":
         f = _dhatu_fields(pe.dhatu_entry)
-        stem = _krdanta_stem(pe)
+        stem = _passive_stem(form, pe) or _krdanta_stem(pe)
         m = Morph(form=form, lemma=f["lemma"], kind="avyaya" if avyaya else "subanta", stem=stem,
                   linga=None if avyaya else linga, vibhakti=None if avyaya else vib,
                   vacana=None if avyaya else vac, root=f["root"], dhatu=f["dhatu"], gana=f["gana"],
@@ -143,6 +143,15 @@ def _convert(code_form: str, form: str, e: Any) -> Optional[Entry]:
 
 
 _STEMS: dict[str, str] = {}
+
+
+def _passive_stem(form: str, pe: Any) -> str:
+    """भिद्यमान of भिद्यमानस्: the stem of a कर्मणि शानच् participle, read off the form. The Python API
+    derives a kṛdanta stem in कर्तरि only (भिन्दान), so the kosha entry's own stem cannot be derived."""
+    if str(getattr(pe, "prayoga", "")) in ("", "None", "kartari") or _krt(pe.krt) != "शानच्":
+        return ""
+    cut = max(form.rfind("मान"), form.rfind("माण"))
+    return form[: cut + len("मान")] if cut > 0 else ""
 
 
 def _krdanta_stem(pe: Any) -> str:

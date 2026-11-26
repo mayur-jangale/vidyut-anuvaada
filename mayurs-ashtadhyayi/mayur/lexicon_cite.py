@@ -24,6 +24,8 @@ def _join(left: str, right: str) -> str:
         return left + right
     if left == "उद्" and right.startswith(("स्था", "स्तम्भ्")):  # 8.4.61 उदः स्थास्तम्भोः पूर्वस्य
         return "उत्" + right[2:]
+    if left == "उद्" and right.startswith("ह"):  # 8.4.62 झयो होऽन्यतरस्याम्: उद् + हृ -> उद्धृ (the usual spelling)
+        return "उद्ध" + right[1:]
     if left == "उद्" and right.startswith("श"):  # 8.4.40 + 8.4.63 शश्छोऽटि: उद् + श्रि -> उच्छ्रि
         return "उच्छ" + right[1:]
     if left == "उद्" and right[:1] in ("न", "म"):  # 8.4.45 यरोऽनुनासिकेऽनुनासिको वा (the usual spelling)
@@ -86,7 +88,7 @@ def _dcs_root(m: Morph) -> str:
 # How the corpus cites roots that vidyut names by their Dhatupatha form (ध्यै -> ध्या, 6.1.45)
 _CITED_ROOT = {"स्वञ्ज्": "स्वज्", "ऋच्छ्": "ऋछ्", "पूर्": "पृ", "क्षी": "क्षि",  # the corpus has no पूर्, क्षी
                "तॄ": "तृ", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
-               "दै": "दा", "वे": "वा", "व्ये": "व्या", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
+               "दै": "दा", "वे": "वा", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
 # 3.1.31 आयादय आर्धधातुके वा: without आय the corpus cites the bare root (गुप्त -> गुप्)
 _AYA_ROOT = {"गोपाय": "गुप्", "धूपाय": "धूप्", "पणाय": "पण्", "पनाय": "पन्", "विच्छाय": "विच्छ्"}
 # Present-system suppletion (7.3.78 पाघ्राध्मास्थाम्नादाण्दृश्यर्तिसर्तिशदसदां पिबजिघ्र...): दृश् -> पश्य

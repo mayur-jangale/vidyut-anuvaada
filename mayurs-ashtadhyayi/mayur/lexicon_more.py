@@ -21,6 +21,8 @@ Lookup = Callable[[str], Sequence[Morph]]
 
 ARSHA = "arsha"
 AUGMENT_NOTE = "without the augment, as after मा (6.4.74 न माङ्योगे)"
+AUGMENT_ARSHA_NOTE = ("ārṣa: a past form without its augment after an upasarga (6.4.75 बहुलं छन्दस्यमाङ्योगेऽपि allows "
+                      "it in the Veda; the classical rule 6.4.74 only after मा); epic usage, labelled and not derived")
 ARSHA_NOTE = ("ārṣa: the {got} ending on a root that takes {want} by 1.3.12–93 (regular form {regular}); "
               "epic usage, labelled and not derived")
 # (आत्मनेपद ending, परस्मैपद ending, person, number) as sounds, longest first. The person and number are
@@ -147,7 +149,8 @@ def gati_verbs(form: str, padas: Lookup, is_stem: Callable[[str], bool]) -> tupl
             continue
         for n in (len(gv) - 1, len(gv), len(gv) + 1):
             rest = lipi.from_varnas(sounds[n:]) if 1 < n < len(sounds) - 1 else ""
-            if rest and sandhi.rejoin_matching([gati, rest], [True], form) is not None:
+            if rest and (sandhi.rejoin_matching([gati, rest], [True], form) is not None
+                         or sandhi.rejoin_matching([gati, rest], [True], lipi.pausa(form)) is not None):
                 for m in _verbal(rest, roots, padas):
                     note = GATI_NOTE.format(gati=gati, rule="1.4.61, 1.4.74", verb=rest)
                     out.append(replace(m, form=form, prefixes=(gati,) + tuple(m.prefixes), source="generated",
@@ -221,6 +224,9 @@ def _labelled(form: str, padas: Lookup, generated: Lookup) -> list[Morph]:
     out = [*kram_participle(form), *kram_short(form), *arsha_voice(form, padas)]
     if not any(m.quality >= 2 for m in found):
         out += [*arsha_participle(form, generated, padas), *arsha_shatr(form)]
+    if not any(m.kind == "tinanta" for m in found):  # प्रजायन्त: the past without its augment after an upasarga
+        out += [replace(m, source=ARSHA, quality=1, handle=("special", AUGMENT_ARSHA_NOTE))
+                for m in augmentless(form, padas)]
     return out
 
 
@@ -241,6 +247,37 @@ def prefixed_labelled(form: str, padas: Lookup, generated: Lookup) -> tuple[Morp
     return tuple(dict.fromkeys(out))
 
 
+def prefixed_augmentless(form: str, padas: Lookup) -> tuple[Morph, ...]:
+    """अवशातयत्, व्यपरोपयत्: upasarga + a past form without its augment (regular अवाशातयत्)."""
+    from mayur.lexicon_usage import prefix_splits
+
+    out: list[Morph] = []
+    for prefixes, rest in prefix_splits(form):
+        out += [replace(m, form=form, lemma="".join(prefixes) + m.lemma, prefixes=prefixes + tuple(m.prefixes),
+                        source=ARSHA, quality=1, handle=("special", AUGMENT_ARSHA_NOTE))
+                for m in augmentless(rest, padas)]
+    return tuple(dict.fromkeys(out))
+
+
+FEM_NOTE = ("ārṣa: the feminine participle without the न् that 7.1.81 शप्श्यनोर्नित्यम् requires for this class "
+            "(regular form {regular}); epic usage, labelled and not derived")
+_ATI = lipi.varnas("अती")
+
+
+def arsha_feminine(form: str, padas: Lookup) -> tuple[Morph, ...]:
+    """आक्रन्दतीम्, अनुशोचती: -अती for -अन्ती in the feminine of a present participle."""
+    sounds = lipi.varnas(form)
+    out: list[Morph] = []
+    for i in range(len(sounds) - 3, 1, -1):
+        if sounds[i: i + 2] == ("अ", "त्") and sounds[i + 2] in ("ई", "य्", "इ"):
+            regular = lipi.from_varnas(sounds[: i + 1] + ("न्",) + sounds[i + 1:])
+            note = FEM_NOTE.format(regular=lipi.pausa(regular))
+            out += [replace(m, form=form, source=ARSHA, quality=1, handle=("special", note))
+                    for m in padas(regular) if m.krt == "शतृ" and m.linga == "स्त्रीलिङ्ग"]
+            break
+    return tuple(dict.fromkeys(out))
+
+
 def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) -> tuple[Morph, ...]:
     """Extra analyses for ``form`` given what the lexicon already ``found``."""
     out: list[Any] = []
@@ -253,14 +290,25 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
     out += [m for m in arsha_voice(form, padas) if (m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) not in have]
     if not found and not out:
         out += prefixed_labelled(form, padas, generated)
+    elif not any(m.kind == "tinanta" or (not m.root and m.quality >= 2) for m in [*found, *out]):
+        # अवशातयत् beside the participle; never beside a listed noun (प्रभवस् is प्रभव, not प्र + भवस्)
+        out += prefixed_augmentless(form, padas)
     if not any(m.quality >= 2 for m in found):
         out += arsha_participle(form, generated, padas)
         out += arsha_shatr(form)
+    if not any(m.root and m.quality >= 2 for m in found):
+        out += arsha_feminine(form, padas)
     if not any(m.kind == "avyaya" and m.krt in ("ल्यप्", "क्त्वा") for m in found):  # पीड्य "having pressed"
         out += [replace(m, kind="avyaya", krt="ल्यप्", linga=None, vibhakti=None, vacana=None, source=ARSHA, quality=1,
                         handle=("special", LYAP_NOTE))
                 for m in found if m.krt in ("यत्", "ण्यत्", "क्यप्") and m.vibhakti == "सम्बोधन" and not m.prefixes][:1]
     from mayur import lexicon
+    from mayur.lexicon_usage import usage_forms
 
     out += gati_verbs(form, padas, lexicon.listed_stem)
+    if not any(m.kind == "tinanta" and m.quality >= 2 for m in [*found, *out]):
+        from mayur.lexicon_denom import denominatives
+
+        out += denominatives(form, lambda stem: bool(lexicon.listed_stem(stem)))  # नमस्यति, पुत्रीयति
+    out += usage_forms(form, [*found, *out], padas)
     return tuple(out)

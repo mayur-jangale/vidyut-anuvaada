@@ -9,7 +9,7 @@ from dataclasses import replace
 from typing import Iterator, Sequence
 
 from mayur import (anvaya, artha, compounds, decoder, fluent, gloss, lexicon, lipi, metre, proof, segmenter,
-                   shabdabodha, translate)
+                   shabdabodha, siblings, translate)
 from mayur.model import UNVERIFIED, VERIFIED, Junction, Reading, VerseAnalysis, Word
 
 LINE_BREAK = re.compile(r"[।॥|/\n]+")
@@ -160,12 +160,15 @@ def candidate_readings(lines: Sequence[str]) -> tuple[list[segmenter.Segmentatio
     # the decoder did not return sits below all of them (see _best_splits).
     best = sum(splits[0].score for splits in per_line)
     decoded = decoder.enabled() and any(seg.tier == 0 for seg in segmentations)
-    temperature = TEMPERATURE_DECODER if decoded else TEMPERATURE_RULES
+    # the trained decoder stores the scale of its own scores (4 x the median gap between its two best
+    # splits on development lines); TEMPERATURE_DECODER stands in for a model file without one
+    scale = decoder.score_scale() if decoded else 0.0
+    temperature = (scale if scale > 1.0 else TEMPERATURE_DECODER) if decoded else TEMPERATURE_RULES
     candidates = []
     spaces = [segmenter.spaces_of(line) for line in lines]
     for idx in _combinations(per_line, MAX_CANDIDATES):
         reading = _reading([per_line[i][j] for i, j in enumerate(idx)], best, temperature, spaces)
-        reading = shabdabodha.resolve(compounds.annotate(reading))
+        reading = shabdabodha.resolve(compounds.annotate(siblings.apply(reading)))
         candidates.append(_label_unproven(proof.check(reading, lines)))
     return segmentations, candidates, notes
 
