@@ -19,7 +19,7 @@ UPASARGAS: tuple[str, ...] = (
     "pra", "parA", "apa", "sam", "anu", "ava", "nis", "nir", "dus", "dur", "vi", "AN",
     "ni", "aDi", "api", "ati", "su", "ud", "aBi", "prati", "pari", "upa",
 )
-AVYAYA_KRTS = frozenset({"ktvA", "lyap", "tumun", "Ramul", "kamul"})
+AVYAYA_KRTS = frozenset({"ktvA", "lyap", "tumu~n", "Ramu~l", "kamu~l"})
 VOWELS = frozenset("aAiIuUfFxXeEoO")
 _MERGED: dict[str, tuple[str, ...]] = {  # a-final upasarga + vowel -> merged vowel (6.1.87/88/101)
     "A": ("a", "A"), "e": ("i", "I"), "o": ("u", "U"), "E": ("e", "E"), "O": ("o", "O"),
@@ -50,6 +50,33 @@ def join_prefixes(prefixes: Iterable[str], base: str) -> str:
     for u in reversed(tuple(prefixes)):
         out = _join_vowels(upasarga_text(u), out)
     return out
+
+
+def _prefix_surface(u: str, following: str) -> str:
+    text = upasarga_text(u)
+    if u == "sam" and following[:1] and following[0] not in VOWELS:
+        return "saM"
+    return text
+
+
+def fix_hiatus(text: str) -> str:
+    """Apply vowel sandhi (6.1.77/87/88/101) at every vowel-vowel junction of ``text``."""
+    out = text[:1]
+    for c in text[1:]:
+        out = _join_vowels(out, c) if out and out[-1] in VOWELS and c in VOWELS else out + c
+    return out
+
+
+def verb_lemma(extra: tuple[str, ...], clean_text: str) -> str:
+    """Lemma of a dhatu with extra upasargas: (``pari``, ``pracC``) -> ``paripracC``.
+
+    vidyut's ``clean_text`` already contains the dhatu's own prefixes (sometimes by
+    plain concatenation, ``avaAp``); hiatus is resolved by ordinary vowel sandhi.
+    """
+    out = clean_text
+    for u in reversed(extra):
+        out = _prefix_surface(u, out) + out
+    return fix_hiatus(out)
 
 
 def _join_vowels(left: str, right: str) -> str:
@@ -129,6 +156,15 @@ def nasal_norm(form: str) -> str:
         "M" if c in "NYRnm" and i + 1 < len(chars) and _NASAL_BY_CLASS.get(chars[i + 1]) == c else c
         for i, c in enumerate(chars)
     )
+
+
+def pausal_norm(form: str) -> str:
+    """Padapatha spelling used only to compare spellings: final H -> s, final M -> m."""
+    if form.endswith("H"):
+        return form[:-1] + "s"
+    if form.endswith("M"):
+        return form[:-1] + "m"
+    return form
 
 
 def final_variants(form: str) -> tuple[str, ...]:
@@ -269,8 +305,8 @@ def stem_probe_forms(form: str) -> tuple[str, ...]:
         probes += [form + "n", form + "s"]  # mahA -> mahAn
     elif last == "f":
         probes.append(form[:-1] + "A")
-    elif last in ("k", "g"):
-        probes.append(form)  # vAk
+    elif last in ("c", "j"):
+        probes += [form[:-1] + "k", form[:-1] + "w"]  # vAc -> vAk
     elif last in ("d", "t"):
         probes += [form[:-1] + "t", form[:-1] + "d"]
     return tuple(dict.fromkeys(probes))
@@ -318,3 +354,17 @@ def krdanta_stem_text(dhatu, krt) -> str:
         texts = derive_texts(Pratipadika.krdanta(dhatu, krt))
         _KRDANTA_STEMS[key] = texts[0] if texts else ""
     return _KRDANTA_STEMS[key]
+
+
+def matup_pada(entry: Any) -> Optional[Any]:
+    """For a kosha Basic stem in -mat/-vat, the same pada with the stem built by matup (5.2.94)."""
+    from vidyut.prakriya import Pada, Pratipadika, Taddhita
+
+    prati_entry = getattr(entry, "pratipadika_entry", None)
+    if prati_entry is None or not hasattr(prati_entry, "pratipadika"):
+        return None
+    text = prati_entry.pratipadika.text
+    if len(text) < 5 or text[-3:] not in ("vat", "mat"):
+        return None
+    stem = Pratipadika.taddhitanta(Pratipadika.basic(text[:-3]), Taddhita.matup)
+    return Pada.Subanta(pratipadika=stem, linga=entry.linga, vibhakti=entry.vibhakti, vacana=entry.vacana)

@@ -18,7 +18,7 @@ from mayur.model import Morph, SutraStep, WordProof
 
 PARTICIPLE_KRTS = frozenset(
     {"kta", "ktavatu~", "Satf~", "SAnac", "tavya", "anIyar", "yat", "Ryat", "kyap", "kvasu~", "kAnac",
-     "ktvA", "lyap", "tumun"}
+     "ktvA", "lyap", "tumu~n"}
 )
 GOOD = 2  # quality threshold below which fallbacks are tried
 
@@ -40,27 +40,29 @@ def _dhatu_fields(dhatu_entry) -> dict:
 
 def _to_morph(form: str, entry) -> Morph:
     if gen.is_tinanta_entry(entry):
+        fields = _dhatu_fields(entry.dhatu_entry)
         return Morph(
             form=form,
-            lemma=entry.dhatu_entry.clean_text,
+            lemma=gen.verb_lemma((), entry.dhatu_entry.clean_text),
             kind="tinanta",
             purusha=_s(entry.purusha),
             lakara=_s(entry.lakara),
             prayoga=_s(entry.prayoga),
             vacana=_s(entry.vacana),
             handle=entry,
-            **_dhatu_fields(entry.dhatu_entry),
+            **fields,
         )
     prati = entry.pratipadika_entry
     is_krdanta = gen.is_krdanta_entry(entry)
     extra = {"krt": _s(prati.krt), **_dhatu_fields(prati.dhatu_entry)} if is_krdanta else {}
+    lemma = gen.verb_lemma((), extra["root"]) if is_krdanta else entry.lemma
     if entry.is_avyaya or (is_krdanta and str(prati.krt) in gen.AVYAYA_KRTS):
-        return Morph(form=form, lemma=entry.lemma, kind="avyaya", handle=entry, **extra)
+        return Morph(form=form, lemma=lemma, kind="avyaya", handle=entry, **extra)
     lingas = [] if is_krdanta else [str(x) for x in prati.lingas]
     linga = _s(entry.linga)
     return Morph(
         form=form,
-        lemma=entry.lemma,
+        lemma=lemma,
         kind="subanta",
         linga=linga,
         vibhakti=_s(entry.vibhakti),
@@ -82,7 +84,9 @@ def quality(m: Morph) -> int:
     if m.kind in ("tinanta", "avyaya"):
         return 0 if m.krt == "kvi~p" else 3
     if m.kind == "stem":
-        return 0 if m.krt == "kvi~p" else 3
+        if m.krt == "kvi~p":
+            return 0
+        return 3 if m.krt is None or m.krt in PARTICIPLE_KRTS else 2
     if m.krt is None:
         if m.source == "generated":
             return 1
@@ -103,8 +107,13 @@ def _lemma_count(lemma: str) -> int:
         return 0
 
 
+PRONOUNS = frozenset({"asmad", "yuzmad", "tad", "etad", "idam", "adas", "kim", "yad", "sarva", "eka", "anya"})
+_KIND_ORDER = {"avyaya": 3, "tinanta": 2, "subanta": 1, "stem": 1}
+
+
 def _rank(m: Morph) -> tuple:
-    return (quality(m), m.lexical_linga_ok, m.source == "kosha", _lemma_count(m.lemma))
+    return (quality(m), m.lexical_linga_ok, m.lemma in PRONOUNS, _lemma_count(m.lemma),
+            _KIND_ORDER.get(m.kind, 0), m.vibhakti != "samboDanam", m.source == "kosha")
 
 
 def _ranked(morphs: Iterable[Morph]) -> tuple[Morph, ...]:
@@ -126,7 +135,7 @@ def _generated_from(form: str, extra: tuple[str, ...], entry) -> list[Morph]:
         return []
     base = _to_morph(form, entry)
     prefixes = tuple(extra) + base.prefixes
-    return [replace(base, lemma=gen.join_prefixes(extra, base.lemma), prefixes=prefixes,
+    return [replace(base, lemma=gen.verb_lemma(extra, base.lemma), prefixes=prefixes,
                     source="generated", handle=pada)]
 
 
@@ -146,7 +155,7 @@ def _lyap_from(form: str, extra: tuple[str, ...], entries: list) -> list[Morph]:
         if form in gen.derive_texts(pada):
             fields = _dhatu_fields(dhatu_entry)
             fields["prefixes"] = tuple(extra) + fields["prefixes"]
-            out.append(Morph(form=form, lemma=gen.join_prefixes(fields["prefixes"], dhatu_entry.clean_text),
+            out.append(Morph(form=form, lemma=gen.verb_lemma(extra, dhatu_entry.clean_text),
                              kind="avyaya", krt="lyap", source="generated", handle=pada, **fields))
     return out
 
@@ -199,7 +208,7 @@ def _core_analyses(form: str) -> tuple[Morph, ...]:
     found = _kosha_morphs(form)
     if not any(quality(m) >= GOOD for m in found):
         found += _with_variants(form)
-    if not any(quality(m) >= GOOD for m in found):
+    if not any(quality(m) >= GOOD and (m.kind == "tinanta" or m.krt) for m in found):
         found += list(_upasarga_morphs(form))
     return _ranked(found)
 
@@ -287,7 +296,7 @@ def _prefixed_krdanta_stems(form: str) -> list[Morph]:
         prati = Pratipadika.krdanta(*_pada_krdanta_args(m.handle))
         texts = gen.derive_texts(prati)
         if texts and form in gen.member_forms(texts[0]):
-            out.append(Morph(form=form, lemma=texts[0], kind="stem", root=m.root, dhatu=m.dhatu, gana=m.gana,
+            out.append(Morph(form=form, lemma=texts[0], kind="stem", root=m.lemma, dhatu=m.dhatu, gana=m.gana,
                              prefixes=m.prefixes, krt=m.krt, root_gloss=m.root_gloss, source="generated",
                              handle=gen.StemHandle("krdanta", texts[0], form, prati)))
     return out
@@ -318,10 +327,10 @@ def _derive_matching(arg: Any, target: str) -> WordProof:
         prakriyas = resources.vyakarana().derive(arg)
     except Exception as exc:  # vidyut raises on unsupported argument combinations
         return WordProof(derivable=False, note=f"vidyut-prakriya error: {exc}")
-    norm = gen.nasal_norm(target)
+    norm = gen.nasal_norm(gen.pausal_norm(target))
     for p in prakriyas:
-        if p.text == target or gen.nasal_norm(p.text) == norm:
-            note = "" if p.text == target else f"derived {p.text}; {target} is a spelling variant (8.4.59)"
+        if p.text == target or gen.nasal_norm(gen.pausal_norm(p.text)) == norm:
+            note = "" if p.text == target else f"derived {p.text}; {target} is a spelling variant (8.4.59 / pausal 8.3.15, 8.3.23)"
             return WordProof(True, "vidyut-prakriya", p.text, _trace(p), note)
     got = ", ".join(p.text for p in prakriyas) or "nothing"
     return WordProof(derivable=False, note=f"vidyut-prakriya derives {got}, not {target}")
@@ -351,6 +360,13 @@ def prove(m: Morph) -> WordProof:
     if m.kind == "stem":
         return _prove_stem(m)
     proof = _derive_matching(m.handle, m.form)
+    if not proof.derivable:
+        alt = gen.matup_pada(m.handle)
+        if alt is not None:
+            alt_proof = _derive_matching(alt, m.form)
+            if alt_proof.derivable:
+                alt_proof.note = "kosha lists the stem as basic; derived as taddhitanta with matup (5.2.94)"
+                return alt_proof
     if not proof.derivable and m.source == "kosha":
         proof.note += "; attested in vidyut-kosha but not reproduced by vidyut-prakriya"
     return proof

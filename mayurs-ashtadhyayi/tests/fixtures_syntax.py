@@ -31,3 +31,28 @@ def reading_from_forms(pairs: list[tuple[str, bool]], line: int = 0) -> Reading:
                           in_compound=in_cpd, analyses=analyses))
         pos += len(form) + (0 if in_cpd else 1)
     return Reading(words=words)
+
+
+def with_glosses(reading: Reading) -> Reading:
+    """Fill word.gloss as the pipeline would (empty string if the gloss module fails)."""
+    from dataclasses import replace
+
+    try:
+        from mayur.gloss import lookup
+    except Exception:  # gloss module is another agent's; tests must not depend on it
+        return reading
+    words = [replace(w, gloss=lookup(w.morph)[0] if w.morph else "") for w in reading.words]
+    return replace(reading, words=words)
+
+
+def analysed(pairs: list[tuple[str, bool]]) -> Reading:
+    """compounds.annotate -> shabdabodha.resolve -> anvaya.order (no translation)."""
+    from mayur import anvaya, compounds, shabdabodha
+
+    return anvaya.order(shabdabodha.resolve(compounds.annotate(reading_from_forms(pairs))))
+
+
+def rendered(pairs: list[tuple[str, bool]]) -> Reading:
+    from mayur import translate
+
+    return translate.render(with_glosses(analysed(pairs)))

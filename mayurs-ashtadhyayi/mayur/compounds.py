@@ -30,7 +30,18 @@ def stem_lingas(m: Optional[Morph]) -> list[str]:
     if m is None or m.handle is None:
         return []
     prati = getattr(m.handle, "pratipadika_entry", None)
+    if prati is None:  # compound-member stem: look up the bare stem's own entries
+        return _lemma_lingas(m.lemma)
     return [str(x) for x in getattr(prati, "lingas", []) or []]
+
+
+@lru_cache(maxsize=20_000)
+def _lemma_lingas(lemma: str) -> list[str]:
+    for a in lexicon.analyses(lemma):
+        prati = getattr(a.handle, "pratipadika_entry", None)
+        if a.lemma == lemma and prati is not None and getattr(prati, "lingas", None):
+            return [str(x) for x in prati.lingas]
+    return []
 
 
 def is_adjectival(m: Optional[Morph]) -> bool:

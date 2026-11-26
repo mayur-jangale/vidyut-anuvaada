@@ -73,6 +73,8 @@
         "tense_mood": {"type": ["string", "null"]}, "voice": {"type": ["string", "null"]},
         "root": {"type": ["string", "null"]}, "prefixes": {"type": "array", "items": {"type": "string"}},
         "krt": {"type": ["string", "null"]}, "source": {"type": "string"},
+        "devanagari": {"type": "object", "description": "The same grammar terms in Devanagari.",
+                       "additionalProperties": {"type": ["string", "array"]}},
         "description": {"type": "string", "description": "English description of the grammar."}
       }
     },
@@ -91,7 +93,12 @@
         "verified_reason": {"type": "string"},
         "sutra_trace": {"type": "array", "items": {
           "type": "object", "required": ["source", "code", "result"],
-          "properties": {"source": {"type": "string"}, "code": {"type": "string"}, "result": {"type": "string"}}}},
+          "properties": {"source": {"type": "string"}, "code": {"type": "string"},
+                         "result": {"type": "string", "description": "Derivation state after the rule (SLP1)."},
+                         "result_devanagari": {"type": "string"},
+                         "sutra": {"type": "object", "description": "Text of the rule.",
+                                   "properties": {"slp1": {"type": "string"}, "devanagari": {"type": "string"},
+                                                  "source_devanagari": {"type": "string"}}}}}},
         "role": {"type": "string"}, "head": {"type": ["integer", "null"]}, "gloss": {"type": "string"},
         "gloss_source": {"type": "string"},
         "arsha": {"type": "boolean", "description": "Labelled as non-Paninian (arsha) usage."}

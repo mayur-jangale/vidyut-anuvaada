@@ -4,7 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from mayur.model import Morph, Reading, VerseAnalysis, Word, to_jsonable
+from mayur import display
+from mayur.model import Morph, Reading, SutraStep, VerseAnalysis, Word, to_jsonable
 from mayur.translit import to_deva, to_iast
 
 MAX_ALTERNATIVE_ANALYSES = 5
@@ -42,8 +43,26 @@ def _analysis_json(m: Optional[Morph]) -> dict[str, Any]:
         "gender": m.linga, "case": m.vibhakti, "number": m.vacana, "person": m.purusha,
         "tense_mood": m.lakara, "voice": m.prayoga, "root": m.root, "prefixes": list(m.prefixes),
         "krt": m.krt, "source": m.source, "description": describe(m),
+        "devanagari": {
+            "lemma": to_deva(m.lemma) if m.lemma else "", "root": display.term(m.root),
+            "prefixes": [to_deva(p) for p in m.prefixes], "kind": display.term(m.kind),
+            "gender": display.term(m.linga), "case": display.term(m.vibhakti),
+            "number": display.term(m.vacana), "person": display.term(m.purusha),
+            "tense_mood": display.term(m.lakara), "voice": display.term(m.prayoga), "krt": display.term(m.krt),
+        },
     }
     return out
+
+
+def _step_json(step: SutraStep) -> dict[str, Any]:
+    """A derivation step with the rule text and resulting state in Devanagari."""
+    return {"source": step.source, "code": step.code, "result": step.result,
+            "sutra": display.sutra(step.source, step.code), "result_devanagari": display.state(step.result)}
+
+
+def _metre_json(metre: dict[str, Any]) -> dict[str, Any]:
+    name = metre.get("name", "")
+    return {**to_jsonable(metre), "name_devanagari": to_deva(name) if name else ""}
 
 
 def _join(words: list[Word], indices: list[int]) -> list[str]:
@@ -85,7 +104,7 @@ def _word_json(i: int, w: Word, full: bool) -> dict[str, Any]:
         "verified": verified,
         "verified_reason": (proof.note if proof and proof.note else
                             ("derived by " + proof.method if verified else "no derivation found")),
-        "sutra_trace": [to_jsonable(s) for s in (proof.trace if proof else [])],
+        "sutra_trace": [_step_json(s) for s in (proof.trace if proof else [])],
         "role": w.role, "head": w.head, "gloss": w.gloss, "gloss_source": w.gloss_source,
         "arsha": w.arsha,
     }
@@ -127,7 +146,7 @@ def to_json(analysis: VerseAnalysis, *, full: bool = False) -> dict[str, Any]:
     n = len(analysis.lines)
     out: dict[str, Any] = {
         "id": analysis.id, "input": analysis.input,
-        "lines": [scripts(s) for s in analysis.lines], "metre": to_jsonable(analysis.metre),
+        "lines": [scripts(s) for s in analysis.lines], "metre": _metre_json(analysis.metre),
         "split_counts": list(analysis.split_counts), "status": analysis.status,
         "notes": list(analysis.notes),
     }

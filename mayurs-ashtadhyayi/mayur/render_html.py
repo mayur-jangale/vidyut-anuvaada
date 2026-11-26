@@ -74,8 +74,8 @@ def _section(title: str, body: str) -> str:
 def _metre(m: dict[str, Any]) -> str:
     if not m:
         return "metre: –"
-    name = m.get("name") or m.get("metre")
-    return "metre: " + (str(name) if name else ", ".join(f"{k} {v}" for k, v in m.items()))
+    name = m.get("name_devanagari") or m.get("name")
+    return "metre: " + (str(name) if name else "not identified")
 
 
 def _pada(d: dict[str, Any]) -> str:
@@ -108,15 +108,20 @@ def _grammar(d: dict[str, Any]) -> str:
     rows = []
     for w in d["words"]:
         a = w["analysis"]
-        lemma = e(a["lemma_iast"] or a["lemma"]) + (f' <span class="mut">(root {e(a["root"])})</span>'
-                                                    if a.get("root") else "")
+        dv = a.get("devanagari", {})
+        lemma = (f'<span class="dev">{e(dv.get("lemma", ""))}</span><br><span class="mut">'
+                 f'{e(a.get("lemma_iast", "") or a["lemma"])}</span>'
+                 + (f'<br><span class="mut">धातु <span class="dev">{e(dv.get("root", ""))}</span></span>'
+                    if a.get("root") else ""))
+        terms = " ".join(dv.get(k, "") for k in ("gender", "case", "number", "person", "tense_mood", "voice", "krt"))
         mark = ('<span class="tick" title="derived">✓</span>' if w["verified"]
                 else f'<span class="cross">✗</span> <span class="mut">{e(w["verified_reason"])}</span>')
         arsha = '<span class="tag">ārṣa</span>' if w["arsha"] else ""
         rows.append(
             f'<tr data-w="{w["index"]}" class="wd"><td><span class="dev">{e(w["form"]["devanagari"])}</span><br>'
             f'<span class="mut">{e(w["form"]["iast"])}</span>{arsha}</td><td>{lemma}</td>'
-            f'<td>{e(a["description"])}</td><td>{e(w["role"])}</td><td>{e(w["gloss"])}</td><td>{mark}</td></tr>')
+            f'<td><span class="dev">{e(" ".join(terms.split()))}</span><br><span class="mut">'
+            f'{e(a["description"])}</span></td><td>{e(w["role"])}</td><td>{e(w["gloss"])}</td><td>{mark}</td></tr>')
     if not rows:
         return ""
     return ('<div class="scroll"><table><tr><th>word</th><th>lemma / root</th><th>grammar</th><th>role</th>'
@@ -142,7 +147,8 @@ def _alternatives(d: dict[str, Any]) -> str:
     items = []
     for alt in d["alternatives"]:
         sc = ", ".join(f"{k} {v:.2f}" for k, v in alt["scores"].items())
-        split = " / ".join(e(p["iast"]) for p in alt["padaccheda"])
+        split = " / ".join(f'<span class="dev">{e(p["devanagari"])}</span> <span class="mut">{e(p["iast"])}</span>'
+                           for p in alt["padaccheda"])
         items.append(f'<details><summary>Reading {alt["rank"] + 1} – {e(alt["status"])}</summary>'
                      f'<p>{split}</p><p class="mut">{e(sc)}</p>'
                      f'<p>{e(alt["translation"])}</p></details>')
@@ -154,16 +160,20 @@ def _traces(d: dict[str, Any]) -> str:
     for w in d["words"]:
         if not w["sutra_trace"]:
             continue
-        rows = "".join(f'<tr><td class="mono">{e(s["code"])}</td><td class="mut">{e(s["source"])}</td>'
-                       f'<td class="mono">{e(s["result"])}</td></tr>' for s in w["sutra_trace"])
-        items.append(f'<details><summary>{e(w["form"]["iast"])} – {len(w["sutra_trace"])} steps</summary>'
-                     f'<div class="scroll"><table><tr><th>rule</th><th>source</th><th>state</th></tr>{rows}'
+        rows = "".join(
+            f'<tr><td class="mono">{e(s["code"])}</td><td class="dev">{e(s["sutra"]["devanagari"])}'
+            f'<br><span class="mut">{e(s["sutra"]["source_devanagari"])}</span></td>'
+            f'<td class="dev">{e(s["result_devanagari"])}</td></tr>' for s in w["sutra_trace"])
+        items.append(f'<details><summary><span class="dev">{e(w["form"]["devanagari"])}</span> '
+                     f'{e(w["form"]["iast"])} – {len(w["sutra_trace"])} steps</summary>'
+                     f'<div class="scroll"><table><tr><th>rule</th><th>sūtra</th><th>state</th></tr>{rows}'
                      "</table></div></details>")
     return "".join(items)
 
 
 def _gloss(d: dict[str, Any]) -> str:
-    items = "".join(f'<li><b class="wd" data-w="{i}">{e(g["iast"])}</b><span>{e(g["gloss"])}</span></li>'
+    items = "".join(f'<li><b class="wd dev" data-w="{i}">{e(g["devanagari"])}</b>'
+                    f'<span>{e(g["iast"])} · {e(g["gloss"])}</span></li>'
                     for i, g in enumerate(d["gloss"]))
     return f'<ol class="gl">{items}</ol>' if items else ""
 

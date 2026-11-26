@@ -178,7 +178,8 @@ def _nominal_cands(w: Word, cands: list[int]) -> list[int]:
 def _cand_score(m: Morph, support: float, vmorphs: list[Morph]) -> float:
     s = float(lexicon.quality(m)) - (0.0 if m.lexical_linga_ok else 0.5)
     if m.kind == "avyaya":
-        return s + (2.5 if m.lemma in PARTICLES | NEGATION | ADVERBS else 0.5)
+        # listed indeclinables outrank a homophonous participle reading (itas 'from here' vs 'gone')
+        return s + (3.5 if m.lemma in PARTICLES | NEGATION | ADVERBS else 0.5)
     s += 0.8 * min(support, 4)
     kartari = [v for v in vmorphs if v.prayoga != "karmaRi"]
     vib = m.vibhakti
@@ -207,10 +208,10 @@ def _key_weights(w: Word, nc: list[int]) -> dict[tuple, float]:
     return out
 
 
-def choose_nominals(words: list[Word], cands: list[list[int]], verbs: dict[int, int]) -> list[int]:
-    vmorphs = [words[i].analyses[j] for i, j in verbs.items()]
-    ncands = [_nominal_cands(w, c) for w, c in zip(words, cands)]
-    keys: list[dict] = [{} if w.in_compound else _key_weights(w, nc) for w, nc in zip(words, ncands)]
+REFINE_PASSES = 2
+
+
+def _choose_pass(words, ncands, keys, verbs, vmorphs) -> list[int]:
     chosen = []
     for i, w in enumerate(words):
         if i in verbs:
@@ -228,6 +229,18 @@ def choose_nominals(words: list[Word], cands: list[list[int]], verbs: dict[int, 
     return chosen
 
 
+def choose_nominals(words: list[Word], cands: list[list[int]], verbs: dict[int, int]) -> list[int]:
+    vmorphs = [words[i].analyses[j] for i, j in verbs.items()]
+    ncands = [_nominal_cands(w, c) for w, c in zip(words, cands)]
+    keys: list[dict] = [{} if w.in_compound else _key_weights(w, nc) for w, nc in zip(words, ncands)]
+    chosen = _choose_pass(words, ncands, keys, verbs, vmorphs)
+    for _ in range(REFINE_PASSES):  # re-score against the other words' current choices
+        keys = [{} if (w.in_compound or not w.analyses or i in verbs) else
+                {_nkey(w.analyses[chosen[i]]): 1.0} for i, w in enumerate(words)]
+        chosen = _choose_pass(words, ncands, keys, verbs, vmorphs)
+    return chosen
+
+
 # ---------------------------------------------------------------- role assignment
 
 def _final(words: list[Word], i: int) -> int:
@@ -239,6 +252,11 @@ def _final(words: list[Word], i: int) -> int:
 def _nearest(i: int, pool: list[int]) -> Optional[int]:
     pool = [p for p in pool if p != i]
     return min(pool, key=lambda p: (abs(p - i), p < i)) if pool else None
+
+
+def _preceding(i: int, pool: list[int]) -> Optional[int]:
+    prev = [p for p in pool if p < i]
+    return max(prev) if prev else _nearest(i, pool)
 
 
 def _pick_head(words: list[Word], members: list[int], verbs: list[int]) -> int:
@@ -327,7 +345,8 @@ def _link_avyaya(words, i, verbs, subjects) -> None:
         prev = [j for j in content if j < i]
         _set(words, i, "avyaya", max(prev) if prev else _nearest(i, content))
     else:
-        _set(words, i, "avyaya", _nearest(i, verbs) if verbs else _nearest(i, subjects or content))
+        _set(words, i, "avyaya", _nearest(i, verbs) if verbs else
+             (_preceding(i, subjects) if subjects else _nearest(i, content)))
 
 
 def assign_roles(words: list[Word], finite: list[int]) -> tuple[list[Word], dict, list[str]]:
@@ -354,7 +373,7 @@ def assign_roles(words: list[Word], finite: list[int]) -> tuple[list[Word], dict
         for i, w in enumerate(words):
             if w.role in CASE_ROLE.values() and w.role != "sambandha" and w.head is None or \
                     (w.role == "karma" and w.head is None):
-                _set(words, i, w.role, _nearest(i, subjects))
+                _set(words, i, w.role, _preceding(i, subjects))
     for i, w in enumerate(words):
         if not w.in_compound and w.morph and w.morph.kind == "avyaya":
             _link_avyaya(words, i, verbs, subjects)
@@ -365,6 +384,9 @@ def _stats(words: list[Word], finite: list[int], subjects: list[int]) -> dict:
     vis = [(i, w.head) for i, w in enumerate(words) if w.role == "visheshana" and w.head is not None]
     agree = [_nkey(words[i].morph) == _nkey(words[h].morph) for i, h in vis]
     karta_heads = {w.head for w in words if w.role == "karta"}
+    kartas = [w.head for w in words if w.role == "karta" and w.head is not None]
+    if finite and len(kartas) != len(set(kartas)):  # two karta groups for one verb
+        agree = agree + [False]
     if finite:
         vals = [1.0 if v in karta_heads else (0.75 if words[v].morph.purusha != "praTama" else 0.0)
                 for v in finite]
