@@ -25,9 +25,10 @@ ARSHA_NOTE = ("ārṣa: the {got} ending on a root that takes {want} by 1.3.12�
               "epic usage, labelled and not derived")
 # (आत्मनेपद ending, परस्मैपद ending) as sounds, longest first
 _PAIRS = tuple((lipi.varnas(a), lipi.varnas(p)) for a, p in (
-    ("आमहे", "आमस्"), ("आवहे", "आवस्"), ("अन्ताम्", "अन्तु"), ("अन्ते", "अन्ति"), ("अध्वम्", "अत"),
-    ("अध्वे", "अथ"), ("अन्त", "अन्"), ("अताम्", "अतु"), ("अते", "अति"), ("असे", "असि"), ("एत", "एत्"),
-    ("अत", "अत्"), ("ए", "आमि")))
+    ("महे", "मस्"), ("वहे", "वस्"), ("न्ताम्", "न्तु"), ("न्ते", "न्ति"), ("ध्वम्", "त"), ("ध्वे", "थ"),
+    ("न्त", "न्"), ("ताम्", "तु"), ("ते", "ति"), ("से", "सि"), ("एत", "एत्"), ("त", "त्"), ("ए", "आमि")))
+LYAP_NOTE = ("ārṣa: an absolutive in -य without a prefix (7.1.37 समासेऽनञ्पूर्वे क्त्वो ल्यप् gives ल्यप् only after a "
+             "prefix; the regular form has क्त्वा); epic usage, labelled and not derived")
 _PARTICIPLE = (lipi.varnas("अमान"), lipi.varnas("आन"))  # शानच् stems: क्रोशमान, दर्शयान
 
 
@@ -134,12 +135,13 @@ def gati_verbs(form: str, padas: Lookup, is_stem: Callable[[str], bool]) -> tupl
     for i, v in enumerate(sounds):
         if v != "ई" or i < 2 or i > len(sounds) - 3:
             continue
-        base = [lipi.from_varnas(sounds[:i] + (end,)) for end in ("अ", "आ", "इ", "ई")]
+        rest = lipi.from_varnas(sounds[i + 1:])
+        verbal = _verbal(rest, CVI_ROOTS, padas)
+        base = [lipi.from_varnas(sounds[:i] + (end,)) for end in ("अ", "आ", "इ", "ई")] if verbal else []
         stem = next((b for b in base if is_stem(b)), None)
         if stem is None:
             continue
-        rest = lipi.from_varnas(sounds[i + 1:])
-        for m in _verbal(rest, CVI_ROOTS, padas):
+        for m in verbal:
             cvi = lipi.from_varnas(sounds[: i + 1])
             note = GATI_NOTE.format(gati=f"{cvi} ({stem} + च्वि, 5.4.50, 7.4.32)", rule="1.4.61", verb=rest)
             out.append(replace(m, form=form, prefixes=(cvi,) + tuple(m.prefixes), source="generated", quality=2,
@@ -156,7 +158,11 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
     out += [m for m in arsha_voice(form, padas) if (m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) not in have]
     if not any(m.quality >= 2 for m in found):
         out += arsha_participle(form, generated, padas)
-        from mayur import lexicon
+    if not any(m.kind == "avyaya" and m.krt in ("ल्यप्", "क्त्वा") for m in found):  # पीड्य "having pressed"
+        out += [replace(m, kind="avyaya", krt="ल्यप्", linga=None, vibhakti=None, vacana=None, source=ARSHA, quality=1,
+                        handle=("special", LYAP_NOTE))
+                for m in found if m.krt in ("यत्", "ण्यत्", "क्यप्") and m.vibhakti == "सम्बोधन" and not m.prefixes][:1]
+    from mayur import lexicon
 
-        out += gati_verbs(form, padas, lexicon.is_stem)
+    out += gati_verbs(form, padas, lexicon.is_stem)
     return tuple(out)

@@ -83,12 +83,22 @@ def _feminine_of(ours: str, gold: str) -> bool:
 def same_lemma(m: Morph, gold_lemma: str, gold_upos: str = "") -> bool:
     """Our analysis names the same lexeme as the gold lemma, under the conventions above."""
     want, ours = canonical_lemma(gold_lemma), canonical_lemma(lemma(m))
-    if ours == want or _feminine_of(ours, want) or _citation_variant(m, ours, want):
+    if ours == want or _feminine_of(ours, want) or _citation_variant(m, ours, want) or _causative_citation(ours, want):
         return True
     if gold_upos in INDECLINABLE_UPOS:
         word = canonical_lemma(m.form)
         return word == want or (word.endswith("त्") and word[:-2] + "द्" == want)  # 8.2.39: चेत् = चेद्
     return False
+
+
+def _causative_citation(ours: str, gold: str) -> bool:
+    """The corpus cites a causative by its stem in -अय् (निशामय्, पीडय्) where the form at hand is
+    built on the root (the absolutives निशम्य, पीड्य): the same lexeme for scoring."""
+    if not gold.endswith("य्") or len(gold) < 4:
+        return False
+    base = gold[:-2]  # without य्: the consonant before अय् now ends the string
+    short = base[::-1].replace("ा", "", 1)[::-1]  # निशाम -> निशम (the root's own vowel)
+    return ours in (base + "्", short + "्", base + "ि")
 
 
 def _citation_variant(m: Morph, ours: str, want: str) -> bool:

@@ -109,11 +109,24 @@ def _suppletive_root(m: Morph, root: str) -> str:
     return root
 
 
+_GATI_FINAL = ("स्", "र्", "म्", "त्")
+
+
+def _gati_join(gati: str, rest: str) -> str:
+    """प्रादुस् + अस् -> प्रादुरस्, नमस् + कृ -> नमस्कृ, आविस् + भू -> आविर्भू: a गति joins like a compound member."""
+    from mayur import sandhi
+
+    if rest[:1] in "कखचछटठतथपफशषस":  # नमस्कृ, पुरस्कृ: the final stays before a voiceless sound (8.3.46)
+        return _join(gati, rest)
+    outs = [o.text.replace(" ", "") for o in sandhi.outcomes(gati, rest, samasa=True)]
+    return (outs or [gati + rest])[0]
+
+
 @lru_cache(maxsize=100_000)
 def _verbal_lemma(prefixes: tuple[str, ...], root: str) -> str:
     out = root
     for p in reversed(prefixes):
-        out = _join(p, out)
+        out = _gati_join(p, out) if len(p) > 3 and p.endswith(_GATI_FINAL) else _join(p, out)
     return out
 
 
