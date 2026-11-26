@@ -149,6 +149,20 @@ def gati_verbs(form: str, padas: Lookup, is_stem: Callable[[str], bool]) -> tupl
     return tuple(dict.fromkeys(out))
 
 
+def arsha_shatr(form: str) -> tuple[Morph, ...]:
+    """स्मयन्: the परस्मैपद participle (शतृ) of a root that takes आत्मनेपद; its regular present is स्मयन्ते."""
+    sounds = lipi.varnas(form)
+    if len(sounds) < 4 or sounds[-2:] != ("अ", "न्"):
+        return ()
+    regular = lipi.from_varnas(sounds + ("त्", "ए"))
+    out = []
+    for m in _finite(regular):
+        note = ARSHA_NOTE.format(got="परस्मैपद (शतृ)", want="आत्मनेपद (शानच्)", regular=lipi.pausa(regular))
+        out.append(replace(m, form=form, kind="subanta", krt="शतृ", linga="पुंलिङ्ग", vibhakti="प्रथमा", vacana="एकवचन",
+                           purusha=None, lakara=None, prayoga=None, source=ARSHA, quality=1, handle=("special", note)))
+    return tuple(dict.fromkeys(out))
+
+
 def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) -> tuple[Morph, ...]:
     """Extra analyses for ``form`` given what the lexicon already ``found``."""
     out: list[Any] = []
@@ -158,11 +172,12 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
     out += [m for m in arsha_voice(form, padas) if (m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) not in have]
     if not any(m.quality >= 2 for m in found):
         out += arsha_participle(form, generated, padas)
+        out += arsha_shatr(form)
     if not any(m.kind == "avyaya" and m.krt in ("ल्यप्", "क्त्वा") for m in found):  # पीड्य "having pressed"
         out += [replace(m, kind="avyaya", krt="ल्यप्", linga=None, vibhakti=None, vacana=None, source=ARSHA, quality=1,
                         handle=("special", LYAP_NOTE))
                 for m in found if m.krt in ("यत्", "ण्यत्", "क्यप्") and m.vibhakti == "सम्बोधन" and not m.prefixes][:1]
     from mayur import lexicon
 
-    out += gati_verbs(form, padas, lexicon.is_stem)
+    out += gati_verbs(form, padas, lexicon.listed_stem)
     return tuple(out)

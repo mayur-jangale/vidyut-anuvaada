@@ -54,6 +54,30 @@ def _kap_paradigm(stem: str, linga: str) -> dict[str, tuple[Morph, ...]]:
     return {k: tuple(v) for k, v in table.items()}
 
 
+UPASARJANA_NOTE = ("{stem}: the feminine {base} shortened at the end of a बहुव्रीहि (1.2.48 गोस्त्रियोरुपसर्जनस्य); "
+                   "the stem is inflected by vidyut, the shortening itself is not derived")
+
+
+def shortened_feminine_padas(form: str, is_stem) -> tuple[Morph, ...]:
+    """-लतः of लता, -प्रभम् of प्रभा: the last member of a बहुव्रीहि with its feminine आ shortened."""
+    from mayur import lipi
+    from mayur.lexicon_gen import _ENDINGS
+
+    sounds = lipi.varnas(form)
+    out: list[Morph] = []
+    for ending, stem_end, lingas in _ENDINGS:
+        ev = lipi.varnas(ending)
+        if stem_end != "अ" or len(sounds) <= len(ev) + 2 or sounds[-len(ev):] != ev:
+            continue
+        base = lipi.from_varnas(sounds[:-len(ev)] + ("आ",))
+        if not is_stem(base):
+            continue
+        stem = lipi.from_varnas(sounds[:-len(ev)] + ("अ",))
+        for linga in lingas:
+            out.extend(_kap_paradigm(stem, linga).get(form, ()))
+    return tuple(dict.fromkeys(out))
+
+
 def kap_padas(form: str, is_stem) -> tuple[Morph, ...]:
     """-लक्ष्मीकः, -स्त्रीकः, -कर्तृकः: the last member of a बहुव्रीहि with कप्."""
     from mayur import lipi

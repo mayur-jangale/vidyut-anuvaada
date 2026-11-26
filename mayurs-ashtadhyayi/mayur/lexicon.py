@@ -220,7 +220,11 @@ def _base_padas(form: str) -> tuple[Morph, ...]:
         from mayur.lexicon_dict import dictionary_padas
 
         found.extend(dictionary_padas(form))
-        found.extend(kap_padas(form, is_stem))
+        found.extend(kap_padas(form, listed_stem))
+    if not found:
+        from mayur.lexicon_closed import shortened_feminine_padas
+
+        found.extend(shortened_feminine_padas(form, listed_stem))
     from mayur.lexicon_fem import feminine_padas
 
     have = {m.lemma for m in found if m.linga == "स्त्रीलिङ्ग"}
@@ -338,6 +342,15 @@ def _prefixed_stems(form: str) -> list[Morph]:
                              gana=m.gana, prefixes=m.prefixes, krt=m.krt, root_gloss=m.root_gloss,
                              source="generated", quality=3, handle=("stem", stem_handle)))
     return list(dict.fromkeys(out))
+
+
+def listed_stem(form: str) -> bool:
+    """The kosha or the corpus dictionary lists ``form`` itself as a nominal stem (a plain lookup:
+    safe to call from inside the generators, unlike ``is_stem``)."""
+    from mayur.lexicon_dict import genders
+
+    return any(e.entry == "basic" and e.pratipadika == form and not e.is_avyaya for e in bridge.lookup(form)) \
+        or any(e.entry == "basic" and e.pratipadika == form for e in bridge.lookup(form + "स्")) or bool(genders(form))
 
 
 def is_stem(form: str) -> bool:
