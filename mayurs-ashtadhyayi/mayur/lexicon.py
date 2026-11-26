@@ -310,8 +310,10 @@ def _join(left: str, right: str) -> str:
         return "उत्" + right[2:]
     if left == "उद्" and right[:1] in ("न", "म"):  # 8.4.45 यरोऽनुनासिकेऽनुनासिको वा (the usual spelling)
         return "उन्" + right
-    if left.endswith("र्") and right[:1] not in _VOWEL_INITIAL:  # निर्गम्, दुर्गम्: र् stays
-        return left + right
+    if left in ("निर्", "दुर्"):  # the upasarga is निस् / दुस् (र् is its sandhi form)
+        left = left[:-2] + "स्"
+    if left in ("निस्", "दुस्") and right[:1] in _VOWEL_INITIAL:
+        return lipi.from_varnas(lipi.varnas(left[:-2] + "र्") + lipi.varnas(right))
     outs = sandhi.outcomes(left, right)
     # within a word the samhita rules are obligatory (1.4.109 with 6.1.72): prefer an outcome that applied one
     applied = [o for o in outs if o.sutras and "पादान्त-विराम" not in o.sutras]
