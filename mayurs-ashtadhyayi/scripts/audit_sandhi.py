@@ -130,6 +130,7 @@ def audit(lines) -> None:
         target = sandhi.canon(line["compact"])
         if _ok(forms, flags, target):
             ok += 1
+            line["rejoins"] = True
             per_book[book][0] += 1
             per_book[book][1] += 1
             continue
@@ -187,7 +188,7 @@ def main() -> None:
     lines = gold_lines(args.limit)
     audit(lines)
     if args.lattice:
-        lattice([ln for ln in lines if not ln.get("anomaly")][: args.lattice], ROOT / "data/derived/audit_lexicon_misses.txt")
+        lattice([ln for ln in lines if ln.get("rejoins")][: args.lattice], ROOT / "data/derived/audit_lexicon_misses.txt")
 
 
 if __name__ == "__main__":

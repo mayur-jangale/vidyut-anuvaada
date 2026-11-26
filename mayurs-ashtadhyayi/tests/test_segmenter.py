@@ -57,3 +57,11 @@ def test_speed_32_syllables():
 def test_fallback_never_fails():
     seg = segmenter.segment_line("क्ष्ट्रप्")
     assert seg.splits and seg.tier >= 1
+
+
+def test_sa_drops_s_before_consonant_in_lattice():  # 6.1.132
+    assert segmenter.contains("स सुखी", ["सस्", "सुखी"], [False, False])
+
+
+def test_word_made_only_of_merged_vowel():  # च + अ (नञ्) → चा, 6.1.101
+    assert segmenter.contains("चानृशंसा", ["च", "अ", "नृशंसा"], [False, True, False])
