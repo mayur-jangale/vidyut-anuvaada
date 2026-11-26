@@ -49,9 +49,15 @@ def decline(stem: str, vibhakti: str, vacana: str, linga: Optional[str] = None) 
 
     if linga is None:
         lingas = [x for m in lexicon.stem_analyses(stem) for x in stem_lingas(m)]
-        linga = lingas[0] if lingas else None
+        linga = lingas[0] if lingas else _guess_linga(stem)
     if linga is None:
         return None
+    return _derive(stem, vibhakti, vacana, linga)
+
+
+def _derive(stem: str, vibhakti: str, vacana: str, linga: str) -> Optional[str]:
+    import vidyut.prakriya as P
+
     try:
         args = P.Pada.Subanta(P.Pratipadika.basic(stem), P.Linga.from_string(linga),
                               P.Vibhakti.from_string(vibhakti), P.Vacana.from_string(vacana))
@@ -59,6 +65,16 @@ def decline(stem: str, vibhakti: str, vacana: str, linga: Optional[str] = None) 
     except Exception:  # vidyut raises on unsupported combinations
         return None
     return texts[0] if texts else None
+
+
+def _guess_linga(stem: str) -> Optional[str]:
+    """Gender of a stem not listed as a bare form: accept a gender only if its derived
+    nominative singular is in the kosha under the same lemma."""
+    for linga in ("puM", "strI", "napuMsaka"):
+        nom = _derive(stem, "praTamA", "eka", linga)
+        if nom and any(m.lemma == stem and m.linga == linga for m in lexicon.analyses(nom)):
+            return linga
+    return None
 
 
 def _runs(words: list[Word]) -> list[list[int]]:
@@ -116,9 +132,10 @@ def classify(words: list[Word], members: list[int]) -> tuple[str, str, str]:
     first_adj = is_adjectival(firsts[-1].morph) or _first_is_kta(firsts[-1].form)
     if first_adj and (_exocentric(final) or _first_is_kta(firsts[-1].form)):
         vib, vac = "praTamA", fm.vacana or "eka"
-        noun_l = next((l for l in stem_lingas(_stem_morph(final)) if l), None)
+        noun = _noun_analysis(final)
+        noun_l = next(iter(stem_lingas(noun)), None)
         a = _gen(nouns[-1], vib, vac, noun_l)
-        n = _gen(fstem, vib, vac, noun_l)
+        n = _gen(noun.lemma if noun else fstem, vib, vac, noun_l)
         yasya = _gen("yad", "zazWI", vac, fm.linga or "puM")
         sah = _gen("tad", "praTamA", vac, fm.linga or "puM")
         return ("bahuvrihi", f"{a} {n} {yasya} {sah}",
@@ -132,10 +149,12 @@ def classify(words: list[Word], members: list[int]) -> tuple[str, str, str]:
     return "unknown", hy, "heuristic: no pattern matched"
 
 
-def _stem_morph(final: Word) -> Optional[Morph]:
+def _noun_analysis(final: Word) -> Optional[Morph]:
+    """The final member read as a plain (non-krdanta) noun, if the kosha lists one."""
     m = final.morph
-    stems = lexicon.stem_analyses(m.lemma) if m else ()
-    return stems[0] if stems else None
+    plain = [a for a in final.analyses if a.kind == "subanta" and a.krt is None
+             and (m is None or a.vibhakti == m.vibhakti)]
+    return plain[0] if plain else m
 
 
 def annotate(reading: Reading) -> Reading:
@@ -143,8 +162,7 @@ def annotate(reading: Reading) -> Reading:
     compounds: list[Compound] = []
     for cid, members in enumerate(_runs(words)):
         samasa, vigraha, basis = classify(words, members)
-        stem = "".join(words[i].form for i in members[:-1]) + (words[members[-1]].morph.lemma
-                                                                 if words[members[-1]].morph else words[members[-1]].form)
+        stem = "".join(words[i].form for i in members)
         compounds.append(Compound(id=cid, members=members, stem=stem, samasa=samasa,
                                   vigraha=vigraha, basis=basis))
         for i in members:
