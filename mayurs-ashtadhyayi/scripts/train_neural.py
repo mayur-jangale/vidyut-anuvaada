@@ -107,7 +107,7 @@ def head_accuracy(model, meta: dict, data: list[dict]) -> dict[str, float]:
     return {h: round(right[h] / max(1, n), 4) for h in (*neural.HEADS, "all")}
 
 
-def train(data, dev, epochs: int, log, cfg: dict) -> tuple:
+def train(data, dev, epochs: int, log, cfg: dict, minutes: float = 1e9) -> tuple:
     sounds, values = vocab(data)
     meta = {"config": cfg, "sounds": sounds, "values": values}
     model = neural.build_model(cfg, len(sounds), {h: len(v) for h, v in values.items()})
@@ -115,6 +115,7 @@ def train(data, dev, epochs: int, log, cfg: dict) -> tuple:
     loss_fn = torch.nn.CrossEntropyLoss(ignore_index=-100)
     sound_ix = {s: i for i, s in enumerate(sounds)}
     best = {"acc": -1.0, "state": None, "epoch": 0}
+    deadline = time.time() + 60 * minutes
     for epoch in range(epochs):
         model.train()
         t0, nw, tot = time.time(), 0, 0.0
@@ -130,15 +131,21 @@ def train(data, dev, epochs: int, log, cfg: dict) -> tuple:
             opt.step()
             nw += sum(len(r["forms"]) for r in b)
             tot += float(loss.detach())
+            if time.time() > deadline:
+                log(f"time budget reached in epoch {epoch + 1} after {nw} words")
+                break
             if k % 200 == 0:
                 log(f"epoch {epoch + 1} batch {k}/{len(bs)} loss {tot / (k + 1):.3f} {nw / (time.time() - t0):.0f} w/s")
         for g in opt.param_groups:
             g["lr"] *= 0.6
         acc = head_accuracy(model, meta, dev)
-        log(f"epoch {epoch + 1}: train loss {tot / len(bs):.3f}, DEV gold-form heads {acc}")
+        log(f"epoch {epoch + 1}: train loss {tot / max(1, k):.3f}, DEV gold-form heads {acc}")
         if acc["all"] > best["acc"]:
             best.update(acc=acc["all"], state={k: v.clone() for k, v in model.state_dict().items()},
                         epoch=epoch + 1, heads=acc)
+            torch.save(best["state"], neural.WEIGHTS_FILE)  # checkpoint (config written at the end)
+        if time.time() > deadline:
+            break
     model.load_state_dict(best["state"])
     model.eval()
     return model, {**meta, "epochs_best": best["epoch"], "dev_heads": best["heads"]}
@@ -190,6 +197,7 @@ def main() -> None:
     ap.add_argument("--max-words", type=int, default=2_500_000)
     ap.add_argument("--epochs", type=int, default=4)
     ap.add_argument("--eval-only", action="store_true")
+    ap.add_argument("--minutes", type=float, default=1e9, help="wall-clock budget for training")
     args = ap.parse_args()
     torch.manual_seed(0)
     random.seed(0)
@@ -205,7 +213,7 @@ def main() -> None:
     else:
         data = load_train(args.max_words)
         log(f"train {len(data)} verses, {sum(len(r['forms']) for r in data)} words")
-        model, meta = train(data, dev_gold, args.epochs, log, dict(neural.DEFAULT_CONFIG))
+        model, meta = train(data, dev_gold, args.epochs, log, dict(neural.DEFAULT_CONFIG), args.minutes)
         meta["train_words"] = sum(len(r["forms"]) for r in data)
         del data
     print("neural alone, DEV gold forms, per head:", head_accuracy(model, meta, dev_gold))
