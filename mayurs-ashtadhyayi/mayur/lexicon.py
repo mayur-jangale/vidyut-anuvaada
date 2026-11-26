@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import replace
 from functools import lru_cache
 
-from mayur import bridge
+from mayur import bridge, lipi
 from mayur.model import Morph, SutraStep, WordProof
 from mayur.terms import NONFINITE_KRT, PARTICIPLE_KRT
 
@@ -123,12 +123,20 @@ def _as_adjective(m: Morph) -> Morph:
                    root_gloss=m.root_gloss, quality=min(m.quality, 2))
 
 
+@lru_cache(maxsize=100_000)
+def _kosha_ranked(form: str) -> tuple[Morph, ...]:
+    """Kosha analyses only (no generation): the members of generated compounds."""
+    return tuple(_kosha_morphs(form))
+
+
 @lru_cache(maxsize=200_000)
 def padas(form: str) -> tuple[Morph, ...]:
     """All analyses of ``form`` as a complete pada, best first; () if none."""
-    from mayur.lexicon_gen import anvadesha, indefinite, looks_verbal, prefixed, sa_esha
+    from mayur.lexicon_gen import anvadesha, avyaya_compound, indefinite, looks_verbal, prefixed, sa_esha
 
     found = _kosha_morphs(form) + list(anvadesha(form)) + list(sa_esha(form)) + list(indefinite(form, padas))
+    if not any(m.kind == "avyaya" and m.quality >= 2 for m in found):
+        found.extend(avyaya_compound(form, _kosha_ranked, stems))
     if not any(m.quality >= 2 for m in found) or looks_verbal(form):
         # prefixed participles/absolutives sit next to the kosha's adjective (सम्पन्नस्, विचिन्त्य)
         known = set(found)
@@ -205,7 +213,7 @@ def _prefixed_stems(form: str) -> list[Morph]:
         stem_handle = bridge.pratipadika_of(m.handle) if m.kind == "subanta" else None
         if stem_handle is None or m.krt not in _GOOD_KRT:
             continue
-        if any(d.text == form for d in bridge.derive(stem_handle)):
+        if any(t == form for t in bridge.derived_texts(stem_handle)):
             out.append(Morph(form=form, lemma=m.lemma, kind="stem", stem=form, root=m.root, dhatu=m.dhatu,
                              gana=m.gana, prefixes=m.prefixes, krt=m.krt, root_gloss=m.root_gloss,
                              source="generated", quality=3, handle=("stem", stem_handle)))

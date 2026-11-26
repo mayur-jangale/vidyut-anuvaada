@@ -21,6 +21,14 @@ _STOP_FINALS = ("स्", "ष्", "र्", "ः", "द्", "त्", "न्
 
 
 @lru_cache(maxsize=None)
+def _surfaces_by_first() -> dict[str, tuple]:
+    table: dict[str, list] = {}
+    for u, wv, starts in _surface_varnas():
+        table.setdefault(wv[0], []).append((u, wv, starts))
+    return {k: tuple(v) for k, v in table.items()}
+
+
+@lru_cache(maxsize=None)
 def _surface_varnas() -> tuple[tuple[str, tuple[str, ...], tuple[tuple[str, ...], ...]], ...]:
     """(upasarga, written prefix varnas, remainder-start varnas) for all upasargas, computed once."""
     return tuple((u, lipi.varnas(w), tuple(lipi.varnas(s) for s in starts))
@@ -60,7 +68,7 @@ def _splits(form: str) -> tuple[tuple[str, str], ...]:
     """(upasarga, remainder) candidates for ``form``."""
     sounds = lipi.varnas(form)
     out = []
-    for u, wv, starts in _surface_varnas():
+    for u, wv, starts in _surfaces_by_first().get(sounds[0] if sounds else "", ()):
         if len(wv) < len(sounds) and sounds[:len(wv)] == wv:
             rest = sounds[len(wv):]
             for s in starts:
@@ -107,7 +115,7 @@ def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> l
                 continue
             seen.add(repr(entry.morph.handle.dhatu_entry.dhatu))
             pada = bridge.ktva_of_verb(entry, upasargas)
-            if pada is not None and any(d.text == form for d in bridge.derive(pada)):
+            if pada is not None and any(t == form for t in bridge.derived_texts(pada)):
                 m = entry.morph
                 prefixes = upasargas + m.prefixes
                 out.append(Morph(form=form, lemma=_lemma(prefixes, m.root or m.lemma), kind="avyaya", root=m.root,
@@ -127,7 +135,7 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             if m.krt in ("यत्", "ण्यत्", "क्यप्") and form.endswith("्य"):
                 # the same remainder may be the ल्यप् absolutive of the prefixed root (7.1.37)
                 ktva = bridge.prefixed_krdanta(entry, upasargas, as_ktva=True)
-                if ktva is not None and any(d.text == form for d in bridge.derive(ktva)):
+                if ktva is not None and any(t == form for t in bridge.derived_texts(ktva)):
                     prefixes = upasargas + m.prefixes
                     out.append(replace(m, form=form, lemma=_lemma(prefixes, m.root or m.lemma), prefixes=prefixes,
                                        krt="ल्यप्", kind="avyaya", linga=None, vibhakti=None, vacana=None,
@@ -136,7 +144,7 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             continue
         if pada is None:
             continue
-        if any(d.text == form for d in bridge.derive(pada)):
+        if any(t == form for t in bridge.derived_texts(pada)):
             prefixes = upasargas + m.prefixes
             krt = "ल्यप्" if m.krt == "क्त्वा" else m.krt
             out.append(replace(m, form=form, lemma=_lemma(prefixes, m.root or m.lemma), prefixes=prefixes, krt=krt,
@@ -199,7 +207,7 @@ def generated_nominals(form: str) -> tuple[Morph, ...]:
             for pada, template in bridge.subanta_paradigm(stem, linga):
                 if time.perf_counter() - start > _BUDGET_S:
                     return tuple(found)
-                if any(d.text == form for d in bridge.derive(pada)):
+                if any(t == form for t in bridge.derived_texts(pada)):
                     found.append(replace(template, form=form))
     return tuple(found)
 
@@ -265,3 +273,53 @@ def indefinite(form: str, lookup) -> tuple[Morph, ...]:
                 out.append(replace(m, form=form, lemma=lemma, source="generated", quality=3,
                                    handle=("particle", m, part)))
     return tuple(out)
+
+
+_PARTICLE_ENDS = (("अपि", ("पि",)), ("तु", ("तु",)), ("च", ("च",)), ("उ", ("ु", "उ")))
+_YATHA = ("यथा", "प्रति", "अनु", "उप", "सह")  # avyayibhava first members (2.1.6-2.1.7)
+AVYAYA_NOTE = ("indeclinable compound of kosha-listed members ({parts}); the joining (avyayībhāva 2.1.6 "
+               "or a particle in samhita) is not derived through vidyut's Python API")
+
+
+_VOWELS = frozenset({"अ", "आ", "इ", "ई", "उ", "ऊ", "ए", "ओ"})
+_PRONOMINAL = frozenset({"किम्", "क", "क्व", "कदा", "कथम्", "यद्", "तद्"})
+
+
+def _avyaya(form: str, parts: str) -> Morph:
+    return Morph(form=form, lemma=form, kind="avyaya", source="generated", quality=3,
+                 handle=("special", AVYAYA_NOTE.format(parts=parts)))
+
+
+def avyaya_compound(form: str, pada_lookup, stem_lookup) -> tuple[Morph, ...]:
+    """किंतु, किंच, क्वापि, किमु, यथाशक्ति, यथाक्रमम्: members are looked up, the join is re-run forward
+    with ``mayur.sandhi``; lemma = the word (as the corpus cites it)."""
+    from mayur import sandhi
+
+    out: list[Morph] = []
+    for particle, ends in _PARTICLE_ENDS:
+        if not form.endswith(ends) or len(form) < 3:
+            continue
+        sounds = lipi.varnas(form)
+        plen = len(lipi.varnas(particle))
+        for cut in range(max(1, len(sounds) - plen - 1), min(len(sounds), len(sounds) - plen + 2)):
+            base = sounds[:cut]
+            heads = [base]
+            if base[-1] in _VOWELS:
+                heads += [base[:-1] + (v,) for v in ("अ", "आ") if v != base[-1]]
+            for hv in heads:
+                h = lipi.from_varnas(hv)
+                h = h[:-1] + "म्" if h.endswith("ं") else h
+                if h == form or not any(m.kind == "avyaya" or m.lemma in _PRONOMINAL
+                                        for m in pada_lookup(h) if m.quality >= 2):
+                    continue
+                if any(o.text == form for o in sandhi.outcomes(h, particle)):
+                    out.append(_avyaya(form, h + " + " + particle))
+        if out:
+            return tuple(out[:1])
+    for first in _YATHA:
+        if form.startswith(first) and len(form) > len(first) + 1:
+            rest = form[len(first):]
+            bare = rest[:-2] if rest.endswith("म्") else rest
+            if stem_lookup(bare):
+                return (_avyaya(form, first + " + " + bare),)
+    return ()

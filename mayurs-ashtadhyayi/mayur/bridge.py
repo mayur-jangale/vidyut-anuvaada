@@ -189,6 +189,17 @@ def derive(handle: Any) -> tuple[Derivation, ...]:
     return tuple(Derivation(text=lipi.from_code(p.text), trace=_steps(p)) for p in ps)
 
 
+def derived_texts(handle: Any) -> tuple[str, ...]:
+    """Only the final texts of vidyut's forward derivations (cheap: no trace conversion)."""
+    if handle is None:
+        return ()
+    try:
+        ps = resources.vyakarana().derive(handle)
+    except Exception:  # noqa: BLE001
+        return ()
+    return tuple(lipi.from_code(p.text) for p in ps)
+
+
 def stem_handle(entry: Entry) -> Any:
     """Handle whose derivation yields the stem: the krdanta PratipadikaEntry, or the basic
     Pratipadika (1.2.45)."""

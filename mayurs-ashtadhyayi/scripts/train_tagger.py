@@ -70,7 +70,9 @@ def analyse(verse: list[dict]) -> dict:
             words.append(w)
             toks.append(t)
             cands.append(ms)
-            gold.append(tuple(j for j, m in enumerate(ms) if correct(m, t)))
+            ok = tuple(j for j, m in enumerate(ms) if correct(m, t))
+            exact = tuple(j for j in ok if all(feature_ok(ms[j], t, key) for key in ("Case", "Gender")))
+            gold.append(exact or ok)  # prefer the readings whose case and gender are also the gold ones
     return {"words": words, "toks": toks, "cands": cands, "gold": gold}
 
 

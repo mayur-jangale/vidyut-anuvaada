@@ -181,6 +181,11 @@ class Verse:
                     o.append("vfitAny")
             if m.kind == "tinanta" and _fits(topj, m):
                 o.append("kartaTop")
+            if abs(d) == 1:
+                o.append("nbT%+d=%s" % (d, tag(topj)))
+            if topj.kind == "tinanta" and m.kind == "subanta":
+                o.append("vlm=" + topj.lemma)
+                o.append("vpr=%s|%s" % (topj.prayoga or "", topj.vacana or ""))
         if m.vibhakti == "द्वितीया":
             verbal = any(self.cands[j][self.top[j]].kind == "tinanta" or _verbal(self.cands[j][self.top[j]])
                          for j in others)
