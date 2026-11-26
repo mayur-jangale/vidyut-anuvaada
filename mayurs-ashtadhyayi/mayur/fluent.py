@@ -16,13 +16,13 @@ from dataclasses import dataclass, replace
 from typing import Callable, Optional
 
 from . import english
-from .fluent_checks import Failure, Rendering, run_checks
-from .fluent_more import coordination, questions  # noqa: F401  (rules of RULES)
+from .fluent_checks import Failure, Rendering, run_checks, unrendered
+from .fluent_more import coordination, drop_particles, questions, unglossed  # noqa: F401  (rules of RULES)
 from .fluent_tok import PUNCT, Tok, _is_name, _pronoun, _w
 from .model import Alignment, Reading, Word
 
 NOTE_OK = "rule-based; checks passed"
-_PIECE = re.compile(r"\[[^\]]*\]|[^\s,;.?!:\-\[\]]+|[,;.?!:\-]")
+_PIECE = re.compile(r"\[[^\]]*\]|[^\s,;.?!:\-\[\]“”]+|[,;.?!:\-“”]")
 _AUX = {"is", "are", "am", "was", "were", "will", "shall", "do", "did", "does", "has", "have"}
 _DET = {"such", "other", "same", "the", "a", "an", "this", "that", "these", "those", "my", "your", "his", "her", "its", "our", "their",
         "all", "some", "no", "each", "every", "whose", "which"}
@@ -30,6 +30,7 @@ _DANGLING = {"and", "or", "but", "of", "to", "in", "by", "with", "from", "as", "
 _WH = {"who", "what", "whom", "whose", "which"}
 _MASS = {"water", "fire", "speech", "dharma", "truth", "joy", "anger", "grief", "affection", "valour", "virtue",
          "knowledge", "austerity", "study", "patience", "battle", "fortune", "happiness", "wealth", "time"}
+_NO_ARTICLE = {"someone", "anyone", "everyone", "something", "anything", "nothing", "everything", "one", "no one"}
 _NOUN_SKIP = {"विशेषण", "समासपूर्वपद", "सम्बोधन", "क्रिया", "अव्यय", "सम्बन्ध"}
 _ADJ = {"विशेषण", "विधेय"}
 _AGENT_END = ("er", "or", "ist")
@@ -60,7 +61,7 @@ def render(toks: list[Tok]) -> tuple[str, list[Alignment]]:
     """Text and exact spans of the aligned tokens."""
     out, spans = "", []
     for i, t in enumerate(toks):
-        glued = i == 0 or t.glue or t.text in PUNCT or t.text == "-" or toks[i - 1].text == "-"
+        glued = i == 0 or t.glue or t.text in PUNCT | {"”"} or t.text == "-" or toks[i - 1].text in ("-", "“")
         out += ("" if glued else " ")
         if t.word is not None:
             spans.append(Alignment(t.word, len(out), len(out) + len(t.text)))
@@ -117,7 +118,8 @@ def possessive_names(toks, reading):
     i = 1
     while i < len(toks) - 1:
         t, w = toks[i + 1], _w(reading, toks[i + 1])
-        if toks[i].text == "of" and toks[i].word is None and _is_name(w) and w.role == "सम्बन्ध" and w.head is not None:
+        if toks[i].text == "of" and toks[i].word is None and _is_name(w) and w.role == "सम्बन्ध" and w.head is not None \
+                and not t.text.endswith("'s"):
             if toks[i - 1].word != w.head or (i > 1 and toks[i - 2].text == "-") or _is_name(_w(reading, toks[i - 1])):
                 i += 1
                 continue
@@ -147,8 +149,10 @@ def verb_agreement(toks, reading):
                                   else "is")
         w = _w(reading, t)
         m = w.morph if w else None
+        before = toks[i - 1].text.lower() if i else ""
         if m and m.kind == "tinanta" and m.lakara == "लट्" and m.purusha == "प्रथमपुरुष" and m.vacana == "एकवचन" \
-                and w.gloss and t.text.lower() == english.base(w.gloss.split()[0]):
+                and w.gloss and t.text.lower() == english.base(w.gloss.split()[0]) \
+                and before not in ("not", "does", "do", "did", "to", "will", "should", "may", "would", "shall"):
             toks[i] = Tok(english.third_singular(t.text.lower()), t.word)
     return toks
 
@@ -158,7 +162,7 @@ def relative_clauses(toks, reading):
     out = []
     for i, t in enumerate(toks):
         w = _w(reading, t)
-        if w and w.morph and w.morph.lemma == "यद्" and out and out[-1].text not in PUNCT | {"and", "or", "O"} \
+        if w and w.morph and w.morph.lemma == "यद्" and out and out[-1].text not in PUNCT | {"and", "or", "O", "he", "she", "they", "him", "her", "them", "those", "it", "“"} \
                 and out[-1].text.lower() not in ("by", "to", "in", "with", "from", "of"):
             out.append(Tok(","))
         out.append(t)
@@ -251,6 +255,8 @@ def articles(toks, reading):
             continue
         if t.text.lower().split()[0] in _MASS | {"this", "that"} or t.text.endswith(("ing",)) and w.role == "विधेय":
             continue
+        if t.text.lower() in _NO_ARTICLE or t.text.lower().endswith(("ness", "hood", "ship")):
+            continue
         j = i
         while j > 0 and toks[j - 1].word is not None and reading.words[toks[j - 1].word].head == t.word \
                 and (reading.words[toks[j - 1].word].role == "विशेषण" or reading.words[toks[j - 1].word].in_compound) \
@@ -279,6 +285,9 @@ def tidy(toks, reading):
     """No dangling conjunctions or prepositions, no doubled commas, final punctuation, capitals."""
     ts = [t for t in toks if t.text]
     ends = {".", "?", "!"}
+    close = bool(ts) and ts[-1].text == "”"
+    if close:
+        ts.pop()
     asks = bool(ts) and ts[-1].text == "?"
     while ts and ts[-1].text in ends | {",", ";"}:
         ts.pop()
@@ -293,6 +302,7 @@ def tidy(toks, reading):
         out.append(t)
     if out:
         out.append(Tok("?" if asks else "."))
+        out += [Tok("”")] if close else []
     cap = True
     for i, t in enumerate(out):
         if cap and t.text[:1].isalpha():
@@ -301,7 +311,7 @@ def tidy(toks, reading):
     return out
 
 
-RULES: tuple[Rule, ...] = (unbracket, instrument_with, smooth_compounds, possessive_names, verb_agreement, relative_clauses,
+RULES: tuple[Rule, ...] = (unbracket, unglossed, drop_particles, instrument_with, smooth_compounds, possessive_names, verb_agreement, relative_clauses,
                            vocatives, apposition, coordination, questions, articles, tidy)
 
 
@@ -329,7 +339,7 @@ def rewrite(reading: Reading) -> tuple[Reading, list[Alignment]]:
         toks = rule(toks, reading)
     text, spans = render(toks)
     aligned = sorted(t.word for t in toks if t.word is not None)
-    if aligned != sorted(a.word for a in reading.alignment):
+    if aligned != sorted(a.word for a in reading.alignment if not unrendered(reading, a.word)):
         return replace(reading, reworded="", reworded_note="rule-based; check failed: alignment: an aligned word was lost"), []
     already = {str(f) for f in _failures(reading, reading.translation, base, reading.alignment)}
     new = [f for f in _failures(reading, text, toks, spans) if str(f) not in already]

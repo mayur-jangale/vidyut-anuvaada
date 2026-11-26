@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from .fluent_checks import unrendered
 from .fluent_tok import PUNCT, Tok, _w
 
 _ADJ = {"विशेषण", "विधेय"}
@@ -59,3 +60,26 @@ def questions(toks, reading):
     if k is None or any(t.text in PUNCT for t in toks[:k]):
         return toks
     return [toks[0], toks[k]] + toks[1:k] + toks[k + 1:]
+
+
+def drop_particles(toks, reading):
+    """Emphatic particles (fluent_checks.UNRENDERED_PARTICLES: एव, हि, वै ...) are left out of the fluent line."""
+    return [t for t in toks if t.word is None or not unrendered(reading, t.word)]
+
+
+_NOMINAL_ROLES = {"कर्ता", "कर्म", "करण", "सम्प्रदान", "अपादान", "अधिकरण", "सम्बोधन", "सम्बन्ध"}
+
+
+def unglossed(toks, reading):
+    """A word the glossary lacks stays as its IAST: without angle brackets, capitalised as a name when it
+    stands as a noun (कर्ता, कर्म, ...)."""
+    out = []
+    for t in toks:
+        w = _w(reading, t)
+        if w is not None and not w.gloss and t.text:
+            text = t.text.strip("⟨⟩")
+            if w.role in _NOMINAL_ROLES and (w.morph is None or w.morph.kind == "subanta") and text[:1].islower():
+                text = text[0].upper() + text[1:]
+            t = Tok(text, t.word, t.glue)
+        out.append(t)
+    return out

@@ -205,9 +205,8 @@ def test_np_demonstrative_title_name_then_participial_phrase():
 def test_adjectives_before_the_noun_and_name_after_a_common_noun():
     ws = [noun("dear", "विशेषण", 1), noun("son", "कर्म", 3, vib="द्वितीया"), noun("Rāma", "विशेषण", 1),
           verb("see", "लिट्", "ददर्श")]
-    ws = [ws[0], ws[1], replace(ws[2], head=1), replace(ws[3], head=None)]
-    ws[1] = replace(ws[1], head=3)
-    assert say(ws, anvaya=[0, 1, 2, 3])[0] == "Dear son Rāma saw."
+    ws[3] = replace(ws[3], head=None)
+    assert say(ws, anvaya=[3, 0, 1, 2])[0] == "[He] saw dear son Rāma."
 
 
 def test_genitive_of_a_person_is_possessive_and_otherwise_of():
@@ -226,7 +225,7 @@ def test_compound_of_three_members_follows_the_bracketing():
     ws[4] = replace(ws[4], head=None)
     lit, flu = say(ws, [c], anvaya=[3, 0, 1, 2, 4])
     assert lit == "King, accompanied by son and grandson, went."
-    assert flu == "King, accompanied by son and grandson, went."
+    assert flu == "The king, accompanied by son and grandson, went."
 
 
 def test_bahuvrihi_endings_like_and_the_rest_and_for_the_sake_of():
@@ -239,12 +238,11 @@ def test_bahuvrihi_endings_like_and_the_rest_and_for_the_sake_of():
     ws = [noun("sun", "समासपूर्वपद", 1, member=True, compound=0), final("like", "विशेषण", 2, "संनिभ", compound=0),
           noun("Rāma", "कर्ता", 3), verb("go", "लिट्", "जगाम")]
     ws[3] = replace(ws[3], head=None)
-    assert say(ws, [c])[0] == "Like sun Rāma went."
-    ws = [noun("tree", "समासपूर्वपद", 1, member=True, compound=0), final("beginning", "कर्म", 2, "आदि", compound=0),
+    assert say(ws, [c])[0] == "Rāma, like sun, went."
+    ws = [noun("tree", "समासपूर्वपद", 1, member=True, compound=0), final("beginning", "कर्म", 3, "आदि", compound=0),
           noun("Rāma", "कर्ता", 3), verb("see", "लिट्", "ददर्श")]
     ws[3] = replace(ws[3], head=None)
-    ws[1] = replace(ws[1], head=3)
-    assert say(ws, [c], anvaya=[2, 0, 1, 3])[0] == "Rāma tree and the rest saw."
+    assert say(ws, [c], anvaya=[2, 3, 0, 1])[0] == "Rāma saw tree and the rest."
 
 
 def test_taddhita_is_one_word_in_both_lines():
@@ -278,13 +276,11 @@ def test_when_then_and_as_so_pairs_join_with_a_comma():
 
 
 def test_iti_quotes_the_clause_and_the_verb_of_saying_stays_outside():
-    ws = [noun("Rāma", "कर्ता", 4), pron("अहम्", "अस्मद्", "I", "कर्ता", 2, linga=None), verb("go", "लट्", "गच्छामि", head=None),
+    ws = [noun("Rāma", "कर्ता", 4), pron("अहम्", "अस्मद्", "I", "कर्ता", 2, linga=None),
+          w("गच्छामि", "tinanta", "go", "क्रिया", 4, lakara="लट्", prayoga="कर्तरि", purusha="उत्तमपुरुष", vacana=SG),
           w("इति", "avyaya", "thus", "अव्यय", 2), verb("say", "लङ्", "अवदत्", head=None)]
-    ws[2] = replace(ws[2], head=4, role="क्रिया")
-    ws[1] = replace(ws[1], head=2)
-    ws[3] = replace(ws[3], head=2)
     lit, flu = say(ws, anvaya=[0, 1, 2, 3, 4])
-    assert lit == 'Rāma said, "I go."' or lit == 'Rāma said: "I go".', lit
+    assert lit == "Rāma said, “I go.”" and flu == "Rāma said, “I go.”"
 
 
 def test_unrendered_particles_are_visible_and_only_those():
@@ -301,14 +297,14 @@ def test_absolutive_present_participle_and_locative_absolute():
           w("खादन्", "subanta", "eat", "विशेषण", 0, krt="शतृ", vacana=SG, vibhakti="प्रथमा"), verb("stand", "लट्", "तिष्ठति", head=None)]
     lit, flu = say(ws, anvaya=[1, 0, 2, 3])
     assert lit == "Having gone, Rāma, eating, stands."
-    ws = [noun("Rāma", "भावलक्षण", 1, vib="सप्तमी"), w("गते", "subanta", "go", "विशेषण", 0, krt="क्त", vacana=SG, vibhakti="सप्तमी"),
+    ws = [noun("Rāma", "भावलक्षण", 3, vib="सप्तमी"), w("गते", "subanta", "go", "विशेषण", 0, krt="क्त", vacana=SG, vibhakti="सप्तमी"),
           noun("Sītā", "कर्ता", 3), verb("weep", "लङ्", "अरोदीत्", head=None)]
     lit, flu = say(ws, anvaya=[0, 1, 2, 3])
     assert lit == "When Rāma had gone, Sītā wept."
 
 
 def test_word_without_gloss_is_iast_in_literal_and_bare_name_in_fluent():
-    ws = [noun("", "कर्ता", 1, form="शुकः"), verb("go", "लिट्", "जगाम", head=None)]
-    ws[0] = replace(ws[0], analyses=[Morph(form="शुकः", lemma="शुक", kind="subanta", vacana=SG, vibhakti="प्रथमा")])
-    lit, flu = say(ws)
-    assert lit.startswith("⟨śuka") and flu.startswith("Śuka") and "⟨" not in flu
+    ws = [noun("Rāma", "कर्ता", 2), Word(form="शुकम्", line=0, start=0, end=1, role="कर्म", head=2),
+          verb("see", "लिट्", "ददर्श", head=None)]
+    lit, flu = say(ws, anvaya=[0, 2, 1])
+    assert lit == "Rāma saw ⟨śukam⟩." and flu == "Rāma saw Śukam."

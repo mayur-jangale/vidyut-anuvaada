@@ -6,7 +6,7 @@ from __future__ import annotations
 from typing import Optional
 
 from . import english
-from .translate_words import TIME_PHRASES, TO_OBJECT, WITH_LEMMAS, adverb, is_motion, is_question_lemma
+from .translate_words import SUBORDINATORS, TIME_PHRASES, TO_OBJECT, WITH_LEMMAS, adverb, is_motion, is_question_lemma
 
 Piece = tuple[str, Optional[int], str]
 _CONNECTIVES = {"and", "but", "or", "then", "now", "thus", "if", "when", "so", "as"}
@@ -111,7 +111,7 @@ class ClauseMixin:
                                                          or self.words[k].gloss[:1].isupper())))
         return ([_p("to")] if to else []) + self.np(k)
 
-    def clause(self, v: int, keep_conn: bool = True) -> list[Piece]:
+    def clause_core(self, v: int, keep_conn: bool = True) -> list[Piece]:
         self.used.add(v)
         m = self.words[v].morph
         passive = m is not None and (m.prayoga or "") in _PASSIVE
@@ -138,7 +138,7 @@ class ClauseMixin:
                     self.used.add(k)
                 elif g in _CONNECTIVES:
                     self.used.add(k)
-                    if keep_conn:  # a clause-initial 'and' of the first clause would dangle
+                    if keep_conn or g in SUBORDINATORS:  # a clause-initial 'and' of the first clause would dangle
                         conn.append(_p(g, k))
                 elif g in TIME_PHRASES:
                     self.used.add(k)

@@ -64,7 +64,7 @@ def test_verse_one_plain():
 def test_verse_one_compound_and_alignment():
     out = translate.render(_verse1(True))
     t = out.translation
-    assert t == "Vālmīki asked devoted to austerity and study best Nārada."
+    assert t == "Vālmīki asked best Nārada, devoted to austerity and study."
     check(out)
     spans = {a.word: t[a.start:a.end] for a in out.alignment}
     assert spans[0] == "austerity" and spans[1] == "study" and spans[2] == "devoted to"
@@ -211,7 +211,7 @@ def test_bahuvrihi_of_phrase():
     words[0].compound = words[1].compound = 0
     out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="bahuvrihi")],
                                    anvaya=[2, 0, 1]))
-    assert out.translation == "[He is] Rāma great-armed."
+    assert out.translation == "[He is] great-armed Rāma."
     check(out)
 
 

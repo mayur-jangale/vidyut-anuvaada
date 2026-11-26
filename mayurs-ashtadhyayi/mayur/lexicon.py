@@ -189,19 +189,32 @@ def padas(form: str) -> tuple[Morph, ...]:
 
 @lru_cache(maxsize=200_000)
 def _padas(form: str) -> tuple[Morph, ...]:
-    """Analyses of ``form`` exactly as spelled."""
+    """Analyses of ``form`` exactly as spelled: the kosha and the generators, then the forms found
+    through a sibling form (augmentless past, agent nouns, ārṣa voice endings)."""
+    from mayur.lexicon_more import more
+
+    base = _base_padas(form)
+    extra = more(form, base, _base_padas, generated)
+    return _rank(list(base) + list(extra)) if extra else base
+
+
+@lru_cache(maxsize=200_000)
+def _base_padas(form: str) -> tuple[Morph, ...]:
     from mayur.lexicon_iyan import iyan_uvan
     from mayur.lexicon_paradigm import closed_paradigms
     from mayur.lexicon_gen import (anvadesha, avyaya_compound, indefinite, looks_verbal, prefixed, sa_esha,
                                    numerals, tasi_forms)
 
-    found = _kosha_morphs(form) + list(anvadesha(form)) + list(sa_esha(form)) + list(indefinite(form, padas))
+    found = _kosha_morphs(form) + list(anvadesha(form)) + list(sa_esha(form)) + list(indefinite(form, _base_padas))
     if not any(m.kind == "avyaya" and m.quality >= 2 for m in found):
         found.extend(avyaya_compound(form, _kosha_ranked, stems))
     found.extend(tasi_forms(form, stems))
     found.extend(numerals(form))
     found.extend(iyan_uvan(form))
     found.extend(closed_paradigms(form))
+    from mayur.lexicon_closed import closed_forms
+
+    found.extend(closed_forms(form))
     from mayur.lexicon_fem import feminine_padas
 
     have = {m.lemma for m in found if m.linga == "स्त्रीलिङ्ग"}

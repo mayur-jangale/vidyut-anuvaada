@@ -266,3 +266,22 @@ def test_pipeline_fills_reworded_offline():
         assert data["fluent"]["text"][a["start"]:a["end"]] == a["text"]
     assert not {"anthropic", "openai", "requests", "httpx"} & set(sys.modules)
 
+
+
+def test_only_listed_emphatic_particles_may_be_left_unrendered():
+    ws = [word("रामः", "subanta", "Rāma", "कर्ता", 3, vacana=SG, vibhakti="प्रथमा"),
+          word("च", "avyaya", "and", "अव्यय", 3, lemma="च"), word("एव", "avyaya", "indeed", "अव्यय", 3, lemma="एव"),
+          word("पप्रच्छ", "tinanta", "ask", "क्रिया", None, lakara="लिट्", prayoga="कर्तरि", purusha="प्रथमपुरुष", vacana=SG)]
+    rd = reading(ws, "Rāma and indeed asked.", [(0, "Rāma"), (1, "and"), (2, "indeed"), (3, "asked")])
+    assert fc.check_alignment_complete(rd, rends((0, "Rāma"), (1, "and"), (3, "asked"))) == []
+    assert [f.code for f in fc.check_alignment_complete(rd, rends((0, "Rāma"), (2, "indeed"), (3, "asked")))] == ["alignment"]
+    assert fc.UNRENDERED_PARTICLES == {"एव", "हि", "वै", "तु", "ह", "खलु", "किल", "नु"}
+    out = fluent.rewrite(rd)[0]
+    assert out.reworded == "Rāma and asked." and out.reworded_note == fluent.NOTE_OK
+
+
+def test_closing_quote_and_glued_suffix_survive_the_rules():
+    rd = reading([word("x", "subanta", "Rāma", "कर्ता", 1, vacana=SG, vibhakti="प्रथमा"),
+                  word("y", "tinanta", "say", "क्रिया", None, lakara="लिट्", prayoga="कर्तरि", purusha="प्रथमपुरुष", vacana=SG)],
+                 "Rāma said, “Go.”", [(0, "Rāma"), (1, "said")])
+    assert fluent.rewrite(rd)[0].reworded == "Rāma said, “Go.”"

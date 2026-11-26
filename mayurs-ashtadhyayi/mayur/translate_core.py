@@ -8,6 +8,7 @@ from typing import Optional
 from . import english, lipi
 from .translate_clause import ClauseMixin
 from .translate_compound import CompoundMixin
+from .translate_join import JoinMixin
 from .translate_np import NounPhraseMixin
 from .translate_words import ADJ_FIRST as _ADJ_FIRST, ADJ_SENSE, ON_NOUNS, WITH_LEMMAS, FINAL as _FINAL, PAIRED as _PAIRED, WITH_WORDS, is_latin_binomial, is_motion, is_question_lemma, name_plural
 from .model import Alignment, Reading
@@ -29,7 +30,7 @@ def _p(text: str, idx: Optional[int] = None, sep: str = " ") -> Piece:
     return (text, idx, sep)
 
 
-class _Renderer(NounPhraseMixin, CompoundMixin, ClauseMixin):
+class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin):
     def __init__(self, reading: Reading) -> None:
         self.reading = reading
         self.words = reading.words

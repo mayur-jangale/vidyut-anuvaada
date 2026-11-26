@@ -152,7 +152,7 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             continue
         if entry.entry == "tinanta":
             pada = bridge.prefixed_tinanta(entry, upasargas)
-        elif entry.entry == "krdanta" and m.krt in _GOOD_KRT:
+        elif entry.entry == "krdanta" and (m.krt in _GOOD_KRT or m.krt == "तृच्"):  # विच्छेदितृ (3.1.133)
             pada = bridge.prefixed_krdanta(entry, upasargas)
             if m.krt in ("यत्", "ण्यत्", "क्यप्") and form.endswith("्य"):
                 # the same remainder may be the ल्यप् absolutive of the prefixed root (7.1.37)

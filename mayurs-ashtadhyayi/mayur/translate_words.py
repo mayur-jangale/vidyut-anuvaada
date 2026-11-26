@@ -46,6 +46,9 @@ TITLE_NOUNS = frozenset({"king", "sage", "hero", "monkey", "demon", "vulture", "
 PERSON_NOUNS = frozenset({"father", "mother", "son", "daughter", "brother", "sister", "wife", "husband", "friend", "king",
                           "sage", "teacher", "master", "lord", "queen", "prince", "grandfather", "uncle", "elder", "guru",
                           "brahmin", "hero", "enemy", "ancestor", "people", "man", "woman", "boy", "girl", "child"})
+SUBORDINATORS = frozenset({"when", "as", "if", "while", "where", "since", "because", "although", "whenever"})
+CORRELATIVES = frozenset({"then", "so", "thus", "there", "therefore"})
+SAYING = frozenset({"say", "speak", "tell", "reply", "answer", "ask", "declare", "utter", "call", "announce"})
 ON_NOUNS = frozenset({"bank", "shore", "top", "surface", "peak", "summit", "ground", "roof", "hill", "mountain"})
 NOMINAL_SUFFIXES = {"ness": "ness", "hood": "hood", "ship": "ship"}  # तद्धित -ता / -त्व / -त्वम्
 

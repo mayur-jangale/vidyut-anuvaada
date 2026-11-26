@@ -6,6 +6,7 @@ from dataclasses import replace
 
 from . import english
 from .model import Alignment, Reading
+from .translate_words import SUBORDINATORS
 from .translate_core import _CONNECTIVES, _PREP, Piece, _p, _Renderer
 
 _KIM = {"किम्", "क", "कः", "कस्"}
@@ -103,8 +104,9 @@ def render(reading: Reading) -> Reading:
                 r.children.setdefault(first, []).append(i)
         for ch in r.children.values():
             ch.sort(key=lambda k: r.pos[k])
-        for n, v in enumerate(sorted(verbs, key=lambda k: r.pos[k])):
-            pieces += ([_p(";", None, "")] if n else []) + r.clause(v, keep_conn=n > 0)
+        items = [(v, r.clause(v, keep_conn=n > 0 and r.quote_of(v) is None))
+                 for n, v in enumerate(sorted(verbs, key=lambda k: r.pos[k]))]
+        pieces += r.join_clauses(items)
     else:
         pieces += _copular(r, top)
     for i in r.order:  # anything not yet consumed still appears, in prose order
@@ -116,12 +118,12 @@ def render(reading: Reading) -> Reading:
         if w.in_compound and i not in r.used:
             r.used.add(i)
             pieces.append(_p(r.text(i), i))
-    while pieces and (pieces[0][0] in _CONNECTIVES or not pieces[0][0]) and pieces[0][1] is not None:
+    while pieces and (pieces[0][0] in _CONNECTIVES - SUBORDINATORS or not pieces[0][0]) and pieces[0][1] is not None:
         pieces = pieces[1:]  # never open a sentence with a dangling conjunction
     text, alignment = _compose(pieces)
     if text:
         k = next((n for n, ch in enumerate(text) if ch.isalpha()), 0)
         text = text[:k] + text[k].upper() + text[k + 1:]
         asks = any(w.morph is not None and not w.in_compound and w.morph.lemma in _KIM for w in reading.words)
-        text += "" if text.endswith((".", "?", "!")) else ("?" if asks else ".")
+        text += "" if text.endswith((".", "?", "!", ".”")) else ("?" if asks else ".")
     return replace(reading, translation=text, alignment=alignment)

@@ -29,6 +29,8 @@ between through about also o if than
 """.split())
 NEGATION_WORDS = frozenset({"not", "no", "never", "nor", "neither", "none", "cannot", "without"})
 NEGATION_FORMS = frozenset({"न", "नहि", "नो", "नैव", "नञ्"})  # Devanagari words that negate
+# Emphatic particles that the FLUENT line may leave unrendered; no other word may go missing. च is not here.
+UNRENDERED_PARTICLES = frozenset({"एव", "हि", "वै", "तु", "ह", "खलु", "किल", "नु"})
 
 _TOKEN = re.compile(r"[^\W\d_]+(?:['’][^\W\d_]+)?|\d+(?:[.,]\d+)*")
 _IRREGULAR_PLURALS = frozenset({"men", "women", "children", "feet", "teeth", "mice", "people", "geese"})
@@ -101,6 +103,13 @@ def _display(w: Word) -> str:
     return lipi.pausa(w.form)
 
 
+def unrendered(reading: Reading, i: int) -> bool:
+    """True for an emphatic particle (UNRENDERED_PARTICLES) that the rewording may omit."""
+    w = reading.words[i]
+    return w.role == "अव्यय" and (_display(w) in UNRENDERED_PARTICLES
+                                  or (w.morph is not None and w.morph.lemma in UNRENDERED_PARTICLES))
+
+
 def template_spans(reading: Reading) -> dict[int, str]:
     return {a.word: reading.translation[a.start:a.end] for a in reading.alignment}
 
@@ -144,10 +153,11 @@ def analysis_negated(reading: Reading) -> bool:
 def check_alignment_complete(reading: Reading, renderings: Sequence[Rendering]) -> list[Failure]:
     """Every word aligned in the template is aligned in the rewording, once, and no unknown word."""
     have = [r.word for r in renderings]
-    want = {a.word for a in reading.alignment}
+    every = {a.word for a in reading.alignment}
+    want = {i for i in every if not unrendered(reading, i)}
     out = [Failure("alignment", f"word {i} is aligned in the template but not in the rewording")
            for i in sorted(want - set(have))]
-    out += [Failure("alignment", f"word {i} is not a word of the analysis") for i in sorted(set(have) - want)]
+    out += [Failure("alignment", f"word {i} is not a word of the analysis") for i in sorted(set(have) - every)]
     out += [Failure("alignment", f"word {i} is aligned twice") for i in sorted({i for i in have if have.count(i) > 1})]
     out += [Failure("alignment", f"word {r.word} has an empty rendering") for r in renderings if not r.text.strip()]
     return out

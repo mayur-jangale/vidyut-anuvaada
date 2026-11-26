@@ -118,7 +118,7 @@ def _label_unproven(reading: Reading) -> Reading:
     words, notes = [], list(reading.notes)
     for w in reading.words:
         unproven = not w.analyses or (w.proof is not None and not w.proof.derivable)
-        listed = bool(w.morph) and w.morph.source in ("kosha", "special")
+        listed = bool(w.morph) and w.morph.source in ("kosha", "special")  # (source "arsha" is labelled ārṣa)
         if unproven and listed:
             notes.append(f"{lipi.pausa(w.form)}: listed in the dictionary, but vidyut did not derive it "
                          f"({w.proof.note}); left unverified")
