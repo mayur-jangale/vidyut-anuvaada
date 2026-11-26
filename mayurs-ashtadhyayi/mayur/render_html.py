@@ -187,6 +187,19 @@ def _compounds(data: dict[str, Any]) -> str:
             f"<th>Vigraha</th><th>Basis</th></tr>{rows}</table></div>")
 
 
+def _role_rules(w: dict[str, Any]) -> str:
+    """The rule numbers that license the word's role, each with its text as a tooltip."""
+    if not w.get("role_rules"):
+        return ""
+    chips = " ".join(f'<span class="jn" tabindex="0" title="{esc(r["text"]["devanagari"])}">§{esc(r["number"]["devanagari"])}</span>'
+                     for r in w["role_rules"])
+    return f'<span class="en">{chips}</span>'
+
+
+def _derived(w: dict[str, Any]) -> str:
+    return f'<span class="en">by derivation: {esc(w["derived_meaning"])}</span>' if w.get("derived_meaning") else ""
+
+
 def _grammar(data: dict[str, Any]) -> str:
     rows = []
     for w in data["words"]:
@@ -201,8 +214,8 @@ def _grammar(data: dict[str, Any]) -> str:
             f'<tr data-w="{w["index"]}"><td>{_sa(w["form"], "big")}{arsha}{_iast(w["form"])}</td>'
             f"<td>{lemma}{root}</td>"
             f"<td>{esc(g['kind']['devanagari'])} {_terms(g)}<span class='en'>{esc(w['description'])}</span></td>"
-            f"<td>{esc(w['role']['devanagari'])}<span class='en'>{esc(w['role']['english'])}</span></td>"
-            f"<td>{esc(w['gloss'])}</td><td>{mark}{reason}</td></tr>"
+            f"<td>{esc(w['role']['devanagari'])}<span class='en'>{esc(w['role']['english'])}</span>{_role_rules(w)}</td>"
+            f"<td>{esc(w['gloss'])}{_derived(w)}</td><td>{mark}{reason}</td></tr>"
         )
     return (f'<h2>व्याकरणम् <span>grammar</span></h2><div class="scroll"><table class="g"><tr><th>Word</th><th>Lemma</th>'
             f"<th>Grammar</th><th>Role</th><th>Gloss</th><th>Proof</th></tr>{''.join(rows)}</table></div>")
@@ -239,7 +252,9 @@ def _translation(data: dict[str, Any]) -> str:
         out.append(f'<mark class="al" data-w="{a["word"]}">{esc(text[a["start"]:a["end"]])}</mark>')
         pos = a["end"]
     out.append(esc(text[pos:]))
-    return f'<h2>Translation</h2><p>{"".join(out)}</p>'
+    fluent = data.get("fluent", {}).get("text", "")
+    readable = f'<h2>Readable English <span>by rule from the literal one</span></h2><p>{esc(fluent)}</p>' if fluent else ""
+    return f'<h2>Literal translation</h2><p>{"".join(out)}</p>{readable}'
 
 
 MAX_ALTERNATIVES_SHOWN = 5

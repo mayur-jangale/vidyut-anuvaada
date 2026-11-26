@@ -1,0 +1,97 @@
+# verse 1
+roles: 0=समासपूर्वपद>2 1=समासपूर्वपद>2 2=विशेषण>7 3=विशेषण>9 4=समासपूर्वपद>5 5=सम्बन्ध>6 6=विशेषण>7 7=कर्म>8 8=क्रिया>- 9=कर्ता>8 10=समासपूर्वपद>11 11=विशेषण>7
+compounds: 0,1,2=तत्पुरुष|तपसि स्वाध्याये च निरतः (तपश्च स्वाध्यायश्च) ; 4,5=उपपद-तत्पुरुष|वाचं विदन्ति इति ; 10,11=तत्पुरुष|मुनीनां पुङ्गवः
+anvaya: 3 9 0 1 2 4 5 6 10 11 7 8
+english: The ascetic Vālmīki asked Nārada, who was devoted to austerity and Vedic recitation, the best of those who know speech, the bull among sages.
+issues: निरतम् lemma given as निरम्; root is रम् with preverb नि.
+
+# verse 2
+roles: 0=कर्ता>- 1=अव्यय>0 2=विशेषण>4 3=अव्यय>5 4=अधिकरण>5 5=विधेय>0 6=कर्ता>- 7=अव्यय>6 8=विधेय>6 9=समासपूर्वपद>10 10=विधेय>6 11=अव्यय>10 12=विधेय>6 13=अव्यय>12 14=समासपूर्वपद>15 15=विधेय>6 16=समासपूर्वपद>17 17=विधेय>6
+compounds: 9,10=उपपद-तत्पुरुष|धर्मं जानाति इति ; 14,15=बहुव्रीहि|सत्यं वाक्यं यस्य सः ; 16,17=बहुव्रीहि|दृढं व्रतं यस्य सः
+anvaya: 0 1 3 2 4 5 6 7 8 9 10 11 12 13 14 15 16 17
+english: Who now in this world is virtuous, and who is valorous, and knowing dharma, and grateful, truthful in speech [and] firm in vows?
+
+# verse 3
+roles: 0=करण>3 1=अव्यय>0 2=कर्ता>3 3=क्रिया>- 4=समासपूर्वपद>5 5=अधिकरण>7 6=कर्ता>- 7=विधेय>6 8=विधेय>9 9=कर्ता>- 10=कर्ता>- 11=विधेय>10 12=अव्यय>11 13=कर्ता>- 14=अव्यय>13 15=समासपूर्वपद>17 16=समासपूर्वपद>17 17=विधेय>13
+compounds: 4,5=कर्मधारय|सर्वाणि भूतानि ; 15,16,17=बहुव्रीहि|एकं प्रियं दर्शनं यस्य सः
+anvaya: 2 0 1 3 6 4 5 7 9 8 10 11 12 13 14 15 16 17
+english: And who is endowed with good conduct, who is beneficial to all beings, who is learned, who is capable, and who is uniquely pleasing to behold?
+issues: युक्तः taken as participial predicate (क्रिया); could equally be विधेय>2 like the other epithets.
+
+# verse 4
+roles: 0=विधेय>1 1=कर्ता>- 2=समासपूर्वपद>3 3=विधेय>1 4=विधेय>5 5=कर्ता>- 6=विधेय>5 7=अपादान>8 8=क्रिया>- 9=कर्ता>8 10=अव्यय>9 11=समासपूर्वपद>12 12=विशेषण>7 13=अधिकरण>8
+compounds: 2,3=बहुव्रीहि|जितः क्रोधः येन सः ; 11,12=बहुव्रीहि|जातः रोषः यस्य सः
+anvaya: 1 0 2 3 5 4 6 9 10 13 11 12 7 8
+english: Who is self-possessed, who has conquered anger, who is wise [and] free from envy; and of whom, his anger roused in battle, are the gods afraid?
+issues: कस्य is the feared one with भी in the genitive (अपादान sense).
+
+# verse 5
+roles: 0=कर्म>3 1=क्रिया>- 2=कर्ता>1 3=तुमर्थ>1 4=विधेय>5 5=कर्ता>- 6=अव्यय>5 7=सम्बन्ध>5 8=समासपूर्वपद>9 9=सम्बोधन>12 10=कर्ता>12 11=विधेय>10 12=क्रिया>- 13=तुमर्थ>11 14=विशेषण>15 15=कर्म>13
+compounds: 8,9=कर्मधारय|महान् ऋषिः
+anvaya: 2 0 3 1 7 5 6 4 8 9 10 14 15 13 11 12
+english: I wish to hear this, for my curiosity is great; O great sage, you are able to know such a man.
+issues: परम् is Nom here (DCS correct); taken as predicate of the verbless clause, not attributive.
+
+# verse 6
+roles: 0=पूर्वकालक्रिया>14 1=अव्यय>0 2=विशेषण>7 3=समासपूर्वपद>4 4=विशेषण>6 5=सम्बन्ध>7 6=कर्ता>14 7=कर्म>0 8=क्रिया>11 9=अव्यय>8 10=अव्यय>9 11=पूर्वकालक्रिया>14 12=विशेषण>6 13=कर्म>14 14=क्रिया>-
+compounds: 3,4=उपपद-तत्पुरुष|त्रिलोकं जानाति इति
+anvaya: 3 4 12 6 5 2 7 0 1 8 9 10 11 13 14
+english: And having heard this speech of Vālmīki, Nārada, knower of the three worlds, delighted, having addressed [him] with "Listen!", spoke [these] words.
+
+# verse 7
+roles: 0=विशेषण>7 1=विशेषण>7 2=अव्यय>1 3=अव्यय>1 4=विशेषण>7 5=कर्ता>6 6=क्रिया>12 7=कर्म>6 8=सम्बोधन>9 9=क्रिया>- 10=कर्ता>9 11=पूर्वकालक्रिया>9 12=करण>13 13=विशेषण>15 14=क्रिया>- 15=कर्म>14
+anvaya: 8 4 0 1 2 3 7 5 6 10 11 9 12 13 15 14
+english: O sage, the many and indeed rare qualities which have been proclaimed by you — having considered [them] I shall tell; let the man endowed with them be heard [of].
+
+# verse 8
+roles: 0=समासपूर्वपद>2 1=समासपूर्वपद>2 2=विशेषण>3 3=कर्म>6 4=अव्यय>3 5=कर्ता>6 6=क्रिया>- 7=समासपूर्वपद>8 8=विशेषण>3 9=समासपूर्वपद>10 10=विशेषण>3 11=विशेषण>3 12=विशेषण>3 13=विशेषण>3
+compounds: 0,1,2=बहुव्रीहि|इक्ष्वाकूणां वंशः प्रभवः यस्य सः ; 7,8=बहुव्रीहि|नियतः आत्मा यस्य सः ; 9,10=बहुव्रीहि|महत् वीर्यं यस्य सः
+anvaya: 0 1 2 7 8 9 10 11 12 13 3 4 5 6
+english: Sprung from the Ikṣvāku lineage, self-controlled, of great valour, radiant, steadfast, self-mastered, [one] named Rāma is heard of by the people.
+
+# verse 9
+roles: 0=विधेय>- 1=विधेय>- 2=विधेय>- 3=विधेय>- 4=समासपूर्वपद>5 5=विधेय>- 6=समासपूर्वपद>7 7=विधेय>- 8=समासपूर्वपद>9 9=विधेय>- 10=समासपूर्वपद>11 11=विधेय>- 12=समासपूर्वपद>13 13=विधेय>-
+compounds: 4,5=तत्पुरुष|शत्रूणां निबर्हणः ; 6,7=बहुव्रीहि|विपुलौ अंसौ यस्य सः ; 8,9=बहुव्रीहि|महान्तौ बाहू यस्य सः ; 10,11=बहुव्रीहि|कम्बुः इव ग्रीवा यस्य सः ; 12,13=बहुव्रीहि|महती हनुः यस्य सः
+anvaya: 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+english: [He is] intelligent, versed in policy, eloquent, glorious, destroyer of enemies, broad-shouldered, mighty-armed, conch-necked, large-jawed.
+
+# verse 10
+roles: 0=समासपूर्वपद>1 1=विधेय>- 2=समासपूर्वपद>3 3=विधेय>- 4=समासपूर्वपद>5 5=विधेय>- 6=विधेय>- 7=समासपूर्वपद>8 8=विधेय>- 9=समासपूर्वपद>10 10=विधेय>- 11=समासपूर्वपद>12 12=विधेय>- 13=समासपूर्वपद>14 14=विधेय>-
+compounds: 0,1=बहुव्रीहि|महत् उरः यस्य सः ; 2,3=बहुव्रीहि|महान् इष्वासः यस्य सः ; 4,5=बहुव्रीहि|गूढे जत्रुणी यस्य सः ; 7,8=बहुव्रीहि|आजानु बाहू यस्य सः ; 9,10=बहुव्रीहि|शोभनं शिरः यस्य सः ; 11,12=बहुव्रीहि|शोभनं ललाटं यस्य सः ; 13,14=बहुव्रीहि|शोभनः विक्रमः यस्य सः
+anvaya: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+english: [He is] broad-chested, a great archer, with hidden collar-bones, subduer of foes, with arms reaching to the knees, with a fine head, a fine forehead [and] fine stride.
+issues: आजानु and सु are tagged as free ADV, not as compound members; they are first members of bahuvrīhis.
+
+# verse 11
+roles: 0=विधेय>- 1=समासपूर्वपद>3 2=समासपूर्वपद>3 3=विधेय>- 4=समासपूर्वपद>5 5=विधेय>- 6=विधेय>- 7=समासपूर्वपद>8 8=विधेय>- 9=समासपूर्वपद>10 10=विधेय>- 11=विधेय>- 12=समासपूर्वपद>13 13=विधेय>-
+compounds: 1,2,3=बहुव्रीहि|समं विभक्तानि अङ्गानि यस्य सः ; 4,5=बहुव्रीहि|स्निग्धः वर्णः यस्य सः ; 7,8=बहुव्रीहि|पीनं वक्षः यस्य सः ; 9,10=बहुव्रीहि|विशाले अक्षिणी यस्य सः ; 12,13=बहुव्रीहि|शुभानि लक्षणानि यस्य सः
+anvaya: 0 1 2 3 4 5 6 7 8 9 10 11 12 13
+english: [He is] well-proportioned, with evenly divided limbs, of glossy complexion, powerful, full-chested, large-eyed, prosperous, with auspicious marks.
+
+# verse 12
+roles: 0=समासपूर्वपद>1 1=विधेय>- 2=समासपूर्वपद>3 3=विधेय>- 4=अव्यय>3 5=सम्बन्ध>7 6=अव्यय>5 7=अधिकरण>8 8=विधेय>- 9=विधेय>- 10=समासपूर्वपद>11 11=विधेय>- 12=विधेय>- 13=विधेय>- 14=विधेय>-
+compounds: 0,1=उपपद-तत्पुरुष|धर्मं जानाति इति ; 2,3=बहुव्रीहि|सत्या संधा यस्य सः ; 10,11=तत्पुरुष|ज्ञानेन सम्पन्नः
+anvaya: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+english: [He is] knower of dharma, true to his promise, and devoted to the welfare of the subjects, famous, endowed with knowledge, pure, self-controlled, possessed of concentration.
+issues: रतः/सम्पन्नः kept as epithets (विधेय) rather than participial predicates (क्रिया).
+
+# verse 13
+roles: 0=विधेय>- 1=सम्बन्ध>0 2=सम्बन्ध>3 3=विधेय>- 4=समासपूर्वपद>7 5=समासपूर्वपद>7 6=समासपूर्वपद>7 7=विधेय>- 8=अधिकरण>10 9=अव्यय>8 10=विधेय>-
+compounds: 4,5,6,7=उपपद-तत्पुरुष|वेदानां वेदाङ्गानां च तत्त्वं जानाति इति
+anvaya: 1 0 2 3 4 5 6 7 8 9 10
+english: [He is] protector of the world of living beings, guardian of dharma, knower of the truth of the Vedas and Vedāṅgas, and well-grounded in the science of archery.
+issues: जीवलोकस्य, धर्मस्य are object-genitives of the agent nouns रक्षितृ/परिरक्षितृ (सम्बन्ध).
+
+# verse 14
+roles: 0=समासपूर्वपद>4 1=समासपूर्वपद>4 2=समासपूर्वपद>4 3=समासपूर्वपद>4 4=विधेय>- 5=विधेय>- 6=विधेय>- 7=समासपूर्वपद>9 8=समासपूर्वपद>9 9=विधेय>- 10=विधेय>- 11=समासपूर्वपद>13 12=समासपूर्वपद>13 13=विधेय>- 14=विधेय>-
+compounds: 0,1,2,3,4=उपपद-तत्पुरुष|सर्वेषां शास्त्राणाम् अर्थानां तत्त्वं जानाति इति ; 7,8,9=तत्पुरुष|सर्वेषां लोकानां प्रियः ; 11,12,13=बहुव्रीहि|अदीनः (न दीनः) आत्मा यस्य सः
+anvaya: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
+english: [He is] knower of the true sense of all the śāstras, possessed of memory, quick-witted, dear to all people, good, of undejected spirit, discerning.
+issues: अ (नञ्) tagged as free PART, not as compound member.
+
+# verse 15
+roles: 0=अव्यय>1 1=क्रिया>- 2=कर्ता>1 3=कर्म>1 4=अव्यय>3 5=कर्ता>1 6=विधेय>- 7=समासपूर्वपद>8 8=विधेय>- 9=अव्यय>8 10=अव्यय>8 11=अव्यय>14 12=समासपूर्वपद>14 13=समासपूर्वपद>14 14=विधेय>-
+compounds: 7,8=तत्पुरुष|सर्वेषु समः ; 12,13,14=बहुव्रीहि|एकं प्रियं दर्शनं यस्य सः
+anvaya: 2 0 1 5 3 4 6 7 8 9 10 11 12 13 14
+english: [He is] always approached by the good, as the ocean [is] by rivers; noble, equal toward all, and ever uniquely pleasing to behold.
+issues: simile is elliptical: समुद्रः/सिन्धुभिः attached to अभिगतः as the compared object/agent.

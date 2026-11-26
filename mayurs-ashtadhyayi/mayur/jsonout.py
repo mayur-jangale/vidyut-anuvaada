@@ -163,7 +163,9 @@ def word_json(reading: Reading, index: int, full: bool) -> dict[str, Any]:
         "derivation_method": proof.method if proof else "",
         "sutra_trace": _trace(w),
         "role": {"devanagari": w.role, "english": terms.english(w.role)},
-        "head": w.head, "gloss": w.gloss, "gloss_source": w.gloss_source, "arsha": w.arsha,
+        "role_rules": [rule_entry(*split_rule(ref)) for ref in w.role_sutras],
+        "head": w.head, "gloss": w.gloss, "gloss_source": w.gloss_source,
+        "derived_meaning": w.derived_meaning, "arsha": w.arsha,
     }
 
 
@@ -234,6 +236,14 @@ def _alignment(reading: Reading) -> list[dict[str, Any]]:
     return [{"word": a.word, "start": a.start, "end": a.end, "text": t[a.start:a.end]} for a in reading.alignment]
 
 
+def _fluent(reading: Reading) -> dict[str, Any]:
+    """Fluent English made by fixed rules from the literal one; empty text when a check failed."""
+    t = reading.reworded
+    return {"text": t, "note": reading.reworded_note,
+            "alignment": [{"word": a.word, "start": a.start, "end": a.end, "text": t[a.start:a.end]}
+                          for a in reading.reworded_alignment]}
+
+
 def _gloss(reading: Reading) -> list[dict[str, Any]]:
     return [
         {"index": i, "word": sk(display(w.form)), "gloss": w.gloss, "source": w.gloss_source}
@@ -264,7 +274,7 @@ def to_json(analysis: VerseAnalysis, *, full: bool = False) -> dict[str, Any]:
         "words": [word_json(best, i, full) for i in range(len(best.words))],
         "compounds": [compound_json(best, c) for c in best.compounds],
         "anvaya": anvaya_json(best), "gloss": _gloss(best), "translation": best.translation,
-        "alignment": _alignment(best), "scores": dict(best.scores),
+        "alignment": _alignment(best), "fluent": _fluent(best), "scores": dict(best.scores),
     })
     alts = []
     for rank, r in enumerate(analysis.readings[1:], start=2):

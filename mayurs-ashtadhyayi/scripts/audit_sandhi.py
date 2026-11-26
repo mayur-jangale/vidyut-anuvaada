@@ -10,7 +10,6 @@ the text even ignoring sandhi are counted as DCS anomalies, not rule gaps.
 from __future__ import annotations
 
 import argparse
-import glob
 import itertools
 import random
 import sys
@@ -23,15 +22,11 @@ from mayur import dcs, sandhi  # noqa: E402
 from mayur.lipi import from_varnas, varnas  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-RAMAYANA = ROOT / "data/dcs/sanskrit/dcs/data/conllu/files/Rāmāyaṇa"
 
 
 def gold_lines(limit: int, seed: int = 1):
-    """A seeded sample of train-split gold lines across all texts (Ramayana files as fallback)."""
-    files = dcs.split_files("train") if hasattr(dcs, "split_files") else []
-    if not files:
-        files = sorted(glob.glob(str(RAMAYANA / "*.conllu")))
-    files = list(files)
+    """A seeded sample of train-split gold lines across all texts."""
+    files = list(dcs.split_files("train"))  # raises when the split manifest is missing
     random.Random(seed).shuffle(files)
     out = []
     for entry in files:

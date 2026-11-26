@@ -143,6 +143,22 @@ def draw_pools(by_text: dict[str, list[Path]], presplit: set[str], exclude: set[
     return pools
 
 
+def stored_pools(by_text: dict[str, list[Path]]) -> dict[str, list[dict]] | None:
+    """The committed pools (mayur/gold/pools.json), or None when there is no such file. The pools
+    are fixed once drawn: a chapter of the sealed pool must stay sealed even when the corpus or
+    the list of fetched texts changes, so a stored chapter that is no longer on disk is an error."""
+    if not POOLS_FILE.exists():
+        return None
+    doc = json.loads(POOLS_FILE.read_text(encoding="utf-8"))
+    pools = {name: doc[name] for name in ("sealed_test", "dev_pool")}
+    present = {chapter_id(f) for files in by_text.values() for f in files}
+    missing = [e for rows in pools.values() for e in rows if e["chapter_id"] not in present]
+    if missing:
+        raise RuntimeError(f"{len(missing)} pooled chapters are missing from the corpus on disk (first: {missing[0]}); "
+                           "fetch the pinned corpus revision, or pass --redraw-pools to start a new, untested pool")
+    return pools
+
+
 def splits(root: Path, files: list[Path], pools: dict[str, list[dict]] | None = None) -> dict[str, list[dict]]:
     """Train = every counted chapter; dev/test = parts of the held-out chapters (see HELD_OUT_SPLITS)."""
     rel = lambda f: str(f.relative_to(root))  # noqa: E731
@@ -160,7 +176,7 @@ def splits(root: Path, files: list[Path], pools: dict[str, list[dict]] | None = 
     return out
 
 
-def build(data_dir: Path) -> dict[str, int]:
+def build(data_dir: Path, redraw_pools: bool = False) -> dict[str, int]:
     root = data_dir / "dcs" / "sanskrit" / "dcs" / "data" / "conllu"
     files = chapter_files(root)
     if not files:
@@ -169,14 +185,16 @@ def build(data_dir: Path) -> dict[str, int]:
     for f in files:
         by_text[f.parent.name].append(f)
     presplit = {t: is_presplit([x for f in fs[:3] for x in dcs.iter_sentences(f)]) for t, fs in by_text.items()}
-    pools = draw_pools(by_text, {t for t, v in presplit.items() if v}, set(HELD_OUT_IDS))
+    pools = stored_pools(by_text) if not redraw_pools else None
+    if pools is None:
+        pools = draw_pools(by_text, {t for t, v in presplit.items() if v}, set(HELD_OUT_IDS))
+        POOLS_FILE.write_text(json.dumps({"seed": POOL_SEED, "presplit_texts_excluded": sorted(t for t, v in presplit.items() if v),
+                                          **pools}, ensure_ascii=False, indent=1), encoding="utf-8")
     excluded = set(HELD_OUT_IDS) | {e["chapter_id"] for rows in pools.values() for e in rows}
     sentences = (s for f in files for s in dcs.iter_sentences(f))
     counted = count_sentences(sentences, held_out=excluded)
     out = tables(counted, sense_labels(root / "lookup" / "word-senses.csv"), dictionary(root / "lookup" / "dictionary.csv"))
     out["splits.json"] = splits(root, files, pools)
-    POOLS_FILE.write_text(json.dumps({"seed": POOL_SEED, "presplit_texts_excluded": sorted(t for t, v in presplit.items() if v),
-                                      **pools}, ensure_ascii=False, indent=1), encoding="utf-8")
     dest = data_dir / "derived"
     dest.mkdir(parents=True, exist_ok=True)
     for name, obj in out.items():
@@ -188,11 +206,13 @@ def build(data_dir: Path) -> dict[str, int]:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--data-dir", type=Path, default=None)
+    ap.add_argument("--redraw-pools", action="store_true",
+                    help="draw new dev and sealed pools (invalidates every earlier measurement and the ledger)")
     args = ap.parse_args(argv)
     if args.data_dir is None:
         from mayur.resources import data_dir
         args.data_dir = data_dir()
-    print(build(args.data_dir))
+    print(build(args.data_dir, redraw_pools=args.redraw_pools))
     return 0
 
 

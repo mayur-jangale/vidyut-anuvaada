@@ -138,13 +138,39 @@ def iter_sentences(path: str | Path) -> Iterator[dict]:
         yield from parse_sentences(fh.readlines())
 
 
-def split_files(name: str) -> list[dict[str, Any]]:
-    """Entries ``{"file": absolute path, "verses": [first, last] | None}`` of the split ``name``
-    ("train" | "dev" | "test") from data/derived/splits.json; ``[]`` when the manifest is missing."""
-    from mayur.resources import data_dir, derived
+SEALED = "sealed_test"
 
+
+class SealedSplit(PermissionError):
+    """The sealed test pool was requested by code that is not the final-test sampler."""
+
+
+def split_files(name: str, final_test: bool = False) -> list[dict[str, Any]]:
+    """Entries ``{"file": absolute path, "verses": [first, last] | None}`` of the split ``name``
+    ("train" | "dev" | "test" | "dev_pool" | "sealed_test") from data/derived/splits.json.
+
+    This is the only place that decides which chapters a job may read. A missing manifest is an
+    error (no fallback to "all files"), and the sealed pool is refused unless ``final_test`` is
+    set, which only scripts/sample_test.py does."""
+    from mayur.resources import data_dir, derived, FETCH_HINT
+
+    manifest = derived("splits.json")
+    if not manifest:
+        raise FileNotFoundError(f"data/derived/splits.json is missing; {FETCH_HINT}")
+    if name == SEALED and not final_test:
+        raise SealedSplit("the sealed test pool is read only by scripts/sample_test.py")
     root = data_dir() / "dcs" / "sanskrit" / "dcs" / "data" / "conllu"
-    return [{"file": str(root / e["file"]), "verses": e["verses"]} for e in derived("splits.json").get(name, [])]
+    return [{"file": str(root / e["file"]), "verses": e["verses"]} for e in manifest.get(name, [])]
+
+
+def is_trainable(path: str | Path) -> bool:
+    """True if the chapter file is in the train split (whole chapter)."""
+    return str(Path(path)) in _train_paths()
+
+
+@lru_cache(maxsize=1)
+def _train_paths() -> frozenset[str]:
+    return frozenset(e["file"] for e in split_files("train") if e["verses"] is None)
 
 
 def gold_lines(files: Any, limit: Optional[int] = None, seed: int = 0) -> Iterator[dict[str, Any]]:

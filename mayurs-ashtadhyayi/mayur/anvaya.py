@@ -63,17 +63,21 @@ def pick(cands: list[int], words: list[Word], i: int) -> Optional[int]:
 
 def evaluate(words: list[Word], incoming: dict[str, float]) -> dict[str, float]:
     """akanksha, yogyata, sannidhi (0..1), frequency and weighted total (see shabdabodha.WEIGHTS)."""
-    from mayur.shabdabodha import PRATHAMA, SAMBODHANA, WEIGHTS, is_case, karta_agrees, unary
+    from mayur.shabdabodha import PRATHAMA, SAMBODHANA, WEIGHTS, is_case, unary
 
     n = len(words) or 1
+    from mayur.karaka import STRUCTURAL, expressed
+
     roots = {i for i, w in enumerate(words) if w.role == "क्रिया"}
-    connected = sum(1 for i, w in enumerate(words) if w.role and (w.head is not None or i in roots or w.role == "विधेय"))
-    nominatives_roots = sum(1 for w in words if w.role == "" and w.morph is not None and is_case(w.morph, PRATHAMA))
-    parts = [(connected + min(nominatives_roots, 1)) / n]
-    for v in roots:
-        vm = words[v].morph
-        kartas = [w for w in words if w.head == v and w.role == "कर्ता"]
-        parts.append(1.0 if any(karta_agrees(w.morph, vm) for w in kartas) else (0.5 if kartas else 0.0))
+    # a word counts as connected when a rule licenses its link (role_sutras) or its role is structural
+    connected = sum(1 for i, w in enumerate(words) if w.role_sutras or w.in_compound
+                    or (w.role in STRUCTURAL and w.role and (w.head is not None or i in roots)))
+    parts = [connected / n]
+    for v in roots:  # the kāraka the verb expresses: found in the text 1.0, supplied (अध्याहार) 0.5
+        options = {r for r, _ in expressed(words[v].morph) if r}
+        if options:
+            found = any(w.head == v and w.role in options and w.role_sutras for w in words)
+            parts.append(1.0 if found else 0.5)
     akanksha = min(1.0, sum(parts) / len(parts))
     # yogyata: only formal penalties; deeper semantic compatibility is not implemented.
     penalty = 0.0

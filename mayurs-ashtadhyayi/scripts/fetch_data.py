@@ -19,6 +19,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 DCS_REPO = "https://github.com/OliverHellwig/sanskrit.git"
+# The revision every table, split and reported number was built from. Change it only together
+# with a rebuild of data/derived and a fresh draw of the pools (see scripts/build_tables.py).
+DCS_COMMIT = "8aeed5a1343d0e48b64eb32af8c00e8c6eb29359"
 # Directory names of DCS texts (epic, kavya, purana, narrative, sastra). Everything fetched is
 # counted into the frequency tables except the held-out chapters named in build_tables.py.
 DCS_TEXTS = (
@@ -51,8 +54,12 @@ def fetch_dcs(data_dir: Path) -> Path:
     target = data_dir / "dcs" / "sanskrit"
     if not (target / ".git").exists():
         target.parent.mkdir(parents=True, exist_ok=True)
-        _git(["clone", "--depth", "1", "--filter=blob:none", "--sparse", DCS_REPO, str(target)])
+        _git(["clone", "--no-checkout", "--filter=blob:none", "--sparse", DCS_REPO, str(target)])
     _git(["sparse-checkout", "set", "--no-cone", *DCS_PATHS], cwd=target)
+    head = subprocess.run(["git", "rev-parse", "HEAD"], cwd=target, capture_output=True, text=True, check=True)
+    if head.stdout.strip() != DCS_COMMIT:
+        _git(["fetch", "--filter=blob:none", "origin", DCS_COMMIT], cwd=target)
+        _git(["checkout", "--detach", DCS_COMMIT], cwd=target)
     return target
 
 

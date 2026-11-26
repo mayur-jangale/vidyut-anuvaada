@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 import sys
+from dataclasses import replace
 from pathlib import Path
 from typing import Any, Sequence
 
@@ -58,13 +59,21 @@ def build_parser() -> argparse.ArgumentParser:
         else:
             s.add_argument("n", type=int, help="verse number in Bala-kanda 1")
         s.add_argument("--full", action="store_true", help="full word lists for alternatives, all other analyses")
-        s.add_argument("--max-readings", type=int, default=5)
+        s.add_argument("--max-readings", type=_positive, default=5)
         s.add_argument("--compact", action="store_true", help="single-line JSON")
+        s.add_argument("--fluent", action="store_true", help="accepted for compatibility; fluent English is always included")
     h = sub.add_parser("html", help="write the static page")
     h.add_argument("--verses", default="1-20", help="range such as 1-20")
     h.add_argument("--out", default=DEFAULT_OUT)
-    h.add_argument("--max-readings", type=int, default=5)
+    h.add_argument("--max-readings", type=_positive, default=5)
     return p
+
+
+def _positive(value: str) -> int:
+    n = int(value)
+    if n < 1:
+        raise argparse.ArgumentTypeError("must be 1 or more")
+    return n
 
 
 def _dump(analysis: VerseAnalysis, args: argparse.Namespace) -> str:

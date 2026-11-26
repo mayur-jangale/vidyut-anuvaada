@@ -313,6 +313,34 @@ def _prove_with_particle(m: Morph, base: Morph, particle: str) -> WordProof:
                      note=f"{base.form} is derived by vidyut; {particle} is a particle (अव्यय) joined by sandhi")
 
 
+def _prove_member(m: Morph, stem_handle) -> WordProof:
+    """Proof of a non-final compound member. ``derivable`` only if a vidyut derivation yields
+    exactly the member's form: the stem itself, or a pada of that stem with the same sounds
+    (वाक् of वाच्). A form that exists only by a substitution made in compound formation
+    (महा for महत्, मत् for अस्मद्) is reported as NOT derived."""
+    target = m.stem or m.lemma
+    ok, text, trace = _matching(stem_handle, target)
+    if not ok and m.source == "special":
+        ok, text, trace = _matching(stem_handle, m.lemma)
+    if not ok:
+        return WordProof(derivable=False, method="vidyut-prakriya (stem)", derived_form=text, trace=trace,
+                         note="the stem derivation did not yield " + target + "; " + _NOTE_2471)
+    if m.form in nasal_variants(text):
+        return WordProof(derivable=True, method="vidyut-prakriya (stem)", derived_form=text, trace=trace,
+                         note=_NOTE_2471)
+    for pada in padas(m.form):
+        if (pada.stem or pada.lemma) == text and pada.source == "kosha" and not isinstance(pada.handle, tuple):
+            same, pada_text, pada_trace = _matching(pada.handle, m.form)
+            if same:
+                return WordProof(derivable=True, method="vidyut-prakriya (pada form of the stem)",
+                                 derived_form=pada_text, trace=pada_trace,
+                                 note=f"{m.form} is derived here as a pada of {text}; in the compound the same "
+                                      f"pada-final form arises (1.4.14). " + _NOTE_2471)
+    return WordProof(derivable=False, method="vidyut-prakriya (stem only)", derived_form=text, trace=trace,
+                     note=f"vidyut derives the stem {text}, not the in-compound form {m.form}: that form is a "
+                          f"substitution made in compound formation, which vidyut's Python API cannot derive")
+
+
 def prove(m: Morph) -> WordProof:
     """Forward derivation of ``m``; derivable only if vidyut yields exactly the expected text."""
     h = m.handle
@@ -329,15 +357,7 @@ def prove(m: Morph) -> WordProof:
     if isinstance(h, tuple) and h and h[0] == "stem":
         if h[1] is None:
             return WordProof(derivable=False, method="stem", note="no stem derivation available")
-        target = m.stem or m.lemma
-        ok, text, trace = _matching(h[1], target)
-        if not ok and m.source == "special":
-            ok, text, trace = _matching(h[1], m.lemma)
-        note = _NOTE_2471
-        if ok and text != m.form:
-            note += f"; the stem {text} appears as {m.form} by pada-final rules (1.4.14 with 8.2.x)"
-        return WordProof(derivable=ok, method="vidyut-prakriya (stem)", derived_form=text, trace=trace,
-                         note=note if ok else "the stem derivation did not yield " + target + "; " + note)
+        return _prove_member(m, h[1])
     ok, text, trace = _matching(h, m.form)
     note = ""
     if ok and text != m.form:

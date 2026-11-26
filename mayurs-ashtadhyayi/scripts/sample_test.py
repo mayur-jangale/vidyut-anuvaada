@@ -104,7 +104,7 @@ def main(argv: Optional[list[str]] = None) -> int:
         return 1
     seed = args.seed if args.seed is not None else random.SystemRandom().randrange(2**31)
     sealed = args.pool == "sealed_test"
-    candidates = [v for e in dcs.split_files(args.pool) for v in chapter_verses(e["file"])]
+    candidates = [v for e in dcs.split_files(args.pool, final_test=args.pool == dcs.SEALED) for v in chapter_verses(e["file"])]
     chosen = draw(candidates, args.n, seed, ledger_ids(ledger) if sealed else ())
     doc = sample_document(chosen, args.pool, args.label, seed)
     args.out_dir.mkdir(parents=True, exist_ok=True)

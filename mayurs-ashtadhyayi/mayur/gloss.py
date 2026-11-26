@@ -7,8 +7,8 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-from . import resources
-from .model import Morph
+from . import resources, ud
+from .model import Morph, Reading
 
 _OWN = Path(__file__).parent / "annotations" / "gloss.json"
 _MARKER = re.compile(r"\s*\((?:p|a|n|s|r|v)\)\s*$")
@@ -127,3 +127,25 @@ def lookup(m: Morph) -> tuple[str, str]:
     if g:
         return g, "vidyut-dhatupatha"
     return "", "none"
+
+
+MIN_SENSE_CONFIDENCE = 0.5
+
+
+def lookup_in_context(reading: Reading, index: int) -> tuple[str, str]:
+    """(gloss, source) of ``reading.words[index]``: our own table first, then the sense the DCS
+    sense model picks from the context ("dcs-sense-context"), else the context-free ``lookup``."""
+    m = reading.words[index].morph
+    if m is None:
+        return "", "none"
+    plain = lookup(m)
+    if plain[1] == "own":
+        return plain
+    from . import senses  # lazy: senses -> ud -> lexicon
+
+    label, confidence = senses.choose(ud.lemma(m), senses.context_of(reading, index))
+    if label and confidence >= MIN_SENSE_CONFIDENCE:
+        text = senses.gloss_of(label)
+        if text:
+            return text, "dcs-sense-context"
+    return plain

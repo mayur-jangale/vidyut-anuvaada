@@ -34,11 +34,16 @@ def require(path: Path) -> Path:
     return path
 
 
-@lru_cache(maxsize=None)
 def derived(name: str) -> Any:
-    """A derived JSON table, or an empty dict when it has not been built."""
+    """A derived JSON table, or an empty dict when it has not been built. Read-only: callers must
+    not change the returned object (it is cached per file path)."""
+    return _derived(str(derived_dir() / name))
+
+
+@lru_cache(maxsize=None)
+def _derived(path: str) -> Any:
     try:
-        return json.loads((derived_dir() / name).read_text(encoding="utf-8"))
+        return json.loads(Path(path).read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {}
 

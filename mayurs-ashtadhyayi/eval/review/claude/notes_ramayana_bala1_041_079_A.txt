@@ -1,0 +1,271 @@
+# verse 41
+roles: 0=अव्यय>1 1=पूर्वकालक्रिया>8 2=अव्यय>5 3=विशेषण>4 4=कर्म>1 5=कर्ता>8 6=समासपूर्वपद>7 7=विशेषण>5 8=क्रिया>- 9=अव्यय>10 10=विशेषण>5 11=सम्बन्ध>13 12=समासपूर्वपद>13 13=कर्म>8 14=अव्यय>8
+compounds: 6,7=तत्पुरुष|कालेन चोदितः ; 12,13=तत्पुरुष|आश्रमस्य पदम्
+anvaya: 14 6 7 9 10 5 2 3 4 0 1 11 12 13 8
+english: But then Rāvaṇa, impelled by Time, together with Mārīca, disregarding that speech, went to the hermitage-site of him [Rāma].
+issues: DCS splits the नञ् of अनादृत्य (0) and the सह-बहुव्रीहि सहमरीचः (9,10) into separate words; 10 is treated as an epithet of रावणः ("accompanied by Mārīca"). तस्य (11) refers to Rāma and should be Masc, not Neut; पद (13) is neuter, not Masc.
+
+# verse 42
+roles: 0=विशेषण>1 1=कर्ता>3 2=अव्यय>3 3=पूर्वकालक्रिया>6 4=समासपूर्वपद>5 5=कर्म>3 6=क्रिया>- 7=कर्म>6 8=सम्बन्ध>7 9=कर्म>10 10=पूर्वकालक्रिया>6 11=विशेषण>9
+compounds: 4,5=तत्पुरुष|नृपस्य आत्मजौ
+anvaya: 0 1 2 4 5 3 11 9 10 8 7 6
+english: Having had the two sons of the king drawn far away by that illusionist, [and] having killed the vulture Jaṭāyus, [he] carried off the wife of Rāma.
+issues: तेन मायाविना (0,1) is the प्रयोज्यकर्ता (instrumental agent) of the causative absolutive अपवाह्य, marked कर्ता>3. दूरम् (2) is an adverbial accusative (क्रियाविशेषण), marked अव्यय. DCS lemma जटायुष for जटायुस्.
+
+# verse 43
+roles: 0=कर्म>3 1=अव्यय>0 2=विशेषण>0 3=पूर्वकालक्रिया>11 4=विशेषण>7 5=पूर्वकालक्रिया>11 6=अव्यय>5 7=कर्म>5 8=कर्ता>11 9=समासपूर्वपद>10 10=विशेषण>8 11=क्रिया>- 12=समासपूर्वपद>13 13=विशेषण>8
+compounds: 9,10=तत्पुरुष|शोकेन संतप्तः ; 12,13=बहुव्रीहि|आकुलानि इन्द्रियाणि यस्य सः
+anvaya: 9 10 12 13 8 0 1 2 3 7 4 5 6 11
+english: Having seen the vulture slain, and having heard that Maithilī [was] carried off, Rāghava, burning with grief, his senses agitated, lamented.
+issues: निहतम् (2) and हृताम् (4) are predicative (object complements of दृष्ट्वा / श्रुत्वा), marked विशेषण.
+
+# verse 44
+roles: 0=अव्यय>11 1=विशेषण>3 2=अव्यय>1 3=करण>5 4=कर्म>5 5=पूर्वकालक्रिया>11 6=विशेषण>4 7=विशेषण>11 8=अधिकरण>7 9=कर्म>7 10=कर्म>11 11=क्रिया>- 12=अव्यय>11
+compounds:
+anvaya: 0 1 2 3 6 4 5 8 9 7 10 11 12
+english: Then, having burned the vulture Jaṭāyus in that very grief, [Rāma], searching for Sītā in the forest, saw a Rākṣasa.
+issues: मार्गमाणः (7) qualifies the unexpressed subject of संददर्श; with no noun to attach to it is given head = the finite verb (11) as विशेषण.
+
+# verse 45
+roles: 0=कर्म>7 1=अव्यय>0 2=करण>3 3=विशेषण>0 4=समासपूर्वपद>5 5=विशेषण>0 6=विशेषण>0 7=पूर्वकालक्रिया>10 8=समासपूर्वपद>9 9=कर्ता>10 10=क्रिया>- 11=क्रिया>- 12=अव्यय>11 13=कर्ता>11
+compounds: 4,5=बहुव्रीहि|घोरं दर्शनं यस्य सः ; 8,9=बहुव्रीहि|महान्तौ बाहू यस्य सः
+anvaya: 8 9 2 3 4 5 0 1 6 7 10 13 11 12
+english: Having slain him, named Kabandha, deformed in form, of dreadful appearance, the mighty-armed [Rāma] burned [him]; and he went to heaven.
+issues: रूपेण (2) is an instrumental of respect (इत्थंभूतलक्षण) completing विकृतम्. स्वर्गतः (11) is kept by DCS as one lexicalised word (स्वः गतः); used as the verbal predicate of the second clause. दर्शनम् (5) as a bahuvrihi member is fine as Masc.
+
+# verse 46
+roles: 0=कर्ता>3 1=अव्यय>0 2=सम्प्रदान>3 3=क्रिया>- 4=कर्म>9 5=विशेषण>4 6=विशेषण>4 7=समासपूर्वपद>8 8=विशेषण>4 9=क्रिया>3 10=अव्यय>9 11=सम्बोधन>9 12=कर्ता>13 13=क्रिया>- 14=समासपूर्वपद>15 15=विशेषण>12 16=कर्म>13 17=समासपूर्वपद>18 18=विशेषण>12
+compounds: 7,8=तत्पुरुष|धर्मे निपुणा ; 14,15=बहुव्रीहि|महत् तेजः यस्य सः ; 17,18=तत्पुरुष|शत्रूणां सूदनः
+anvaya: 0 1 2 11 5 6 7 8 4 9 10 3 14 15 17 18 12 16 13
+english: And he told him: "Rāghava, go to Śabarī, the female ascetic who practises dharma, skilled in dharma." He, of great splendour, the destroyer of enemies, went to Śabarī.
+issues: अस्य (2) is a genitive used for the dative of the person told (षष्ठी for चतुर्थी), marked सम्प्रदान. The quoted clause (9 with इति) is treated as a subordinate क्रिया under कथयामास. DCS gives form श्रमणाम्/lemma श्रमणा but text reads श्रमणीम्; vocative form shown as राघवैस् (should be राघव). धर्मचारिणी is kept as one word by DCS.
+
+# verse 47
+roles: 0=कर्ता>1 1=क्रिया>- 2=अव्यय>1 3=कर्म>1 4=समासपूर्वपद>5 5=विशेषण>3 6=समासपूर्वपद>7 7=अधिकरण>9 8=करण>9 9=क्रिया>- 10=विशेषण>8 11=अव्यय>9
+compounds: 4,5=तत्पुरुष|दशरथस्य आत्मजः ; 6,7=तत्पुरुष|पम्पायाः तीरम्
+anvaya: 4 5 3 0 2 1 6 7 10 8 9 11
+english: Rāma, son of Daśaratha, [was] duly honoured by Śabarī; on the bank of the Pampā [he] met with the monkey Hanumān.
+issues: Two क्त predicates: पूजितः (passive, रामः its कर्म) and संगतः (intransitive, unexpressed subject Rāma). हनुमता (8) is an instrumental of accompaniment. DCS form/lemma हनुमन्ता/हनुमन्त् for हनुमत्.
+
+# verse 48
+roles: 0=समासपूर्वपद>1 1=अपादान>5 2=अव्यय>1 3=अव्यय>1 4=करण>5 5=क्रिया>- 6=सम्प्रदान>10 7=अव्यय>6 8=विशेषण>9 9=कर्म>10 10=विशेषण>11 11=कर्ता>5 12=समासपूर्वपद>13 13=विशेषण>11
+compounds: 0,1=तत्पुरुष|हनुमतः वचनम् ; 12,13=बहुव्रीहि|महत् बलं यस्य सः
+anvaya: 12 13 11 0 1 2 3 4 5 6 7 8 9 10
+english: And on the very word of Hanumān, mighty Rāma met with Sugrīva, and [was] telling Sugrīva all that.
+issues: DCS reads शंसत् as the present participle शंसन्; it may instead be an augmentless (ārṣa) imperfect अशंसत्, which would make line 2 a separate finite clause. Followed DCS. सुग्रीवेण (4) instrumental of accompaniment with समागतः.
+
+# verse 49
+roles: 0=अव्यय>7 1=समासपूर्वपद>2 2=कर्ता>7 3=समासपूर्वपद>4 4=कर्म>5 5=अव्यय>7 6=सम्प्रदान>7 7=क्रिया>- 8=कर्म>7 9=अपादान>7 10=विशेषण>2 11=अव्यय>10 12=सम्बन्ध>14 13=अव्यय>12 14=कर्म>16 15=अव्यय>16 16=क्रिया>- 17=कर्ता>16
+compounds: 1,2=तत्पुरुष|वानराणां राजा ; 3,4=तत्पुरुष|वैरस्य अनुकथनम्
+anvaya: 0 10 11 1 2 6 3 4 5 9 8 7 17 15 12 13 14 16
+english: Then by the king of monkeys, distressed too, everything was told to Rāma out of affection, regarding the recounting of the enmity; and there the monkey told of Vālin's strength.
+issues: Convention added: an accusative governed by the कर्मप्रवचनीय प्रति is marked कर्म>प्रति, and प्रति is अव्यय>verb. आवेदितम् is passive क्त, so सर्वम् (nom) is its कर्म.
+
+# verse 50
+roles: 0=क्रिया>- 1=अव्यय>0 2=कर्ता>0 3=अव्यय>0 4=समासपूर्वपद>5 5=कर्म>6 6=अव्यय>0 7=कर्ता>10 8=विधेय>7 9=अव्यय>8 10=क्रिया>- 11=अव्यय>8 12=करण>8 13=अधिकरण>8
+compounds: 4,5=तत्पुरुष|वालिनः वधः
+anvaya: 2 3 4 5 6 0 1 7 11 13 12 8 9 10
+english: And then it was promised by Rāma regarding the slaying of Vālin; and Sugrīva was ever doubtful about Rāghava as to [his] prowess.
+issues: प्रतिज्ञातम् (0) is an impersonal (भावे) क्त, Nom Neut Sing; DCS tags it Acc Masc. वीर्येण (12) instrumental of respect with शङ्कितः.
+
+# verse 51
+roles: 0=कर्ता>8 1=समासपूर्वपद>2 2=अव्यय>8 3=अव्यय>0 4=सम्बन्ध>5 5=कर्म>8 6=विशेषण>5 7=करण>8 8=क्रिया>- 9=विशेषण>11 10=समासपूर्वपद>11 11=अव्यय>8
+compounds: 1,2=तत्पुरुष|प्रत्ययस्य अर्थम् ; 10,11=द्विगु|दशानां योजनानां समाहारः
+anvaya: 0 3 1 2 4 6 5 7 9 10 11 8
+english: But Rāghava, for the sake of proof, with his big toe flung the huge body of Dundubhi a full ten yojanas.
+issues: प्रत्ययार्थम् (2) and दशयोजनम् (11, accusative of distance) are adverbial accusatives, marked अव्यय (same convention as दूरम् in v42). सम्पूर्णम् (9) tagged Masc by DCS though it qualifies neuter दशयोजनम्; it could also agree with कायम्. पादाङ्गुष्ठ kept as one word.
+
+# verse 52
+roles: 0=क्रिया>- 1=अव्यय>0 2=अव्यय>0 3=कर्म>0 4=विशेषण>3 5=विशेषण>7 6=समासपूर्वपद>7 7=करण>0 8=कर्म>0 9=कर्म>0 10=अव्यय>9 11=अव्यय>9 12=विशेषण>0 13=कर्म>12 14=अव्यय>12
+compounds: 6,7=कर्मधारय|महान् इषुः
+anvaya: 2 14 13 12 5 6 7 4 3 8 9 10 11 0 1
+english: And again, then producing conviction, [he] pierced seven sāla trees with a single great arrow, and the mountain and the netherworld too.
+issues: जनयन् (12) qualifies the unexpressed subject and is attached to the finite verb (as in v44). सप्त (4) tagged Neut Sing by DCS; it is an indeclinable-like numeral agreeing with सालान्.
+
+# verse 53
+roles: 0=अव्यय>11 1=समासपूर्वपद>2 2=विशेषण>7 3=करण>4 4=विशेषण>7 5=विशेषण>7 6=समासपूर्वपद>7 7=कर्ता>11 8=कर्म>11 9=समासपूर्वपद>10 10=विशेषण>7 11=क्रिया>- 12=अव्यय>11 13=विशेषण>8 14=अव्यय>11
+compounds: 1,2=बहुव्रीहि|प्रीतं मनः यस्य सः ; 6,7=कर्मधारय|महान् कपिः ; 9,10=तत्पुरुष|रामेण सहितः
+anvaya: 0 3 4 1 2 9 10 5 6 7 14 13 8 11 12
+english: Then he, the great monkey, glad in mind, reassured by him, accompanied by Rāma, went then to Kiṣkindhā, the cave.
+issues: गुहाम् (13) taken as apposition to किष्किन्धाम्.
+
+# verse 54
+roles: 0=अव्यय>1 1=क्रिया>- 2=विशेषण>3 3=कर्ता>1 4=समासपूर्वपद>5 5=विशेषण>3 6=विशेषण>7 7=करण>9 8=विशेषण>7 9=क्रिया>- 10=समासपूर्वपद>11 11=कर्ता>9
+compounds: 4,5=कर्मधारय|हेम इव पिङ्गलः ; 10,11=तत्पुरुष|हरीणाम् ईश्वरः
+anvaya: 0 2 4 5 3 1 10 11 6 8 7 9
+english: Then Sugrīva, best of monkeys, tawny like gold, roared; at that great roar the lord of monkeys [Vālin] came out.
+issues: हरिवर (2) kept by DCS as one word (हरीणां वरः). नादेन (7) instrumental of cause. हेमपिङ्गलः is an उपमान-कर्मधारय.
+
+# verse 55
+roles: 0=अव्यय>11 1=समासपूर्वपद>2 2=अपादान>11 3=पूर्वकालक्रिया>11 4=कर्म>3 5=अधिकरण>3 6=कर्म>11 7=अव्यय>6 8=सम्बन्ध>9 9=अधिकरण>11 10=कर्ता>11 11=क्रिया>-
+compounds: 1,2=तत्पुरुष|सुग्रीवस्य वचनम्
+anvaya: 0 10 1 2 5 4 3 8 9 6 7 11
+english: Then, at Sugrīva's word, having slain Vālin in battle, Rāghava installed Sugrīva himself in that kingdom.
+issues: तत् (8) is tagged Acc Neut by DCS, but तद्राज्ये is a compound (तस्य राज्ये, "in his kingdom"); marked सम्बन्ध>9 and translated "that kingdom".
+
+# verse 56
+roles: 0=कर्ता>8 1=अव्यय>0 2=विशेषण>4 3=पूर्वकालक्रिया>8 4=कर्म>3 5=समासपूर्वपद>6 6=विशेषण>0 7=कर्म>8 8=क्रिया>- 9=विशेषण>0 10=कर्म>9
+compounds: 5,6=तत्पुरुष|वानराणाम् ऋषभः
+anvaya: 10 9 5 6 0 1 2 4 3 7 8
+english: And he, the bull among monkeys, desiring to see Janaka's daughter, having assembled all the monkeys, sent [them] forth to the quarters.
+issues: दिशः (7) is the destination with a verb of motion (गत्यर्थ कर्म). जनकात्मजा kept as one word by DCS. जनकात्मजाम् is the object of the desiderative adjective दिदृक्षुः.
+
+# verse 57
+roles: 0=अव्यय>9 1=विशेषण>3 2=अपादान>9 3=सम्बन्ध>2 4=कर्ता>9 5=विशेषण>4 6=समासपूर्वपद>8 7=समासपूर्वपद>8 8=विशेषण>10 9=क्रिया>- 10=कर्म>9
+compounds: 6,7,8=तत्पुरुष|शतं योजनानि (शतयोजनम्) विस्तीर्णः
+anvaya: 0 1 3 2 5 4 6 7 8 10 9
+english: Then, at the word of the vulture Sampāti, the mighty Hanumān leapt across the salt ocean, extending a hundred yojanas.
+issues: DCS form हनुमन्त् for हनुमान्. लवणार्णव kept as one word. गृध्रस्य (1) is in apposition to सम्पातेः.
+
+# verse 58
+roles: 0=अव्यय>2 1=कर्म>2 2=पूर्वकालक्रिया>6 3=विशेषण>1 4=समासपूर्वपद>5 5=विशेषण>1 6=क्रिया>- 7=कर्म>6 8=विशेषण>7 9=समासपूर्वपद>10 10=कर्म>11 11=विशेषण>7
+compounds: 4,5=तत्पुरुष|रावणेन पालिता ; 9,10=तत्पुरुष|अशोकानां वनिका
+anvaya: 0 4 5 3 1 2 8 9 10 11 7 6
+english: There, having reached Laṅkā, the city guarded by Rāvaṇa, [he] saw Sītā, brooding, gone into the Aśoka grove.
+issues: DCS form ध्यायतीम् for text ध्यायन्तीम्.
+
+# verse 59
+roles: 0=पूर्वकालक्रिया>9 1=कर्म>0 2=कर्म>4 3=अव्यय>2 4=पूर्वकालक्रिया>9 5=अव्यय>4 6=पूर्वकालक्रिया>9 7=अव्यय>6 8=कर्म>6 9=क्रिया>- 10=कर्म>9
+compounds:
+anvaya: 1 0 2 3 4 5 8 6 7 10 9
+english: Having presented the token of recognition, and having reported the news, and having comforted Vaidehī, [Hanumān] smashed the gateway.
+
+# verse 60
+roles: 0=विशेषण>2 1=समासपूर्वपद>2 2=कर्म>3 3=पूर्वकालक्रिया>13 4=विशेषण>6 5=समासपूर्वपद>6 6=कर्म>3 7=अव्यय>6 8=विशेषण>9 9=कर्म>11 10=अव्यय>9 11=पूर्वकालक्रिया>13 12=कर्म>13 13=क्रिया>-
+compounds: 1,2=तत्पुरुष|सेनायाः अग्रगाः ; 5,6=तत्पुरुष|मन्त्रिणां सुताः
+anvaya: 0 1 2 4 5 6 7 3 8 9 10 11 12 13
+english: Having slain the five army-leaders and also the seven sons of ministers, and having crushed the hero Akṣa, [he] submitted to capture.
+issues: पञ्च (0) is tagged Nom by DCS; it agrees with accusative सेनाग्रगान्. अग्रग is kept as one word (itself an उपपद compound अग्रे गच्छति).
+
+# verse 61
+roles: 0=कर्म>1 1=पूर्वकालक्रिया>4 2=विशेषण>3 3=अपादान>1 4=क्रिया>- 5=कर्म>4 6=कर्ता>4 7=विशेषण>5 8=विशेषण>5 9=करण>4
+compounds:
+anvaya: 6 2 3 0 1 9 8 7 5 4
+english: The hero, knowing himself [released from the weapon] by virtue of the boon of the Grandfather, [was] willingly bearing with those Rākṣasas who had bound [him].
+issues: DCS word list omits अस्त्रेण उन्मुहम् (text अस्त्रेणोन्मुहम्, probably a corruption of उन्मुक्तम्); supplied in brackets in English only. मर्षयन् (4) is tagged Voc; it is Nom, and as the only verbal form it is the predicate. वरात् (3) "boon" is a noun, not ADJ; पैतामहात् (2) is adjectival ("of Brahmā"). यदृच्छया instrumental of manner.
+
+# verse 62
+roles: 0=अव्यय>12 1=पूर्वकालक्रिया>12 2=विशेषण>3 3=कर्म>1 4=अव्यय>1 5=कर्म>4 6=अव्यय>5 7=विशेषण>5 8=सम्प्रदान>10 9=कर्म>10 10=तुमर्थ>12 11=अव्यय>12 12=क्रिया>- 13=समासपूर्वपद>14 14=कर्ता>12
+compounds: 13,14=कर्मधारय|महान् कपिः
+anvaya: 13 14 0 7 5 6 4 2 3 1 8 9 10 11 12
+english: Then, having burned the city Laṅkā except Maithilī Sītā, the great monkey came back to tell Rāma the pleasing [news].
+issues: सीताम् (5) is an (ārṣa) accusative with ऋते, which normally takes the ablative; marked कर्म>ऋते like the प्रति construction (v49).
+
+# verse 63
+roles: 0=कर्ता>6 1=पूर्वकालक्रिया>6 2=विशेषण>4 3=पूर्वकालक्रिया>6 4=कर्म>3 5=विशेषण>4 6=क्रिया>- 7=समासपूर्वपद>8 8=विशेषण>0 9=क्रिया>6 10=कर्म>9 11=अव्यय>9 12=अव्यय>6
+compounds: 7,8=बहुव्रीहि|अमेयः आत्मा यस्य सः
+anvaya: 7 8 0 1 2 4 5 3 10 9 11 12 6
+english: He, of immeasurable spirit, having approached the great-souled Rāma and having made [him] the object of circumambulation, reported truly: "Sītā has been seen."
+issues: Text reads तत्त्वतः (adverb, तसिल्), DCS gives तत्त्वात् Abl; marked अव्यय. महात्मानम् (2) is the object of अभिगम्य as well; attached to रामम्. प्रदक्षिणम् (5) is predicative. The quote दृष्टा सीता is a passive क्त clause (सीता = कर्म) under न्यवेदयत्.
+
+# verse 64
+roles: 0=अव्यय>8 1=समासपूर्वपद>2 2=विशेषण>8 3=पूर्वकालक्रिया>8 4=कर्म>3 5=समासपूर्वपद>6 6=सम्बन्ध>4 7=कर्म>8 8=क्रिया>- 9=करण>8 10=समासपूर्वपद>11 11=विशेषण>9
+compounds: 1,2=तत्पुरुष|सुग्रीवेण सहितः ; 5,6=कर्मधारय|महान् उदधिः ; 10,11=तत्पुरुष|आदित्येन संनिभाः
+anvaya: 1 2 0 5 6 4 3 10 11 9 7 8
+english: Then, accompanied by Sugrīva, having gone to the shore of the great ocean, [Rāma] agitated the sea with arrows resembling the sun.
+issues: सुग्रीवसहितः (2) qualifies the unexpressed subject; attached to the finite verb (as v44).
+
+# verse 65
+roles: 0=क्रिया>- 1=अव्यय>0 2=कर्म>0 3=कर्ता>0 4=सम्बन्ध>5 5=विशेषण>3 6=समासपूर्वपद>7 7=अपादान>12 8=अव्यय>7 9=अव्यय>7 10=कर्म>12 11=कर्म>12 12=क्रिया>-
+compounds: 6,7=तत्पुरुष|समुद्रस्य वचनम्
+anvaya: 4 5 3 2 0 1 6 7 8 9 10 11 12
+english: And the ocean, lord of rivers, showed himself; and on the very word of the ocean [Rāma] had Nala build a bridge.
+issues: नलम् (10) is the प्रयोज्यकर्ता of causative अकारयत् in the accusative (हृक्रोरन्यतरस्याम्), marked कर्म.
+
+# verse 66
+roles: 0=करण>1 1=पूर्वकालक्रिया>7 2=विशेषण>3 3=कर्म>1 4=पूर्वकालक्रिया>7 5=कर्म>4 6=अधिकरण>4 7=क्रिया>- 8=कर्ता>7 9=अधिकरण>7 10=समासपूर्वपद>11 11=विशेषण>12 12=कर्म>7
+compounds: 10,11=तत्पुरुष|राक्षसानाम् इन्द्रः
+anvaya: 8 0 2 3 1 6 5 4 9 10 11 12 7
+english: Having gone by that [bridge] to the city Laṅkā, having slain Rāvaṇa in battle, he consecrated Vibhīṣaṇa in Laṅkā as lord of the Rākṣasas.
+issues: तेन (0) refers to the bridge (सेतु) of v65. राक्षसेन्द्रम् (11) is a predicative complement of अभ्यषिञ्चत्.
+
+# verse 67
+roles: 0=करण>8 1=विशेषण>0 2=विशेषण>0 3=कर्ता>8 4=विशेषण>3 5=अव्यय>7 6=समासपूर्वपद>7 7=विशेषण>3 8=क्रिया>- 9=सम्बन्ध>0 10=विशेषण>9
+compounds: 6,7=तत्पुरुष|देवानाम् ऋषीणां च गणः
+anvaya: 4 5 6 7 3 10 9 1 2 0 8
+english: The three worlds, with [all] moving and unmoving beings, together with the hosts of gods and seers, [were] pleased by that great deed of the great-souled Rāghava.
+issues: DCS splits the सह-बहुव्रीहि सदेवर्षिगणम् (स + देवर्षिगणम्) and tags गणम् Acc Masc; it is Nom Neut, agreeing with त्रैलोक्यम्. सचराचरम् is kept as one word. तुष्टम् is a कर्तरि क्त predicate.
+
+# verse 68
+roles: 0=अव्यय>3 1=समासपूर्वपद>2 2=विशेषण>5 3=विशेषण>8 4=समासपूर्वपद>5 5=कर्ता>3 6=विशेषण>8 7=अव्यय>10 8=कर्ता>10 9=विशेषण>8 10=क्रिया>- 11=अव्यय>10
+compounds: 1,2=कर्मधारय|परमं संतुष्टाः ; 4,5=कर्मधारय|सर्वाणि दैवतानि
+anvaya: 0 1 2 4 5 3 6 9 8 7 10 11
+english: Thus honoured by all the deities, supremely pleased, Rāma, his task accomplished, free from distress, then rejoiced.
+issues: कृतकृत्य (6) is a lexicalised bahuvrihi (कृतं कृत्यं येन सः) kept as one word. सर्वदैवतैः (5) is the instrumental agent of the passive participle पूजितः.
+
+# verse 69
+roles: 0=अपादान>2 1=कर्म>2 2=पूर्वकालक्रिया>10 3=पूर्वकालक्रिया>10 4=अव्यय>3 5=कर्म>3 6=कर्म>8 7=विशेषण>6 8=पूर्वकालक्रिया>10 9=कर्म>10 10=क्रिया>- 11=अव्यय>10
+compounds:
+anvaya: 11 0 1 2 5 3 4 7 6 8 9 10
+english: Having obtained boons from the deities, and having raised up the monkeys, having mounted that Puṣpaka, [he] then went to Nandigrāma.
+issues: देवताभ्यः (0) is ablative (source with प्र-आप्), DCS tags Dat. प्राप्य lemma should be प्राप्, not causative प्रापय्. तत् (7) tagged Neut against Masc पुष्पकम्.
+
+# verse 70
+roles: 0=अधिकरण>2 1=कर्म>2 2=पूर्वकालक्रिया>11 3=करण>4 4=विशेषण>6 5=विशेषण>6 6=कर्ता>11 7=कर्म>8 8=पूर्वकालक्रिया>11 9=कर्म>11 10=अव्यय>11 11=क्रिया>-
+compounds:
+anvaya: 3 4 5 6 0 1 2 7 8 10 9 11
+english: In Nandigrāma, having cast off [his] matted locks, the sinless Rāma, accompanied by his brothers, having regained Sītā, obtained the kingdom again.
+issues: DCS form अवाप्तवन् for अवाप्तवान् (क्तवतु predicate, marked क्रिया).
+
+# verse 71
+roles: 0=समासपूर्वपद>1 1=विधेय>2 2=कर्ता>- 3=विधेय>2 4=विधेय>2 5=अव्यय>6 6=विधेय>2 7=विधेय>2 8=अव्यय>7 9=समासपूर्वपद>11 10=समासपूर्वपद>11 11=विधेय>2
+compounds: 0,1=कर्मधारय|प्रहृष्टश्च असौ मुदितश्च ; 9,10,11=तत्पुरुष|दुर्भिक्षात् भयं (दुर्भिक्षभयम्), तेन वर्जितः
+anvaya: 2 0 1 3 4 5 6 7 8 9 10 11
+english: The world [will be] delighted and glad, content, well-nourished, very righteous, [free from affliction] and free from disease, devoid of the fear of famine.
+issues: DCS word list omits निरायमः (text निरायमो); supplied in English in brackets only. सुधार्मिकः is split into सु + धार्मिकः. The verbless nominal clause is taken as future, in line with v72.
+
+# verse 72
+roles: 0=अव्यय>4 1=समासपूर्वपद>2 2=कर्म>4 3=विशेषण>5 4=क्रिया>- 5=कर्ता>4 6=अव्यय>4 7=कर्ता>11 8=अव्यय>7 9=विधेय>7 10=अव्यय>11 11=क्रिया>- 12=विशेषण>7
+compounds: 1,2=तत्पुरुष|पुत्रस्य मरणम्
+anvaya: 3 5 6 1 2 0 4 12 7 8 10 9 11
+english: No men at all will anywhere see the death of a son, and women, devoted to their husbands, will always be un-widowed.
+issues: अविधवा and पतिव्रता kept as single words (नञ्-तत्पुरुष / बहुव्रीहि). पतिव्रताः taken as attributive, अविधवाः as the complement of भविष्यन्ति.
+
+# verse 73
+roles: 0=अव्यय>3 1=समासपूर्वपद>2 2=विशेषण>3 3=कर्ता>- 4=विशेषण>3 5=अव्यय>7 6=अधिकरण>7 7=क्रिया>- 8=कर्ता>7 9=अव्यय>10 10=कर्ता>- 11=विशेषण>10 12=अव्यय>15 13=समासपूर्वपद>14 14=अधिकरण>12 15=अव्यय>10
+compounds: 1,2=उपपद-तत्पुरुष|वातात् जायते इति ; 13,14=कर्मधारय|कृतं युगम्
+anvaya: 0 4 1 2 3 8 6 5 7 9 11 10 12 13 14 15
+english: There [will be] no fear at all born of wind; creatures do not drown in the waters; nor [will there be] any fear [born of fire]; as in the Kṛta age, so [it will be].
+issues: DCS word list omits च and अग्निजम् (text चाग्रिजं, a misprint for चाग्निजं); supplied in brackets in English. In the verbless negative clauses न is attached to the subject. यथा … तथा: the locative कृतयुगे is attached to यथा, and तथा to the clause before it.
+
+# verse 74
+roles: 0=समासपूर्वपद>1 1=करण>2 2=पूर्वकालक्रिया>9 3=अव्यय>5 4=समासपूर्वपद>5 5=करण>2 6=सम्बन्ध>8 7=समासपूर्वपद>8 8=कर्म>9 9=पूर्वकालक्रिया>- 10=सम्प्रदान>9 11=समासपूर्वपद>12 12=अव्यय>9
+compounds: 0,1=तत्पुरुष|अश्वमेधानां शतानि ; 4,5=बहुव्रीहि|बहु सुवर्णं येषु ते (यज्ञाः) ; 7,8=तत्पुरुष|कोटीनाम् अयुतम् ; 11,12=बहुव्रीहि|विधिः पूर्वः यस्मिन् तत् (यथा तथा)
+anvaya: 0 1 3 4 5 2 11 12 10 6 7 8 9
+english: Having sacrificed with hundreds of horse-sacrifices, and likewise with [sacrifices] abounding in gold, having given to the learned, according to rule, ten thousand crores of cows, …
+issues: The sentence's finite verb (स्थापयिष्यति) is in v75; the last absolutive दत्त्वा takes head '-' and इष्ट्वा is chained to it. DCS form of 12 is empty (should be पूर्वकम्, adverbial acc.) and 10 has form विद्वोभ्यस् for विद्वद्भ्यः. बहुसुवर्णकैः is a bahuvrihi adjective qualifying understood यज्ञैः, tagged NOUN.
+
+# verse 75
+roles: 0=समासपूर्वपद>1 1=कर्म>3 2=विशेषण>1 3=क्रिया>- 4=कर्ता>3 5=कर्म>12 6=अव्यय>5 7=अधिकरण>12 8=विशेषण>7 9=विशेषण>11 10=विशेषण>11 11=अधिकरण>12 12=क्रिया>-
+compounds: 0,1=तत्पुरुष|राज्ञां वंशाः
+anvaya: 4 2 0 1 3 8 7 5 6 9 10 11 12
+english: Rāghava will establish royal dynasties a hundredfold, and in this world [he] will engage the four varṇas each in its own dharma.
+issues: शतगुण (2) kept as one word. स्वे स्वे is a distributive repetition (वीप्सा).
+
+# verse 76
+roles: 0=समासपूर्वपद>2 1=समासपूर्वपद>2 2=अव्यय>9 3=समासपूर्वपद>5 4=समासपूर्वपद>5 5=अव्यय>9 6=अव्यय>5 7=कर्ता>12 8=कर्म>9 9=पूर्वकालक्रिया>12 10=समासपूर्वपद>11 11=कर्म>12 12=क्रिया>-
+compounds: 0,1,2=कर्मधारय|दश वर्षाणां सहस्राणि ; 3,4,5=कर्मधारय|दश वर्षाणां शतानि ; 10,11=तत्पुरुष|ब्रह्मणः लोकः
+anvaya: 7 0 1 2 3 4 5 6 8 9 10 11 12
+english: Rāma, having ruled the kingdom for ten thousand years and ten hundred years, will go to the world of Brahmā.
+issues: The time-duration accusatives (2, 5) are adverbial, marked अव्यय (convention as v42/v51). Outer relation of दश-वर्षसहस्राणि taken as संख्या-कर्मधारय (not a समाहार द्विगु).
+
+# verse 77
+roles: 0=कर्ता>- 1=विधेय>0 2=समासपूर्वपद>3 3=विधेय>0 4=विधेय>0 5=करण>7 6=अव्यय>5 7=विधेय>0 8=कर्ता>9 9=क्रिया>14 10=समासपूर्वपद>11 11=कर्म>9 12=समासपूर्वपद>13 13=करण>14 14=क्रिया>-
+compounds: 2,3=उपपद-तत्पुरुष|पापं हन्ति इति ; 10,11=तत्पुरुष|रामस्य चरितम् ; 12,13=कर्मधारय|सर्वाणि पापानि
+anvaya: 0 1 2 3 4 5 6 7 8 10 11 9 12 13 14
+english: This [is] purifying, sin-destroying, meritorious, and equal to the Vedas; whoever would read the deeds of Rāma is released from all sins.
+issues: सर्वपापैः (13) is instrumental with passive प्रमुच्यते (sense "from"); marked करण by case. The correlative सः of the main clause is unexpressed. पवित्र is tagged NOUN; it is adjectival here.
+
+# verse 78
+roles: 0=विशेषण>4 1=विशेषण>4 2=विशेषण>4 3=विशेषण>5 4=कर्म>3 5=कर्ता>13 6=अव्यय>8 7=समासपूर्वपद>8 8=विशेषण>5 9=अव्यय>10 10=विशेषण>5 11=पूर्वकालक्रिया>13 12=अधिकरण>13 13=क्रिया>-
+compounds: 7,8=द्वन्द्व|पुत्राश्च पौत्राश्च
+anvaya: 0 2 1 4 3 6 7 8 9 10 5 11 12 13
+english: A man reading this life-giving narrative, the Rāmāyaṇa, together with sons and grandsons, together with his retinue, having departed [this life], is exalted in heaven.
+issues: DCS splits the सह-बहुव्रीहि सपुत्रपौत्रः and सगणः into स + member (as v67); स (6, 9) attached as अव्यय to the following word.
+
+# verse 79
+roles: 0=विशेषण>1 1=कर्ता>4 2=समासपूर्वपद>3 3=कर्म>4 4=क्रिया>- 5=क्रिया>9 6=कर्ता>9 7=समासपूर्वपद>8 8=कर्म>9 9=क्रिया>- 10=समासपूर्वपद>11 11=कर्ता>13 12=कर्म>13 13=क्रिया>- 14=कर्ता>19 15=अव्यय>14 16=विशेषण>14 17=अव्यय>16 18=कर्म>19 19=क्रिया>-
+compounds: 2,3=तत्पुरुष|वाचाम् ऋषभस्य भावः ; 7,8=तत्पुरुष|भूमेः पत्युः भावः ; 10,11=तत्पुरुष|वणिजां जनः
+anvaya: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 16 17 14 15 18 19
+english: Reading [it], a Brahmin would attain eminence in speech; should one be a Kṣatriya, he would attain lordship of the earth; the merchant folk would attain profit from their wares; and a person, even a Śūdra, would attain greatness.
+issues: DCS treats the taddhita -त्व as a separate compound member (वागृषभ+त्व, भूमिपति+त्व) yet keeps पण्यफलत्वम् and महत्त्वम् whole; vigrahas given as भाव-abstracts. स्यात् (5) read as a conditional copula ("should he be"), attached to ईयात् (9). Verse is in Upajāti metre (not anuṣṭubh).

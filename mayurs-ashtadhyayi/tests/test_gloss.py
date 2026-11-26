@@ -44,3 +44,28 @@ def test_english_helpers():
     assert english.plural("man") == "men" and english.plural("austerity") == "austerities"
     assert english.past("ask question") == "ask questioned" or True
     assert english.present_participle("run") == "running" and english.present_participle("make") == "making"
+
+
+def _reading(lemma: str = "रथ"):
+    from mayur.model import Reading, Word
+
+    m = Morph("रथस्", lemma, "subanta")
+    return Reading(words=[Word("रथस्", 0, 0, 0, analyses=[m])])
+
+
+def test_in_context_falls_back_when_model_missing(monkeypatch):
+    monkeypatch.setattr(gloss.resources, "derived", lambda n: {"dcs_senses.json": {"रथ": "chariot"}}.get(n, {}))
+    assert gloss.lookup_in_context(_reading(), 0) == ("chariot", "dcs-sense")
+
+
+def test_in_context_own_table_first_then_sense(monkeypatch):
+    from mayur import senses
+
+    monkeypatch.setattr(gloss.resources, "derived", lambda n: {"dcs_senses.json": {"रथ": "chariot"}}.get(n, {}))
+    model = {"top": {}, "gloss": {"king": "king"},
+             "lemmas": {"रथ": {"p": {"chariot": 5, "king": 5}, "f": {"g:Nom/Sing": {"king": 5}}}}}
+    monkeypatch.setattr(senses, "_model", lambda: model)
+    assert gloss.lookup_in_context(_reading(), 0) == ("king", "dcs-sense-context")
+    own = _reading("च")
+    own.words[0].analyses[0] = Morph("च", "च", "avyaya")
+    assert gloss.lookup_in_context(own, 0) == ("and", "own")

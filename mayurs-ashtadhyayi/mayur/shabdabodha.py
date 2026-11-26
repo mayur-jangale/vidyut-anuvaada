@@ -11,6 +11,7 @@ import math
 from dataclasses import replace
 from typing import Optional
 
+from mayur import karaka
 from mayur.anvaya import evaluate, pick as _pick, quoted as _quoted, regions as _region_map
 from mayur.model import Morph, Reading, Word
 
@@ -391,8 +392,11 @@ def resolve(reading: Reading) -> Reading:
     chosen = choose(reading.words)
     words = [replace(w, chosen=c) if w.analyses else w for w, c in zip(reading.words, chosen)]
     words, notes = assign_roles(words)
+    words, licence_notes = karaka.license_words(words)  # a link stays only if a rule licenses it
     scores = evaluate(words, reading.scores)
-    return replace(reading, words=words, scores=scores, notes=list(reading.notes) + notes)
+    out = replace(reading, words=words, scores=scores, notes=list(reading.notes) + notes + licence_notes)
+    verified, extra = karaka.check(out)
+    return replace(out, scores={**scores, "karaka_verified": verified}, notes=out.notes + extra)
 
 
 def rank(readings: list[Reading]) -> list[Reading]:

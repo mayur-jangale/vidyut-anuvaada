@@ -21,7 +21,8 @@
     "translation",
     "alignment",
     "scores",
-    "alternatives"
+    "alternatives",
+    "fluent"
   ],
   "properties": {
     "id": {
@@ -196,6 +197,55 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/alternative"
+      }
+    },
+    "fluent": {
+      "type": "object",
+      "description": "Fluent English made from the literal translation by fixed rules (no language model). Empty text when a check failed.",
+      "required": [
+        "text",
+        "note",
+        "alignment"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "alignment": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "word",
+              "start",
+              "end",
+              "text"
+            ],
+            "properties": {
+              "word": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "description": "Spans of the translation that render a Sanskrit word."
+        }
       }
     }
   },
@@ -485,7 +535,9 @@
         "head",
         "gloss",
         "gloss_source",
-        "arsha"
+        "arsha",
+        "derived_meaning",
+        "role_rules"
       ],
       "properties": {
         "index": {
@@ -558,6 +610,17 @@
         "arsha": {
           "type": "boolean",
           "description": "Labelled arsha: not derivable by the rules, never forced."
+        },
+        "derived_meaning": {
+          "type": "string",
+          "description": "Sense read off the derivation: which suffix rule gives which meaning."
+        },
+        "role_rules": {
+          "type": "array",
+          "description": "Rules that license the role: karaka definition and case rule.",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
         }
       },
       "additionalProperties": false

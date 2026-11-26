@@ -98,6 +98,9 @@ def _item(line: str, gold: list[dict], table: dict) -> dict | None:
             "missing": [w["form"] for j, w in enumerate(gold) if j not in present]}
 
 
+REUSE = False  # --reuse-cache: take the newest shard of each chunk even if mayur/*.py changed since
+
+
 def shards(name: str, data: list, table: dict) -> list[Path]:
     code = [p.stat().st_mtime_ns for p in sorted((ROOT / "mayur").glob("*.py")) if p.name != "ranker.py"]
     tkey = hashlib.sha1(repr(sorted(table.items())).encode()).hexdigest()[:6]
@@ -106,6 +109,9 @@ def shards(name: str, data: list, table: dict) -> list[Path]:
         part = data[c:c + CHUNK]
         key = hashlib.sha1(repr(([l for l, _ in part], code, tkey)).encode()).hexdigest()[:12]
         path = CACHE / f"{name}_{c}_{key}.pkl"
+        old = sorted(CACHE.glob(f"{name}_{c}_*.pkl"), key=lambda q: q.stat().st_mtime) if REUSE else []
+        if old and not path.exists():
+            path = old[-1]
         if not path.exists():
             items = [x for x in (_item(l, g, table) for l, g in part) if x is not None]
             CACHE.mkdir(parents=True, exist_ok=True)
@@ -230,7 +236,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--epochs", type=int, default=5)
     ap.add_argument("--dev-per-text", type=int, default=20)
     ap.add_argument("--configs", default="", help="comma-separated substrings of config names to run")
+    ap.add_argument("--reuse-cache", action="store_true", help="reuse lattice shards built by older code")
     a = ap.parse_args(argv)
+    global REUSE
+    REUSE = a.reuse_cache
     t0 = time.time()
     raw_train = train_lines(a.lines, seed=7)
     table = tag_table([(l, g, None) for l, g in raw_train])

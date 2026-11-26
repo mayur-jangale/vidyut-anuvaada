@@ -138,8 +138,9 @@ class Reading:
     anvaya: list[int] = field(default_factory=list)  # word indices in prose order
     translation: str = ""
     alignment: list[Alignment] = field(default_factory=list)
-    reworded: str = ""  # optional fluent English produced by a language model from this analysis
-    reworded_note: str = ""  # which model, and the checks the rewording passed
+    reworded: str = ""  # fluent English made from this analysis by fixed rules (mayur.fluent); no language model
+    reworded_note: str = ""  # the checks the rewording passed, or the one it failed
+    reworded_alignment: list[Alignment] = field(default_factory=list)  # word spans in ``reworded``
 
 
 @dataclass

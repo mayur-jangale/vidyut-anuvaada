@@ -8,7 +8,8 @@ import re
 from dataclasses import replace
 from typing import Iterator, Sequence
 
-from mayur import anvaya, compounds, decoder, gloss, lexicon, lipi, metre, proof, segmenter, shabdabodha, translate
+from mayur import (anvaya, artha, compounds, decoder, fluent, gloss, lexicon, lipi, metre, proof, segmenter,
+                   shabdabodha, translate)
 from mayur.model import UNVERIFIED, VERIFIED, Junction, Reading, VerseAnalysis, Word
 
 LINE_BREAK = re.compile(r"[।॥|/\n]+")
@@ -94,20 +95,26 @@ def _label_unproven(reading: Reading) -> Reading:
 
 
 def _with_gloss(reading: Reading) -> Reading:
+    """Gloss per word; a word with several dictionary senses takes the one its context selects."""
     words = []
-    for w in reading.words:
-        text, source = gloss.lookup(w.morph) if w.morph else ("", "none")
+    for i, w in enumerate(reading.words):
+        text, source = gloss.lookup_in_context(reading, i)
         words.append(replace(w, gloss=text, gloss_source=source))
     return replace(reading, words=words)
 
 
 def _finish(reading: Reading) -> Reading:
-    return translate.render(anvaya.order(_with_gloss(reading)))
+    """Gloss, meaning read off the derivation, prose order, literal English, then fluent English."""
+    literal = translate.render(anvaya.order(artha.annotate(_with_gloss(reading))))
+    fluent_reading, spans = fluent.rewrite(literal)
+    return replace(fluent_reading, reworded_alignment=spans)
 
 
 def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
                   max_readings: int = 5) -> VerseAnalysis:
     """Analyse one verse. ``readings[0]`` is the chosen reading; the rest are kept alternatives."""
+    if max_readings < 1:
+        raise ValueError("max_readings must be at least 1")
     lines = to_lines(text, script)
     if not lines:
         return VerseAnalysis(id=verse_id, input=text, notes=["empty input"])
@@ -115,6 +122,13 @@ def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
     notes = [f"line {i + 1}: no dictionary-only split; fallback tier {seg.tier} used"
              for i, seg in enumerate(segmentations) if seg.tier]
     per_line = [_best_splits(seg) for seg in segmentations]
+    empty = [i + 1 for i, splits in enumerate(per_line) if not splits]
+    if empty:
+        return VerseAnalysis(id=verse_id, input=text, lines=lines, metre=metre.identify(lines),
+                             notes=notes + [f"line {i}: no split found" for i in empty])
+    # Split score of a line: the trained decoder's score for its own choices; a rule-ranked split
+    # the decoder did not return sits below all of them (see _best_splits). The sum over lines is
+    # reported as the "frequency" score of a reading, relative to the best combination.
     best = sum(splits[0].score for splits in per_line)
 
     candidates = []

@@ -104,7 +104,8 @@ def test_person_agreement_and_copula_verse5():
 def test_number_agreement_and_fear_verse4():
     r = _gold(4)
     assert _r(r, "देवास्") == ("कर्ता", "बिभ्यति")
-    assert _r(r, "कस्य") == ("अपादान", "बिभ्यति")
+    assert _r(r, "कस्य") == ("सम्बन्ध", "बिभ्यति")  # षष्ठी शेषे (2.3.50): भी takes पञ्चमी by 1.4.25
+    assert next(w for w in r.words if w.form == "कस्य").role_sutras == ("2.3.50",)
     first = [w for w in r.words if w.line == 0 and w.form == "कस्"][0]
     assert first.role == "" and first.head is None  # line 1 is a nominal clause
 
@@ -147,7 +148,7 @@ def test_epithet_list_without_subject_verse12():
 
 def test_local_attachment_verse17():
     r = _gold(17)
-    assert _r(r, "विष्णुना") == ("करण", "सदृशस्")
+    assert _r(r, "विष्णुना") == ("सम्बन्ध", "सदृशस्")  # तुल्यार्थैः … तृतीया (2.3.72), not a करण
     assert _r(r, "वीर्ये") == ("अधिकरण", "सदृशस्")
     assert _r(r, "क्षमया")[1] == "समस्"
 
@@ -160,7 +161,8 @@ def test_agent_noun_over_lut_verse13():
 
 def test_named_subject_kept_verse8():
     r = _gold(8)
-    assert _r(r, "रामस्") == ("", None)
+    assert _r(r, "रामस्") == ("कर्म", "श्रुतस्")  # the क्त predicate expresses its कर्म (3.4.70)
+    assert next(w for w in r.words if w.form == "रामस्").role_sutras[:2] == ("1.4.49", "3.4.70")
     assert _r(r, "वशी") == ("विधेय", "रामस्")
 
 

@@ -162,10 +162,7 @@ def lookup(form: str) -> tuple[Entry, ...]:
     if not form:
         return ()
     code = lipi.to_code(form)
-    try:
-        raw = resources.kosha().get(code)
-    except Exception:  # noqa: BLE001
-        return ()
+    raw = resources.kosha().get(code)  # a missing kosha raises FileNotFoundError: never cached as "no entries"
     out = []
     for e in raw:
         conv = _convert(code, form, e)

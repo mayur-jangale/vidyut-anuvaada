@@ -31,10 +31,11 @@ def _text_of(path: str) -> str:
 
 
 def choose_files(split: str, books: list[str], max_files: int, per_text: int, seed: int) -> list[dict]:
-    if books:
-        return [{"file": str(p), "verses": None} for b in books
-                for p in sorted((FILES / b).glob("*.conllu"))[: max_files or None]]
     import random
+
+    if books:  # books only narrow the chosen split; they never reach chapters outside it
+        wanted = [e for e in dcs.split_files(split) if _text_of(e["file"]) in books]
+        return wanted[: max_files or None]
 
     by_text: dict[str, list[dict]] = {}
     for e in dcs.split_files(split):

@@ -1,0 +1,236 @@
+"""Evaluate sentence structure (heads, roles, prose order) against gold treebanks and reference files.
+
+    python eval/eval_roles.py --source ufal|dcs|vedic [--limit 300] [--json out.json]
+    python eval/eval_roles.py --claude eval/review/claude/<file>.json [--limit N] [--json out.json]
+    python eval/eval_roles.py --gold eval/review/gold_roles.json        (human corrections)
+    python eval/eval_roles.py --agreement fileA.json fileB.json         (two annotators, no pipeline run)
+
+For each gold sentence the pipeline (``mayur.pipeline.analyze_verse``) is run on its Devanagari text
+(exceptions are caught and counted); our words are aligned to the gold words with the lemma-tolerant
+alignment of eval/eval_dcs.py. Everything is reported on ALIGNED words that are not compound members
+(gold words without a counterpart are counted):
+  * head attachment (unlabelled): our head, with heads inside a compound moved to its final member, is
+    the aligned counterpart of the gold head (both "clause head" counts as equal);
+  * role accuracy and per-role precision/recall on words whose gold label maps to a role
+    (mayur/treebank.py documents the mapping; unmapped labels are counted, not forced);
+  * anvaya agreement where the gold has a prose order: share of word pairs in the same relative order
+    (and Kendall tau = 2*share - 1).
+Every number is printed as n/N. Metric functions are pure and unit-tested (tests/test_eval_roles.py).
+"""
+
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import json
+import sys
+import traceback
+from pathlib import Path
+from typing import Any, Callable, Iterable, Optional, Sequence
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from mayur import treebank  # noqa: E402
+
+
+def _load_dcs_eval() -> Any:
+    spec = importlib.util.spec_from_file_location("eval_dcs", ROOT / "eval" / "eval_dcs.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+ev = _load_dcs_eval()
+
+
+def our_view(reading: Any) -> dict[str, Any]:
+    """Our analysis as plain data: words with role and head (a head inside a compound is moved to the
+    compound's final member), compounds (member indices, type), and the prose order."""
+    final = {i: max(c.members) for c in reading.compounds for i in c.members}
+    words = [{"form": w.form, "in_compound": w.in_compound, "lemma": ev.our_word(w)[2], "role": w.role,
+              "head": None if w.head is None else final.get(w.head, w.head)} for w in reading.words]
+    return {"words": words, "compounds": [{"members": sorted(c.members), "type": c.samasa} for c in reading.compounds],
+            "anvaya": list(reading.anvaya)}
+
+
+def align(ours: Sequence[dict], gold: Sequence[dict]) -> dict[int, int]:
+    """Our word index -> gold word index."""
+    pairs = ev.align_words([(w["form"], w["in_compound"], w["lemma"]) for w in ours], gold, lenient=True)
+    return dict(pairs)
+
+
+def pairwise_agreement(order_a: Sequence[Any], order_b: Sequence[Any]) -> tuple[int, int]:
+    """(pairs in the same relative order, all pairs) over the items both orders contain."""
+    common = [x for x in order_a if x in set(order_b)]
+    pos_b = {x: i for i, x in enumerate(order_b)}
+    agree = total = 0
+    for i in range(len(common)):
+        for j in range(i + 1, len(common)):
+            total += 1
+            agree += pos_b[common[i]] < pos_b[common[j]]
+    return agree, total
+
+
+def score_sentence(ours: dict[str, Any], gold: dict[str, Any]) -> dict[str, Any]:
+    """Counts of one sentence. ``ours`` as from ``our_view``; ``gold`` a sentence of mayur.treebank."""
+    gw = gold["words"]
+    mapping = align(ours["words"], gw)
+    gold_final = {i: max(c["members"]) for c in gold.get("compounds", []) for i in c["members"]}
+    c: dict[str, Any] = {"gold_words": len(gw), "aligned": len(mapping), "unaligned_gold": len(gw) - len(mapping),
+                         "members_skipped": 0, "evaluated": 0, "head_ok": 0, "role_eval": 0, "role_ok": 0,
+                         "unmapped_gold_role": 0, "roles": {}}
+    for o, g in mapping.items():
+        gwd, owd = gw[g], ours["words"][o]
+        if gwd["compound_member"] or owd["in_compound"]:
+            c["members_skipped"] += 1
+            continue
+        c["evaluated"] += 1
+        h, gh = owd["head"], gwd["head_index"]
+        gh = gold_final.get(gh, gh)
+        c["head_ok"] += (h is None and gh is None) or (h is not None and gh is not None and mapping.get(h) == gh)
+        if not gwd["role"]:
+            c["unmapped_gold_role"] += 1
+            continue
+        c["role_eval"] += 1
+        c["role_ok"] += owd["role"] == gwd["role"]
+        for role, key in ((gwd["role"], "gold"), (owd["role"], "pred")):
+            if role:
+                c["roles"].setdefault(role, {"gold": 0, "pred": 0, "tp": 0})[key] += 1
+        if owd["role"] == gwd["role"]:
+            c["roles"][gwd["role"]]["tp"] += 1
+    if gold.get("anvaya") and ours.get("anvaya"):
+        ours_order = [mapping[i] for i in ours["anvaya"] if i in mapping]
+        c["anvaya_agree"], c["anvaya_pairs"] = pairwise_agreement(ours_order, list(gold["anvaya"]))
+    return c
+
+
+def add_counts(a: dict[str, Any], b: dict[str, Any]) -> dict[str, Any]:
+    out = dict(a)
+    for k, v in b.items():
+        if k == "roles":
+            roles = {r: dict(d) for r, d in a.get("roles", {}).items()}
+            for r, d in v.items():
+                cur = roles.setdefault(r, {"gold": 0, "pred": 0, "tp": 0})
+                for key, n in d.items():
+                    cur[key] += n
+            out["roles"] = roles
+        else:
+            out[k] = out.get(k, 0) + v
+    return out
+
+
+def frac(a: int, b: int) -> str:
+    return f"{a}/{b} = {100 * a / b:.1f}%" if b else f"{a}/0"
+
+
+def per_role(roles: dict[str, dict[str, int]]) -> list[dict[str, Any]]:
+    rows = []
+    for role, d in sorted(roles.items(), key=lambda kv: -kv[1]["gold"]):
+        p = d["tp"] / d["pred"] if d["pred"] else 0.0
+        r = d["tp"] / d["gold"] if d["gold"] else 0.0
+        rows.append({"role": role, "gold": d["gold"], "pred": d["pred"], "tp": d["tp"], "precision": round(p, 3),
+                     "recall": round(r, 3), "f1": round(2 * p * r / (p + r), 3) if p + r else 0.0})
+    return rows
+
+
+def report(total: dict[str, Any], sentences: int, errors: int, label: str) -> str:
+    lines = [f"{label}: {sentences} sentences, {errors} pipeline exceptions (counted, not scored)",
+             f"gold words {total.get('gold_words', 0)}; aligned {frac(total.get('aligned', 0), total.get('gold_words', 0))};"
+             f" not aligned {total.get('unaligned_gold', 0)}; compound members skipped {total.get('members_skipped', 0)}",
+             f"head attachment: {frac(total.get('head_ok', 0), total.get('evaluated', 0))}",
+             f"role accuracy: {frac(total.get('role_ok', 0), total.get('role_eval', 0))}"
+             f" (gold label unmapped: {total.get('unmapped_gold_role', 0)})"]
+    if total.get("anvaya_pairs"):
+        a, n = total["anvaya_agree"], total["anvaya_pairs"]
+        lines.append(f"anvaya pair order: {frac(a, n)}; Kendall tau {2 * a / n - 1:.3f}")
+    lines.append("role            gold  pred    tp  precision  recall")
+    lines += [f"{r['role']:<14}{r['gold']:>6}{r['pred']:>6}{r['tp']:>6}{r['precision']:>11.3f}{r['recall']:>8.3f}"
+              for r in per_role(total.get("roles", {}))]
+    return "\n".join(lines)
+
+
+def run(sentences: Iterable[dict[str, Any]], analyze: Callable[..., Any], limit: Optional[int] = None) -> dict[str, Any]:
+    total: dict[str, Any] = {}
+    n = errors = 0
+    failures: list[dict[str, str]] = []
+    for s in sentences:
+        if limit is not None and n >= limit:
+            break
+        n += 1
+        try:
+            analysis = analyze(s["text"], verse_id=str(s["id"]))
+            total = add_counts(total, score_sentence(our_view(analysis.readings[0]), s))
+        except BaseException as exc:  # counted (a Rust panic in vidyut is a BaseException)
+            if isinstance(exc, (KeyboardInterrupt, SystemExit)):
+                raise
+            errors += 1
+            failures.append({"id": str(s["id"]), "error": f"{type(exc).__name__}: {exc}"[:200]})
+            if errors <= 3:
+                traceback.print_exc(file=sys.stderr)
+    return {"sentences": n, "exceptions": errors, "failures": failures[:20], "counts": total}
+
+
+# Two annotators on the same verses (no pipeline).
+
+def agreement_view(s: dict[str, Any]) -> dict[str, Any]:
+    words = [{"form": w["form"], "in_compound": w["compound_member"], "lemma": w["lemma"], "role": w["role"],
+              "head": w["head_index"]} for w in s["words"]]
+    comps = [{"members": sorted(c["members"]), "type": c["type"]} for c in s.get("compounds", [])]
+    return {"words": words, "compounds": comps, "anvaya": list(s.get("anvaya", []))}
+
+
+def agreement(a_sents: Sequence[dict], b_sents: Sequence[dict]) -> dict[str, Any]:
+    """Score annotator A against B on the verses (same id) both cover."""
+    b_by_id = {s["id"]: s for s in b_sents}
+    total: dict[str, Any] = {}
+    shared = 0
+    for a in a_sents:
+        b = b_by_id.get(a["id"])
+        if b is not None:
+            shared += 1
+            total = add_counts(total, score_sentence(agreement_view(a), b))
+    return {"sentences": shared, "exceptions": 0, "failures": [], "counts": total}
+
+
+def load_sentences(args: argparse.Namespace) -> tuple[list[dict[str, Any]], str]:
+    if args.claude:
+        return treebank.read_claude(args.claude), f"reference {Path(args.claude).name}"
+    if args.gold:
+        return treebank.read_gold_roles(args.gold), f"human gold {Path(args.gold).name}"
+    return list(_take(treebank.iter_source(args.source), args.limit)), f"gold {args.source}"
+
+
+def _take(it: Iterable[dict], limit: Optional[int]) -> Iterable[dict]:
+    for i, s in enumerate(it):
+        if limit is not None and i >= limit:
+            return
+        yield s
+
+
+def main(argv: Optional[list[str]] = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--source", choices=("ufal", "dcs", "vedic"), default="dcs")
+    ap.add_argument("--claude", default=None)
+    ap.add_argument("--gold", default=None)
+    ap.add_argument("--agreement", nargs=2, metavar=("A", "B"), default=None)
+    ap.add_argument("--limit", type=int, default=None)
+    ap.add_argument("--json", default=None)
+    args = ap.parse_args(argv)
+    if args.agreement:
+        a, b = (treebank.read_claude(p) for p in args.agreement)
+        result, label = agreement(a, b), f"agreement {Path(args.agreement[0]).name} vs {Path(args.agreement[1]).name}"
+    else:
+        from mayur.pipeline import analyze_verse
+
+        sentences, label = load_sentences(args)
+        result = run(sentences, analyze_verse, args.limit)
+    print(report(result["counts"], result["sentences"], result["exceptions"], label))
+    if args.json:
+        result["per_role"] = per_role(result["counts"].get("roles", {}))
+        Path(args.json).write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
