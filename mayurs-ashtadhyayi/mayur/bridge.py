@@ -244,3 +244,21 @@ def matup_subanta(handle: Any) -> Any:
     base = Pratipadika.basic(text[:-3])
     stem = Pratipadika.taddhitanta(base, Taddhita.matup)
     return Pada.Subanta(pratipadika=stem, linga=handle.linga, vibhakti=handle.vibhakti, vacana=handle.vacana)
+
+
+def prefixed_krdanta(entry: Entry, upasargas: tuple[str, ...]) -> Any:
+    """A Pada.Subanta for ``entry``'s krdanta with ``upasargas`` (Devanagari) put before the
+    prefixes its dhatu already has; vidyut then applies e.g. 7.1.37 (क्त्वा -> ल्यप्)."""
+    from vidyut.prakriya import Pada, Pratipadika
+
+    e = entry.morph.handle
+    pe = e.pratipadika_entry
+    if getattr(pe, "prayoga", None) is not None:
+        return None  # the Python API cannot pass a krdanta's prayoga
+    dhatu = pe.dhatu_entry.dhatu
+    codes = [UPASARGA_CODE[u] for u in upasargas] + list(getattr(dhatu, "prefixes", None) or [])
+    try:
+        stem = Pratipadika.krdanta(dhatu.with_prefixes(codes), pe.krt)
+        return Pada.Subanta(pratipadika=stem, linga=e.linga, vibhakti=e.vibhakti, vacana=e.vacana)
+    except Exception:  # noqa: BLE001
+        return None

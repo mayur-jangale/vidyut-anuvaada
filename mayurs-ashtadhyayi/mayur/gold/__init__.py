@@ -22,9 +22,10 @@ def _num(n: int) -> str:
     return devanagari(str(n), "iast")
 
 
-def build(sentences: Iterable[dict]) -> dict[str, Any]:
-    """Gold document from the DCS sentences of the chapter (pure)."""
-    sents = [s for s in sentences if s["chapter_id"] == CHAPTER_ID]
+def build(sentences: Iterable[dict], chapter_id: str | None = CHAPTER_ID, label: str = "रामायण १.१",
+          source: str = SOURCE) -> dict[str, Any]:
+    """Gold document from the DCS sentences of one chapter (pure). ``chapter_id=None`` keeps all."""
+    sents = [s for s in sentences if chapter_id is None or s["chapter_id"] == chapter_id]
     verses = []
     for number, group in groupby(sents, key=lambda s: s["sent_counter"]):
         lines = [{
@@ -34,8 +35,19 @@ def build(sentences: Iterable[dict]) -> dict[str, Any]:
             "words": [{"form": t["form"], "lemma": t["lemma"], "upos": t["upos"], "feats": t["feats"],
                        "compound_member": t["compound_member"]} for t in s["tokens"]],
         } for s in group]
-        verses.append({"id": f"रामायण १.१.{_num(number)}", "number": number, "lines": lines})
-    return {"source": SOURCE, "license": LICENSE, "verses": verses}
+        verses.append({"id": f"{label}.{_num(number)}", "number": number, "lines": lines})
+    return {"source": source, "license": LICENSE, "verses": verses}
+
+
+def from_conllu(path: Path, label: str) -> dict[str, Any]:
+    """Gold document for any DCS chapter file, e.g. a chapter of another book."""
+    return build(dcs.iter_sentences(path), chapter_id=None, label=label,
+                 source=f"Digital Corpus of Sanskrit (Oliver Hellwig), {Path(path).stem}")
+
+
+def text_of(verse_doc: dict[str, Any]) -> str:
+    """Compact Devanagari text of a gold verse: half-verses joined by " । ", ending " ॥"."""
+    return LINE_SEP.join(line["compact"] for line in verse_doc["lines"]) + VERSE_END
 
 
 @lru_cache(maxsize=1)
@@ -52,7 +64,7 @@ def verse(n: int) -> dict[str, Any]:
 
 def verse_text(n: int) -> str:
     """Compact Devanagari half-verses of verse ``n`` joined by " । " and ending " ॥"."""
-    return LINE_SEP.join(line["compact"] for line in verse(n)["lines"]) + VERSE_END
+    return text_of(verse(n))
 
 
 def write(conllu_files: Iterable[Path], dest: Path = GOLD_FILE) -> int:

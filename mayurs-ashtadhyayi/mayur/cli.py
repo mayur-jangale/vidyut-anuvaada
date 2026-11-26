@@ -106,7 +106,7 @@ def main(argv: Sequence[str] | None = None) -> int:
     except lipi.AmbiguousScript as exc:
         print(str(exc), file=sys.stderr)
         return 1
-    except (ValueError, KeyError, IndexError, OSError) as exc:
+    except (ValueError, KeyError, IndexError, OSError, ImportError) as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 1
     return 0

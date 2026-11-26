@@ -20,7 +20,10 @@ _NOTE_2471 = ("compound-internal elision of the case ending (2.4.71, with 1.4.14
 
 _NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ्", "च": "ञ्", "छ": "ञ्", "ज": "ञ्", "झ": "ञ्",
           "ट": "ण्", "ठ": "ण्", "ड": "ण्", "ढ": "ण्", "त": "न्", "थ": "न्", "द": "न्", "ध": "न्",
-          "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्"}
+          "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्", "न": "न्", "म": "म्"}
+# pada-final spellings (8.2.30, 8.2.39, 8.4.56): a stem's final consonant as it stands at a pada end
+_FINAL = {"द्": ("त्",), "ग्": ("क्",), "ड्": ("ट्",), "ब्": ("प्",), "च्": ("क्",), "ज्": ("क्", "ट्"),
+          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्")}
 
 
 def _quality(entry: bridge.Entry) -> int:
@@ -83,9 +86,21 @@ def nasal_variants(form: str) -> tuple[str, ...]:
     return tuple(dict.fromkeys(x for x in out if x))
 
 
+def final_variants(form: str) -> tuple[str, ...]:
+    """``form`` and its spellings with the final consonant as at a pada end (केचिद् -> केचित्)."""
+    for cons, alts in _FINAL.items():
+        if form.endswith(cons) and len(form) > len(cons):
+            return (form,) + tuple(form[: -len(cons)] + a for a in alts)
+    return (form,)
+
+
+def spelling_variants(form: str) -> tuple[str, ...]:
+    return tuple(dict.fromkeys(n for f in final_variants(form) for n in nasal_variants(f)))
+
+
 def _kosha_morphs(form: str) -> list[Morph]:
     out = []
-    for variant in nasal_variants(form):
+    for variant in spelling_variants(form):
         for entry in bridge.lookup(variant):
             out.append(replace(entry.morph, form=form, quality=_quality(entry)))
     return out
@@ -145,6 +160,10 @@ def stems(form: str) -> tuple[Morph, ...]:
         for entry in bridge.lookup(variant):
             if _stem_entry_ok(entry, variant):
                 out.append(_as_stem(entry, form))
+        for key in final_variants(variant)[1:]:  # a stem cited as such: वाच् (pada वाक्)
+            for entry in bridge.lookup(key):
+                if entry.entry == "basic" and entry.pratipadika == variant:
+                    out.append(_as_stem(entry, form))
     if form in _SPECIAL_STEMS:
         lemma, _ = _SPECIAL_STEMS[form]
         out.append(Morph(form=form, lemma=lemma, kind="stem", stem=form, source="special", quality=3,

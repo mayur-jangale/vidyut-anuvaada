@@ -1,6 +1,7 @@
-"""Evaluate mayur against the DCS gold verses (Ramayana, Balakanda sarga 1).
+"""Evaluate mayur against DCS gold verses (default: Ramayana, Balakanda sarga 1).
 
     python eval/eval_dcs.py [--verses 1-20] [--json eval/results.json]
+    python eval/eval_dcs.py --conllu <DCS chapter file of any book> --label "मनुस्मृति १" --verses 1-20
 
 Every number is printed as n/N. The metric functions are pure and unit-tested.
 Normalisation used when comparing word forms: an internal nasal consonant with virama before a
@@ -111,13 +112,13 @@ def line_words(reading: Any, line: int) -> list[Any]:
     return [w for w in reading.words if w.line == line]
 
 
-def evaluate_verse(number: int, analyze: Callable[..., Any]) -> dict[str, Any]:
-    """Metrics of one gold verse; ``analyze(text, verse_id=...)`` is ``pipeline.analyze_verse``."""
-    g = gold.verse(number)
+def evaluate_verse(g: dict[str, Any], analyze: Callable[..., Any]) -> dict[str, Any]:
+    """Metrics of one gold verse ``g``; ``analyze(text, verse_id=...)`` is ``pipeline.analyze_verse``."""
+    number = g["number"]
     gold_lines = [[w for w in ln["words"]] for ln in g["lines"]]
     res: dict[str, Any] = {"verse": number, "id": g["id"], "n_lines": len(gold_lines),
                            "gold_words": sum(map(len, gold_lines)), "error": ""}
-    analysis = analyze(gold.verse_text(number), verse_id=g["id"])
+    analysis = analyze(gold.text_of(g), verse_id=g["id"])
     if not analysis.readings:
         raise ValueError("analysis has no readings")
     reading = analysis.readings[0]
@@ -146,8 +147,8 @@ def evaluate_verse(number: int, analyze: Callable[..., Any]) -> dict[str, Any]:
     return res
 
 
-def failed_result(number: int, exc: BaseException) -> dict[str, Any]:
-    g = gold.verse(number)
+def failed_result(g: dict[str, Any], exc: BaseException) -> dict[str, Any]:
+    number = g["number"]
     return {"verse": number, "id": g["id"], "n_lines": len(g["lines"]),
             "gold_words": sum(len(ln["words"]) for ln in g["lines"]), "our_words": 0, "matched": 0,
             "lines_exact": [False] * len(g["lines"]), "verse_exact": False, "gold_in_readings": False,
@@ -217,17 +218,22 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--verses", default=None, help="e.g. 1-20 (default: all)")
     ap.add_argument("--json", default=None, help="write the numbers to this file")
+    ap.add_argument("--conllu", default=None, help="evaluate on this DCS chapter file instead (any book)")
+    ap.add_argument("--label", default="ग्रन्थ", help="verse id prefix used with --conllu")
     args = ap.parse_args(argv)
     from mayur.pipeline import analyze_verse
 
-    numbers = [n for n in parse_range(args.verses, len(gold.load()["verses"]))]
+    doc = gold.from_conllu(Path(args.conllu), args.label) if args.conllu else gold.load()
+    by_number = {v["number"]: v for v in doc["verses"]}
+    wanted = parse_range(args.verses, max(by_number))
+    print(f"gold: {doc['source']}")
     results = []
-    for n in numbers:
+    for g in (by_number[n] for n in wanted if n in by_number):
         try:
-            results.append(evaluate_verse(n, analyze_verse))
+            results.append(evaluate_verse(g, analyze_verse))
         except Exception as exc:  # noqa: BLE001 - counted as a failure and printed, never hidden
-            results.append(failed_result(n, exc))
-            print(f"verse {n}: FAILED {exc!r}", file=sys.stderr)
+            results.append(failed_result(g, exc))
+            print(f"verse {g['number']}: FAILED {exc!r}", file=sys.stderr)
     summary = summarize(results)
     print(report(results, summary))
     if args.json:

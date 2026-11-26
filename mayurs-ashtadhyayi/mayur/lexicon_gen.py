@@ -11,6 +11,9 @@ from dataclasses import replace
 
 from mayur import bridge, lipi
 from mayur.model import Morph
+from mayur.terms import NONFINITE_KRT, PARTICIPLE_KRT
+
+_GOOD_KRT = frozenset(PARTICIPLE_KRT) | frozenset(NONFINITE_KRT)
 
 _VOWEL_SIGNS = {"ा": "आ", "ि": "इ", "ी": "ई", "ु": "उ", "ू": "ऊ", "ृ": "ऋ", "े": "ए", "ै": "ऐ", "ो": "ओ", "ौ": "औ"}
 _STOP_FINALS = ("स्", "ष्", "र्", "ः", "द्", "त्", "न्", "ण्", "ञ्", "ङ्", "म्", "ं", "ज्", "च्", "ल्", "ब्", "भ्")
@@ -66,14 +69,18 @@ def _lemma(upasargas: tuple[str, ...], root: str) -> str:
 def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list[Morph]:
     out = []
     for entry in bridge.lookup(remainder):
-        if entry.entry != "tinanta":
+        m = entry.morph
+        if entry.entry == "tinanta":
+            pada = bridge.prefixed_tinanta(entry, upasargas)
+        elif entry.entry == "krdanta" and m.krt in _GOOD_KRT:
+            pada = bridge.prefixed_krdanta(entry, upasargas)
+        else:
             continue
-        pada = bridge.prefixed_tinanta(entry, upasargas)
         if pada is None:
             continue
         if any(d.text == form for d in bridge.derive(pada)):
-            m = entry.morph
-            out.append(replace(m, form=form, lemma=_lemma(upasargas, m.root or m.lemma), prefixes=upasargas,
+            prefixes = upasargas + m.prefixes
+            out.append(replace(m, form=form, lemma=_lemma(prefixes, m.root or m.lemma), prefixes=prefixes,
                                source="generated", quality=3, handle=pada))
     return out
 
