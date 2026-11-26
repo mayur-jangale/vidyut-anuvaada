@@ -8,7 +8,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Optional
 
-from mayur.karaka_rules import DVIKARMAKA
+from mayur.karaka_rules import DVIKARMAKA, GATI_AKARMAKA
 from mayur.anvaya import pick as _pick, quoted as _quoted, regions as _region_map
 from mayur.model import Word
 from mayur.shabdabodha import (COPULA, DVITIYA, FEAR, FIRST_PERSON, KARAKA_OF_CASE, LOCAL, NONFINITE, POSSESSIVE,
@@ -48,6 +48,57 @@ def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     return score
 
 
+def _segment(words: list[Word], i: int) -> Optional[int]:
+    """Clause of word ``i`` inside its line when the line has two or more finite verbs: the clause
+    runs up to and including each finite verb (यस् पठति | सस् सुखम् लभते); words after the last verb
+    belong to it. None when the line has one finite verb or none (then the line is the clause)."""
+    line = [j for j, w in enumerate(words) if w.line == words[i].line and is_finite(w.morph)]
+    if len(line) < 2:
+        return None
+    nxt = next((j for j in line if j >= i), line[-1])
+    before = [j for j in line if j < i]
+    m = words[i].morph
+    if before and m is not None and is_case(m, PRATHAMA) and not karta_agrees(m, words[nxt].morph) \
+            and karta_agrees(m, words[before[-1]].morph):
+        return before[-1]  # वक्ष्यामि अहम्: the subject stands after its verb, as verse allows
+    return nxt
+
+
+def _next_governor(words: list[Word], i: int) -> Optional[int]:
+    """The absolutive, infinitive or motion participle (गत, प्राप्त: 3.4.72) standing right after word ``i``
+    (particles skipped): वनम् गते. An accusative there is its कर्म, not part of a later phrase."""
+    j = i + 1
+    while j < len(words) and words[j].line == words[i].line and words[j].form in ENCLITIC:
+        j += 1
+    if j >= len(words) or words[j].line != words[i].line or words[j].morph is None or words[j].in_compound:
+        return None
+    m = words[j].morph
+    return j if m.krt in ("क्त", "क्तवतु") and (m.root or "") in GATI_AKARMAKA else None
+
+
+def _before_verbal(words: list[Word], i: int) -> bool:
+    """Word ``i`` stands right before a finite verb, absolutive or infinitive (particles skipped)."""
+    j = i + 1
+    while j < len(words) and words[j].line == words[i].line and words[j].form in ENCLITIC:
+        j += 1
+    return j < len(words) and words[j].line == words[i].line and (is_finite(words[j].morph) or is_nonfinite(words[j].morph))
+
+
+def _split_at_absolutive(words: list[Word], group: list[int]) -> list[list[int]]:
+    """वनम् गत्वा फलम् खादति: two object nouns with an absolutive between them are two phrases, the
+    first governed by the absolutive. An adjective and its noun are not parted this way."""
+    def noun(j: int) -> bool:
+        m = words[j].morph
+        return not m.krt and lemma_class(m.lemma) == "noun"
+    for k in range(1, len(group)):
+        between = [j for j in range(group[k - 1] + 1, group[k]) if words[j].morph is not None
+                   and words[j].morph.krt in ("क्त्वा", "ल्यप्")]
+        if between and any(noun(j) for j in group[:k]) and any(noun(j) for j in group[k:]) \
+                and _before_verbal(words, group[-1]):  # (गृध्रम् हत्वा जटायुषम् stays one phrase: an apposition)
+            return [group[:k]] + _split_at_absolutive(words, group[k:])
+    return [group]
+
+
 def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> list[list[int]]:
     """Agreement groups (same case, number, gender) per clause: the half-verse when it has a
     verb or verbal, else its region; अस्मद्/युष्मद् never group with (qualify) other words."""
@@ -60,9 +111,12 @@ def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> li
             relative = m.lemma == "यद्" and sum(is_finite(x.morph) for x in words if x.line == w.line) > 1
             if m.vibhakti not in (PRATHAMA, DVITIYA):  # oblique phrases do not run across half-verses
                 clause = (clause, w.line)
+            clause = (clause, _segment(words, i), _next_governor(words, i) if m.vibhakti == DVITIYA else None)
             groups.setdefault((m.vibhakti, m.vacana, m.linga, clause, i if personal or relative else -1), []).append(i)
     order = lambda g: (words[g[0]].morph.vibhakti != PRATHAMA, words[g[0]].morph.lemma not in FIRST_PERSON | SECOND_PERSON)
-    return sorted(groups.values(), key=order)
+    parts = [part for g in groups.values()
+             for part in (_split_at_absolutive(words, g) if words[g[0]].morph.vibhakti == DVITIYA else [g])]
+    return sorted(parts, key=order)
 
 
 def _set(words: list[Word], i: int, role: str, head: Optional[int]) -> None:
@@ -125,6 +179,8 @@ def _particle_head(words: list[Word], i: int, verbs: list[int], verbals: list[in
                  and w.morph.kind == "subanta" and w.morph.krt in PREDICATE_KRT and w.morph.vibhakti == PRATHAMA]
         if after:
             return after[0]
+    if _segment(words, i) is not None:
+        return _segment(words, i)
     near = [j for j, w in enumerate(words) if j != i and w.line == line and not w.in_compound
             and (j in verbs or j in verbals or (w.morph is not None and w.morph.kind == "subanta" and w.morph.krt in PREDICATE_KRT))]
     if near:
@@ -208,6 +264,8 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
     for group in _groups(words, region, governed):
         case = words[group[0]].morph.vibhakti
         rverbs = in_region[region[words[group[0]].line]]
+        if _segment(words, group[0]) is not None:
+            rverbs = [_segment(words, group[0])]  # the finite verb that closes this word's clause
         head = max(group, key=lambda i: _head_priority(words, i, rverbs))
         verb, sub_role, role = None, "विशेषण", ""
         conjuncts = _conjuncts(words, group, head)
@@ -236,9 +294,15 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
                 continue
             if agreeing:
                 verb, role = _pick(agreeing, words, head), "कर्ता"
-                kartas[verb] = head
                 if words[verb].morph.root in COPULA:
-                    sub_role = "विधेय"  # रामस् वीरस् अस्ति; a qualifier standing right before its noun stays विशेषण
+                    sub_role = "विधेय"
+                    pronouns = [j for j in group if words[j].morph.lemma in PRONOUNS | FIRST_PERSON | SECOND_PERSON]
+                    nouns = [j for j in group if not words[j].morph.krt and lemma_class(words[j].morph.lemma) == "noun"]
+                    if pronouns and head not in pronouns:
+                        head = pronouns[0]  # सस् राजा अस्ति: "he is a king"
+                    elif not pronouns and len(nouns) > 1:
+                        head = nouns[0]  # रामस् वीरस् अस्ति: what is named first is what is spoken of
+                kartas[verb] = head  # रामस् वीरस् अस्ति; a qualifier standing right before its noun stays विशेषण
             elif copular:  # त्वम् समर्थस् असि: the other nominative is the predicate
                 for j in group:
                     _set(words, j, "विधेय", kartas[_pick(copular, words, head)])
@@ -254,6 +318,9 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
             notes.append(f"{words[head].form}: क्रियाविशेषण, the neuter accusative used as an adverb "
                          f"(the corpus tags this form as an adverb)")
             continue
+        elif case == DVITIYA and _next_governor(words, group[-1]) is not None:
+            verb, role = _next_governor(words, group[-1]), "कर्म"  # the object stands right before its governor
+            has_karma.add(verb)
         elif case == DVITIYA:
             governors = rverbs + [g for g in verbals + participles if region[words[g].line] == region[words[head].line]
                                   and g not in group]
@@ -318,80 +385,4 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
     return words, notes
 
 
-def can_be_subject(words: list[Word], i: int) -> bool:
-    """Pronoun, or a noun that is not a participle, possessive (-वत्/-मत्/-इन्) or compound final."""
-    m = words[i].morph
-    same = [a for a in words[i].analyses if (a.vibhakti, a.vacana, a.linga) == (m.vibhakti, m.vacana, m.linga)]
-    if any(a.lemma in PRONOUNS for a in same):
-        return True  # also when the chosen lemma is a variant stem (क for किम्)
-    if m.krt or m.lemma.endswith(POSSESSIVE) or (i > 0 and words[i - 1].in_compound):
-        return False
-    return lemma_class(m.lemma) == "noun"
-
-
-def _krt_predicates(words: list[Word], idx: list[int], main: Optional[int]) -> list[int]:
-    """Nominative kṛt (क्त, क्तवतु, कृत्य) agreeing with the subject: the predicates of a verbless clause."""
-    krt = [i for i in idx if i != main and not words[i].in_compound and not (i > 0 and words[i - 1].in_compound)
-           and words[i].morph is not None and words[i].morph.krt in ("क्त", "क्तवतु", "तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्")
-           and is_case(words[i].morph, PRATHAMA) and (main is None or agrees(words[i].morph, words[main].morph))]
-    oblique = ("तृतीया", "चतुर्थी", "पञ्चमी", "सप्तमी", DVITIYA)
-    with_deps = [i for i in krt if any(w.line == words[i].line and not w.in_compound and w.morph is not None
-                                       and w.morph.vibhakti in oblique for w in words)]
-    if main is None:  # हनुमता संगतस्: the one nominative of its half-verse, with its own kārakas, predicates
-        alone = lambda i: not any(j != i and w.line == words[i].line and not w.in_compound  # noqa: E731
-                                  and is_case(w.morph, PRATHAMA) for j, w in enumerate(words))
-        return [i for i in with_deps if alone(i)]  # of the earlier subject; in a list of epithets it is one more
-    return with_deps or krt[-1:]  # choice: the kṛt with its own kārakas, else the last one
-
-
-def _qualifier(words: list[Word], i: int) -> bool:
-    """Adjective, participle or pronoun: a word that qualifies rather than predicates (by lemma class)."""
-    m = words[i].morph
-    return bool(m.krt) or lemma_class(m.lemma) in ("adjective", "pronoun") or m.lemma in PRONOUNS
-
-
-def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[int, list[int]],
-                     notes: list[str]) -> None:
-    """Nominal clauses: one expressed subject or none; dependents attach to the nearest predicate."""
-    for r, rverbs in in_region.items():
-        idx = [i for i, w in enumerate(words) if region[w.line] == r]
-        subjects = [i for i in idx if words[i].role == "" and is_case(words[i].morph, PRATHAMA)]
-        if not subjects:
-            continue
-        if not rverbs:
-            able = [i for i in subjects if can_be_subject(words, i)]
-            main = max(able, key=lambda i: (_head_priority(words, i, []), -i)) if able else None
-            preds = _krt_predicates(words, idx, main)
-            for i in idx:  # nominatives: kṛt predicates are क्रिया; qualifiers of the subject विशेषण; others विधेय
-                if not (is_case(words[i].morph, PRATHAMA) and i != main and (i in subjects or words[i].role == "विधेय")):
-                    continue
-                if i in preds:
-                    _set(words, i, "क्रिया", None)
-                elif main is not None and preds and agrees(words[i].morph, words[main].morph):
-                    _set(words, i, "विशेषण", main)
-                else:
-                    _set(words, i, "विधेय", main)
-            if preds and main is not None:
-                _set(words, main, "कर्ता", _pick(preds, words, main))  # karaka_links.license_words fixes कर्ता/कर्म (3.4.70)
-                notes.append(f"nominal clause: {', '.join(words[p].form for p in preds)} kṛt predicate(s) of "
-                             f"{words[main].form}; copula अस्ति supplied (अध्याहार)")
-            if preds and main is None:
-                notes.append(f"{', '.join(words[p].form for p in preds)}: kṛt predicate(s); the subject is not "
-                             f"expressed here (carried over, अनुवृत्ति)")
-            notes.append("nominal clause: subject not expressed; all nominatives are विधेय" if main is None
-                         else f"nominal clause: {words[main].form} is the subject (कर्ता of the understood अस्ति, "
-                              f"अध्याहार), agreeing nominatives are विधेय")
-            predicates = preds or [i for i in idx if is_case(words[i].morph, PRATHAMA) and not words[i].in_compound]
-            for i in idx:  # epithet lists: local attachment to the nearest predicate in the line
-                if words[i].role in LOCAL and words[i].role != "सम्बन्ध" or (words[i].role == "सम्बन्ध" and
-                                                                           words[i].head is None):
-                    same = [j for j in predicates if words[j].line == words[i].line] or predicates
-                    _set(words, i, words[i].role, _pick(same, words, i))
-            subjects = preds or ([main] if main is not None else [])
-        if not subjects:
-            continue
-        for i in idx:
-            if words[i].role and words[i].head is None and i not in subjects and words[i].role != "क्रिया":
-                _set(words, i, words[i].role, _pick(subjects, words, i))
-        if not rverbs and main is not None and words[main].head is None:
-            _set(words, main, "कर्ता", None)
+from mayur.vakya_nominal import _attach_verbless, can_be_subject  # noqa: E402,F401

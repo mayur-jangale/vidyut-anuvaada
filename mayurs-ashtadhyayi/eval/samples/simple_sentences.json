@@ -770,6 +770,117 @@
     }
    ],
    "english": "The poet writes a poem."
+  },
+  {
+   "text": "यः पठति सः सुखं लभते",
+   "expect": [
+    {
+     "form": "यः",
+     "role": "कर्ता",
+     "head": "पठति"
+    },
+    {
+     "form": "सः",
+     "role": "कर्ता",
+     "head": "लभते"
+    },
+    {
+     "form": "सुखम्",
+     "role": "कर्म",
+     "head": "लभते"
+    }
+   ],
+   "english": "He who reads obtains happiness."
+  },
+  {
+   "text": "यदा रामः आगच्छति तदा सीता हसति",
+   "expect": [
+    {
+     "form": "रामः",
+     "role": "कर्ता",
+     "head": "आगच्छति"
+    },
+    {
+     "form": "सीता",
+     "role": "कर्ता",
+     "head": "हसति"
+    },
+    {
+     "form": "तदा",
+     "role": "अव्यय",
+     "head": "हसति"
+    }
+   ],
+   "english": "When Rāma comes, then Sītā laughs."
+  },
+  {
+   "text": "रामः वनं गत्वा फलं खादति",
+   "expect": [
+    {
+     "form": "रामः",
+     "role": "कर्ता",
+     "head": "खादति"
+    },
+    {
+     "form": "वनम्",
+     "role": "कर्म",
+     "head": "गत्वा"
+    },
+    {
+     "form": "फलम्",
+     "role": "कर्म",
+     "head": "खादति"
+    }
+   ],
+   "english": "Having gone to the forest, Rāma eats a fruit."
+  },
+  {
+   "text": "रामे वनं गते सीता अरोदीत्",
+   "expect": [
+    {
+     "form": "वनम्",
+     "role": "कर्म",
+     "head": "गते"
+    },
+    {
+     "form": "सीता",
+     "role": "कर्ता",
+     "head": "अरोदीत्"
+    }
+   ],
+   "english": "When Rāma had gone to the forest, Sītā wept."
+  },
+  {
+   "text": "रामः वीरः अस्ति",
+   "expect": [
+    {
+     "form": "रामः",
+     "role": "कर्ता",
+     "head": "अस्ति"
+    },
+    {
+     "form": "वीरः",
+     "role": "विधेय",
+     "head": "रामः"
+    }
+   ],
+   "english": "Rāma is a hero."
+  },
+  {
+   "text": "सः राजा अस्ति",
+   "expect": [
+    {
+     "form": "सः",
+     "role": "कर्ता",
+     "head": "अस्ति"
+    },
+    {
+     "form": "राजा",
+     "role": "विधेय",
+     "head": "सः"
+    }
+   ],
+   "english": "He is a king."
   }
  ]
 }
