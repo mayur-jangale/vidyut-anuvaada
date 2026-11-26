@@ -238,13 +238,14 @@ _VIB_ENUM = ("Prathama", "Dvitiya", "Trtiya", "Caturthi", "Panchami", "Sasthi", 
 _VAC_ENUM = ("Eka", "Dvi", "Bahu")
 
 
-def subanta_paradigm(stem: str, linga: str) -> tuple[tuple[Any, Morph], ...]:
-    """Every (handle, Morph-template) of ``stem`` (Devanagari) in ``linga`` (Devanagari term)."""
+def subanta_paradigm(stem: str, linga: str, nyap: bool = False) -> tuple[tuple[Any, Morph], ...]:
+    """Every (handle, Morph-template) of ``stem`` (Devanagari) in ``linga`` (Devanagari term);
+    with ``nyap`` the stem is a feminine in ङी/आप् (सुमुखी, शिष्या: 4.1.4, 4.1.41ff.)."""
     from vidyut.prakriya import Linga, Pada, Pratipadika, Vacana, Vibhakti
 
     lmap = {"पुंलिङ्ग": Linga.Pum, "स्त्रीलिङ्ग": Linga.Stri, "नपुंसकलिङ्ग": Linga.Napumsaka}
     try:
-        prati = Pratipadika.basic(lipi.to_code(stem))
+        prati = (Pratipadika.nyap if nyap else Pratipadika.basic)(lipi.to_code(stem))
     except ValueError:  # a sound vidyut's code cannot spell
         return ()
     out = []

@@ -160,6 +160,10 @@ def padas(form: str) -> tuple[Morph, ...]:
     found.extend(numerals(form))
     found.extend(iyan_uvan(form))
     found.extend(closed_paradigms(form))
+    from mayur.lexicon_fem import feminine_padas
+
+    have = {m.lemma for m in found if m.linga == "स्त्रीलिङ्ग"}
+    found.extend(m for m in feminine_padas(form) if m.lemma not in have and m.lemma[:-1] not in have)
     if not any(m.krt == "क्त" for m in found):
         from mayur.lexicon_kta import kta_padas
 

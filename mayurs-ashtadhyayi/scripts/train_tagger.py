@@ -22,10 +22,38 @@ from typing import Callable, Optional, Sequence
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from mayur import dcs, lexicon, shabdabodha, tagger, ud  # noqa: E402
+from mayur import dcs, lexicon, shabdabodha, tagger, terms, ud  # noqa: E402
 from mayur.model import Word  # noqa: E402
 
 MODEL = ROOT / "mayur/models/tagger.json"
+TABLES: dict = {}  # corpus-structure tables of the model being trained or evaluated
+_GENDER = {v: k for k, v in terms.UD_GENDER.items()}
+
+
+def build_tables(items, min_count: int = 3, acc: Optional[tuple] = None) -> dict:
+    """From TRAIN gold: P(gender | lemma), P(gender | last two sounds of the lemma), and per verb lemma
+    the share of its half-verses with an accusative / a dative."""
+    gl, gs, verbs = acc if acc is not None else ({}, {}, {})
+    for it in items:
+        for line in sorted({w.line for w in it["words"]}):
+            toks = [t for t, w in zip(it["toks"], it["words"]) if w.line == line and not t["compound_member"]]
+            cases = {t["feats"].get("Case") for t in toks}
+            for t in toks:
+                lem = ud.canonical_lemma(t["lemma"])
+                g = _GENDER.get(t["feats"].get("Gender", ""))
+                if g and t["upos"] == "NOUN":
+                    gl.setdefault(lem, Counter())[g] += 1
+                    gs.setdefault("".join(tagger._sounds(lem)[-2:]), Counter())[g] += 1
+                if t["upos"] == "VERB" and "Mood" in t["feats"]:
+                    c = verbs.setdefault(lem, Counter())
+                    c["n"] += 1
+                    c["acc"] += "Acc" in cases
+                    c["dat"] += "Dat" in cases
+    norm = lambda c: {k: round(v / sum(c.values()), 2) for k, v in c.items()}
+    return {"g": {k: norm(c) for k, c in gl.items() if sum(c.values()) >= min_count},
+            "gs": {k: norm(c) for k, c in gs.items() if sum(c.values()) >= 20},
+            "acc": {k: round(c["acc"] / c["n"], 2) for k, c in verbs.items() if c["n"] >= min_count},
+            "dat": {k: round(c["dat"] / c["n"], 2) for k, c in verbs.items() if c["n"] >= min_count}}
 
 
 def phi(v: tagger.Verse, path: Sequence[int]) -> dict[tuple[str, str], float]:
@@ -85,7 +113,7 @@ def train(data: Sequence[tuple[tuple, Sequence[tuple[int, ...]]]], epochs: int, 
         random.Random(seed + epoch).shuffle(order)
         for j in order:
             args, gold = data[j]
-            p.update(tagger.Verse(*args), gold)
+            p.update(tagger.Verse(*args, tables=TABLES), gold)
         if on_epoch is not None:
             on_epoch(epoch, p.averaged())
     return p.averaged()
@@ -192,7 +220,7 @@ def load_eval() -> tuple[list, list]:
 def learned_choice(item: dict, weights, use_enforce: bool = True) -> list[int]:
     """``weights``: first-pass weights, or a pair (first pass, second pass)."""
     w1, w2 = weights if isinstance(weights, tuple) else (weights, None)
-    pick = tagger.choose_indices(*verse_args(item)[:4], weights=w1, weights2=w2)
+    pick = tagger.choose_indices(*verse_args(item)[:4], weights=w1, weights2=w2, tables=TABLES)
     if not use_enforce:
         return pick
     words = item["words"]
@@ -290,13 +318,18 @@ def main() -> None:
     if args.eval_only:
         saved = json.loads(MODEL.read_text(encoding="utf-8"))
         w = (saved["weights"], saved.get("weights2"))
+        TABLES.update(saved.get("tables", {}))
         meta = {k: v for k, v in saved.items() if k not in ("weights", "weights2", "report", "enabled")}
     else:
         data, unmatched, nwords = [], 0, 0
+        counts: tuple = ({}, {}, {})
         for _book_name, item in load_train(args.max_words):
+            build_tables([item], acc=counts)
             data.append((verse_args(item, minus_of(item)), item["gold"]))
             unmatched += sum(1 for g in item["gold"] if not g)
             nwords += len(item["toks"])
+        TABLES.update(build_tables([], acc=counts))
+        log(f"tables: {', '.join(f'{k} {len(v)}' for k, v in TABLES.items())}")
         log(f"train {len(data)} verses, {nwords} words ({unmatched} without a matching candidate)")
         w1, e1 = train_early(data, args.epochs, dev, lambda w: w, log, "pass 1")
         w = (w1, None)
@@ -305,7 +338,7 @@ def main() -> None:
             for fold in (0, 1):  # jackknifed first-pass choices for the second pass's training data
                 wf = train([d for k, d in enumerate(data) if k % 2 != fold], args.epochs)
                 for k in range(fold, len(data), 2):
-                    priors[k] = [max(x, 0) for x in tagger.decode(tagger.Verse(*data[k][0]), wf)]
+                    priors[k] = [max(x, 0) for x in tagger.decode(tagger.Verse(*data[k][0], tables=TABLES), wf)]
                 log(f"fold {fold} done")
             data2 = [((*a, p), g) for (a, g), p in zip(data, priors)]
             w2, e2 = train_early(data2, args.epochs, dev, lambda w: (w1, w), log, "pass 2")
@@ -330,7 +363,7 @@ def main() -> None:
         print(f"{n:5}  {g}  ->  {p}")
     print("enabled" if enabled else "NOT enabled (not better on DEV)", "| enforce helps" if enforce else "")
     if not args.eval_only:
-        out = {**meta, "enabled": enabled, "enforce": enforce, "report": report, "weights": w[0]}
+        out = {**meta, "enabled": enabled, "enforce": enforce, "report": report, "tables": TABLES, "weights": w[0]}
         if w[1]:
             out["weights2"] = w[1]
         MODEL.write_text(json.dumps(out,

@@ -89,6 +89,16 @@ def _fits(n: Morph, v: Morph) -> bool:
             and _PERSON.get(n.lemma, "प्रथमपुरुष") == (v.purusha or "प्रथमपुरुष"))
 
 
+@lru_cache(maxsize=200_000)
+def _lkey(m: Morph) -> str:
+    """Corpus lemma key of an analysis (the DCS citation form)."""
+    from mayur import ud
+    try:
+        return ud.canonical_lemma(ud.lemma(m))
+    except Exception:
+        return m.lemma
+
+
 def _bucket(x: float) -> str:
     return str(min(15, int(math.log2(1.0 + max(0.0, x)))))
 
@@ -98,7 +108,8 @@ class Verse:
 
     def __init__(self, cands: Sequence[Sequence[Morph]], lines: Sequence[int], cpd: Sequence[bool],
                  forms: Sequence[str], minus: Optional[Sequence[Sequence[tuple[float, float]]]] = None,
-                 prior: Optional[Sequence[int]] = None):
+                 prior: Optional[Sequence[int]] = None, tables: Optional[dict] = None):
+        self.tab = tables if tables is not None else (load() or {}).get("tables", {})
         self.cands = [list(c) for c in cands]
         self.lines, self.cpd, self.forms = list(lines), list(cpd), list(forms)
         self.counts = [[(max(0.0, _freq("analysis_count", m) - (minus[i][k][0] if minus else 0.0)),
@@ -196,7 +207,63 @@ class Verse:
             o.append("accV" if verbal else "accNoV")
         if m.vibhakti == "प्रथमा" and not any(self.cands[j][self.ref[j]].kind == "tinanta" for j in others):
             o.append("nomNoV")
-        return o + self._verse_level(i, m)
+        return o + self._verse_level(i, m) + self._structural(i, m)
+
+    def _gender_prior(self, m: Morph) -> Optional[dict]:
+        key = _lkey(m)
+        return self.tab.get("g", {}).get(key) or self.tab.get("gs", {}).get("".join(_sounds(key)[-2:]))
+
+    def _structural(self, i: int, m: Morph) -> Obs:
+        """Corpus-learned structure: lemma gender priors, noun concord, verb valency, clause type."""
+        if m.kind != "subanta":
+            return []
+        o: Obs = []
+        gp = self._gender_prior(m)
+        if gp and m.linga:
+            o += ["gp=%d" % int(4 * gp.get(m.linga, 0.0)), "gpTop=%d" % (max(gp, key=gp.get) == m.linga)]
+        n, line = len(self.forms), self.lines[i]
+        refs = {j: self.cands[j][self.ref[j]] for j in range(n) if j != i and not self.cpd[j] and self.cands[j]}
+        if _lemma_class(m.lemma) != "noun":
+            for side, rng in (("L", range(i - 1, max(-1, i - WINDOW - 1), -1)), ("R", range(i + 1, min(n, i + WINDOW + 1)))):
+                for j in rng:
+                    if self.lines[j] != line or j not in refs:
+                        continue
+                    nouns = [x for x in self.cands[j] if _lemma_class(x.lemma) == "noun" and x.kind == "subanta"
+                             and (x.vibhakti, x.vacana) == (m.vibhakti, m.vacana)]
+                    pr = self._gender_prior(nouns[0]) if nouns else None
+                    if pr:
+                        o.append("nG%s=%d" % (side, max(pr, key=pr.get) == m.linga))
+                        break
+        verbs = [x for x in refs.values() if x.kind == "tinanta"]
+        nonfin = [x for x in refs.values() if _verbal(x) in ("abs", "inf")]
+        acc, dat = self.tab.get("acc", {}), self.tab.get("dat", {})
+        if m.vibhakti in ("प्रथमा", "द्वितीया"):
+            ps = [acc[_lkey(v)] for v in verbs + nonfin if _lkey(v) in acc]
+            o.append("vacc=%s" % (int(4 * max(ps)) if ps else "-"))
+            if not verbs and not nonfin:
+                o.append("noVerb")
+            for j, x in refs.items():
+                if x.krt in ("क्त", "क्तवतु") or _verbal(x) == "part" and x.krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्"):
+                    if _agree(m, x):
+                        o.append("ktaAg")
+                if abs(j - i) == 1 and (_verbal(x) in ("abs", "inf") or x.krt in ("शतृ", "शानच्")):
+                    o.append("gov%+d" % (j - i))
+            nxt = refs.get(i + 1)
+            if nxt is not None and nxt.kind == "tinanta" and any(_fits(x, nxt) for j, x in refs.items() if j < i):
+                o.append("preVnom")
+        if m.vibhakti in ("चतुर्थी", "षष्ठी", "पञ्चमी"):
+            ps = [dat[_lkey(v)] for v in verbs if _lkey(v) in dat]
+            o.append("vdat=%s" % (int(4 * max(ps)) if ps else "-"))
+        if m.vibhakti in ("सम्बोधन", "प्रथमा"):
+            o.append("v2p=%d" % any(v.purusha == "मध्यमपुरुष" for v in verbs))
+            o.append("voc2=%d" % any(x.vibhakti == "सम्बोधन" for x in refs.values()))
+        if m.krt == "तृच्" and any(refs.get(j) is not None and refs[j].vibhakti == "षष्ठी" for j in (i - 1, i + 1)):
+            o.append("trcGen")
+        if m.krt and m.linga == "स्त्रीलिङ्ग":
+            fem = any(x.linga == "स्त्रीलिङ्ग" and x.vibhakti == m.vibhakti and not x.krt and self.lines[j] == line
+                      for j, x in refs.items())
+            o.append("femPN=%d" % fem)
+        return o
 
     def _verse_level(self, i: int, m: Morph) -> Obs:
         """Verb–subject and object features across the whole verse (half-verse boundaries are arbitrary)."""
@@ -302,17 +369,18 @@ def enabled() -> bool:
 
 def choose_indices(cands: Sequence[Sequence[Morph]], lines: Sequence[int], compound_flags: Sequence[bool],
                    forms: Sequence[str], weights: Optional[Weights] = None,
-                   weights2: Optional[Weights] = None) -> list[int]:
+                   weights2: Optional[Weights] = None, tables: Optional[dict] = None) -> list[int]:
     """Index of the chosen candidate per word (0 for a word without candidates). With second-pass
     weights the verse is decoded again, every word seeing the first-pass choices of the others."""
     if weights is None:
         model = load() or {}
-        weights, weights2 = model.get("weights", {}), model.get("weights2")
+        weights, weights2, tables = model.get("weights", {}), model.get("weights2"), model.get("tables", {})
     if not cands:
         return []
-    path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms), weights)]
+    path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms, tables=tables), weights)]
     if weights2:
-        path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms, prior=path), weights2)]
+        path = [max(k, 0) for k in decode(Verse(cands, lines, compound_flags, forms, prior=path, tables=tables),
+                                          weights2)]
     return path
 
 

@@ -74,11 +74,13 @@ def _dcs_root(m: Morph) -> str:
         if short != root and short[:-1] in m.form and root[:-1] not in m.form:  # 6.4.92 मितां ह्रस्वः
             root = short
         return root[:-1] + "य्"
+    if root and "क" <= root[-1] <= "ह":  # a sanādi stem in -अ (जिगीष, विधित्स): cited with virāma
+        return root + "्"
     return _CITED_ROOT.get(root, root.replace("ॄ", "ृ"))  # the corpus cites कॄ, स्तॄ as कृ, स्तृ
 
 
 # How the corpus cites roots that vidyut names by their Dhatupatha form (ध्यै -> ध्या, 6.1.45)
-_CITED_ROOT = {"स्वञ्ज्": "स्वज्", "तॄ": "तृ", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
+_CITED_ROOT = {"स्वञ्ज्": "स्वज्", "ऋच्छ्": "ऋछ्", "तॄ": "तृ", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
                "दै": "दा", "वे": "वा", "व्ये": "व्या", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
 # 3.1.31 आयादय आर्धधातुके वा: without आय the corpus cites the bare root (गुप्त -> गुप्)
 _AYA_ROOT = {"गोपाय": "गुप्", "धूपाय": "धूप्", "पणाय": "पण्", "पनाय": "पन्", "विच्छाय": "विच्छ्"}
@@ -89,6 +91,8 @@ _PRESENT = frozenset({"लट्", "लोट्", "लङ्", "विधिल
 def _suppletive_root(m: Morph, root: str) -> str:
     if root == "दृश्" and "पश्य" in m.form and (m.lakara in _PRESENT or m.krt in ("शतृ", "शानच्")):
         return "पश्"
+    if root == "ध्मा" and "धम" in m.form:  # 7.3.78 ... ध्मा -> धम in the present system: व्यधमत् -> विधम्
+        return "धम्"
     if root == "हन्" and "वध" in m.form:  # 2.4.42 हनो वध लिङि, 2.4.43 लुङि च; the corpus cites वध्
         return "वध्"
     if root.endswith(("ाय", "ीय")):  # a sanādi stem in -आय/-ईय (3.1.28 आय, 3.1.27 यक्): गोपाय्, महीय्
