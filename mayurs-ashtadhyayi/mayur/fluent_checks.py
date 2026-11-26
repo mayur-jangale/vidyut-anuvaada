@@ -171,10 +171,12 @@ def locate(reworded: str, renderings: Sequence[Rendering]) -> tuple[list[Alignme
             return [], [Failure("substring", f"rendering of word {r.word} {r.text!r} does not occur in the rewording")]
         options.append((r.word, occ))
     chosen: list[tuple[int, int, int]] = []
+    budget = [20000]  # backtracking is bounded: a pathological verse is rejected, never hangs
 
     def place(k: int) -> bool:
-        if k == len(options):
-            return True
+        budget[0] -= 1
+        if k == len(options) or budget[0] < 0:
+            return budget[0] >= 0
         word, occ = options[k]
         for s, e in occ:
             if all(e <= s2 or s >= e2 for _, s2, e2 in chosen):
@@ -279,7 +281,12 @@ def tense_classes(text: str, gloss: str) -> set[str]:
     g = gloss.lower().split()[0] if gloss.split() else ""
     base, past, third = (english.base(g), english.past(g), english.third_singular(g)) if g else ("", "", "")
     found: set[str] = set()
+    prev = ""
     for t in tokens(text):
+        passive_participle = prev in _PAST_AUX | _PRESENT_AUX | {"be", "been"} and t.endswith("ed") and t != past
+        prev = t
+        if passive_participle:
+            continue  # "is conveyed": the participle is not a second tense marker
         if t in _PAST_AUX or t == past or (t.endswith("ed") and len(t) > 3):
             found.add("past")
         elif t in ("will", "shall") or t.endswith("'ll"):
@@ -349,10 +356,21 @@ def check_length(template: str, reworded: str) -> list[Failure]:
 # ---------------------------------------------------------------- all checks
 
 def run_checks(reading: Reading, reworded: str, renderings: Sequence[Rendering],
-               synonyms: Mapping[int, Sequence[str]]) -> tuple[list[Alignment], list[Failure]]:
-    """(alignment of the rewording, failures). The rewording may be used only if there are no failures."""
+               synonyms: Mapping[int, Sequence[str]],
+               exact: Sequence[Alignment] | None = None) -> tuple[list[Alignment], list[Failure]]:
+    """(alignment of the rewording, failures). The rewording may be used only if there are no failures.
+    ``exact`` are spans the caller knows (a rewriter that builds the text from tokens); they are verified
+    instead of searched for."""
     fails = check_alignment_complete(reading, renderings) + check_synonyms(synonyms)
-    spans, loc = locate(reworded, renderings) if not fails else ([], [])
+    if exact is not None and not fails:
+        by = {r.word: r.text for r in renderings}
+        bad = [a for a in exact if reworded[a.start:a.end] != by.get(a.word)]
+        spans, loc = ([], [Failure("substring", f"span of word {bad[0].word} is not its rendering")]) if bad else (list(exact), [])
+        spans = sorted(spans, key=lambda a: a.start)
+        if any(x.end > y.start for x, y in zip(spans, spans[1:])):
+            spans, loc = [], [Failure("overlap", "spans overlap")]
+    else:
+        spans, loc = locate(reworded, renderings) if not fails else ([], [])
     fails += loc
     fails += check_length(reading.translation, reworded)
     if not fails:

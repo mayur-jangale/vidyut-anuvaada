@@ -277,7 +277,8 @@ def questions(toks, reading):
 def _phrase_start(toks, i, t, reading) -> int:
     j = i
     while j > 0 and toks[j - 1].word is not None and reading.words[toks[j - 1].word].head == t.word \
-            and reading.words[toks[j - 1].word].role == "विशेषण":
+            and (reading.words[toks[j - 1].word].role == "विशेषण" or reading.words[toks[j - 1].word].in_compound) \
+            and toks[j - 1].text.lower() not in ("with", "without"):
         j -= 1
     return j
 
@@ -307,7 +308,8 @@ def articles(toks, reading):
             continue
         j = i
         while j > 0 and toks[j - 1].word is not None and reading.words[toks[j - 1].word].head == t.word \
-                and reading.words[toks[j - 1].word].role == "विशेषण":
+                and (reading.words[toks[j - 1].word].role == "विशेषण" or reading.words[toks[j - 1].word].in_compound) \
+            and toks[j - 1].text.lower() not in ("with", "without"):
             j -= 1
         prev = toks[j - 1].text.lower() if j else ""
         if prev in _DET or prev.endswith("'s") or prev in ("of", "-") or toks[j].text.lower() in _DET:
@@ -366,8 +368,8 @@ def _renderings(toks: list[Tok]) -> list[Rendering]:
     return [Rendering(t.word, t.text) for t in toks if t.word is not None]
 
 
-def _failures(reading: Reading, text: str, toks: list[Tok]) -> list[Failure]:
-    return run_checks(reading, text, _renderings(toks), {})[1]
+def _failures(reading: Reading, text: str, toks: list[Tok], exact=None) -> list[Failure]:
+    return run_checks(reading, text, _renderings(toks), {}, exact)[1]
 
 
 def rewrite(reading: Reading) -> tuple[Reading, list[Alignment]]:
@@ -386,8 +388,8 @@ def rewrite(reading: Reading) -> tuple[Reading, list[Alignment]]:
     aligned = sorted(t.word for t in toks if t.word is not None)
     if aligned != sorted(a.word for a in reading.alignment):
         return replace(reading, reworded="", reworded_note="rule-based; check failed: alignment: an aligned word was lost"), []
-    already = {str(f) for f in _failures(reading, reading.translation, base)}
-    new = [f for f in _failures(reading, text, toks) if str(f) not in already]
+    already = {str(f) for f in _failures(reading, reading.translation, base, reading.alignment)}
+    new = [f for f in _failures(reading, text, toks, spans) if str(f) not in already]
     if new:
         return replace(reading, reworded="", reworded_note=f"rule-based; check failed: {new[0]}"), []
     return replace(reading, reworded=text, reworded_note=NOTE_OK), spans

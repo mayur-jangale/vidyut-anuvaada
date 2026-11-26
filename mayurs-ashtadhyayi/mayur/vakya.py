@@ -133,15 +133,16 @@ def _conjuncts(words: list[Word], group: list[int], head: int) -> list[int]:
     followed by the particle, or preceding a head that is followed by it. Qualifiers are not conjuncts."""
     def marked(j: int) -> bool:
         return j + 1 < len(words) and words[j + 1].form in CONJUNCTION
-    def nounlike(j: int) -> bool:
+    def nounlike(j: int) -> bool:  # a noun or अस्मद्/युष्मद्: एक, अन्य, सर्व, तद् qualify, they are not conjuncts
         m = words[j].morph
-        return not m.krt and (lemma_class(m.lemma) in ("noun", "pronoun", "") or m.lemma in PRONOUNS)
+        return not m.krt and (lemma_class(m.lemma) == "noun" or m.lemma in FIRST_PERSON | SECOND_PERSON)
     others = [j for j in group if j != head and nounlike(j)]
     if not nounlike(head):
         return []
     out = [j for j in others if marked(j)]
     if marked(head):  # A B च with B chosen as head: the other nouns are its conjuncts
-        out = others or [j for j in group if j != head and not words[j].morph.krt]  # मामकास् पाण्डवास् च
+        pair = [j for j in group if j != head and not words[j].morph.krt] if len(group) == 2 else []
+        out = others or pair  # मामकास् पाण्डवास् च: the only other word of the phrase
     return out
 
 

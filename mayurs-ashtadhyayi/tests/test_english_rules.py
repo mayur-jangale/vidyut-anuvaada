@@ -61,7 +61,7 @@ def test_with_is_the_preposition_not_by_with():
     ws = [noun("Rāma", "कर्ता", 3), noun("Sītā", "करण", 3, vib="तृतीया"),
           w("सह", "avyaya", "with", "अव्यय", 1), verb("go", "लङ्", head=None)]
     lit, flu = say(ws, anvaya=[0, 2, 1, 3])
-    assert "with Sītā" in lit and "by" not in lit and flu == "Rāma with Sītā went."
+    assert "with Sītā" in lit and " by " not in lit and flu == "Rāma went with Sītā."
 
 
 def test_question_word_with_auxiliary():
@@ -76,13 +76,13 @@ def test_plural_names_and_coordinated_names():
     ws = [noun("man", "कर्ता", 3, vac=PL), noun("Pāṇḍava", "विशेषण", 0, vac=PL),
           w("च", "avyaya", "and", "अव्यय", 1), verb("see", "लङ्", head=None)]
     lit, flu = say(ws, anvaya=[0, 2, 1, 3])
-    assert "men and Pāṇḍavas" in lit and "men and the Pāṇḍavas" in flu
+    assert "Men and Pāṇḍavas" in lit and "Men and the Pāṇḍavas" in flu
 
 
 def test_latin_binomial_is_replaced_by_the_sanskrit_name():
     ws = [noun("Bombax ceiba Linn", "कर्ता", 1, lemma="शाल्मली"), verb("grow", "लट्", head=None)]
     lit, _ = say(ws)
-    assert "Linn" not in lit and "śālmalī" in lit
+    assert "Linn" not in lit and "Śālmalī" in lit
 
 
 def test_sentence_initial_capital_does_not_survive_an_article():
@@ -120,6 +120,13 @@ def test_together_with_bahuvrihi_is_a_preposition():
 def test_proxy_metrics():
     assert eval_english.chrf("Rāma went home.", "Rāma went home.") == pytest.approx(100.0)
     assert eval_english.chrf("zzz", "Rāma went home.") == 0.0
-    assert eval_english.content_f1("The king went to the forest", "king goes forest") == pytest.approx(100.0)
+    assert eval_english.content_f1("The king went to the forest", "king went forest") == pytest.approx(100.0)
     assert 0 < eval_english.content_f1("king sleeps", "king went") < 100
     assert eval_english.parse_range("21-23,30") == {21, 22, 23, 30}
+
+
+def test_passive_participle_is_not_a_tense_marker():
+    from mayur import fluent_checks as fc
+    assert fc.tense_classes("is conveyed", "convey") == {"present"}
+    assert fc.tense_classes("was conveyed", "convey") == {"past"}
+    assert fc.tense_classes("conveyed", "convey") == {"past"}
