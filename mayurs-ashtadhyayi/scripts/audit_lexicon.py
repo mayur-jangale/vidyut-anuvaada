@@ -64,14 +64,16 @@ def collect(entries: list[dict]) -> dict[str, Counter]:
     return out
 
 
-def judge(form: str, lemma: str, feats: dict[str, str], cpd: bool) -> str:
-    """"ok" | "unproved" | "wrong" (analysed, gold analysis missing) | "none"."""
+def judge(form: str, lemma: str, upos: str, feats: dict[str, str], cpd: bool) -> str:
+    """"ok" | "unproved" | "wrong" (analysed, gold analysis missing) | "none".
+
+    "Correct analysis present" is defined only by ``ud.same_lemma`` and ``ud.same_feats``."""
     ms = lexicon.stems(form) if cpd else lexicon.padas(form)
     if not ms and not cpd:
         ms = lexicon.generated(form)
     if not ms:
         return "none"
-    good = [m for m in ms if ud.lemma(m) == lemma and (cpd or ud.feats_agree(ud.feats(m), feats))]
+    good = [m for m in ms if ud.same_lemma(m, lemma, upos) and (cpd or ud.same_feats(m, upos, feats))]
     if not good:
         return "wrong"
     return "ok" if any(lexicon.prove(m).derivable for m in good[:4]) else "unproved"
@@ -93,19 +95,14 @@ def main() -> None:
     ap.add_argument("--max-files", type=int, default=0)
     ap.add_argument("--top", type=int, default=300)
     ap.add_argument("--out", default=str(derived_dir() / "audit_lexicon_failures.txt"))
-    ap.add_argument("--verbal-lemma", action="store_true",
-                    help="experiment: cite verbal lemmas with lexicon.verbal_lemma (sandhi-joined)")
     args = ap.parse_args()
-    if args.verbal_lemma:
-        original = ud.lemma
-        ud.lemma = lambda m: lexicon.verbal_lemma(m) if (m.kind == "tinanta" or ud.is_verbal_noun(m)) else original(m)
     entries = choose_files(args.split, [b for b in args.books.split(",") if b], args.max_files, args.per_text,
                            args.seed)
     per_text = collect(entries)
     counts: Counter = Counter()
     for c in per_text.values():
         counts.update(c)
-    verdicts = {key: judge(key[0], key[1], dict(key[3]), key[4]) for key in counts}
+    verdicts = {key: judge(key[0], key[1], key[2], dict(key[3]), key[4]) for key in counts}
     print("per text (tokens: analysed / correct / proven):")
     for text, c in sorted(per_text.items(), key=lambda kv: -sum(kv[1].values())):
         n = sum(c.values())

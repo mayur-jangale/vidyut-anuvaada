@@ -49,7 +49,8 @@ _GANA = {"BvAdi": "भ्वादि", "adAdi": "अदादि", "juhotyAdi":
 UPASARGA_CODE = {"प्र": "pra", "परा": "parA", "अप": "apa", "सम्": "sam", "अनु": "anu", "अव": "ava",
                  "निस्": "nis", "निर्": "nis", "दुस्": "dus", "दुर्": "dus", "वि": "vi", "आ": "AN",
                  "नि": "ni", "अधि": "aDi", "अपि": "api", "अति": "ati", "सु": "su", "उद्": "ud",
-                 "अभि": "aBi", "प्रति": "prati", "परि": "pari", "उप": "upa"}
+                 "अभि": "aBi", "प्रति": "prati", "परि": "pari", "उप": "upa",
+                 "पुरस्": "puras"}  # पुरस् is a gati (1.4.67), prefixed like an upasarga
 
 
 _UPASARGA_OF_CODE = {"AN": "आ", "nis": "निस्", "dus": "दुस्"}

@@ -113,11 +113,13 @@ def _kosha_morphs(form: str) -> list[Morph]:
 @lru_cache(maxsize=200_000)
 def padas(form: str) -> tuple[Morph, ...]:
     """All analyses of ``form`` as a complete pada, best first; () if none."""
-    from mayur.lexicon_gen import anvadesha, indefinite, prefixed, sa_esha
+    from mayur.lexicon_gen import anvadesha, indefinite, looks_verbal, prefixed, sa_esha
 
     found = _kosha_morphs(form) + list(anvadesha(form)) + list(sa_esha(form)) + list(indefinite(form, padas))
-    if not any(m.quality >= 2 for m in found):
-        found.extend(prefixed(form))
+    if not any(m.quality >= 2 for m in found) or looks_verbal(form):
+        # prefixed participles/absolutives sit next to the kosha's adjective (सम्पन्नस्, विचिन्त्य)
+        known = set(found)
+        found.extend(m for m in prefixed(form) if m not in known)
     return _rank(found)
 
 
@@ -288,7 +290,14 @@ def _verbal_lemma(prefixes: tuple[str, ...], root: str) -> str:
     return out
 
 
+def _labial_m(text: str) -> str:
+    """The corpus writes म् before a labial (सम्पद्, सम्भू) and ं elsewhere (संगम्, संयम्)."""
+    for lab in "पफबभम":
+        text = text.replace("ं" + lab, "म्" + lab)
+    return text
+
+
 def verbal_lemma(m: Morph) -> str:
     """The upasargas joined to the root by sandhi, in the corpus' citation form: प्र+आप् -> प्राप्,
     प्र+नम् -> प्रणम्, आ+इ -> ए, आ+सादि -> आसादय्. For ``mayur.ud.lemma``."""
-    return _verbal_lemma(tuple(m.prefixes), _dcs_root(m))
+    return _labial_m(_verbal_lemma(tuple(m.prefixes), _dcs_root(m)))

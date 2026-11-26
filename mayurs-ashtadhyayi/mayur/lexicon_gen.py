@@ -80,10 +80,14 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
             pada = bridge.prefixed_tinanta(entry, upasargas)
         elif entry.entry == "krdanta" and m.krt in _GOOD_KRT:
             pada = bridge.prefixed_krdanta(entry, upasargas)
-            if m.krt in ("यत्", "ण्यत्", "क्यप्") and form.endswith("्य") and not any(
-                    d.text == form for d in bridge.derive(pada)):
-                pada = bridge.prefixed_krdanta(entry, upasargas, as_ktva=True)
-                m = replace(m, krt="क्त्वा", kind="avyaya", linga=None, vibhakti=None, vacana=None)
+            if m.krt in ("यत्", "ण्यत्", "क्यप्") and form.endswith("्य"):
+                # the same remainder may be the ल्यप् absolutive of the prefixed root (7.1.37)
+                ktva = bridge.prefixed_krdanta(entry, upasargas, as_ktva=True)
+                if ktva is not None and any(d.text == form for d in bridge.derive(ktva)):
+                    prefixes = upasargas + m.prefixes
+                    out.append(replace(m, form=form, lemma=_lemma(prefixes, m.root or m.lemma), prefixes=prefixes,
+                                       krt="ल्यप्", kind="avyaya", linga=None, vibhakti=None, vacana=None,
+                                       source="generated", quality=3, handle=ktva))
         else:
             continue
         if pada is None:
@@ -96,15 +100,29 @@ def _try_prefixes(form: str, upasargas: tuple[str, ...], remainder: str) -> list
     return out
 
 
+@lru_cache(maxsize=100_000)
 def prefixed(form: str) -> tuple[Morph, ...]:
-    """Verbs with one or two upasargas that the kosha lacks, forward-derived with the prefixes."""
+    """Verbs and participles with one or two upasargas, forward-derived with the prefixes."""
     found: list[Morph] = []
     for u1, rem1 in _splits(form):
         found.extend(_try_prefixes(form, (u1,), rem1))
         if not found:
             for u2, rem2 in _splits(rem1):
                 found.extend(_try_prefixes(form, (u1, u2), rem2))
-    return tuple(found)
+    return tuple(dict.fromkeys(found))
+
+
+# endings of participles and absolutives (क्त, क्तवतु, शतृ, शानच्, ल्यप्, क्त्वा, तव्य, अनीयर्) in some case
+_VERBAL_ENDING_SOUNDS = frozenset({"त्", "न्", "म्", "य्", "व्"})
+
+
+def looks_verbal(form: str) -> bool:
+    """Gate for the always-on prefixed search: begins with an upasarga, and a त/न/म/य/व
+    (participle or absolutive suffix) stands in its last four sounds."""
+    sounds = lipi.varnas(form)
+    if len(sounds) < 5 or not _splits(form):
+        return False
+    return any(s in _VERBAL_ENDING_SOUNDS for s in sounds[-5:-1])
 
 
 # (ending of form, ending of stem, genders to try)
