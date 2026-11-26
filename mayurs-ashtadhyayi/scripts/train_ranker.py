@@ -1,6 +1,6 @@
 """Train the split reranker (mayur/ranker.py) on DCS gold half-verses.
 
-    python scripts/train_ranker.py [--lines 5000] [--k 50] [--epochs 10] [--workers 4]
+    python scripts/train_ranker.py [--lines 5000] [--k 50] [--epochs 10] [--workers 1] [--dev-per-text 20]
 
 TEST (never trained/tuned on): Rām Bā 1 v1-20, KumSaṃ 1 v1-20, MBh 6.23/6.24 (BhG 1-2).
 DEV (early stopping): Rām Bā 1 v21-79, KumSaṃ 1 v21-60. TRAIN: every other chapter on disk.
@@ -97,8 +97,12 @@ def candidates(name: str, data: list, k: int, workers: int) -> list:
     path = CACHE / f"{name}_{len(data)}_{k}_{key}.pkl"
     if path.exists():
         return pickle.loads(path.read_bytes())
-    with Pool(workers) as pool:
-        out = [c for c in pool.map(_cand, [(l, g, k) for l, g in data], chunksize=4) if c]
+    items = [(l, g, k) for l, g in data]
+    if workers > 1:  # each worker loads the big tables: mind the memory
+        with Pool(workers) as pool:
+            out = [c for c in pool.map(_cand, items, chunksize=4) if c]
+    else:
+        out = [c for c in map(_cand, items) if c]
     CACHE.mkdir(parents=True, exist_ok=True)
     path.write_bytes(pickle.dumps(out))
     return out
@@ -186,9 +190,10 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--lines", type=int, default=5000)
     ap.add_argument("--k", type=int, default=50)
     ap.add_argument("--epochs", type=int, default=10)
-    ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--workers", type=int, default=1)
+    ap.add_argument("--dev-per-text", type=int, default=20)
     a = ap.parse_args(argv)
-    held = {name: candidates(name, d, a.k, a.workers) for name, d in held_sets().items()}
+    held = {name: candidates(name, d, a.k, a.workers) for name, d in held_sets(a.dev_per_text).items()}
     train_c = candidates("train", train_lines(a.lines), a.k, a.workers)
     table = tag_table(train_c)
     train_f = featurize(train_c, table)

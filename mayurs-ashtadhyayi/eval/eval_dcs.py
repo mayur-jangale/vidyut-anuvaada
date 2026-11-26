@@ -33,8 +33,20 @@ FEATURES = ("Case", "Number", "Gender", "Tense", "Mood", "Person", "VerbForm")
 _VARGA = {"ङ्": "कखगघ", "ञ्": "चछजझ", "ण्": "टठडढ", "न्": "तथदधन", "म्": "पफबभम"}
 
 
+_FINAL_STOP = {"द्": "त्", "ग्": "क्", "ड्": "ट्", "ब्": "प्"}
+
+
 def normalize(form: str) -> str:
-    """Anusvara for a nasal + virama followed by a consonant of its own varga."""
+    """Spelling differences that are not analysis differences, removed before comparing forms.
+
+    * anusvara for a nasal + virama followed by a consonant of its own varga (साम्प्रतम् = सांप्रतम्);
+    * a pada-final voiced stop as its unvoiced partner (the corpus writes both काचिद् and काचित्);
+    * ण as न: the corpus often undoes retroflexion in its reconstructed forms (ब्रह्मना for ब्रह्मणा).
+    """
+    for voiced, plain in _FINAL_STOP.items():
+        if form.endswith(voiced):
+            form = form[: -len(voiced)] + plain
+    form = form.replace("ण", "न")
     out, i = [], 0
     while i < len(form):
         pair = form[i:i + 2]
@@ -52,10 +64,14 @@ def word_matches(form: str, gold_form: str, gold_lemma: str = "", compound_membe
     f = normalize(form)
     if f == normalize(gold_form):
         return True
-    same_lemma = bool(lemma and gold_lemma and normalize(lemma) == normalize(gold_lemma))
+    same_lemma = bool(lemma and gold_lemma and _lexeme(lemma) == _lexeme(gold_lemma))
     if compound_member and gold_lemma and (f == normalize(gold_lemma) or same_lemma):
         return True
     return lenient and same_lemma
+
+
+def _lexeme(lemma: str) -> str:
+    return normalize(ud.canonical_lemma(lemma))
 
 
 def _parts(ours_word: Sequence[Any]) -> tuple[str, str]:
@@ -100,9 +116,12 @@ def split_equal(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict], lenie
         for o, g in zip(ours, gold_words))
 
 
-def align_words(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict]) -> list[tuple[int, int]]:
+def align_words(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict],
+                lenient: bool = False) -> list[tuple[int, int]]:
+    """LCS alignment; ``lenient`` also pairs words with the same lemma but a differently
+    reconstructed form (the corpus has मम where the text has मे)."""
     return lcs_pairs(ours, gold_words, lambda o, g: word_matches(
-        _parts(o)[0], g["form"], g["lemma"], g["compound_member"], _parts(o)[1]))
+        _parts(o)[0], g["form"], g["lemma"], g["compound_member"], _parts(o)[1], lenient))
 
 
 def morphology_counts(pairs: Sequence[tuple[Any, dict]]) -> dict[str, int]:
@@ -147,7 +166,7 @@ def gold_pada_units(gold_words: Sequence[dict]) -> list[tuple[str, str]]:
 def pada_match(ours: tuple[str, str], gold_unit: tuple[str, str]) -> bool:
     """Same joined form, or failing that the same lemma of the final member."""
     return normalize(ours[0]) == normalize(gold_unit[0]) or bool(
-        ours[1] and gold_unit[1] and normalize(ours[1]) == normalize(gold_unit[1]))
+        ours[1] and gold_unit[1] and _lexeme(ours[1]) == _lexeme(gold_unit[1]))
 
 
 def pada_line_equal(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict]) -> bool:
@@ -191,16 +210,18 @@ def evaluate_verse(g: dict[str, Any], analyze: Callable[..., Any]) -> dict[str, 
     res["gold_in_readings"] = any(
         all(split_equal([our_word(w) for w in line_words(r, i)], gl) for i, gl in enumerate(gold_lines))
         for r in analysis.readings)
-    matched, pairs, mismatches, e2e = 0, [], [], 0
+    matched, same, pairs, mismatches, e2e = 0, 0, [], [], 0
     for i, (o, gl) in enumerate(zip(ours_lines, gold_lines)):
-        al = align_words(o, gl)
-        matched += len(al)
+        matched += len(align_words(o, gl))
+        al = align_words(o, gl, lenient=True)
+        same += len(al)
         words = line_words(reading, i)
         pairs += [(words[a].morph, gl[b]) for a, b in al if not words[a].in_compound and not gl[b]["compound_member"]]
         e2e += sum(end_to_end_ok(words[a], gl[b]) for a, b in al)
         if not res["lines_exact"][i]:
             mismatches.append({"line": i, "ours": " ".join(x[0] for x in o), "gold": " ".join(x["form"] for x in gl)})
     res["matched"] = matched
+    res["matched_same"] = same
     res["e2e_correct"] = e2e
     res["book"] = g.get("book", "")
     res["morphology"] = morphology_counts(pairs)
@@ -244,6 +265,7 @@ def summarize(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
         "gold_in_readings": sum(r["gold_in_readings"] for r in results),
         "verses_verified": sum(r["verified"] for r in results),
         "gold_words": gw, "our_words": ow, "matched_words": mt, **prf(mt, ow, gw),
+        "same_word": prf(sum(r.get("matched_same", 0) for r in results), ow, gw),
         "e2e_correct": sum(r.get("e2e_correct", 0) for r in results),
         "pada": prf(sum(r.get("pada_matched", 0) for r in results), sum(r.get("pada_ours", 0) for r in results),
                     sum(r.get("pada_gold", 0) for r in results)),
@@ -342,7 +364,9 @@ def headline(s: dict[str, Any]) -> str:
     m = s["morphology"]
     return "\n".join([
         "HEADLINE (word level):",
-        f"  segmentation F1, member level: {s['f1']:.3f}   pada level: {s['pada']['f1']:.3f}",
+        f"  words identified (same boundaries and lexeme) F1: {s['same_word']['f1']:.3f}"
+        f"  (P {s['same_word']['precision']:.3f}, R {s['same_word']['recall']:.3f})",
+        f"  segmentation F1 on exact forms, member level: {s['f1']:.3f}   pada level: {s['pada']['f1']:.3f}",
         f"  lemma accuracy: {_frac(m.get('lemma', 0), m.get('words', 0))}",
         f"  all-features accuracy: {_frac(m.get('all_features', 0), m.get('words', 0))}",
         f"  END-TO-END word accuracy: {_frac(s['e2e_correct'], s['gold_words'])}"])

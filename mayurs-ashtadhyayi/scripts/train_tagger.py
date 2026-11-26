@@ -113,7 +113,7 @@ def load_sets(max_train: int, per_text: int = 1500):
 
 def leave_one_out(cands, toks) -> list[list[tuple[float, float]]]:
     """The training token itself is counted in the corpus tables: remove it (jackknife)."""
-    return [[(1.0 if correct(m, t) else 0.0, 1.0 if ud.lemma(m) == t["lemma"] else 0.0) for m in c]
+    return [[(1.0 if correct(m, t) else 0.0, 1.0 if ud.same_lemma(m, t["lemma"], t["upos"]) else 0.0) for m in c]
             for c, t in zip(cands, toks)]
 
 
@@ -232,6 +232,11 @@ def main() -> None:
             b, a = r["before"][book], r["after"][book]
             print(f"{split:5} {book:15} n={b['n']:4} all {b['all']:.3f}->{a['all']:.3f}  Case {b['Case']:.3f}->"
                   f"{a['Case']:.3f}  Gender {b['Gender']:.3f}->{a['Gender']:.3f}  oracle {b['oracle']:.3f}")
+    for split, r in report.items():
+        for when in ("before", "after"):
+            n = sum(x["n"] for x in r[when].values())
+            acc = {k: sum(x[k] * x["n"] for x in r[when].values()) / n for k in ("all", "Case", "Gender", "oracle")}
+            print(f"{split:5} OVERALL {when:6} n={n} " + "  ".join(f"{k} {v:.3f}" for k, v in acc.items()))
     print("enabled" if enabled else "NOT enabled (not better on DEV)")
     print(f"done in {time.time() - t0:.0f}s", file=sys.stderr)
 
