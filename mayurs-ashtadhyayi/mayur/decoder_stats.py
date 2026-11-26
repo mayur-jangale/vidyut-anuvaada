@@ -49,7 +49,19 @@ def neural_available() -> bool:
 def _neural(text: tuple, spaces: frozenset) -> tuple:
     from mayur import neural_boundary
 
+    _one_thread()
     return tuple(neural_boundary.logprobs(text, spaces))
+
+
+@lru_cache(maxsize=1)
+def _one_thread() -> None:
+    """Small per-line networks run ~200x faster single-threaded on a loaded machine."""
+    try:
+        import torch
+
+        torch.set_num_threads(1)
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def neural_features(g: Any, e: Any, lps: Sequence[Mapping[str, float]]) -> list[tuple[str, float]]:

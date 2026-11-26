@@ -84,6 +84,8 @@ class Word:
     proof: Optional[WordProof] = None
     role: str = ""  # see mayur.labels.ROLES
     head: Optional[int] = None  # index (in Reading.words) of the word this one depends on
+    role_sutras: tuple[str, ...] = ()  # rules that license the role (karaka definition, case rule)
+    derived_meaning: str = ""  # sense read off the derivation: which suffix rule gives which meaning
     gloss: str = ""
     gloss_source: str = ""
     arsha: bool = False  # not derivable by Panini's rules as implemented; labelled, never forced
@@ -136,6 +138,8 @@ class Reading:
     anvaya: list[int] = field(default_factory=list)  # word indices in prose order
     translation: str = ""
     alignment: list[Alignment] = field(default_factory=list)
+    reworded: str = ""  # optional fluent English produced by a language model from this analysis
+    reworded_note: str = ""  # which model, and the checks the rewording passed
 
 
 @dataclass
