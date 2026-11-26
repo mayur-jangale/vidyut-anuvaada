@@ -1,3 +1,4 @@
+import dataclasses
 import sys
 from pathlib import Path
 
@@ -86,3 +87,29 @@ def test_agent_noun_with_adjacent_genitive_feature():
     gen = nom("धर्मस्य", "धर्म", "षष्ठी")
     v = tagger.Verse([[agent], [gen]], [0, 0], [False, False], ["रक्षिता", "धर्मस्य"], tables={})
     assert "trcGen" in v.static[0][0]
+
+
+def test_sibling_forms_of_a_surface_spelling():
+    from mayur.tagger_siblings import sibling_form, surface, variant
+    assert sibling_form("मूढा", "ज्ञानिनस्") == "मूढास्"  # 8.3.17, 8.3.22: -आः loses its visarga before a voiced sound
+    assert sibling_form("मूढास्", "ज्ञानिनस्") == "मूढा"
+    assert sibling_form("मूढा", "तत्र") is None  # before a voiceless sound the visarga stays
+    assert sibling_form("भीष्मे", "उवाच") == "भीष्मस्"  # 6.1.78 / 8.3.19: both end in -अ with hiatus
+    assert sibling_form("भीष्मस्", "उवाच") == "भीष्मे"
+    assert sibling_form("रामस्", "अत्र") is None  # before अ: रामोऽत्र
+    assert surface("मूढा", "मूढास्") == surface("मूढास्", "मूढा") == "मूढा"
+    assert (variant("मूढास्"), variant("मूढा"), variant("भीष्मे"), variant("भीष्मस्")) == ("आस्", "आ", "ए", "अस्")
+
+
+def test_choose_with_siblings_returns_the_swap():
+    fem = nom("मूढा", "मूढ", "प्रथमा", "स्त्रीलिङ्ग")
+    pl = nom("मूढास्", "मूढ", "प्रथमा", vacana="बहुवचन")
+    v = verb("पतन्ति", "पत्", "लट्")
+    v = dataclasses.replace(v, vacana="बहुवचन")
+    w = {"var=आस्": {"Nबहुवचन": 2.0}}
+    chosen, swaps = tagger.choose_with_siblings([[fem], [v]], [0, 0], [False, False], ["मूढा", "नरास्"],
+                                                weights=w, sibling_candidates=lambda f: [pl] if f == "मूढास्" else [])
+    assert chosen[0] is pl and swaps == {0: "मूढास्"}
+    chosen, swaps = tagger.choose_with_siblings([[fem], [v]], [0, 0], [False, False], ["मूढा", "नरास्"],
+                                                weights={}, sibling_candidates=lambda f: [pl] if f == "मूढास्" else [])
+    assert chosen[0] is fem and swaps == {}

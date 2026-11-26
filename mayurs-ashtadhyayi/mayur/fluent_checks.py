@@ -283,7 +283,7 @@ def tense_classes(text: str, gloss: str) -> set[str]:
     found: set[str] = set()
     prev = ""
     for t in tokens(text):
-        passive_participle = prev in _PAST_AUX | _PRESENT_AUX | {"be", "been"} and t.endswith("ed") and t != past
+        passive_participle = prev in _PAST_AUX | _PRESENT_AUX | {"be", "been"} and t.endswith("ed")
         prev = t
         if passive_participle:
             continue  # "is conveyed": the participle is not a second tense marker

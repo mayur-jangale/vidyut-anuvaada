@@ -83,3 +83,10 @@ def test_drafted_table_by_kind_and_prefixed_verb(monkeypatch):
     assert gloss.lookup(Morph("x", "मद्", "tinanta", root="मद्", root_gloss="to rejoice")) == ("rejoice", "vidyut-dhatupatha")
     prefixed = Morph("समवेतास्", "समवे", "subanta", stem="समवेत", root="इ", prefixes=("सम्", "अव"), krt="क्त")
     assert gloss.lookup(prefixed) == ("come together", "dcs-dictionary")
+
+
+def test_agent_noun_entry_is_not_the_verbs_gloss():
+    """हन् as the last member of a compound is "slayer" in the hand-made table; the verb हन्ति is "kill"."""
+    verb = Morph("हन्ति", "हन्", "tinanta", root="हन्")
+    assert gloss.lookup(verb)[0] == "kill"
+    assert gloss.lookup(Morph("हन्", "हन्", "stem"))[0] == "slayer"

@@ -128,8 +128,8 @@ def lookup(m: Morph) -> tuple[str, str]:
     if m.krt in ("ण्यत्", "यत्", "क्यप्", "तव्य", "अनीयर्") and m.stem in own:
         return own[m.stem], "own"  # a noun that only looks like a gerundive: वाक्य "speech"
     for k in keys:
-        if k in own:
-            return own[k], "own"
+        if k in own and not (verb and k == m.root and _draft().get(k, ["", ""])[1] == "verb"):
+            return own[k], "own"  # (an agent noun of the table, हन् "slayer", is not the gloss of the verb हन्)
     cited = ud.lemma(m)  # the corpus's citation form: समवे for सम् + अव + इ
     senses = resources.derived("dcs_senses.json") or {}
     dictionary = resources.derived("dcs_dict.json") or {}
