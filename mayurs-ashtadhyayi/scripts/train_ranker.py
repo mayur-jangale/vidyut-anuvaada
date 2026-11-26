@@ -92,7 +92,8 @@ def _cand(item: tuple[str, list[dict], int]) -> list | None:
 
 def candidates(name: str, data: list, k: int, workers: int) -> list:
     import hashlib
-    key = hashlib.sha1(repr([l for l, _ in data]).encode()).hexdigest()[:10]
+    code = [p.stat().st_mtime_ns for p in sorted((ROOT / "mayur").glob("*.py")) if p.name != "ranker.py"]
+    key = hashlib.sha1(repr(([l for l, _ in data], code)).encode()).hexdigest()[:10]
     path = CACHE / f"{name}_{len(data)}_{k}_{key}.pkl"
     if path.exists():
         return pickle.loads(path.read_bytes())

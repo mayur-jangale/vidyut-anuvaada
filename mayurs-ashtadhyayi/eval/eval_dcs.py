@@ -10,6 +10,9 @@ counts as correct if its form or lemma equals the gold form or lemma (DCS writes
 the lemma: वाच् where the text has वाक्). That is the strict "split exact" number. A second,
 lenient number ("same words") also accepts any word whose lemma equals the gold lemma, because
 DCS sometimes reconstructs a different surface form than the text has (मम for मे, विद्वास् for विद्वान्).
+Lemmas and features are compared under the citation conventions documented in ``mayur/ud.py``
+(``same_lemma``, ``same_feats``): strong-stem citations (हनुमन्त् = हनुमत्), and no feature scoring
+for words the corpus classes as indeclinable.
 """
 
 from __future__ import annotations
@@ -109,14 +112,13 @@ def morphology_counts(pairs: Sequence[tuple[Any, dict]]) -> dict[str, int]:
     for morph, g in pairs:
         c["words"] += 1
         ours = ud.feats(morph) if morph is not None else {}
-        c["lemma"] += int(morph is not None and ud.lemma(morph) == g["lemma"])
-        ok = True
-        for k in FEATURES:
-            if k in g["feats"]:
+        upos = g.get("upos", "")
+        c["lemma"] += int(morph is not None and ud.same_lemma(morph, g["lemma"], upos))
+        for k in ud.compared_features(upos, g["feats"]):
+            if k in FEATURES:
                 c[f"feat_{k}_total"] += 1
                 c[f"feat_{k}"] += int(ours.get(k) == g["feats"][k])
-            ok = ok and ours.get(k) == g["feats"].get(k)
-        c["all_features"] += int(ok)
+        c["all_features"] += int(morph is not None and ud.same_feats(morph, upos, g["feats"]))
     return c
 
 
@@ -153,6 +155,15 @@ def pada_line_equal(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict]) -
     return len(a) == len(b) and all(pada_match(x, y) for x, y in zip(a, b))
 
 
+def end_to_end_ok(ours: Any, gold_word: dict) -> bool:
+    """An aligned word counts as end-to-end correct when the form matches AND, for a pada, the lemma and
+    all features are right; a non-final compound member needs the form (and to be one of our members) only."""
+    if gold_word["compound_member"] or ours.in_compound:
+        return bool(gold_word["compound_member"] and ours.in_compound)
+    c = morphology_counts([(ours.morph, gold_word)])
+    return bool(c["lemma"] and c["all_features"])
+
+
 def line_words(reading: Any, line: int) -> list[Any]:
     return [w for w in reading.words if w.line == line]
 
@@ -180,15 +191,18 @@ def evaluate_verse(g: dict[str, Any], analyze: Callable[..., Any]) -> dict[str, 
     res["gold_in_readings"] = any(
         all(split_equal([our_word(w) for w in line_words(r, i)], gl) for i, gl in enumerate(gold_lines))
         for r in analysis.readings)
-    matched, pairs, mismatches = 0, [], []
+    matched, pairs, mismatches, e2e = 0, [], [], 0
     for i, (o, gl) in enumerate(zip(ours_lines, gold_lines)):
         al = align_words(o, gl)
         matched += len(al)
         words = line_words(reading, i)
         pairs += [(words[a].morph, gl[b]) for a, b in al if not words[a].in_compound and not gl[b]["compound_member"]]
+        e2e += sum(end_to_end_ok(words[a], gl[b]) for a, b in al)
         if not res["lines_exact"][i]:
             mismatches.append({"line": i, "ours": " ".join(x[0] for x in o), "gold": " ".join(x["form"] for x in gl)})
     res["matched"] = matched
+    res["e2e_correct"] = e2e
+    res["book"] = g.get("book", "")
     res["morphology"] = morphology_counts(pairs)
     res["proof_words"] = len(reading.words)
     res["proof_verified"] = sum(1 for w in reading.words if w.proof is not None and w.proof.derivable)
@@ -202,6 +216,7 @@ def failed_result(g: dict[str, Any], exc: BaseException) -> dict[str, Any]:
     number = g["number"]
     return {"verse": number, "id": g["id"], "n_lines": len(g["lines"]),
             "gold_words": sum(len(ln["words"]) for ln in g["lines"]), "our_words": 0, "matched": 0,
+            "e2e_correct": 0, "book": g.get("book", ""),
             "lines_exact": [False] * len(g["lines"]), "lines_same_words": [False] * len(g["lines"]),
             "verse_exact": False, "gold_in_readings": False,
             "morphology": {}, "proof_words": 0, "proof_verified": 0, "status": "error", "verified": False,
@@ -229,6 +244,7 @@ def summarize(results: Sequence[dict[str, Any]]) -> dict[str, Any]:
         "gold_in_readings": sum(r["gold_in_readings"] for r in results),
         "verses_verified": sum(r["verified"] for r in results),
         "gold_words": gw, "our_words": ow, "matched_words": mt, **prf(mt, ow, gw),
+        "e2e_correct": sum(r.get("e2e_correct", 0) for r in results),
         "pada": prf(sum(r.get("pada_matched", 0) for r in results), sum(r.get("pada_ours", 0) for r in results),
                     sum(r.get("pada_gold", 0) for r in results)),
         "proof_words": pw, "proof_verified": pv, "morphology": mc,
@@ -322,6 +338,29 @@ def all_tests(analyze: Callable[..., Any]) -> tuple[str, dict[str, Any]]:
     return "\n".join(rows), per_set
 
 
+def headline(s: dict[str, Any]) -> str:
+    m = s["morphology"]
+    return "\n".join([
+        "HEADLINE (word level):",
+        f"  segmentation F1, member level: {s['f1']:.3f}   pada level: {s['pada']['f1']:.3f}",
+        f"  lemma accuracy: {_frac(m.get('lemma', 0), m.get('words', 0))}",
+        f"  all-features accuracy: {_frac(m.get('all_features', 0), m.get('words', 0))}",
+        f"  END-TO-END word accuracy: {_frac(s['e2e_correct'], s['gold_words'])}"])
+
+
+def per_text_table(results: Sequence[dict[str, Any]]) -> str:
+    books: dict[str, list[dict[str, Any]]] = {}
+    for r in results:
+        books.setdefault(r.get("book", ""), []).append(r)
+    rows = [f"{'text':<22}{'verses':>7}{'F1':>8}  {'all-features':<20}{'end-to-end'}"]
+    for book, rs in sorted(books.items()):
+        s = summarize(rs)
+        m = s["morphology"]
+        rows.append(f"{book:<22}{s['verses']:>7}{s['f1']:>8.3f}  "
+                    f"{_frac(m.get('all_features', 0), m.get('words', 0)):<20}{_frac(s['e2e_correct'], s['gold_words'])}")
+    return "\n".join(rows)
+
+
 def parse_range(spec: Optional[str], last: int) -> list[int]:
     if not spec:
         return list(range(1, last + 1))
@@ -335,6 +374,7 @@ def main(argv: Optional[list[str]] = None) -> int:
     ap.add_argument("--json", default=None, help="write the numbers to this file")
     ap.add_argument("--conllu", default=None, help="evaluate on this DCS chapter file instead (any book)")
     ap.add_argument("--label", default="ग्रन्थ", help="verse id prefix used with --conllu")
+    ap.add_argument("--sample", default=None, help="evaluate a file made by scripts/sample_test.py")
     ap.add_argument("--all-tests", action="store_true", help="run the test sets of data/derived/splits.json")
     args = ap.parse_args(argv)
     from mayur.pipeline import analyze_verse
@@ -344,6 +384,18 @@ def main(argv: Optional[list[str]] = None) -> int:
         print(table)
         if args.json:
             Path(args.json).write_text(json.dumps(per_set, ensure_ascii=False, indent=1), encoding="utf-8")
+        return 0
+    if args.sample:
+        doc = json.loads(Path(args.sample).read_text(encoding="utf-8"))
+        results = run_verses(doc["verses"], analyze_verse)
+        summary = summarize(results)
+        print(f"sample: {doc['label']} ({doc['pool']}), {len(results)} verses")
+        print(headline(summary))
+        print(per_text_table(results))
+        print(report(results, summary))
+        if args.json:
+            Path(args.json).write_text(json.dumps({"summary": summary, "verses": results}, ensure_ascii=False,
+                                                  indent=1), encoding="utf-8")
         return 0
     doc = gold.from_conllu(Path(args.conllu), args.label) if args.conllu else gold.load()
     by_number = {v["number"]: v for v in doc["verses"]}

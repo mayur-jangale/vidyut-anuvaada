@@ -29,13 +29,10 @@ KEYS = ("Case", "Number", "Gender", "Person", "Tense", "Mood", "VerbForm")
 
 
 def correct(m, tok: dict) -> bool:
-    """Candidate ``m`` matches the gold token: lemma and every gold feature we can state."""
-    if ud.lemma(m) != tok["lemma"]:
-        return False
-    ours, gold = ud.feats(m), tok["feats"]
+    """Candidate ``m`` is the gold analysis (citation conventions of ``mayur.ud``)."""
     if tok["compound_member"]:
-        return m.kind == "stem"
-    return ud.feats_agree(ours, gold) and all(k in ours for k in ("Case", "Number", "Person") if k in gold)
+        return m.kind == "stem" and ud.same_lemma(m, tok["lemma"], tok["upos"])
+    return ud.same_lemma(m, tok["lemma"], tok["upos"]) and ud.same_feats(m, tok["upos"], tok["feats"])
 
 
 def feature_ok(m, tok: dict, key: str) -> bool:
@@ -53,7 +50,7 @@ def analyse(sent: dict):
         ms = [w.analyses[i] for i in idx]
         words.append(w)
         cands.append(ms)
-        gold.append(next((j for j, m in enumerate(ms) if correct(m, t)), None))
+        gold.append(tuple(j for j, m in enumerate(ms) if correct(m, t)))  # every matching candidate
     return words, cands, gold
 
 
@@ -106,9 +103,18 @@ def load_sets(max_train: int, per_text: int = 1500):
                     test.append((book, s))
                 elif dev_range[0] <= n <= dev_range[1]:
                     dev.append((book, s))
+    pool: dict[str, list] = {}
     for e in dcs.split_files("dev_pool"):
-        dev.extend(("pool:" + _book(e["file"]), s) for s in _sentences(e))
+        pool.setdefault(_book(e["file"]), []).extend(_sentences(e))
+    for book, sents in sorted(pool.items()):  # at most 300 half-verses per text (memory, speed)
+        dev.extend(("pool:" + book, s) for s in random.Random(1).sample(sents, min(300, len(sents))))
     return load_train(max_train, per_text), dev, test
+
+
+def leave_one_out(cands, toks) -> list[list[tuple[float, float]]]:
+    """The training token itself is counted in the corpus tables: remove it (jackknife)."""
+    return [[(1.0 if correct(m, t) else 0.0, 1.0 if ud.lemma(m) == t["lemma"] else 0.0) for m in c]
+            for c, t in zip(cands, toks)]
 
 
 def train(data, epochs: int) -> dict[str, float]:
@@ -117,14 +123,15 @@ def train(data, epochs: int) -> dict[str, float]:
     stamp: dict[str, int] = {}
     t = 0
     for _ in range(epochs):
-        for cands, gold in data:
+        for cands, gold, minus in data:
             t += 1
-            pred = tagger.decode(cands, w)
-            g = [gi if gi is not None else p for gi, p in zip(gold, pred)]
+            pred = tagger.decode(cands, w, minus)
+            # a word with no matching candidate, or already predicted correctly, causes no update
+            g = [p if (not gi or p in gi) else gi[0] for gi, p in zip(gold, pred)]
             if g == pred:
                 continue
-            diff = tagger.features(cands, g)
-            for k, v in tagger.features(cands, pred).items():
+            diff = tagger.features(cands, g, minus)
+            for k, v in tagger.features(cands, pred, minus).items():
                 diff[k] = diff.get(k, 0.0) - v
             for k, v in diff.items():
                 if v:
@@ -150,7 +157,7 @@ def evaluate(items, choose) -> dict[str, dict[str, float]]:
             s["all"] += correct(m, t)
             s["Case"] += feature_ok(m, t, "Case")
             s["Gender"] += feature_ok(m, t, "Gender")
-            s["oracle"] += g is not None
+            s["oracle"] += bool(g)
     return {b: {k: round(v / s["n"], 4) if k != "n" else v for k, v in s.items()} for b, s in stats.items()}
 
 
@@ -161,7 +168,7 @@ def write_missing(items) -> None:
     examples: dict[str, list[str]] = defaultdict(list)
     for _b, toks, cands, gold, _w in items:
         for t, g in zip(toks, gold):
-            if g is None and not t["compound_member"]:
+            if not g and not t["compound_member"]:
                 f = t["feats"]
                 key = "|".join([t["upos"]] + [f"{k}={f[k]}" for k in ("VerbForm", "Tense", "Case") if k in f])
                 counts[key] += 1
@@ -183,14 +190,23 @@ def main() -> None:
     tr, dev, test = load_sets(args.max_train, args.per_text)
     prep = lambda sets: [(b, s["tokens"], *(lambda a: (a[1], a[2], a[0]))(analyse(s))) for b, s in sets]
     tr_items, dev_items, test_items = prep(tr), prep(dev), prep(test)
-    unmatched = sum(g is None for *_, cands, gold, _w in tr_items for g in gold)
+    unmatched = sum(not g for *_, cands, gold, _w in tr_items for g in gold)
     print(f"train {len(tr_items)} half-verses ({unmatched} tokens without a matching candidate), "
           f"dev {len(dev_items)}, test {len(test_items)}; {time.time() - t0:.0f}s", file=sys.stderr)
-    data = [(c, g) for _b, _t, c, g, _w in tr_items if c and all(c)]
+    data = []
+    for _b, t, c, g, _w in tr_items:  # words without candidates are left out of the sequence
+        keep = [i for i, x in enumerate(c) if x]
+        if keep:
+            cc, tt = [c[i] for i in keep], [t[i] for i in keep]
+            data.append((cc, [g[i] for i in keep], leave_one_out(cc, tt)))
     w = train(data, args.epochs)
 
     def learned(words, cands):
-        return tagger.decode(cands, w) if all(cands) else [0] * len(cands)
+        keep = [i for i, x in enumerate(cands) if x]
+        out = [0] * len(cands)
+        for i, k in zip(keep, tagger.decode([cands[i] for i in keep], w)):
+            out[i] = k
+        return out
 
     def baseline(words, cands):
         chosen = shabdabodha.choose_rules(words)

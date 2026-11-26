@@ -93,7 +93,12 @@ def main() -> None:
     ap.add_argument("--max-files", type=int, default=0)
     ap.add_argument("--top", type=int, default=300)
     ap.add_argument("--out", default=str(derived_dir() / "audit_lexicon_failures.txt"))
+    ap.add_argument("--verbal-lemma", action="store_true",
+                    help="experiment: cite verbal lemmas with lexicon.verbal_lemma (sandhi-joined)")
     args = ap.parse_args()
+    if args.verbal_lemma:
+        original = ud.lemma
+        ud.lemma = lambda m: lexicon.verbal_lemma(m) if (m.kind == "tinanta" or ud.is_verbal_noun(m)) else original(m)
     entries = choose_files(args.split, [b for b in args.books.split(",") if b], args.max_files, args.per_text,
                            args.seed)
     per_text = collect(entries)

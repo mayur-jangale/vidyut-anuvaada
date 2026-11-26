@@ -10,7 +10,8 @@ from dataclasses import dataclass
 from functools import lru_cache
 from typing import Sequence
 
-from mayur.lipi import from_varnas, varnas
+from mayur.lipi import from_varnas as _lipi_from_varnas
+from mayur.lipi import varnas
 
 Varnas = tuple[str, ...]
 
@@ -38,7 +39,11 @@ ANUSVARA, VISARGA, AVAGRAHA, CHANDRABINDU = "ं", "ः", "ऽ", "ँ"
 PRAGRHYA = ("ई", "ऊ", "ए")  # 1.1.11 ईदूदेद्द्विवचनं प्रगृह्यम् (only dual forms; the form alone cannot tell)
 # Hiatus left across a pāda boundary (metrical licence in epic verse; no sūtra). The segmenter
 # accepts it only where the text writes a space.
-PADA_HIATUS = "पादान्त-विराम"
+# Saṃhitā between the words of a sentence is optional (the kārikā on 1.4.109 परः संनिकर्षः संहिता:
+# "वाक्ये तु सा विवक्षामपेक्षते"): a word may stand in pausa before the next, or a vowel may meet a
+# vowel unjoined (e.g. across a pāda boundary). The segmenter accepts this only where the text
+# writes a space.
+PADA_HIATUS = "१.४.१०९"
 # Pada-final palatals and ह् become stops before sandhi: 8.2.30 चोः कुः, 8.2.36 व्रश्च... (श्/ष्, and
 # राज्-type ज्), 8.2.31 हो ढः.
 PALATAL_FINAL = {
@@ -48,6 +53,17 @@ PALATAL_FINAL = {
     "ष्": (("ट्", "८.२.३९"),),
     "ह्": (("ट्", "८.२.३१"), ("क्", "८.२.३२")),
 }
+
+
+def from_varnas(seq) -> str:
+    """``lipi.from_varnas``, but a vowel after a vowel (hiatus) is written as an independent letter.
+
+    (The underlying transliteration merges some such pairs, e.g. ए + आ.)
+    """
+    seq = tuple(seq)
+    cuts = [i for i in range(1, len(seq)) if is_vowel(seq[i]) and is_vowel(seq[i - 1])]
+    bounds = [0] + cuts + [len(seq)]
+    return "".join(_lipi_from_varnas(seq[a:b]) for a, b in zip(bounds, bounds[1:]))
 
 
 @dataclass(frozen=True)
@@ -208,7 +224,7 @@ def _outcomes_v(left: Varnas, right: Varnas, word: str, samasa: bool) -> tuple[t
             raw = [(left[:-1] + seq + right[1:], s) for seq, s in _vowel_vowel(a, b)]
             if a in PRAGRHYA:  # dual ई ऊ ए are pragṛhya and stay unjoined
                 raw.append((left + right, ("१.१.११", "६.१.१२५")))
-            raw.append((left + right, (PADA_HIATUS,)))
+
         elif b == "छ्":
             raw = [(left + ("च्",) + right, ("६.१.७३",) if a in SHORT else ("६.१.७६",))]
             if a not in SHORT:
@@ -225,6 +241,8 @@ def _outcomes_v(left: Varnas, right: Varnas, word: str, samasa: bool) -> tuple[t
         raw = _final_stop(left, right)
     else:
         raw = [(left + right, ())]
+    if not samasa:
+        raw = list(raw) + [(varnas(p) + right, (PADA_HIATUS,)) for p in pausa_forms(from_varnas(left))]
     return tuple((seq, tuple(dict.fromkeys(extra + tuple(s)))) for seq, s in raw)
 
 
@@ -279,6 +297,42 @@ def rejoin(forms: Sequence[str], compound_flags: Sequence[bool]) -> set[str]:
         for p in pausa_forms(from_varnas(cur)) if cur[-1:] == fin else (from_varnas(cur),):
             result.add(from_varnas(done + varnas(p)))
     return result
+
+
+def rejoin_matching(forms: Sequence[str], compound_flags: Sequence[bool], text: str) -> str | None:
+    """A re-join of ``forms`` whose ``canon`` equals ``canon(text)``, or None.
+
+    The same fold as :func:`rejoin`, but states that already disagree with the text are dropped,
+    so long lines with many optional rules stay cheap.
+    """
+    target = canon_varnas(text)
+    if not forms:
+        return "" if not target else None
+    flags = list(compound_flags) + [False] * (len(forms) - len(compound_flags))
+
+    def alive(done: Varnas) -> bool:
+        cv = canon_varnas(from_varnas(done)) if done else ()
+        cut = max(len(cv) - 1, 0)
+        return target[:cut] == cv[:cut]
+
+    states = {((), varnas(forms[0]), forms[0])}
+    for i in range(1, len(forms)):
+        nv = varnas(forms[i])
+        keep = max(len(nv) - 1, 1)
+        nxt = set()
+        for done, cur, word in states:
+            for seq, _ in _outcomes_v(cur, nv, word, flags[i - 1]):
+                new_done = done + seq[:-keep]
+                if alive(new_done):
+                    nxt.add((new_done, seq[-keep:], forms[i]))
+        states = nxt
+    for done, cur, word in states:
+        fin = varnas(word)[-1:]
+        for p in pausa_forms(from_varnas(cur)) if cur[-1:] == fin else (from_varnas(cur),):
+            cand = from_varnas(done + varnas(p))
+            if canon_varnas(cand) == target:
+                return cand
+    return None
 
 
 def _stop_nasal(v: str) -> str | None:

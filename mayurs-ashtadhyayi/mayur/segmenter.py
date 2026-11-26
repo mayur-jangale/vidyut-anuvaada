@@ -17,7 +17,7 @@ from typing import Callable, Iterator, Optional
 
 from mayur import model
 from mayur import sandhi as sd
-from mayur.lipi import from_varnas
+from mayur.sandhi import from_varnas
 
 Varnas = tuple[str, ...]
 MAX_WORD = 30  # varnas
@@ -79,14 +79,18 @@ def _contexts() -> list[tuple[Varnas, str]]:
 
 
 def _strip(ctx: Varnas, out: Varnas, right: Varnas) -> tuple[Varnas, Varnas, Varnas]:
-    lp = 0
-    while lp < len(ctx) and lp < len(out) and ctx[lp] == out[lp]:
-        lp += 1
-    rest = out[lp:]
+    """(left_tail, right_head, surface): strip the unchanged right part first, then the left part.
+
+    Suffix first, so that सस् + सुखी → ससुखी (6.1.132) keeps the right word's स्.
+    """
     rs = 0
-    while rs < len(right) and rs < len(rest) and right[-1 - rs] == rest[-1 - rs]:
+    while rs < len(right) and rs < len(out) and right[-1 - rs] == out[-1 - rs]:
         rs += 1
-    return ctx[lp:], right[: len(right) - rs], rest[: len(rest) - rs]
+    rest = out[: len(out) - rs]
+    lp = 0
+    while lp < len(ctx) and lp < len(rest) and ctx[lp] == rest[lp]:
+        lp += 1
+    return ctx[lp:], right[: len(right) - rs], rest[lp:]
 
 
 @lru_cache(maxsize=1)
@@ -162,7 +166,7 @@ def _can_follow_samasa(form: str, as_stem: bool) -> bool:
     """The word after a compound-internal junction must be able to be nominal (not only a finite verb)."""
     if as_stem:
         return True
-    return any(m.kind != "tinanta" and m.quality >= 2 for m in _analyses(form, False))
+    return any(m.kind != "tinanta" for m in _analyses(form, False))
 
 
 @lru_cache(maxsize=300_000)
@@ -272,7 +276,7 @@ class _Lattice:
         for k in range(i, min(nxt_space, self.n, i + MAX_WORD) + 1):
             core = head + self.t[i:k]
             for jn, j in self.cands[k]:
-                if k == i and j <= k and j >= 0:
+                if k == i and j <= k and j >= 0 and not head:
                     continue  # no progress: a word wholly absent from the text
                 word = core + jn.left_tail
                 if not word or word[-len(jn.left_ctx):] != jn.left_ctx or len(word) < len(jn.left_ctx):

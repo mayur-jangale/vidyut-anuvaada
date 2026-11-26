@@ -7,7 +7,6 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
-import json
 import random
 from typing import Any, Iterator, Optional
 
@@ -24,13 +23,23 @@ def _deva(text: str) -> str:
     return devanagari(text, "iast") if text and text != "_" else ""
 
 
-def pada_form(unsandhied: str, lemma: str) -> str:
-    """Grammatical (padapatha) form: final visarga -> स् (र् after a lemma in र्/ऋ or पुनर् ...), ं -> म्."""
+def _visarga_is_r(unsandhied: str, lemma: str, feats: dict[str, str]) -> bool:
+    """The final visarga stands for र्: र्-final words (पुनर्, गिर्), and of ऋ-stems the forms in
+    -उः (पितुर्, 6.1.111 with 8.2.24) and the vocative singular (पितर्)."""
+    if lemma.endswith("र्") or lemma in _R_LEMMAS:
+        return True
+    if lemma.endswith(("ऋ", "ृ")):
+        vocative = feats.get("Case") == "Voc" and feats.get("Number") == "Sing"
+        return unsandhied.endswith("ु" + _VISARGA) or vocative
+    return False
+
+
+def pada_form(unsandhied: str, lemma: str, feats: dict[str, str] | None = None) -> str:
+    """Grammatical (padapatha) form: final visarga -> स् or र् (see ``_visarga_is_r``), ं -> म्."""
     if not unsandhied:
         return unsandhied
     if unsandhied.endswith(_VISARGA):
-        r_final = lemma.endswith(("र्", "ऋ")) or lemma in _R_LEMMAS
-        return unsandhied[:-1] + ("र्" if r_final else "स्")
+        return unsandhied[:-1] + ("र्" if _visarga_is_r(unsandhied, lemma, feats or {}) else "स्")
     if unsandhied.endswith(_ANUSVARA):
         return unsandhied[:-1] + "म्"
     return unsandhied
@@ -76,7 +85,7 @@ def _parse_token(cols: list[str]) -> dict:
     lemma = _deva(cols[2])
     unsandhied = _deva(misc.get("Unsandhied", "")) or _deva(cols[1])
     return {
-        "form": pada_form(unsandhied, lemma),
+        "form": pada_form(unsandhied, lemma, feats),
         "lemma": lemma,
         "upos": cols[3],
         "feats": {k: v for k, v in feats.items() if k != "Case" or v != "Cpd"},

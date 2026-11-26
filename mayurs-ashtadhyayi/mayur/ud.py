@@ -34,13 +34,52 @@ def is_verbal_noun(m: Morph) -> bool:
     return bool(m.root) and (krt in terms.PARTICIPLE_KRT or krt in terms.NONFINITE_KRT)
 
 
+# DCS word classes that are indeclinable: any case/number tag on them is ignored, and DCS often
+# cites the word itself as the lemma (भृशम्, शनैस्) where grammar sees a case form of a stem.
+INDECLINABLE_UPOS = frozenset({"ADV", "PART", "CCONJ", "SCONJ", "INTJ", "ADP"})
+
+
 def lemma(m: Morph) -> str:
-    """DCS lemma: upasargas + root for verbal forms and participles, else the stem."""
+    """DCS lemma: upasargas joined to the root for verbal forms and participles, else the stem."""
     if m.kind == "tinanta" or is_verbal_noun(m):
-        base = "".join(m.prefixes) + (m.root or m.lemma)
-        return base
+        from mayur import lexicon  # lazy: lexicon -> freq -> ud
+
+        return lexicon.verbal_lemma(m)
     base = m.stem or m.lemma
     return LEMMA_EQUIVALENCE.get(base, base)
+
+
+def canonical_lemma(text: str) -> str:
+    """One spelling for citation variants: DCS cites some -मत्/-वत्/-अत् stems in their strong
+    form (हनुमन्त्, हिमवन्त्, विवस्वन्त्); a final visarga-sound is written स्."""
+    if text.endswith("न्त्"):
+        return text[: -len("न्त्")] + "त्"
+    if text.endswith(("ः", "र्")):
+        return text[:-1 if text.endswith("ः") else -2] + "स्"
+    return text
+
+
+def same_lemma(m: Morph, gold_lemma: str, gold_upos: str = "") -> bool:
+    """Our analysis names the same lexeme as the gold lemma, under the conventions above."""
+    want = canonical_lemma(gold_lemma)
+    if canonical_lemma(lemma(m)) == want:
+        return True
+    return gold_upos in INDECLINABLE_UPOS and canonical_lemma(m.form) == want
+
+
+def compared_features(gold_upos: str, gold_feats: dict[str, str]) -> tuple[str, ...]:
+    """The gold features that are scored for a word of this class (none for indeclinables)."""
+    if gold_upos in INDECLINABLE_UPOS:
+        return ()
+    return tuple(k for k in TAG_FEATS if k in gold_feats)
+
+
+def same_feats(m: Morph, gold_upos: str, gold_feats: dict[str, str]) -> bool:
+    """All scored features agree; for indeclinable gold words there is nothing to score."""
+    if gold_upos in INDECLINABLE_UPOS:
+        return True
+    ours = feats(m)
+    return all(ours.get(k) == gold_feats.get(k) for k in TAG_FEATS)
 
 
 def feats(m: Morph) -> dict[str, str]:

@@ -50,12 +50,13 @@ def _verbal(m: Morph) -> str:
     return ""
 
 
-def unary(m: Morph) -> Feats:
+def unary(m: Morph, minus: tuple[float, float] = (0.0, 0.0)) -> Feats:
+    """``minus``: counts to remove (training only: the token itself is in the corpus tables)."""
     case = m.vibhakti or m.kind
     f: Feats = {
         "bias": 1.0,
-        "lac": math.log1p(_freq("analysis_count", m)),
-        "llc": math.log1p(_freq("lemma_count", m.lemma)),
+        "lac": math.log1p(max(0.0, _freq("analysis_count", m) - minus[0])),
+        "llc": math.log1p(max(0.0, _freq("lemma_count", m.lemma) - minus[1])),
         f"q{m.quality}": 1.0,
         f"kind:{m.kind}": 1.0,
         f"src:{m.source}": 1.0,
@@ -72,9 +73,9 @@ def unary(m: Morph) -> Feats:
     return f
 
 
-def unary_all(cands: list[Morph]) -> list[Feats]:
+def unary_all(cands: list[Morph], minus: Optional[list[tuple[float, float]]] = None) -> list[Feats]:
     """Unary features plus features relative to the word's other candidates."""
-    fs = [unary(m) for m in cands]
+    fs = [unary(m, minus[i]) if minus else unary(m) for i, m in enumerate(cands)]
     top_lac = max(f["lac"] for f in fs)
     top_q = max(m.quality for m in cands)
     for f, m in zip(fs, cands):
@@ -126,12 +127,12 @@ def dot(w: dict[str, float], f: Feats) -> float:
     return sum(w.get(k, 0.0) * v for k, v in f.items())
 
 
-def decode(cands: list[list[Morph]], w: dict[str, float]) -> list[int]:
+def decode(cands: list[list[Morph]], w: dict[str, float], minus=None) -> list[int]:
     """Best candidate index per position (every position must have ≥ 1 candidate)."""
     n = len(cands)
     if n == 0:
         return []
-    un = [[dot(w, f) for f in unary_all(c)] for c in cands]
+    un = [[dot(w, f) for f in unary_all(c, minus[i] if minus else None)] for i, c in enumerate(cands)]
     best = [list(un[0])]
     back: list[list[int]] = [[0] * len(cands[0])]
     for i in range(1, n):
@@ -166,11 +167,11 @@ def decode(cands: list[list[Morph]], w: dict[str, float]) -> list[int]:
     return path
 
 
-def features(cands: list[list[Morph]], path: list[int]) -> Feats:
+def features(cands: list[list[Morph]], path: list[int], minus=None) -> Feats:
     """Global feature vector of one analysed half-verse (for training)."""
     out: Feats = {}
     ms = [c[i] for c, i in zip(cands, path)]
-    parts = [unary_all(c)[i] for c, i in zip(cands, path)] + [pair(ms[i - 1], ms[i]) for i in range(1, len(ms))] + [sentence(ms)]
+    parts = [unary_all(c, minus[k] if minus else None)[i] for k, (c, i) in enumerate(zip(cands, path))] + [pair(ms[i - 1], ms[i]) for i in range(1, len(ms))] + [sentence(ms)]
     for f in parts:
         for k, v in f.items():
             out[k] = out.get(k, 0.0) + v

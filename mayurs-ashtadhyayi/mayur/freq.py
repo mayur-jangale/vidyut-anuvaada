@@ -27,22 +27,23 @@ def lemma_class(lemma: str) -> str:
 
 
 @lru_cache(maxsize=None)
-def _parsed(form: str) -> tuple[tuple[str, dict[str, str], int], ...]:
+def _parsed(form: str) -> tuple[tuple[str, str, dict[str, str], int], ...]:
     tags = derived("form_tags.json").get(form, {})
-    return tuple((lm, fs, n) for lm, _, fs, n in ((*ud.parse_tag_key(k), n) for k, n in tags.items()))
+    return tuple((ud.canonical_lemma(lm), upos, fs, n) for (lm, upos, fs), n in
+                 ((ud.parse_tag_key(k), n) for k, n in tags.items()))
 
 
 def analysis_count(m: Morph) -> int:
-    """Corpus count of ``m.form`` with the lemma and the features that ``m`` asserts."""
-    want_lemma, want_feats = ud.lemma(m), ud.feats(m)
-    return sum(n for lm, fs, n in _parsed(m.form) if lm == want_lemma and ud.feats_agree(want_feats, fs))
+    """Corpus count of ``m.form`` with the lemma and the features that ``m`` asserts.
 
-
-def bigram_count(a: str, b: str) -> int:
-    """Corpus count of ``a`` immediately followed by ``b`` in one half-verse (pairs seen at least twice)."""
-    return int(derived("bigrams.json").get(f"{a}\t{b}", 0))
-
-
-def member_count(form: str) -> int:
-    """Corpus count of ``form`` as a non-final compound member."""
-    return int(derived("member_counts.json").get(form, 0))
+    Corpus tokens of an indeclinable class count for an analysis whose form is their lemma
+    (the corpus lists भृशम् as an adverb where grammar sees the accusative of भृश).
+    """
+    want_lemma, want_feats, as_word = ud.canonical_lemma(ud.lemma(m)), ud.feats(m), ud.canonical_lemma(m.form)
+    total = 0
+    for lm, upos, fs, n in _parsed(m.form):
+        if lm == want_lemma and ud.feats_agree(want_feats, fs):
+            total += n
+        elif upos in ud.INDECLINABLE_UPOS and lm == as_word:
+            total += n
+    return total

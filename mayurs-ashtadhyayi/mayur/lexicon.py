@@ -127,6 +127,7 @@ def is_pada(form: str, min_quality: int = 0) -> bool:
 
 _SPECIAL_STEMS = {
     "अ": ("नञ्", "निषेध"), "अन्": ("नञ्", "निषेध"), "महा": ("महत्", "6.3.46"),
+    "मद्": ("अस्मद्", ""), "त्वद्": ("युष्मद्", ""), "तद्": ("तद्", ""), "यद्": ("यद्", ""), "एतद्": ("एतद्", ""),
     "मत्": ("अस्मद्", ""), "त्वत्": ("युष्मद्", ""), "अस्मत्": ("अस्मद्", ""), "युष्मत्": ("युष्मद्", ""),
     "तत्": ("तद्", ""), "यत्": ("यद्", ""), "एतत्": ("एतद्", ""), "किम्": ("किम्", ""),
     "दुस्": ("दुस्", ""), "कु": ("कु", ""),
@@ -256,3 +257,38 @@ def prove(m: Morph) -> WordProof:
                 note = (f"listed in vidyut-kosha; not reproduced by vidyut's derivation "
                         f"(it derived {text or 'nothing'})")
     return WordProof(derivable=ok, method=method, derived_form=text, trace=trace, note=note)
+
+
+_R_PREFIX = ("प्र", "परा", "परि", "निर्", "निस्", "दुर्")
+
+
+def _join(left: str, right: str) -> str:
+    from mayur import sandhi
+
+    outs = sandhi.outcomes(left, right)
+    text = outs[0].text if outs else left + right
+    if left in _R_PREFIX and text[len(left):].startswith("न"):  # 8.4.14 उपसर्गादसमासेऽपि णोपदेशस्य
+        text = text[: len(left)] + "ण" + text[len(left) + 1:]
+    return text
+
+
+def _dcs_root(m: Morph) -> str:
+    """A ṇic / curādi stem as the corpus cites it: कथि -> कथय्, कारि -> कारय् (vidyut ends it in इ)."""
+    root = m.root or m.lemma
+    if root.endswith("ि") and (m.gana == "चुरादि" or not (m.dhatu or "").rstrip("॒॑ँ").endswith(("ि", "इ"))):
+        return root[:-1] + "य्"
+    return root
+
+
+@lru_cache(maxsize=100_000)
+def _verbal_lemma(prefixes: tuple[str, ...], root: str) -> str:
+    out = root
+    for p in reversed(prefixes):
+        out = _join(p, out)
+    return out
+
+
+def verbal_lemma(m: Morph) -> str:
+    """The upasargas joined to the root by sandhi, in the corpus' citation form: प्र+आप् -> प्राप्,
+    प्र+नम् -> प्रणम्, आ+इ -> ए, आ+सादि -> आसादय्. For ``mayur.ud.lemma``."""
+    return _verbal_lemma(tuple(m.prefixes), _dcs_root(m))

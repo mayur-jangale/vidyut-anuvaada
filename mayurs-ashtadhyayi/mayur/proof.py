@@ -23,12 +23,11 @@ def _prove(word: Word) -> WordProof:
 def _line_rejoin(words: Sequence[Word], line: str) -> tuple[bool, str]:
     forms = [w.form for w in words]
     flags = [w.in_compound for w in words]
-    target = sandhi.canon(line.replace("।", "").replace("॥", ""))
-    options = sandhi.rejoin(forms, flags) if forms else {""}
-    for opt in sorted(options):
-        if sandhi.canon(opt) == target:
-            return True, opt
-    return False, (min(options, key=len) if options else "")
+    text = line.replace("।", "").replace("॥", "")
+    found = sandhi.rejoin_matching(forms, flags, text)
+    if found is not None:
+        return True, found
+    return False, " ".join(forms)
 
 
 def check(reading: Reading, lines: Sequence[str]) -> Reading:

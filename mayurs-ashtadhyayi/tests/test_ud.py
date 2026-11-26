@@ -62,3 +62,13 @@ def test_feats_agree_ignores_features_the_corpus_omits():
     ours = {"Case": "Nom", "Gender": "Masc", "Number": "Sing"}
     assert ud.feats_agree(ours, {"Case": "Nom", "Number": "Sing"})
     assert not ud.feats_agree(ours, {"Case": "Acc", "Number": "Sing"})
+
+
+def test_citation_conventions():
+    assert ud.canonical_lemma("हनुमन्त्") == "हनुमत्"
+    adverb = Morph(form="भृशम्", lemma="भृश", kind="subanta", linga="नपुंसकलिङ्ग", vibhakti="द्वितीया", vacana="एकवचन")
+    assert ud.same_lemma(adverb, "भृशम्", "ADV")
+    assert not ud.same_lemma(adverb, "भृशम्", "NOUN")
+    assert ud.same_feats(adverb, "ADV", {})
+    assert not ud.same_feats(adverb, "NOUN", {"Case": "Nom", "Gender": "Neut", "Number": "Sing"})
+    assert ud.compared_features("ADV", {"Case": "Voc"}) == ()

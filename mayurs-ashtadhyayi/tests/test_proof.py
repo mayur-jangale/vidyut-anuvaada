@@ -21,7 +21,7 @@ def test_verified_simple():
 
 def test_wrong_sandhi_is_unverified():
     original = _reading([("रामस्", False), ("गच्छति", False)])
-    r = proof.check(original, ["रामः गच्छति"])
+    r = proof.check(original, ["रामा गच्छति"])
     assert not r.sandhi_ok and r.status == UNVERIFIED
     assert any("re-join" in n for n in r.notes)
     assert original.status == UNVERIFIED and original.words[0].proof is None  # input untouched

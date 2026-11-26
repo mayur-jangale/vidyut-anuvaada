@@ -98,7 +98,7 @@ def test_anvadesha_special():
 
 
 @pytest.mark.parametrize("form,lemma", [("कश्चित्", "कश्चित्"), ("केचिद्", "कश्चित्"), ("काचित्", "कश्चित्"),
-                                        ("कस्यचित्", "कश्चित्"), ("क्वचित्", "क्वचित्"), ("कश्चन", "कश्चन")])
+                                        ("कस्यचित्", "कश्चित्"), ("क्वचित्", "क्वचिद्"), ("कश्चन", "कश्चन")])
 def test_indefinites(form, lemma):
     m = L.padas(form)[0]
     assert m.lemma == lemma and m.source == "generated"
@@ -140,3 +140,13 @@ def test_sa_esha_special():
 
 def test_ena_dcs_lemma_present():
     assert "एनद्" in {m.lemma for m in L.padas("एनम्")}
+
+
+@pytest.mark.parametrize("form,lemma", [("प्राप्तस्", "प्राप्"), ("प्रणम्य", "प्रणम्"), ("एत्य", "ए"),
+                                        ("कारयेत्", "कारय्"), ("कथयति", "कथय्"), ("अचिन्तयत्", "चिन्तय्")])
+def test_verbal_lemma_sandhi_joined(form, lemma):
+    assert lemma in {L.verbal_lemma(m) for m in L.padas(form) if m.root}
+
+
+def test_pronoun_stems_voiced():
+    assert L.stems("मद्")[0].lemma == "अस्मद्" and L.stems("त्वद्")[0].lemma == "युष्मद्"

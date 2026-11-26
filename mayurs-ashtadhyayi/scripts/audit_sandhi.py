@@ -51,7 +51,7 @@ def _words(line) -> list[tuple[str, bool]]:
 
 
 def _ok(forms, flags, target: str) -> bool:
-    return target in {sandhi.canon(x) for x in sandhi.rejoin(forms, flags)}
+    return sandhi.rejoin_matching(forms, flags, target) is not None
 
 
 _NASALS = {"ं", "ङ्", "ञ्", "ण्", "न्", "म्", "ँ"}
@@ -80,6 +80,11 @@ def _anomalous(forms, target: str) -> bool:
     return any(len(c) >= 2 and _flat(from_varnas(c)) not in t for c in map(_core, forms))
 
 
+# DCS restores a different form of the same word than the text has (ते for तव, मम for मे ...).
+_DCS_SUBST = (("ते", "तव"), ("मम", "मे"), ("मे", "मम"), ("नस्", "अस्माकम्"), ("वस्", "युष्माकम्"),
+              ("त्वा", "त्वाम्"), ("मा", "माम्"), ("राज्ञ्", "राजन्"), ("तव", "ते"))
+
+
 def _dcs_variant_ok(forms, flags, target: str) -> bool:
     """DCS artefacts: न for internal ण (8.4.2 undone), र्/स् finals guessed from the lemma."""
     fixed = [f.replace("ण", "न") for f in forms]
@@ -87,22 +92,30 @@ def _dcs_variant_ok(forms, flags, target: str) -> bool:
     swapped = [f[:-2] + "स्" if f.endswith("र्") else (f[:-2] + "र्" if f.endswith("स्") else f) for f in fixed]
     if _ok(fixed, flags, t):
         return True
+    for a, b in _DCS_SUBST:
+        if a in fixed and _ok([b if f == a else (f[:-3] + "जन्" if f.endswith("ज्ञ्") else f) for f in fixed], flags, t):
+            return True
     return any(_ok(fixed[:i] + [swapped[i]] + fixed[i + 1:], flags, t) for i in range(len(forms)) if swapped[i] != fixed[i])
 
 
 def _first_bad(forms, flags, target: str) -> int:
-    tv = varnas(target)
-    for m in range(1, len(forms)):
-        outs = sandhi.rejoin(forms[: m + 1], flags[: m + 1])
-        good = False
-        for x in outs:
-            xv = varnas(sandhi.canon(x))
-            cut = max(len(xv) - 3, 0)
-            if tv[:cut] == xv[:cut]:
-                good = True
-                break
-        if not good:
-            return m - 1
+    """Index of the left word of the first junction after which no re-join agrees with the text."""
+    tv = sandhi.canon_varnas(target)
+    states = {((), varnas(forms[0]), forms[0])}
+    for i in range(1, len(forms)):
+        nv = varnas(forms[i])
+        keep = max(len(nv) - 1, 1)
+        nxt = set()
+        for done, cur, word in states:
+            for seq, _ in sandhi._outcomes_v(cur, nv, word, bool(flags[i - 1])):
+                nd = done + seq[:-keep]
+                cv = sandhi.canon_varnas(sandhi.from_varnas(nd)) if nd else ()
+                cut = max(len(cv) - 1, 0)
+                if tv[:cut] == cv[:cut]:
+                    nxt.add((nd, seq[-keep:], forms[i]))
+        if not nxt:
+            return i - 1
+        states = nxt
     return len(forms) - 1
 
 

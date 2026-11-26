@@ -181,7 +181,7 @@ def sa_esha(form: str) -> tuple[Morph, ...]:
 _PARTICLES = ("चित्", "चिद्", "चन")
 _INDEF_BASES = frozenset({"किम्", "क", "क्व", "कदा", "कथम्", "कुत्र", "कुतस्", "कति"})
 # the junction reversed: कश्+चित् <- कस्, किं+चित् <- किम्, कञ्+चन? (कं) <- कम्
-_JUNCTION = (("श्", "स्"), ("ं", "म्"), ("ञ्", "म्"))
+_JUNCTION = (("ंश्", "न्"), ("श्", "स्"), ("ं", "म्"), ("ञ्", "म्"))
 
 
 def indefinite(form: str, lookup) -> tuple[Morph, ...]:
@@ -199,7 +199,7 @@ def indefinite(form: str, lookup) -> tuple[Morph, ...]:
                 if m.kind == "subanta":
                     lemma = "कश्चन" if part == "चन" else "कश्चित्"
                 else:
-                    lemma = head + ("चन" if part == "चन" else "चित्")
+                    lemma = head + ("चन" if part == "चन" else "चिद्")  # cited as क्वचिद्, कदाचिद्
                 out.append(replace(m, form=form, lemma=lemma, source="generated", quality=3,
                                    handle=("particle", m, part)))
     return tuple(out)
