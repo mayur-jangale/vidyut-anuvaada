@@ -87,7 +87,8 @@ def test_nonwords():
 def test_generated():
     ms = L.generated("रामेण")
     assert ms and ms[0].source == "generated" and ms[0].vibhakti == "तृतीया"
-    assert L.prove(ms[0]).derivable
+    proof = L.prove(ms[0])  # the ending is derived, but a stem fitted to the form proves nothing about the word
+    assert not proof.derivable and proof.derived_form == "रामेण" and "not in the dictionary" in proof.note
 
 
 def test_anvadesha_special():

@@ -29,6 +29,21 @@ PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thig
 
 ADJ_ENDINGS = ("ed", "ful", "ous", "ive", "less", "ish", "like")
 
+TIME_PHRASES = {"morning": "in the morning", "evening": "in the evening", "night": "at night", "noon": "at noon",
+                "dawn": "at dawn", "midday": "at midday", "midnight": "at midnight"}
+TO_OBJECT = frozenset({"say", "speak", "bow", "talk"})  # take their person with "to" in English
+WITH_LEMMAS = frozenset({"सह", "सार्धम्", "साकम्", "विना", "समम्"})
+ADJ_SENSE = {"Krishna": "black"}  # a name-gloss that is the colour when it is a predicate of a common noun
+
+
+def adverb(adjective: str) -> str:
+    """quick -> quickly, happy -> happily, gentle -> gently; a word already in -ly stays."""
+    if adjective.endswith("ly") or " " in adjective:
+        return adjective
+    if adjective.endswith("y"):
+        return adjective[:-1] + "ily"
+    return adjective[:-1] + "y" if adjective.endswith("le") else adjective + "ly"
+
 
 def is_latin_binomial(gloss: str) -> bool:
     """A botanical or zoological name ("Bombax ceiba Linn") is not an English meaning."""

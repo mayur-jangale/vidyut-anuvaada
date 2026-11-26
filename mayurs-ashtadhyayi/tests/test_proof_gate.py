@@ -37,3 +37,13 @@ def test_words_vidyut_cannot_derive_stay_unproved():
     for form in ("मे", "एनम्", "श्रियम्"):
         special = [m for m in lexicon.padas(form) if m.lemma in ("अस्मद्", "इदम्", "एतद्", "श्री")]
         assert special and not any(lexicon.prove(m).derivable for m in special), form
+
+
+def test_unlisted_stem_is_not_verified():
+    """vidyut inflects any stem; a made-up word must not come out as proof-verified."""
+    from mayur.pipeline import analyze_verse
+
+    made_up = lexicon.generated("ग्लोकस्य")
+    assert made_up and not lexicon.prove(made_up[0]).derivable
+    assert analyze_verse("रामः ब्लिम्फति वनम्").status == "unverified"
+    assert analyze_verse("रामो वनं गच्छति").status == "verified"

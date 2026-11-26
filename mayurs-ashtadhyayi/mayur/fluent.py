@@ -201,6 +201,20 @@ def vocatives(toks, reading):
     return out
 
 
+def instrument_with(toks, reading):
+    """An instrument of an active verb is "with" (with an arrow); "by" stays for agents and causes of participles."""
+    out = list(toks)
+    for i, t in enumerate(out[1:], 1):
+        w = _w(reading, t)
+        prev = out[i - 1]
+        if w and w.role == "करण" and prev.word is None and prev.text == "by" and w.head is not None \
+                and 0 <= w.head < len(reading.words):
+            h = reading.words[w.head].morph
+            if h is not None and h.kind == "tinanta" and (h.prayoga or "") not in ("कर्मणि", "भावे"):
+                out[i - 1] = Tok("with")
+    return out
+
+
 def apposition(toks, reading):
     """Qualifiers that follow a proper name are set off by commas."""
     out, i = [], 0
@@ -358,7 +372,7 @@ def tidy(toks, reading):
     return out
 
 
-RULES: tuple[Rule, ...] = (unbracket, smooth_compounds, possessive_names, verb_agreement, relative_clauses,
+RULES: tuple[Rule, ...] = (unbracket, instrument_with, smooth_compounds, possessive_names, verb_agreement, relative_clauses,
                            vocatives, apposition, coordination, questions, articles, tidy)
 
 

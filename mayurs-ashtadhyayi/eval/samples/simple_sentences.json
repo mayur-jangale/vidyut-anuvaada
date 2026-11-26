@@ -1,5 +1,5 @@
 {
- "about": "Plain prose sentences with the expected role and head of the listed words, written by hand for this project (conventions of mayur.terms.ROLES; an instrumental with सह is सम्बन्ध of सह by 2.3.19). A regression set for the sentence layer, not a statistical sample. CC BY-SA 4.0.",
+ "about": "Plain prose sentences with the expected role and head of the listed words, written by hand for this project (conventions of mayur.terms.ROLES; an instrumental with सह is सम्बन्ध of सह by 2.3.19). A regression set for the sentence layer, not a statistical sample. CC BY-SA 4.0. The 'english' field is a natural rendering written by hand; articles and the choice among synonyms are free.",
  "sentences": [
   {
    "text": "रामो वनं गच्छति",
@@ -19,7 +19,8 @@
      "role": "क्रिया",
      "head": null
     }
-   ]
+   ],
+   "english": "Rāma goes to the forest."
   },
   {
    "text": "बालको ग्रामं गच्छति",
@@ -34,7 +35,8 @@
      "role": "कर्म",
      "head": "गच्छति"
     }
-   ]
+   ],
+   "english": "The boy goes to the village."
   },
   {
    "text": "रामः सीतया सह वनं गतवान्",
@@ -64,7 +66,8 @@
      "role": "क्रिया",
      "head": null
     }
-   ]
+   ],
+   "english": "Rāma went to the forest with Sītā."
   },
   {
    "text": "पिता पुत्रेण सह गच्छति",
@@ -84,7 +87,8 @@
      "role": "अव्यय",
      "head": "गच्छति"
     }
-   ]
+   ],
+   "english": "The father goes with the son."
   },
   {
    "text": "मामकाः पाण्डवाश्चैव किमकुर्वत",
@@ -109,7 +113,8 @@
      "role": "कर्म",
      "head": "अकुर्वत"
     }
-   ]
+   ],
+   "english": "What did my men and the Pāṇḍavas do?"
   },
   {
    "text": "रामो लक्ष्मणश्च वनं गच्छतः",
@@ -134,7 +139,8 @@
      "role": "कर्म",
      "head": "गच्छतः"
     }
-   ]
+   ],
+   "english": "Rāma and Lakṣmaṇa go to the forest."
   },
   {
    "text": "नरः फलानि खादति नार्यश्च जलं पिबन्ति",
@@ -159,7 +165,8 @@
      "role": "कर्म",
      "head": "पिबन्ति"
     }
-   ]
+   ],
+   "english": "The man eats fruits and the women drink water."
   },
   {
    "text": "रामेण रावणो हतः",
@@ -179,7 +186,8 @@
      "role": "क्रिया",
      "head": null
     }
-   ]
+   ],
+   "english": "Rāvaṇa was killed by Rāma."
   },
   {
    "text": "अहं पुस्तकं पठामि",
@@ -194,7 +202,8 @@
      "role": "कर्म",
      "head": "पठामि"
     }
-   ]
+   ],
+   "english": "I read a book."
   },
   {
    "text": "त्वं किं करोषि",
@@ -209,7 +218,8 @@
      "role": "कर्म",
      "head": "करोषि"
     }
-   ]
+   ],
+   "english": "What do you do?"
   },
   {
    "text": "विद्या ददाति विनयम्",
@@ -224,7 +234,8 @@
      "role": "कर्म",
      "head": "ददाति"
     }
-   ]
+   ],
+   "english": "Knowledge gives modesty."
   },
   {
    "text": "धर्मो रक्षति रक्षितः",
@@ -239,7 +250,8 @@
      "role": "विशेषण",
      "head": "धर्मः"
     }
-   ]
+   ],
+   "english": "Dharma, when protected, protects."
   },
   {
    "text": "स्वदेशे पूज्यते राजा",
@@ -254,7 +266,8 @@
      "role": "कर्म",
      "head": "पूज्यते"
     }
-   ]
+   ],
+   "english": "A king is honoured in his own country."
   },
   {
    "text": "अस्ति गोदावरीतीरे विशालः शाल्मलीतरुः",
@@ -274,7 +287,8 @@
      "role": "अधिकरण",
      "head": "अस्ति"
     }
-   ]
+   ],
+   "english": "There is a large silk-cotton tree on the bank of the Godāvarī."
   },
   {
    "text": "गुरुः शिष्याय पुस्तकं ददाति",
@@ -294,7 +308,8 @@
      "role": "कर्म",
      "head": "ददाति"
     }
-   ]
+   ],
+   "english": "The teacher gives a book to the pupil."
   },
   {
    "text": "वृक्षात् पत्रं पतति",
@@ -309,7 +324,8 @@
      "role": "कर्ता",
      "head": "पतति"
     }
-   ]
+   ],
+   "english": "A leaf falls from the tree."
   },
   {
    "text": "रामस्य पुत्रो गच्छति",
@@ -324,7 +340,8 @@
      "role": "कर्ता",
      "head": "गच्छति"
     }
-   ]
+   ],
+   "english": "Rāma's son goes."
   },
   {
    "text": "स ग्रामं गत्वा फलं खादति",
@@ -349,7 +366,8 @@
      "role": "कर्म",
      "head": "खादति"
     }
-   ]
+   ],
+   "english": "Having gone to the village, he eats a fruit."
   },
   {
    "text": "काकः कृष्णः",
@@ -364,7 +382,8 @@
      "role": "विधेय",
      "head": "काकः"
     }
-   ]
+   ],
+   "english": "The crow is black."
   },
   {
    "text": "अहं रामं द्रष्टुम् इच्छामि",
@@ -384,7 +403,8 @@
      "role": "तुमर्थ",
      "head": "इच्छामि"
     }
-   ]
+   ],
+   "english": "I wish to see Rāma."
   },
   {
    "text": "न हि सुप्तस्य सिंहस्य प्रविशन्ति मुखे मृगाः",
@@ -414,7 +434,8 @@
      "role": "कर्ता",
      "head": "प्रविशन्ति"
     }
-   ]
+   ],
+   "english": "Deer do not enter the mouth of a sleeping lion."
   },
   {
    "text": "बालकः हस्तेन फलं खादति",
@@ -434,7 +455,8 @@
      "role": "कर्म",
      "head": "खादति"
     }
-   ]
+   ],
+   "english": "The boy eats a fruit with his hand."
   },
   {
    "text": "सीता रामेण सह वने वसति",
@@ -454,7 +476,8 @@
      "role": "अधिकरण",
      "head": "वसति"
     }
-   ]
+   ],
+   "english": "Sītā lives in the forest with Rāma."
   },
   {
    "text": "राजा ब्राह्मणाय धनं दत्तवान्",
@@ -474,7 +497,8 @@
      "role": "कर्म",
      "head": "दत्तवान्"
     }
-   ]
+   ],
+   "english": "The king gave wealth to a brahmin."
   },
   {
    "text": "मया ग्रन्थः पठितः",
@@ -489,7 +513,8 @@
      "role": "कर्म",
      "head": "पठितः"
     }
-   ]
+   ],
+   "english": "The book was read by me."
   },
   {
    "text": "महान् वृक्षः पतति",
@@ -504,7 +529,8 @@
      "role": "कर्ता",
      "head": "पतति"
     }
-   ]
+   ],
+   "english": "A great tree falls."
   },
   {
    "text": "सा बालिका गीतं गायति",
@@ -524,7 +550,8 @@
      "role": "कर्म",
      "head": "गायति"
     }
-   ]
+   ],
+   "english": "That girl sings a song."
   },
   {
    "text": "कृष्णः अर्जुनम् उवाच",
@@ -539,7 +566,8 @@
      "role": "कर्म",
      "head": "उवाच"
     }
-   ]
+   ],
+   "english": "Kṛṣṇa said to Arjuna."
   },
   {
    "text": "छात्राः पाठशालां गच्छन्ति",
@@ -554,7 +582,8 @@
      "role": "कर्म",
      "head": "गच्छन्ति"
     }
-   ]
+   ],
+   "english": "The students go to school."
   },
   {
    "text": "जनाः नगरात् आगच्छन्ति",
@@ -569,7 +598,8 @@
      "role": "अपादान",
      "head": "आगच्छन्ति"
     }
-   ]
+   ],
+   "english": "The people come from the city."
   },
   {
    "text": "सूर्यः प्रातः उदेति",
@@ -584,7 +614,8 @@
      "role": "अव्यय",
      "head": "उदेति"
     }
-   ]
+   ],
+   "english": "The sun rises in the morning."
   },
   {
    "text": "नद्यां मत्स्याः तरन्ति",
@@ -599,7 +630,8 @@
      "role": "कर्ता",
      "head": "तरन्ति"
     }
-   ]
+   ],
+   "english": "Fish swim in the river."
   },
   {
    "text": "देवदत्तः ओदनं पचति",
@@ -614,7 +646,8 @@
      "role": "कर्म",
      "head": "पचति"
     }
-   ]
+   ],
+   "english": "Devadatta cooks rice."
   },
   {
    "text": "रामः रावणं बाणेन हन्ति",
@@ -634,7 +667,8 @@
      "role": "करण",
      "head": "हन्ति"
     }
-   ]
+   ],
+   "english": "Rāma kills Rāvaṇa with an arrow."
   },
   {
    "text": "शिष्यः गुरुं नमति",
@@ -649,7 +683,8 @@
      "role": "कर्म",
      "head": "नमति"
     }
-   ]
+   ],
+   "english": "The pupil bows to the teacher."
   },
   {
    "text": "माता पुत्राय फलं यच्छति",
@@ -669,7 +704,8 @@
      "role": "कर्म",
      "head": "यच्छति"
     }
-   ]
+   ],
+   "english": "The mother gives a fruit to the son."
   },
   {
    "text": "अश्वः शीघ्रं धावति",
@@ -684,7 +720,8 @@
      "role": "अव्यय",
      "head": "धावति"
     }
-   ]
+   ],
+   "english": "The horse runs quickly."
   },
   {
    "text": "वयं संस्कृतं पठामः",
@@ -699,7 +736,8 @@
      "role": "कर्म",
      "head": "पठामः"
     }
-   ]
+   ],
+   "english": "We read Sanskrit."
   },
   {
    "text": "नृपः शत्रून् जयति",
@@ -714,7 +752,8 @@
      "role": "कर्म",
      "head": "जयति"
     }
-   ]
+   ],
+   "english": "The king conquers the enemies."
   },
   {
    "text": "कविः काव्यं लिखति",
@@ -729,7 +768,8 @@
      "role": "कर्म",
      "head": "लिखति"
     }
-   ]
+   ],
+   "english": "The poet writes a poem."
   }
  ]
 }

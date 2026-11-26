@@ -214,6 +214,8 @@ def word_score(form: str, stem: bool, tier_used: int = 0) -> Optional[tuple[floa
     """(log-score, plain) for a word edge, or None if the word is not valid at this tier."""
     from mayur import freq
 
+    if not any(sd.is_vowel(v) for v in sd.varnas(form)):
+        return None  # a word has a vowel: the kosha's vowelless entries (क्, प्) are not words of a text
     ms = _analyses(form, stem)
     if stem and not _stem_ok(form, ms):
         return None

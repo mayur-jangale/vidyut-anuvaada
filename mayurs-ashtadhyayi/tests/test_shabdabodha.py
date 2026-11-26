@@ -73,7 +73,7 @@ def test_verse1_from_lexicon():
         r = reading([("तपस्", True), ("स्वाध्याय", True), ("निरतम्", False), ("तपस्वी", False), ("वाक्", True),
                      ("विदाम्", False), ("वरम्", False), ("नारदम्", False), ("परिपप्रच्छ", False),
                      ("वाल्मीकिस्", False), ("मुनि", True), ("पुंगवम्", False)])
-    except Exception as e:  # lexicon still under construction
+    except FileNotFoundError as e:  # data not fetched
         pytest.skip(f"lexicon unavailable: {e}")
     r = _resolve(r)
     assert r.words[8].role == "क्रिया"
@@ -84,7 +84,7 @@ def _gold(n):
     from syntax_fixtures import gold_reading
     try:
         return _resolve(gold_reading(n))
-    except Exception as e:  # gold file or lexicon unavailable
+    except FileNotFoundError as e:  # data not fetched
         pytest.skip(f"gold/lexicon unavailable: {e}")
 
 
@@ -194,7 +194,7 @@ def _ref(n):
         import gold_words
         doc = json.loads((root / "eval/review/claude/ramayana_bala1_041_079_A.json").read_text(encoding="utf-8"))
         return _resolve(gold_words.reading_of(next(v for v in doc["verses"] if v["number"] == n))[0])
-    except Exception as e:  # reference file or lexicon unavailable
+    except FileNotFoundError as e:  # data not fetched
         pytest.skip(f"reference unavailable: {e}")
 
 def _two_lines(line0, line1):

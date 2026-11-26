@@ -25,6 +25,23 @@ SAMPLE = ROOT / "eval" / "samples" / "simple_sentences.json"
 _SU_LOPA = {"स": "सस्", "एष": "एषस्"}  # written without the ending before a consonant (6.1.132)
 
 
+# synonym pairs accepted as equal, only where both are right glosses (eat/devour is NOT one: fix the gloss)
+SYNONYMS = [("kill", "slay"), ("teacher", "guru"), ("pupil", "student"), ("big", "large"), ("big", "great"),
+            ("large", "great"), ("live", "dwell"), ("live", "stay"), ("dwell", "stay")]
+_SYN = {w: min(a, b) for a, b in SYNONYMS for w in (a, b)}
+
+
+def normal(text: str) -> list[str]:
+    """Lower-cased words without punctuation, articles and apostrophes; listed synonyms merged."""
+    import re
+    words = re.findall(r"[^\W\d_]+", text.lower().replace("\u2019", "'").replace("'s", "s"))
+    return [_SYN.get(w, w) for w in words if w not in ("a", "an", "the")]
+
+
+def same_english(ours: str, want: str) -> bool:
+    return bool(want) and normal(ours) == normal(want)
+
+
 def padas(reading: Reading) -> list[tuple[str, int]]:
     """(written pada, index of its final word) for every pada of the reading."""
     out, group = [], []
@@ -66,20 +83,23 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--show", action="store_true", help="print the problems and the English of every sentence")
     args = ap.parse_args(argv)
     sentences = json.loads(SAMPLE.read_text(encoding="utf-8"))["sentences"]
-    right = words = words_ok = 0
+    right = words = words_ok = equal = 0
     for s in sentences:
         reading = analyze_verse(s["text"]).readings[0]
         problems = check(reading, s["expect"])
         right += not problems
+        text = reading.reworded or reading.translation
+        equal += same_english(text, s.get("english", ""))
         words += len(s["expect"])
         words_ok += len(s["expect"]) - len(problems)
         if args.show:
-            print(f"{'✓' if not problems else '✗'} {s['text']}\n     {reading.reworded or reading.translation}")
+            print(f"{'=' if same_english(text, s.get('english', '')) else ' '}{'✓' if not problems else '✗'} {s['text']}\n     ours: {reading.reworded or reading.translation}"
+                  f"\n     want: {s.get('english', '')}")
             for p in problems:
                 print(f"     {p}")
     n = len(sentences)
     print(f"simple sentences: {n}; all listed words right {right}/{n} = {right / n:.1%}; "
-          f"words {words_ok}/{words} = {words_ok / words:.1%}")
+          f"words {words_ok}/{words} = {words_ok / words:.1%}; English equal to the reference {equal}/{n}")
     return 0
 
 

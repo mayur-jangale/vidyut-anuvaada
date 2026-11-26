@@ -38,7 +38,7 @@ def _gold_compounds(n):
     from mayur import shabdabodha
     try:
         r = compounds.annotate(shabdabodha.resolve(gold_reading(n)))
-    except Exception as e:
+    except FileNotFoundError as e:  # data not fetched
         pytest.skip(f"gold/lexicon unavailable: {e}")
     return {c.stem: c for c in r.compounds}
 

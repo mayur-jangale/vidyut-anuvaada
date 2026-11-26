@@ -372,6 +372,10 @@ def _prove_member(m: Morph, stem_handle) -> WordProof:
 def prove(m: Morph) -> WordProof:
     """Proof of one analysis; says so when the derived form differs from the text by a doubled stop."""
     proof = _prove(m)
+    if proof.derivable and m.source == "generated" and m.quality <= 1 and m.kind == "subanta":
+        # an ending fitted to a stem no dictionary lists: the inflection is regular, the word is not known
+        return replace(proof, derivable=False, method="inflection of an unlisted stem",
+                       note=f"the stem {m.stem or m.lemma} is not in the dictionary; only its inflection follows the rules")
     derived = proof.derived_form
     if proof.derivable and derived and derived != m.form and derived in geminate_variants(m.form):
         note = GEMINATE_NOTE.format(form=m.form, derived=derived)

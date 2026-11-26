@@ -59,7 +59,7 @@ def test_quoted_iti_follows_its_verb():
     from syntax_fixtures import gold_reading
     try:
         r = _full(gold_reading(6))
-    except Exception as e:
+    except FileNotFoundError as e:  # data not fetched
         pytest.skip(f"gold/lexicon unavailable: {e}")
     f = _forms(r)
     assert f.index("इति") == f.index("श्रूयताम्") + 1 and f[-1] == "अब्रवीत्"
@@ -71,7 +71,7 @@ def test_epithet_list_keeps_text_order_verse17():
     from syntax_fixtures import gold_reading
     try:
         r = _full(gold_reading(17))
-    except Exception as e:
+    except FileNotFoundError as e:  # data not fetched
         pytest.skip(f"gold/lexicon unavailable: {e}")
     f = _forms(r)
     assert f.index("विष्णुना") < f.index("सदृशस्") < f.index("दर्शनस्") < f.index("समस्")

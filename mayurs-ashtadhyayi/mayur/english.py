@@ -37,7 +37,7 @@ _IRREGULAR: dict[str, tuple[str, str]] = {
 }
 _PLURALS = {"man": "men", "woman": "women", "child": "children", "foot": "feet", "tooth": "teeth",
             "mouse": "mice", "person": "people", "ox": "oxen", "wife": "wives", "life": "lives",
-            "knife": "knives", "leaf": "leaves", "wolf": "wolves", "deer": "deer", "sheep": "sheep", "people": "people",
+            "knife": "knives", "leaf": "leaves", "wolf": "wolves", "deer": "deer", "sheep": "sheep", "people": "people", "fish": "fish",
             "folk": "folk", "cattle": "cattle", "police": "police"}
 _VOWELS = "aeiou"
 
