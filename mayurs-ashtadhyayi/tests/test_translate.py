@@ -29,7 +29,7 @@ def test_white_runs():
     r = Reading(words=[noun("श्वेतस्", "श्वेत", "कर्ता", 1, "white"), verb("धावति", "धाव्", "run")],
                 anvaya=[0, 1])
     out = translate.render(r)
-    assert out.translation == "white runs"
+    assert out.translation == "White runs."
     assert [(a.word, a.start, a.end) for a in out.alignment] == [(0, 0, 5), (1, 6, 10)]
     assert r.translation == ""  # input untouched
 
@@ -57,14 +57,14 @@ def _verse1(with_mods):
 
 def test_verse_one_plain():
     out = translate.render(_verse1(False))
-    assert out.translation == "Vālmīki asked Nārada"
+    assert out.translation == "Vālmīki asked Nārada."
     check(out)
 
 
 def test_verse_one_compound_and_alignment():
     out = translate.render(_verse1(True))
     t = out.translation
-    assert t == "Vālmīki asked austerity-study-devoted best Nārada"
+    assert t == "Vālmīki asked austerity-study-devoted best Nārada."
     check(out)
     spans = {a.word: t[a.start:a.end] for a in out.alignment}
     assert spans[0] == "austerity" and spans[1] == "study" and spans[2] == "devoted"
@@ -80,7 +80,7 @@ def test_plural_instrument_locative_negation():
         verb("गच्छन्ति", "गम्", "go", vac="बहुवचन"),
     ], anvaya=[0, 1, 2, 3])
     out = translate.render(r)
-    assert out.translation == "sages do not go among forests"
+    assert out.translation == "Sages do not go among forests."
     check(out)
 
 
@@ -90,7 +90,7 @@ def test_future_and_supplied_subject_and_vocative():
         verb("वदिष्यामि", "वद्", "say", lak="लृट्", p="उत्तमपुरुष"),
     ], anvaya=[0, 1])
     out = translate.render(r)
-    assert out.translation == "O Rāma, [I] will say"
+    assert out.translation == "O Rāma, [I] will say."
     assert [a.word for a in out.alignment] == [0, 1]
 
 
@@ -101,11 +101,79 @@ def test_passive_and_verbless_and_arsha():
         verb("हन्यते", "हन्", "kill", prayoga="कर्मणि"),
     ], anvaya=[1, 2, 0])
     out = translate.render(r)
-    assert out.translation == "Rāvaṇa is killed by Rāma"
+    assert out.translation == "Rāvaṇa is killed by Rāma."
     v = Reading(words=[noun("कस्", "क", "कर्ता", None, "who"),
                        noun("गुणवान्", "गुणवत्", "विधेय", None, "virtuous")], anvaya=[0, 1])
     o = translate.render(v)
-    assert o.translation == "who [is] virtuous" and len(o.alignment) == 2
+    assert o.translation == "Who [is] virtuous." and len(o.alignment) == 2
     a = Word("रामा", 0, 0, 0, role="कर्ता", arsha=True, analyses=[Morph("रामा", "राम", "subanta")])
     o = translate.render(Reading(words=[a]))
     assert o.translation.startswith("⟨") and len(o.alignment) == 1
+
+
+def _verse2():
+    def n(form, lemma, role, head, g, **kw):
+        return noun(form, lemma, role, head, g, **kw)
+    words = [
+        n("कस्", "क", "", None, "who"),
+        W("नु", "नु", "avyaya", "अव्यय", 0, "now"),
+        n("अस्मिन्", "इदम्", "विशेषण", 4, "this", vib="सप्तमी"),
+        W("साम्प्रतम्", "साम्प्रतम्", "avyaya", "अव्यय", 0, "currently"),
+        n("लोके", "लोक", "अधिकरण", 0, "world", vib="सप्तमी"),
+        n("गुणवान्", "गुणवत्", "विधेय", 0, "virtuous"),
+        n("कस्", "क", "विधेय", 0, "who"),
+        W("च", "च", "avyaya", "अव्यय", 6, "and"),
+        n("वीर्यवान्", "वीर्यवत्", "विधेय", 0, "valorous"),
+        n("धर्मज्ञस्", "धर्मज्ञ", "विधेय", 0, "dharma-knowing"),
+        W("च", "च", "avyaya", "अव्यय", 9, "and"),
+        n("कृतज्ञस्", "कृतज्ञ", "विधेय", 0, "grateful"),
+        W("च", "च", "avyaya", "अव्यय", 11, "and"),
+        n("सत्यवाक्यस्", "सत्यवाक्य", "विधेय", 0, "truthful"),
+        n("दृढव्रतस्", "दृढव्रत", "विधेय", 0, "firm in vows"),
+    ]
+    return Reading(words=words, anvaya=[1, 3, 2, 4, 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
+
+
+def test_verse_two_no_duplication():
+    out = translate.render(_verse2())
+    print(out.translation)
+    ids = [a.word for a in out.alignment]
+    assert len(ids) == len(set(ids)) == 15
+    check(out)
+    assert out.translation == ("Who now currently in this world [is] virtuous, and who valorous, and "
+                               "dharma-knowing, and grateful, truthful, firm in vows.")
+
+
+def test_pronoun_cases_and_apposition_and_participle_agent():
+    def pr(form, lemma, role, head, vib, g="x", **kw):
+        return noun(form, lemma, role, head, g, vib=vib, **kw)
+    r = Reading(words=[pr("त्वया", "युष्मद्", "करण", 1, "तृतीया", "state"), verb("ददौ", "दा", "give", lak="लिट्")],
+                anvaya=[1, 0])
+    assert translate.render(r).translation == "[He] gave by you."
+    r = Reading(words=[pr("मे", "मा", "सम्प्रदान", 1, "चतुर्थी", "not"), verb("ददौ", "दा", "give", lak="लिट्")])
+    assert translate.render(r).translation.startswith("[He] gave to me")
+    r = Reading(words=[pr("कस्य", "क", "सम्बन्ध", 1, "षष्ठी"), noun("पुत्रस्", "पुत्र", "कर्ता", 2, "son"),
+                       verb("गच्छति", "गम्", "go")], anvaya=[0, 1, 2])
+    assert translate.render(r).translation == "Whose son goes."
+    r = Reading(words=[pr("त्वम्", "युष्मद्", "कर्ता", 3, "प्रथमा", "you"),
+                       noun("समर्थस्", "समर्थ", "विशेषण", 0, "capable"),
+                       noun("स्तुतस्", "स्तु", "विधेय", None, "extol", krt="क्त", vib="प्रथमा", src="dcs-sense"),
+                       verb("असि", "अस्", "be", p="मध्यमपुरुष")], anvaya=[0, 1, 3])
+    r.words[0].head = 3
+    r.words[1].role = "विशेषण"
+    r.words[1].head = 0
+    r.words[2].role = "विधेय"
+    r.words[2].head = 3
+    out = translate.render(r)
+    assert out.translation.startswith("You, capable are")  # apposition then copular verb, no [is]
+    assert "[is]" not in out.translation
+
+
+def test_participle_takes_by_agent():
+    r = Reading(words=[noun("स्तुतस्", "स्तु", "कर्ता", None, "extol", krt="क्त", vib="प्रथमा", src="dcs-sense"),
+                       pr_noun("त्वया")], anvaya=[0, 1])
+    assert "Extolled by you" in translate.render(r).translation
+
+
+def pr_noun(form):
+    return noun(form, "युष्मद्", "कर्ता", 0, "x", vib="तृतीया")

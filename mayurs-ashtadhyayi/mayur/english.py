@@ -21,7 +21,8 @@ _IRREGULAR: dict[str, tuple[str, str]] = {
     "wear": ("wore", "worn"), "keep": ("kept", "kept"), "meet": ("met", "met"),
     "swim": ("swam", "swum"), "fly": ("flew", "flown"), "beat": ("beat", "beaten"),
     "bind": ("bound", "bound"), "buy": ("bought", "bought"), "pay": ("paid", "paid"),
-    "stay": ("stayed", "stayed"), "weep": ("wept", "wept"), "hide": ("hid", "hidden"),
+    "stay": ("stayed", "stayed"), "weep": ("wept", "wept"), "hide": ("hid", "hidden"), "extol": ("extolled", "extolled"),
+    "control": ("controlled", "controlled"), "compel": ("compelled", "compelled"),
 }
 _PLURALS = {"man": "men", "woman": "women", "child": "children", "foot": "feet", "tooth": "teeth",
             "mouse": "mice", "person": "people", "ox": "oxen", "wife": "wives", "life": "lives",
@@ -110,7 +111,13 @@ _DEMONSTRATIVE = {"तद्": ("that", "those"), "एतद्": ("this", "thes
 _CASES = {"प्रथमा": 0, "सम्बोधन": 0, "षष्ठी": 2}
 
 
+_ALIAS = {"अहम्": "अस्मद्", "मद्": "अस्मद्", "मा": "अस्मद्", "अस्मत्": "अस्मद्", "वयम्": "अस्मद्",
+          "त्वम्": "युष्मद्", "त्वद्": "युष्मद्", "त्वा": "युष्मद्", "यूयम्": "युष्मद्", "भवत्": "युष्मद्",
+          "सः": "तद्", "तत्": "तद्", "एषः": "एतद्", "कः": "किम्", "यः": "यद्", "अयम्": "इदम्"}
+
+
 def is_pronoun(lemma: str) -> bool:
+    lemma = _ALIAS.get(lemma, lemma)
     return lemma in _PRON or lemma in _THIRD_LEMMAS or lemma in _DEMONSTRATIVE
 
 
@@ -120,6 +127,7 @@ _THIRD_LEMMAS = {"तद्", "एतद्", "इदम्", "अदस्"}
 def pronoun(lemma: str, linga: str | None, vacana: str | None, vibhakti: str | None,
             demonstrative: bool = False, force_acc: bool = False) -> str | None:
     """English pronoun for a Sanskrit pronoun form, or None when the lemma is not a pronoun."""
+    lemma = _ALIAS.get(lemma, lemma)
     plural_ = vacana == "बहुवचन"
     dual = vacana == "द्विवचन"
     if demonstrative and lemma in _DEMONSTRATIVE:

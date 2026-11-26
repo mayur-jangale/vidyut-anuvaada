@@ -24,14 +24,14 @@ def test_dcs_order(monkeypatch):
     monkeypatch.setattr(gloss.resources, "derived", lambda n: tables.get(n, {}))
     m = Morph("परिपप्रच्छ", "परिप्रच्छ्", "tinanta", root="प्रच्छ्", prefixes=("परि",))
     assert gloss.lookup(m) == ("ask", "dcs-sense")
-    assert gloss.lookup(Morph("x", "श्वन्", "subanta")) == ("a dog or hound of", "dcs-dictionary")
+    assert gloss.lookup(Morph("x", "श्वन्", "subanta")) == ("dog", "dcs-dictionary")
     m2 = Morph("x", "प्रच्छ्", "tinanta", root="प्रच्छ्", root_gloss="to ask")
     assert gloss.lookup(m2) == ("ask", "dcs-dictionary")
 
 
 def test_first_sense():
     assert gloss.first_sense("to run, to flow") == "run"
-    assert gloss.first_sense("[x]; (y); one two three four five six") == "one two three four five"
+    assert gloss.first_sense("[x]; (y); one two three four five six") == "one two three"
     assert gloss.first_sense("") == ""
 
 

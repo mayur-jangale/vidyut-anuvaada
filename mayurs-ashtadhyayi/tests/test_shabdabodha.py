@@ -29,7 +29,7 @@ def test_verse2_verbless():
     assert r.words[5].role == "विधेय" and r.words[17].role == "विधेय"
     assert r.words[4].role == "अधिकरण" and r.words[2].head == 4
     assert r.words[7].head == 6  # च joins the preceding कस्
-    assert any("verbless" in n for n in r.notes)
+    assert any("nominal clause" in n for n in r.notes)
 
 
 @pytest.mark.parametrize("which", [0, 1])

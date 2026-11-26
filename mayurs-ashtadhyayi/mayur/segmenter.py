@@ -132,7 +132,15 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 # Seen corpus counts dominate: an unseen whole form gets only a tiny lemma pseudo-count, while
 # compound members back off generously to their lemma counts (which include member uses).
 W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -0.5, "stem": 0.0, "samasa": 0.0,
-     "elide": 3.0, "vocative": 1.5}
+     "elide": 3.0, "vocative": 1.5, "unseen": 0.05}
+
+
+@lru_cache(maxsize=300_000)
+def _form_count(form: str) -> int:
+    """Corpus count of ``form`` under any spelling of its nasals (पुङ्गवम् = पुंगवम्)."""
+    from mayur import freq, lexicon
+
+    return max((freq.form_count(v) for v in {form, *lexicon.nasal_variants(form)}), default=0)
 
 @lru_cache(maxsize=300_000)
 def _analyses(form: str, stem: bool) -> tuple:
@@ -164,12 +172,12 @@ def word_score(form: str, stem: bool, tier_used: int = 0) -> Optional[tuple[floa
         return None
     best = max(m.quality for m in ms)
     n = _total()
-    c = freq.form_count(form) if not stem else 0
+    c = _form_count(form) if not stem else 0
     lc = max((freq.lemma_count(m.lemma) for m in ms[:3]), default=0)
     if c > 0:
         s = math.log((c + 0.5) / n)
     else:
-        s = math.log((W["lemma_w_stem" if stem else "lemma_w"] * lc + 0.05) / n)
+        s = math.log((W["lemma_w_stem" if stem else "lemma_w"] * lc + W["unseen"]) / n)
     if best <= 1:
         s -= W["q0"] if best == 0 else W["q1"]
     good = [m for m in ms if m.quality >= 2]

@@ -75,7 +75,7 @@ class _Renderer:
         w = self.words[i]
         if w.morph is None or w.arsha:
             return "⟨" + lipi.iast(w.form) + "⟩"
-        return w.gloss or lipi.iast(w.morph.lemma)
+        return w.gloss or lipi.iast(w.morph.stem or w.morph.lemma) or "⟨" + lipi.iast(w.form) + "⟩"
 
     def members(self, i: int) -> list[int]:
         w = self.words[i]
@@ -90,7 +90,7 @@ class _Renderer:
         w = self.words[i]
         m = w.morph
         g = self.text(i)
-        if m is None or w.arsha or m.kind == "avyaya" or w.in_compound:
+        if m is None or w.arsha or w.in_compound or (m.kind == "avyaya" and not m.vibhakti):
             return g
         pron = english.pronoun(m.lemma, m.linga, m.vacana, m.vibhakti,
                                demonstrative=w.role == "विशेषण", force_acc=i in self.acc)
@@ -104,15 +104,28 @@ class _Renderer:
         return ("two " if m.vacana == "द्विवचन" else "") + english.plural(g)
 
     # ---- noun phrases --------------------------------------------------------------
-    def np(self, i: int) -> list[Piece]:
+    def np(self, i: int, kids: Optional[list[int]] = None) -> list[Piece]:
+        if i in self.used:
+            return []
         self.used.add(i)
         mem = self.members(i)
         poss: list[Piece] = []
         adjs: list[Piece] = []
         after: list[Piece] = []
-        for k in self.children.get(i, []):
+        im = self.words[i].morph
+        pron_head = im is not None and english.is_pronoun(im.lemma)
+        participle = im is not None and im.krt in ("क्त", "क्तवतु")
+        for k in (self.children.get(i, []) if kids is None else kids):
             r = self.role(k)
             km = self.words[k].morph
+            if k in self.used:
+                continue
+            if r == "विशेषण" and pron_head:
+                after += [_p(",", None, "")] + self.np(k)
+                continue
+            if r == "कर्ता" and participle:
+                after += [_p("by")] + self.np(k)
+                continue
             if r == "सम्बन्ध" and km is not None and english.is_pronoun(km.lemma):
                 self.used.add(k)
                 poss.append(_p(english.pronoun(km.lemma, km.linga, km.vacana, "षष्ठी") or self.text(k), k))
@@ -178,7 +191,8 @@ class _Renderer:
         is_be = "am" if p == 1 and sg else "is" if sg3 else "are"
         was = "was" if sg and p != 2 else "were"
         passive = (m.prayoga or "") in _PASSIVE
-        isbe = g == "be"
+        isbe = g in ("be", "is", "are", "am")
+        g = "be" if isbe else g
         aux, main, plain, let = "", g, "", False
         lak = m.lakara or "लट्"
         if lak in _MODAL:
@@ -279,7 +293,8 @@ def _compose(pieces: list[Piece]) -> tuple[str, list[Alignment]]:
     out = ""
     spans: dict[int, Alignment] = {}
     for text, idx, sep in pieces:
-        if not text:
+        text = " ".join(text.split()) if text else ""
+        if not text or (idx is not None and idx in spans):
             continue
         if out:
             out += sep
@@ -288,6 +303,55 @@ def _compose(pieces: list[Piece]) -> tuple[str, list[Alignment]]:
         if idx is not None and idx not in spans:
             spans[idx] = Alignment(idx, start, len(out))
     return out, sorted(spans.values(), key=lambda a: a.start)
+
+
+def _copular(r: "_Renderer", top) -> list[Piece]:
+    """A verbless sentence: subject, supplied copula, predicates (X च Y -> 'X, and Y')."""
+    n = len(r.words)
+    for ch in r.children.values():
+        ch.sort(key=lambda k: r.pos[k])
+    roots = [i for i in r.order if top(i) and not r.words[i].in_compound
+             and (r.words[i].head is None or not 0 <= r.words[i].head < n)]
+    subj = [i for i in roots if r.role(i) == "कर्ता"] or [i for i in roots if r.role(i) not in ("विधेय", "सम्बोधन")][:1]
+    pred = [i for i in roots if r.role(i) == "विधेय"]
+    out: list[Piece] = []
+    for i in roots:
+        if r.role(i) == "सम्बोधन":
+            out += [_p("O")] + r.np(i) + [_p(",", None, "")]
+    mods = ("विशेषण", "सम्बन्ध")
+    for s in subj:
+        kids = r.children.get(s, [])
+        pred += [k for k in kids if r.role(k) == "विधेय"]
+        out += r.np(s, [k for k in kids if r.role(k) in mods])
+        for k in kids:
+            if r.role(k) in mods or r.role(k) == "विधेय":
+                continue
+            sm_ = r.words[s].morph
+            if r.role(k) == "कर्ता" and sm_ is not None and sm_.krt in ("क्त", "क्तवतु"):
+                out += [_p("by")] + r.np(k)
+            else:
+                out += r.case_phrase(k) if r.role(k) in _PREP else r.np(k)
+    sm = r.words[subj[0]].morph if subj else None
+    if pred:
+        pl = bool(sm and sm.vacana in ("बहुवचन", "द्विवचन"))
+        out.append(_p("[are]" if pl or (sm and sm.purusha == "मध्यमपुरुष") else "[am]"
+                      if sm and sm.lemma == "अस्मद्" else "[is]"))
+    pred.sort(key=lambda k: r.pos[k])
+    prev_pron = True
+    for n_, k in enumerate(pred):
+        pm = r.words[k].morph
+        piece = r.np(k)
+        has_conn = any(r.role(c) == "अव्यय" and r.text(c) in _CONNECTIVES for c in r.children.get(k, []))
+        if piece and n_ and (has_conn or not prev_pron):
+            piece[0] = (piece[0][0], piece[0][1], ", ")
+            if piece[0][1] is None:
+                piece[0] = (piece[0][0], None, ", ")
+        out += piece
+        prev_pron = bool(pm and english.is_pronoun(pm.lemma))
+    for i in roots:
+        if i not in subj and i not in pred and r.role(i) != "सम्बोधन":
+            out += r.case_phrase(i) if r.role(i) in _PREP else r.np(i)
+    return out
 
 
 def render(reading: Reading) -> Reading:
@@ -314,34 +378,9 @@ def render(reading: Reading) -> Reading:
         clauses = [r.clause(v) for v in verbs]
         order = sorted(range(len(verbs)), key=lambda n: r.pos[verbs[n]])
         for n, ci in enumerate(order):
-            pieces += ([_p(",", None, "")] if n else []) + clauses[ci]
+            pieces += ([_p(";", None, "")] if n else []) + clauses[ci]
     else:
-        subj = [i for i in r.order if top(i) and r.role(i) == "कर्ता"]
-        pred = [i for i in r.order if top(i) and r.role(i) == "विधेय"]
-        rest = [i for i in r.order if top(i) and i not in subj and i not in pred]
-        voc = [i for i in rest if r.role(i) == "सम्बोधन"]
-        rest = [i for i in rest if i not in voc]
-        lead = [i for i in rest if r.role(i) == "अव्यय" and r.text(i) in _CONNECTIVES]
-        rest = [i for i in rest if i not in lead]
-        for ch in r.children.values():
-            ch.sort(key=lambda k: r.pos[k])
-        for i in voc:
-            pieces += [_p("O")] + r.np(i) + [_p(",", None, "")]
-        for i in lead:
-            pieces += r.np(i)
-        if not subj and rest and not pred:
-            subj, rest = rest[:1], rest[1:]
-        for i in subj:
-            pieces += r.np(i)
-        if (subj or pred) and pred:
-            sm = r.words[subj[0]].morph if subj else None
-            pl = bool(sm and sm.vacana in ("बहुवचन", "द्विवचन"))
-            first_person = bool(sm and sm.lemma == "अस्मद्")
-            pieces.append(_p("[are]" if pl else "[am]" if first_person and not pl else "[is]"))
-        for i in pred:
-            pieces += r.np(i)
-        for i in rest:
-            pieces += r.case_phrase(i) if r.role(i) in _PREP else r.np(i)
+        pieces += _copular(r, top)
     for i in r.order:  # anything not yet consumed still appears, in prose order
         w = r.words[i]
         if i not in r.used and not w.in_compound:
@@ -352,4 +391,8 @@ def render(reading: Reading) -> Reading:
             r.used.add(i)
             pieces.append(_p(r.text(i), i))
     text, alignment = _compose(pieces)
+    if text:
+        k = next((n for n, ch in enumerate(text) if ch.isalpha()), 0)
+        text = text[:k] + text[k].upper() + text[k + 1:]
+        text += "" if text.endswith((".", "?", "!")) else "."
     return replace(reading, translation=text, alignment=alignment)
