@@ -265,7 +265,9 @@ def main(argv: list[str] | None = None) -> int:
     stats = stat_tables(train_p)
     print(f"boundary contexts {len(stats['boundary'])}, junction surfaces {len(stats['junction'])}", flush=True)
     full = {"tag_bigram": table, "prefix": PREFIX, **stats}
-    fixed = {} if UNKNOWN else {"unknown": -1e6}
+    # an all-indeclinable compound member never competes with the free word: the corpus never tags
+    # an indeclinable as a member, and the evaluation scores ours as free words (round 4, class 3)
+    fixed = {"w_member_indeclinable": -1000.0, **({} if UNKNOWN else {"unknown": -1e6})}
     configs = {"without neural boundary": full}
     if decoder.neural_available():
         configs["with neural boundary"] = {**full, "neural": True}
@@ -283,7 +285,7 @@ def main(argv: list[str] | None = None) -> int:
         tabs = configs[name]
         model = {"source": SOURCE, "enabled": m["lenient"] > b_dev["lenient"], "train_lines": n_tr,
                  "weights": {k: v for k, v in w.items() if v}, "config": name, "unknown_edges": UNKNOWN,
-                 "neural": bool(tabs.get("neural")), "score_scale": 4 * median_gap(dev_p, w, tid, tabs),
+                 "neural": bool(tabs.get("neural")), "fixed_weights": fixed, "score_scale": 4 * median_gap(dev_p, w, tid, tabs),
                  **tabs, "dev": {"before": b_dev, "after": m, "coverage": cov, "oracle_f1": ora}}
         path = decoder.MODEL_FILE if name == max(results, key=lambda n: results[n][1]["lenient"]) else None
         if not tabs.get("neural"):

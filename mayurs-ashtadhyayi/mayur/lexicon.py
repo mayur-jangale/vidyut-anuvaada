@@ -23,7 +23,8 @@ _NASAL = {"क": "ङ्", "ख": "ङ्", "ग": "ङ्", "घ": "ङ्", "�
           "प": "म्", "फ": "म्", "ब": "म्", "भ": "म्", "न": "न्", "म": "म्"}
 # pada-final spellings (8.2.30, 8.2.39, 8.4.56): a stem's final consonant as it stands at a pada end
 _FINAL = {"द्": ("त्",), "ग्": ("क्",), "ड्": ("ट्",), "ब्": ("प्",), "च्": ("क्",), "ज्": ("क्", "ट्"),
-          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्"), "ध्": ("त्",), "भ्": ("प्",)}
+          "श्": ("ट्", "क्"), "ष्": ("ट्",), "ह्": ("ट्", "क्"), "ध्": ("त्",), "भ्": ("प्",),
+          "र्": ("स्",)}  # गीर्भिर् as written before a voiced sound: the pada is गीर्भिस् (8.2.66)
 
 
 def _quality(entry: bridge.Entry) -> int:
@@ -31,8 +32,10 @@ def _quality(entry: bridge.Entry) -> int:
     if entry.entry == "tinanta" or entry.is_avyaya:
         return 3
     if entry.entry == "krdanta":
-        if m.krt in _JUNK_KRT:
-            return 0
+        if m.krt in _JUNK_KRT:  # the kosha builds a root noun for every root; the listed ones are words
+            from mayur.lexicon_dict import genders
+
+            return 2 if m.stem and genders(m.stem) else 0  # गिर्, राज्, युध्
         return 3 if m.krt in _GOOD_KRT else 1
     if not entry.lingas or m.linga in entry.lingas:
         return 3
@@ -176,11 +179,12 @@ def _kosha_ranked(form: str) -> tuple[Morph, ...]:
 @lru_cache(maxsize=200_000)
 def padas(form: str) -> tuple[Morph, ...]:
     """All analyses of ``form`` as a complete pada, best first; () if none. A form unknown as
-    written is tried in its other nasal spelling (किन्तु = किंतु)."""
+    written is tried in its other nasal spelling (किन्तु = किंतु) and with its final consonant as
+    at a pada end (देवराड् = देवराट्)."""
     found = _padas(form)
     if found:
         return found
-    for variant in nasal_variants(form)[1:]:
+    for variant in spelling_variants(form)[1:]:
         other = _padas(variant)
         if other:
             return tuple(replace(m, form=form) for m in other)

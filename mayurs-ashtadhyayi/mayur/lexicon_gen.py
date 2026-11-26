@@ -111,7 +111,9 @@ def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> l
     and forward-derive its ल्यप् with the upasargas."""
     if remainder.endswith("्य"):
         base = remainder[: -len("्य")]
-        probes: tuple[str, ...] = (base + "ति", base + "यति", base + "ते", base + "यते")
+        # त्यजति / चिन्तयति, and the fourth class, whose present keeps the य: इष्यति, तुष्यति
+        probes: tuple[str, ...] = (base + "ति", base + "यति", base + "ते", base + "यते", remainder + "ति",
+                                   remainder + "ते")
     elif remainder.endswith("य") and len(remainder) > 2:  # ज्ञाय: a vowel-final root, find it via ज्ञात्वा
         base = remainder[:-1]
         probes = (base + "त्वा", base + "ति", base + "यति")
@@ -192,11 +194,14 @@ _VERBAL_ENDING_SOUNDS = frozenset({"त्", "न्", "म्", "य्", "व�
 
 def looks_verbal(form: str) -> bool:
     """Gate for the always-on prefixed search: begins with an upasarga, and a त/न/म/य/व
-    (participle or absolutive suffix) stands in its last four sounds."""
+    (participle or absolutive suffix) stands in its last four sounds, or a finite verb follows the upasarga."""
     sounds = lipi.varnas(form)
     if len(sounds) < 5 or not _splits(form):
         return False
-    return any(s in _VERBAL_ENDING_SOUNDS for s in sounds[-5:-1])
+    if any(s in _VERBAL_ENDING_SOUNDS for s in sounds[-5:-1]):
+        return True
+    # परिरक्ष, विजहि: what follows the upasarga is itself a finite verb in the kosha (a dictionary probe)
+    return any(e.entry == "tinanta" for _, rest in _splits(form) for e in bridge.lookup(rest))
 
 
 # (ending of form, ending of stem, genders to try)

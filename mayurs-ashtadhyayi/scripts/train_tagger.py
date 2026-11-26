@@ -328,7 +328,6 @@ def main() -> None:
     ap.add_argument("--epochs", type=int, default=4)
     ap.add_argument("--eval-only", action="store_true", help="re-evaluate the saved weights")
     ap.add_argument("--max-mb", type=float, default=14.0)
-    ap.add_argument("--passes", type=int, default=1, choices=(1, 2))
     ap.add_argument("--no-siblings", action="store_true", help="no sibling-form candidates (मूढा / मूढास्)")
     ap.add_argument("--out", default=str(MODEL), help="where to write the model")
     args = ap.parse_args()
@@ -359,23 +358,13 @@ def main() -> None:
         TABLES.update(build_tables([], acc=counts))
         log(f"tables: {', '.join(f'{k} {len(v)}' for k, v in TABLES.items())}")
         log(f"train {len(data)} verses, {nwords} words ({unmatched} without a matching candidate)")
-        w1, e1 = train_early(data, args.epochs, dev, lambda w: w, log, "pass 1")
+        w1, _e1 = train_early(data, args.epochs, dev, lambda w: w, log, "pass 1")
         w = (w1, None)
-        if args.passes == 2:
-            priors: list = [None] * len(data)
-            for fold in (0, 1):  # jackknifed first-pass choices for the second pass's training data
-                wf = train([d for k, d in enumerate(data) if k % 2 != fold], args.epochs)
-                for k in range(fold, len(data), 2):
-                    priors[k] = [max(x, 0) for x in tagger.decode(tagger.Verse(*data[k][0], tables=TABLES, **data[k][2]), wf)]
-                log(f"fold {fold} done")
-            data2 = [((*a, p), g, kw) for (a, g, kw), p in zip(data, priors)]
-            w2, e2 = train_early(data2, args.epochs, dev, lambda w: (w1, w), log, "pass 2")
-            w = (w1, w2) if e2 > e1 else (w1, None)  # keep the second pass only when it helps on DEV
         limit = int(args.max_mb * 1e6 / (2 if w[1] else 1))
         w = (prune(w[0], limit), prune(w[1], limit) if w[1] else None)
         meta = {"source": "trained on Digital Corpus of Sanskrit annotations (Oliver Hellwig), CC BY 4.0",
                 "command": "python scripts/train_tagger.py " + " ".join(sys.argv[1:]),
-                "train_verses": len(data), "train_words": nwords, "passes": args.passes}
+                "train_verses": len(data), "train_words": nwords, "passes": 1}
     conf: Counter = Counter()
     report = {}
     for name, items in (("dev", dev), ("test", test)):

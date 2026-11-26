@@ -33,6 +33,18 @@ def analysis_available(w: dict) -> bool:
     return any(ud.same_lemma(m, w["lemma"], w.get("upos", "")) and ud.same_feats(m, w.get("upos", ""), w["feats"]) for m in ms)
 
 
+def miss_reason(w: dict) -> str:
+    """Why a gold word is not covered: no analysis at all, or only the lemma / the features differ."""
+    if w["compound_member"]:
+        return "no stem analysis"
+    ms = lexicon.padas(w["form"]) or lexicon.generated(w["form"])
+    if not ms:
+        return "no analysis"
+    same = [m for m in ms if ud.same_lemma(m, w["lemma"], w.get("upos", ""))]
+    ours = ", ".join(dict.fromkeys(m.lemma for m in ms))[:60]
+    return f"features differ (lemma found)" if same else f"lemma differs (ours: {ours})"
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--lines", type=int, default=1500)
@@ -63,7 +75,7 @@ def main() -> int:
                 words_ok += 1
             else:
                 no_analysis[(w["form"], w["lemma"], w.get("upos", ""), "member" if w["compound_member"] else
-                             " ".join(f"{k}={v}" for k, v in w["feats"].items()))] += 1
+                             " ".join(f"{k}={v}" for k, v in w["feats"].items()), miss_reason(w))] += 1
     print(f"gold lines {len(lines)}; own words re-join to the text {valid} = {valid / len(lines):.1%} "
           f"(not: {len(not_rejoin)})")
     print(f"SPLIT COVERAGE (gold split is a lattice path, of re-joining lines): {covered}/{valid} = {covered / valid:.1%}")
@@ -72,8 +84,12 @@ def main() -> int:
     print("split misses by kind:", dict(kinds))
     for text, gold, unknown in no_path[: args.show]:
         print(f"  SPLIT  {text}\n         gold: {gold}\n         no edge for: {' '.join(unknown) or '— (all words known)'}")
-    for (form, lemma, upos, feats), n in no_analysis.most_common(args.show):
-        print(f"  ANALYSIS {n:3d}  {form}  lemma {lemma}  {upos} {feats}")
+    reasons = collections.Counter()
+    for key, n in no_analysis.items():
+        reasons[key[4].split(" (")[0]] += n
+    print("analysis misses by kind:", dict(reasons))
+    for (form, lemma, upos, feats, why), n in no_analysis.most_common(args.show):
+        print(f"  ANALYSIS {n:3d}  {form}  lemma {lemma}  {upos} {feats}  | {why}")
     for g in not_rejoin[: args.show // 3]:
         print(f"  NO-REJOIN {g['text']}\n         gold: {' '.join(w['form'] for w in g['words'])}")
     return 0

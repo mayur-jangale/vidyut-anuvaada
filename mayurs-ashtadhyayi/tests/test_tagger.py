@@ -123,3 +123,17 @@ def test_coordinated_nominatives_feature_marks_the_dual_verb():
     v = tagger.Verse([[rama], [laksmana], [ca], [dual, gen]], [0] * 4, [False] * 4,
                      ["रामस्", "लक्ष्मणस्", "च", "गच्छतस्"], tables={})
     assert "coord2=द्विवचनV" in v.static[3][0] and "coord2=द्विवचनV" not in v.static[3][1]
+
+
+def test_coordinated_singular_nominatives_take_the_dual_verb():
+    from mayur.model import Word
+    rama, laksmana = nom("रामस्", "राम", "प्रथमा"), nom("लक्ष्मणस्", "लक्ष्मण", "प्रथमा")
+    ca = tagger.Morph(form="च", lemma="च", kind="avyaya")
+    vanam = nom("वनम्", "वन", "द्वितीया", "नपुंसकलिङ्ग")
+    gen = nom("गच्छतस्", "गम्", "षष्ठी", krt="शतृ")
+    dual = dataclasses.replace(verb("गच्छतस्", "गम्", "लट्"), vacana="द्विवचन")
+    forms = [("रामस्", [rama]), ("लक्ष्मणस्", [laksmana]), ("च", [ca]), ("वनम्", [vanam]), ("गच्छतस्", [gen, dual])]
+    words = [Word(form=f, line=0, start=k, end=k + 1, analyses=a) for k, (f, a) in enumerate(forms)]
+    assert tagger._coordinated_agent_verb(words, [0, 0, 0, 0, 0]) == [0, 0, 0, 0, 1]
+    words[1] = Word(form="तस्य", line=0, start=1, end=2, analyses=[nom("तस्य", "तद्", "षष्ठी")])
+    assert tagger._coordinated_agent_verb(words, [0, 0, 0, 0, 0]) == [0, 0, 0, 0, 0]  # one nominative: no

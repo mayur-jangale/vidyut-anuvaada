@@ -102,11 +102,13 @@ def verse_level(v, i: int, m: Morph) -> Obs:
                      and any(_f()._fits(x, v) for v in verbs)]
         if other_nom:
             o.append("VsureNom")
-    if m.kind == "tinanta":
-        o.append("Vkarta" if any(_f()._fits(x, m) for _, x in refs) else "Vnokarta")
-    # रामो लक्ष्मणश्च वनं गच्छतः: two singular nominatives joined by च agree with a dual (1.2.64, 2.2.29)
+    # रामो लक्ष्मणश्च वनं गच्छतः: singular nominatives joined by च are the agent of a dual or plural verb
     sg_noms = sum(1 for _, x in refs if x.vibhakti == "प्रथमा" and x.vacana == "एकवचन")
-    if sg_noms >= 2 and "च" in v.forms:
+    coord = sg_noms >= 2 and "च" in v.forms
+    if m.kind == "tinanta":
+        joint = coord and m.vacana in ("द्विवचन", "बहुवचन") and (m.purusha or "प्रथमपुरुष") == "प्रथमपुरुष"
+        o.append("Vkarta" if joint or any(_f()._fits(x, m) for _, x in refs) else "Vnokarta")
+    if coord:
         o.append("coord2=" + (m.vacana or "") + ("V" if m.kind == "tinanta" else ""))
     if v.p2 and m.kind == "subanta":
         o += ["Pag%+d" % max(-6, min(6, j - i)) for j, x in refs if _f()._agree(m, x)]

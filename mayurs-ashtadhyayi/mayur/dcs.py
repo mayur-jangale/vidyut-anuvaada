@@ -18,7 +18,8 @@ _ANUSVARA = "ं"
 _R_LEMMAS = frozenset({"पुनर्", "अन्तर्", "प्रातर्"})
 
 
-_BROKEN = str.maketrans({"\uffb1": "ḷ"})  # the corpus files write vocalic ḷ (कॢप्त) with this stray character
+# the corpus files write vocalic ḷ (कॢप्त) and, in some lemmas, long ṝ (प्रकॄ, अतितॄ) with these stray characters
+_BROKEN = str.maketrans({"\uffb1": "ḷ", "\uffde": "ṝ"})
 
 
 @lru_cache(maxsize=500_000)

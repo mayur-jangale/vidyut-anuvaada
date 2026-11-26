@@ -23,12 +23,18 @@ ARSHA = "arsha"
 AUGMENT_NOTE = "without the augment, as after मा (6.4.74 न माङ्योगे)"
 ARSHA_NOTE = ("ārṣa: the {got} ending on a root that takes {want} by 1.3.12–93 (regular form {regular}); "
               "epic usage, labelled and not derived")
-# (आत्मनेपद ending, परस्मैपद ending) as sounds, longest first
-_PAIRS = tuple((lipi.varnas(a), lipi.varnas(p)) for a, p in (
-    ("महे", "मस्"), ("वहे", "वस्"), ("न्ताम्", "न्तु"), ("न्ते", "न्ति"), ("ध्वम्", "त"), ("ध्वे", "थ"),
-    ("न्त", "न्"), ("ताम्", "तु"), ("ते", "ति"), ("से", "सि"), ("एत", "एत्"), ("त", "त्"), ("ए", "आमि")))
+# (आत्मनेपद ending, परस्मैपद ending, person, number) as sounds, longest first. The person and number are
+# those of BOTH endings: a sibling in another slot (क्रामेत 2nd plural for क्रामेत्) is not this pair.
+_P1, _P2, _P3 = "प्रथमपुरुष", "मध्यमपुरुष", "उत्तमपुरुष"
+_SG, _DU, _PL = "एकवचन", "द्विवचन", "बहुवचन"
+_PAIRS = tuple((lipi.varnas(a), lipi.varnas(p), who, n) for a, p, who, n in (
+    ("महे", "मस्", _P3, _PL), ("वहे", "वस्", _P3, _DU), ("न्ताम्", "न्तु", _P1, _PL), ("न्ते", "न्ति", _P1, _PL),
+    ("ध्वम्", "त", _P2, _PL), ("ध्वे", "थ", _P2, _PL), ("न्त", "न्", _P1, _PL), ("ताम्", "तु", _P1, _SG),
+    ("ते", "ति", _P1, _SG), ("से", "सि", _P2, _SG), ("एत", "एत्", _P1, _SG), ("त", "त्", _P1, _SG),
+    ("ए", "आमि", _P3, _SG)))
 LYAP_NOTE = ("ārṣa: an absolutive in -य without a prefix (7.1.37 समासेऽनञ्पूर्वे क्त्वो ल्यप् gives ल्यप् only after a "
              "prefix; the regular form has क्त्वा); epic usage, labelled and not derived")
+_SVA = lipi.varnas("स्व")
 _PARTICIPLE = (lipi.varnas("अमान"), lipi.varnas("आन"))  # शानच् stems: क्रोशमान, दर्शयान
 
 
@@ -75,14 +81,22 @@ def arsha_voice(form: str, padas: Lookup) -> tuple[Morph, ...]:
     """Finite forms and शानच् participles with the other voice's endings (see the module docstring)."""
     sounds = lipi.varnas(form)
     out: list[Morph] = []
-    for atmane, parasmai in _PAIRS:
+    for atmane, parasmai, who, number in _PAIRS:
         for old, new, got, want in ((atmane, parasmai, "आत्मनेपद", "परस्मैपद"), (parasmai, atmane, "परस्मैपद", "आत्मनेपद")):
             if len(sounds) > len(old) + 1 and sounds[-len(old):] == old:
                 regular = _swap(sounds, old, new)
                 siblings = _finite(regular) or (_prefixed_finite(regular, padas) if _has_prefix(form) else [])
                 for m in siblings:
+                    if (m.purusha, m.vacana) != (who, number):
+                        continue
                     note = ARSHA_NOTE.format(got=got, want=want, regular=lipi.pausa(regular))
                     out.append(replace(m, form=form, source=ARSHA, quality=1, handle=("special", note)))
+    if len(sounds) > 4 and sounds[-3:] == _SVA:  # गच्छस्व, पश्यस्व: the regular imperative is गच्छ, पश्य
+        regular = lipi.from_varnas(sounds[:-3] + ("अ",)) if sounds[-4] != "अ" else lipi.from_varnas(sounds[:-3])
+        for m in _finite(regular) or (_prefixed_finite(regular, padas) if _has_prefix(form) else []):
+            if (m.lakara, m.purusha, m.vacana) == ("लोट्", _P2, _SG):
+                note = ARSHA_NOTE.format(got="आत्मनेपद", want="परस्मैपद", regular=regular)
+                out.append(replace(m, form=form, source=ARSHA, quality=1, handle=("special", note)))
     return tuple(dict.fromkeys(out))
 
 
@@ -106,13 +120,19 @@ def arsha_participle(form: str, generated: Lookup, padas: Lookup) -> tuple[Morph
 # 1.4.74 साक्षात्प्रभृतीनि च); तिरस्, अन्तर् also before धा (1.4.71), अस्तम् before गम्/इ (1.4.68).
 GATI_ROOTS = {"प्रादुस्": ("कृ", "भू", "अस्"), "आविस्": ("कृ", "भू", "अस्"), "नमस्": ("कृ",), "अलम्": ("कृ",),
               "सत्": ("कृ",), "साक्षात्": ("कृ",), "तिरस्": ("कृ", "भू", "धा"), "अन्तर्": ("धा", "भू", "इ", "गम्"),
-              "अस्तम्": ("गम्", "इ", "या"), "पुरस्": ("कृ",)}
+              "अस्तम्": ("गम्", "इ", "या"), "पुरस्": ("कृ", "धा", "गम्"), "श्रत्": ("धा",)}  # 1.4.67 पुरोऽव्ययम्
 CVI_ROOTS = ("कृ", "भू", "अस्")
 GATI_NOTE = "{gati} is a गति ({rule}) joined to the verb form {verb} by sandhi; the verb form is derived by vidyut"
 
 
 def _verbal(form: str, roots: Sequence[str], padas: Lookup) -> list[Morph]:
-    return [m for m in padas(form) if m.root in roots and m.quality >= 2 and (m.kind == "tinanta" or m.krt)]
+    found = [m for m in padas(form) if m.root in roots and m.quality >= 2 and (m.kind == "tinanta" or m.krt)]
+    if form.endswith("य") and not any(m.krt == "ल्यप्" for m in found):
+        # पुरोधाय, नमस्कृत्य: after a गति the absolutive takes ल्यप् (7.1.37), which vidyut derives after an
+        # upasarga; प्र + the same remainder is that sibling (प्रधाय, प्रकृत्य)
+        found += [replace(m, form=form, lemma=m.root or m.lemma, prefixes=tuple(m.prefixes[1:]))
+                  for m in padas("प्र" + form) if m.krt == "ल्यप्" and m.root in roots and m.prefixes[:1] == ("प्र",)]
+    return found
 
 
 def gati_verbs(form: str, padas: Lookup, is_stem: Callable[[str], bool]) -> tuple[Morph, ...]:
@@ -163,13 +183,76 @@ def arsha_shatr(form: str) -> tuple[Morph, ...]:
     return tuple(dict.fromkeys(out))
 
 
+KRAM_NOTE = ("ārṣa: क्रम् without the long vowel that 7.3.76 क्रमः परस्मैपदेषु gives before the परस्मैपद endings "
+             "(regular form {regular}); epic usage, labelled and not derived")
+KRAM_SHATR_NOTE = ("शतृ of क्रम् with the long vowel of 7.3.76 क्रमः परस्मैपदेषु (शतृ is a परस्मैपद suffix, 1.4.99); "
+                   "vidyut derives the stem with the short vowel ({short}), so this form is labelled, not proved")
+_KRAM, _KRAAM = lipi.varnas("क्रम"), lipi.varnas("क्राम")
+
+
+def kram_participle(form: str) -> tuple[Morph, ...]:
+    """क्रामन्, क्रामन्तम्: the participle vidyut derives as क्रमन्, क्रमन्तम्."""
+    sounds = lipi.varnas(form)
+    if sounds[: len(_KRAAM)] != _KRAAM:
+        return ()
+    short = lipi.from_varnas(_KRAM + sounds[len(_KRAAM):])
+    note = KRAM_SHATR_NOTE.format(short=lipi.pausa(short))
+    return tuple(dict.fromkeys(
+        replace(e.morph, form=form, source="generated", quality=2, handle=("special", note))
+        for e in bridge.lookup(short) if e.entry == "krdanta" and e.morph.krt == "शतृ" and e.morph.root == "क्रम्"))
+
+
+def kram_short(form: str) -> tuple[Morph, ...]:
+    """क्रमेत्, क्रमति: epic forms of क्रम् with the short vowel; the regular sibling has क्राम्."""
+    sounds = lipi.varnas(form)
+    out: list[Morph] = []
+    for i in (0, 1):  # क्रमेत्, अक्रमत्
+        if sounds[i: i + len(_KRAM)] == _KRAM:
+            regular = lipi.from_varnas(sounds[:i] + _KRAAM + sounds[i + len(_KRAM):])
+            note = KRAM_NOTE.format(regular=lipi.pausa(regular))
+            out += [replace(m, form=form, source=ARSHA, quality=1, handle=("special", note))
+                    for m in _finite(regular) if m.root == "क्रम्"]
+    return tuple(dict.fromkeys(out))
+
+
+def _labelled(form: str, padas: Lookup, generated: Lookup) -> list[Morph]:
+    """The labelled (not derived) verbal analyses of an unprefixed form."""
+    found = padas(form)
+    out = [*kram_participle(form), *kram_short(form), *arsha_voice(form, padas)]
+    if not any(m.quality >= 2 for m in found):
+        out += [*arsha_participle(form, generated, padas), *arsha_shatr(form)]
+    return out
+
+
+def prefixed_labelled(form: str, padas: Lookup, generated: Lookup) -> tuple[Morph, ...]:
+    """अतिक्रमेत्, अतिक्रामन्: one or two upasargas before a verb form that is itself only labelled."""
+    from mayur.lexicon_gen import _GATI_WITH_KR, _splits
+
+    out: list[Morph] = []
+    for u1, rest in _splits(form):
+        inner = [((u1,), rest), *(((u1, u2), rest2) for u2, rest2 in _splits(rest))]
+        for prefixes, base in inner:
+            if any(u in _GATI_WITH_KR for u in prefixes):
+                continue
+            for m in _labelled(base, padas, generated):
+                if m.root and (m.kind == "tinanta" or m.krt in ("शतृ", "शानच्")):
+                    out.append(replace(m, form=form, lemma="".join(prefixes) + m.lemma,
+                                       prefixes=prefixes + tuple(m.prefixes)))
+    return tuple(dict.fromkeys(out))
+
+
 def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) -> tuple[Morph, ...]:
     """Extra analyses for ``form`` given what the lexicon already ``found``."""
     out: list[Any] = []
     if not any(m.kind == "tinanta" for m in found):
         out += augmentless(form, padas)
-    have = {(m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) for m in found if m.kind == "tinanta"}
+    if not any(m.krt == "शतृ" for m in found):
+        out += kram_participle(form)
+    out += kram_short(form)
+    have = {(m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) for m in [*found, *out] if m.kind == "tinanta"}
     out += [m for m in arsha_voice(form, padas) if (m.lemma, m.lakara, m.purusha, m.vacana, m.prayoga) not in have]
+    if not found and not out:
+        out += prefixed_labelled(form, padas, generated)
     if not any(m.quality >= 2 for m in found):
         out += arsha_participle(form, generated, padas)
         out += arsha_shatr(form)

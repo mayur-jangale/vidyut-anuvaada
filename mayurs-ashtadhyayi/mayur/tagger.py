@@ -209,6 +209,29 @@ def _agent_noun_governs(words, chosen: list[int], i: int) -> bool:
     return any(x.vibhakti == "षष्ठी" for x in near) and not fem
 
 
+def _coordinated_agent_verb(words, chosen: list[int]) -> list[int]:
+    """रामो लक्ष्मणश्च वनं गच्छतः: a half-verse with no finite verb, two or more singular nominatives and च,
+    and a word that can be a 3rd-person dual (two nominatives) or plural (more) verb: that word is the
+    verb (1.4.22 द्व्येकयोर्द्विवचनैकवचने, 1.4.21 बहुषु बहुवचनम्; the agents joined by च count together)."""
+    out = list(chosen)
+    for line in sorted({w.line for w in words}):
+        idx = [i for i, w in enumerate(words) if w.line == line and w.analyses and not w.in_compound]
+        ms = {i: words[i].analyses[out[i]] for i in idx}
+        if any(m.kind == "tinanta" for m in ms.values()) or not any(words[i].form == "च" for i in idx):
+            continue
+        noms = sum(1 for m in ms.values() if m.vibhakti == "प्रथमा" and m.vacana == "एकवचन")
+        want = "द्विवचन" if noms == 2 else "बहुवचन" if noms > 2 else None
+        for i in idx if want else []:
+            if ms[i].vibhakti == "प्रथमा":
+                continue
+            k = next((j for j, a in enumerate(words[i].analyses) if a.kind == "tinanta" and a.vacana == want
+                      and (a.purusha or "प्रथमपुरुष") == "प्रथमपुरुष"), None)
+            if k is not None:
+                out[i] = k
+                break
+    return out
+
+
 def enforce(words, chosen: list[int], force: bool = False) -> list[int]:
     """Hard constraints on a learned choice: a तृच् noun over an equally likely लुट् verb, and
     a finite verb without an agreeing nominative takes the nearest word that has one.
@@ -220,6 +243,7 @@ def enforce(words, chosen: list[int], force: bool = False) -> list[int]:
             out[i] = next(j for j, a in enumerate(w.analyses) if a.krt == "तृच्" and is_case(a, PRATHAMA))
         elif w.analyses and _agent_noun_governs(words, out, i):
             out[i] = next(j for j, a in enumerate(w.analyses) if a.krt == "तृच्" and is_case(a, PRATHAMA))
+    out = _coordinated_agent_verb(words, out)
     if not force and not (load() or {}).get("enforce", True):
         return out
     for v, wv in enumerate(words):
