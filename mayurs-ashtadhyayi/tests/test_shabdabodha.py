@@ -133,3 +133,32 @@ def test_karma_capped_per_verb():
                        ("गच्छति", False, [verb("गच्छति", "गम्", "लट्")])]))
     assert sum(1 for w in r.words if w.role == "कर्म") == 1
     assert r.scores["akanksha"] < 1.0
+
+
+def test_epithet_list_without_subject_verse12():
+    r = _gold(12)
+    noms = [w for w in r.words if not w.in_compound and w.morph.vibhakti == "प्रथमा"]
+    assert all(w.role == "विधेय" and w.head is None for w in noms)
+    assert any("subject not expressed" in n for n in r.notes)
+    assert _r(r, "हिते") == ("अधिकरण", "रतस्")
+    assert _r(r, "प्रजानाम्") == ("सम्बन्ध", "हिते")
+    assert r.scores["akanksha"] > 0.8
+
+
+def test_local_attachment_verse17():
+    r = _gold(17)
+    assert _r(r, "विष्णुना") == ("करण", "सदृशस्")
+    assert _r(r, "वीर्ये") == ("अधिकरण", "सदृशस्")
+    assert _r(r, "क्षमया")[1] == "समस्"
+
+
+def test_agent_noun_over_lut_verse13():
+    r = _gold(13)
+    assert r.words[0].morph.kind == "subanta" and r.words[0].morph.krt == "तृच्"
+    assert not any(w.role == "क्रिया" for w in r.words)
+
+
+def test_named_subject_kept_verse8():
+    r = _gold(8)
+    assert _r(r, "रामस्") == ("", None)
+    assert _r(r, "वशी") == ("विधेय", "रामस्")

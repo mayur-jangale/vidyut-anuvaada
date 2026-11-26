@@ -59,6 +59,49 @@ def pick(cands: list[int], words: list[Word], i: int) -> Optional[int]:
     return min(cands, key=lambda j: (words[j].line != words[i].line, abs(j - i), j < i)) if cands else None
 
 
+# Shabdabodha scores (kept here for file size; used by shabdabodha.resolve).
+
+def evaluate(words: list[Word], incoming: dict[str, float]) -> dict[str, float]:
+    """akanksha, yogyata, sannidhi (0..1), frequency and weighted total (see shabdabodha.WEIGHTS)."""
+    from mayur.shabdabodha import PRATHAMA, SAMBODHANA, WEIGHTS, is_case, karta_agrees, unary
+
+    n = len(words) or 1
+    roots = {i for i, w in enumerate(words) if w.role == "क्रिया"}
+    connected = sum(1 for i, w in enumerate(words) if w.role and (w.head is not None or i in roots or w.role == "विधेय"))
+    nominatives_roots = sum(1 for w in words if w.role == "" and w.morph is not None and is_case(w.morph, PRATHAMA))
+    parts = [(connected + min(nominatives_roots, 1)) / n]
+    for v in roots:
+        vm = words[v].morph
+        kartas = [w for w in words if w.head == v and w.role == "कर्ता"]
+        parts.append(1.0 if any(karta_agrees(w.morph, vm) for w in kartas) else (0.5 if kartas else 0.0))
+    akanksha = min(1.0, sum(parts) / len(parts))
+    # yogyata: only formal penalties; deeper semantic compatibility is not implemented.
+    penalty = 0.0
+    has_verb = bool(roots)
+    for w in words:
+        m = w.morph
+        if m is None:
+            continue
+        if w.role in ("कर्ता", "कर्म") and m.quality <= 1:
+            penalty += 0.3
+        if m.vibhakti == SAMBODHANA and has_verb and any(is_case(a, PRATHAMA) for a in w.analyses):
+            penalty += 0.2
+        if w.role == "विशेषण" and w.head is not None and words[w.head].morph is not None \
+                and m.linga != words[w.head].morph.linga:
+            penalty += 0.2
+    yogyata = max(0.0, 1.0 - penalty)
+    dists = [abs(i - w.head) for i, w in enumerate(words) if w.head is not None]
+    sannidhi = sum(1.0 / (1.0 + 0.25 * (d - 1)) for d in dists) / len(dists) if dists else 1.0
+    if "frequency" in incoming:
+        frequency = incoming["frequency"]
+    else:
+        us = [unary(w.morph) for w in words if w.morph is not None]
+        frequency = (sum(min(u, 10.0) for u in us) / (10.0 * len(us))) if us else 0.0
+    scores = {**incoming, "akanksha": akanksha, "yogyata": yogyata, "sannidhi": sannidhi, "frequency": frequency}
+    scores["total"] = sum(WEIGHTS[k] * scores[k] for k in WEIGHTS)
+    return scores
+
+
 def _priority(word: Word) -> int:
     if word.role == "अव्यय" and word.form == NEGATION:
         return _LAST

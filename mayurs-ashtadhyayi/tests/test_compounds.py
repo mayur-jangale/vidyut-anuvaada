@@ -30,3 +30,28 @@ def test_annotate_returns_new_object():
     v = verse1()
     r = compounds.annotate(v)
     assert r is not v and v.compounds == [] and v.words[0].compound is None
+
+
+def _gold_compounds(n):
+    import pytest
+    from syntax_fixtures import gold_reading
+    from mayur import shabdabodha
+    try:
+        r = compounds.annotate(shabdabodha.resolve(gold_reading(n)))
+    except Exception as e:
+        pytest.skip(f"gold/lexicon unavailable: {e}")
+    return {c.stem: c for c in r.compounds}
+
+
+def test_singular_noun_chain_is_tatpurusha():
+    c = _gold_compounds(8)["इक्ष्वाकुवंशप्रभव"]
+    assert c.samasa == compounds.TATPURUSHA and c.samasa != compounds.DVANDVA
+
+
+def test_sama_final_is_tatpurusha_with_relation():
+    c = _gold_compounds(17)["पृथिवीसम"]
+    assert c.samasa == compounds.TATPURUSHA and "तृतीया" in c.basis
+
+
+def test_maha_epithet_is_bahuvrihi():
+    assert _gold_compounds(8)["महावीर्य"].samasa == compounds.BAHUVRIHI

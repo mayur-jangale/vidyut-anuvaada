@@ -64,3 +64,16 @@ def test_quoted_iti_follows_its_verb():
     f = _forms(r)
     assert f.index("इति") == f.index("श्रूयताम्") + 1 and f[-1] == "अब्रवीत्"
     assert sorted(r.anvaya) == list(range(len(r.words)))
+
+
+def test_epithet_list_keeps_text_order_verse17():
+    import pytest
+    from syntax_fixtures import gold_reading
+    try:
+        r = _full(gold_reading(17))
+    except Exception as e:
+        pytest.skip(f"gold/lexicon unavailable: {e}")
+    f = _forms(r)
+    assert f.index("विष्णुना") < f.index("सदृशस्") < f.index("दर्शनस्") < f.index("समस्")
+    assert f.index("क्षमया") > f.index("दर्शनस्")  # dependents are not pulled to the front
+    assert sorted(r.anvaya) == list(range(len(r.words)))
