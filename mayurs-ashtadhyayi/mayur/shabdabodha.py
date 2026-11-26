@@ -24,12 +24,12 @@ FEAR = {"भी", "त्रस्", "उद्विज्"}
 PRONOUNS = {"किम्", "तद्", "यद्", "इदम्", "एतद्", "अदस्", "अस्मद्", "युष्मद्"}
 
 # Weights grid-searched on gold morphology of Bala-kanda 1.21-79 (never 1-20): case+number+gender
-# accuracy 0.903 vs 0.872 for unary scores alone, 0.967 oracle over the pruned candidates.
+# accuracy 0.901 vs 0.872 for unary scores alone, 0.967 oracle over the pruned candidates.
 W_LEMMA = 0.3
-W_PHRASE = 2.0  # same case+number+gender nominals, divided by distance
+W_PHRASE = 3.0  # same case+number+gender nominals, divided by distance
 W_KARTA = 2.5  # nominative agreeing with a कर्तरि finite verb
 W_KARMA = 0.6  # per accusative when a verb or verbal is present
-W_STRAY = 0.25  # nominative not agreeing with any karta of a कर्तरि verb
+W_STRAY = 0.5  # nominative not agreeing with any karta of a कर्तरि verb
 W_VOC = 3.0  # vocative without corpus support
 W_VERBLESS = 1.5  # verbless: nominative outside the subject group, or ungoverned accusative
 SWEEPS = 4
