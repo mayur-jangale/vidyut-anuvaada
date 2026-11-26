@@ -25,9 +25,16 @@ def test_dcs_lookup():
 def test_dcs_verb_with_preverb():
     if not gloss._dcs_dict():
         return
-    m = Morph(form="paripapracCa", lemma="paricCa", kind="tinanta", root="pracC", prefixes=("pari",))
+    m = Morph(form="paripapracCa", lemma="paripracC", kind="tinanta", root="pracC", prefixes=("pari",))
     g, src = gloss.lookup(m)
-    assert src == "dcs" and "ask" in g or "interrogate" in g
+    assert src in ("dcs-sense", "dcs")
+    assert "ask" in g or "interrogate" in g
+
+
+def test_corpus_sense_strips_wordnet_markers(monkeypatch):
+    monkeypatch.setattr(gloss, "_dcs_senses", lambda: {"vid": "aware(p)"})
+    assert gloss._corpus_sense("vid") == "aware"
+    assert gloss._corpus_sense("missing") == ""
 
 
 def test_verb_fallback_to_root_gloss():

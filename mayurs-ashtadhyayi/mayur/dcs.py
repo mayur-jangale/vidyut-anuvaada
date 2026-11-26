@@ -97,6 +97,7 @@ def _token(cols: list[str], mwt: Optional[tuple[int, int]]) -> dict[str, Any]:
         "is_compound_member": feats.get("Case") == "Cpd",
         "mwt": mwt,
         "lemma_id": misc.get("LemmaId"),
+        "word_sem": misc.get("WordSem", ""),
     }
 
 

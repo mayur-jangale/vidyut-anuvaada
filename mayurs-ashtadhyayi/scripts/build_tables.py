@@ -26,6 +26,7 @@ def build(data_dir: Path) -> dict:
         raise FileNotFoundError(f"no Ramayana files under {base}")
     forms: Counter = Counter()
     lemmas: Counter = Counter()
+    senses: dict[str, Counter] = {}
     skipped = 0
     for fp in files:
         for sent in iter_sentences(fp):
@@ -35,6 +36,8 @@ def build(data_dir: Path) -> dict:
             for t in sent["tokens"]:
                 forms[pada_form(t["unsandhied"], t["lemma"])] += 1
                 lemmas[t["lemma"]] += 1
+                for sense_id in filter(None, t["word_sem"].split(",")):
+                    senses.setdefault(t["lemma"], Counter())[sense_id] += 1
     out = data_dir / "derived"
     out.mkdir(parents=True, exist_ok=True)
     freq = {"forms": dict(forms), "lemmas": dict(lemmas),
@@ -51,8 +54,20 @@ def build(data_dir: Path) -> dict:
             d.setdefault(iast_to_slp1(row[1]), []).append(
                 {"grammar": row[2], "preverbs": row[3], "meanings": row[4]})
     (out / "dcs_dict.json").write_text(json.dumps(d, ensure_ascii=False), encoding="utf-8")
-    return {"files": len(files), "held_out_sentences": skipped, "tokens": freq["tokens"],
+    labels = _sense_labels(base / "lookup" / "word-senses.csv")
+    top = {lemma: labels[c.most_common(1)[0][0]] for lemma, c in senses.items()
+           if labels.get(c.most_common(1)[0][0])}
+    (out / "dcs_senses.json").write_text(json.dumps(top, ensure_ascii=False), encoding="utf-8")
+    return {"sense_lemmas": len(top), "files": len(files), "held_out_sentences": skipped, "tokens": freq["tokens"],
             "forms": len(forms), "lemmas": len(lemmas), "dict_lemmas": len(d)}
+
+
+def _sense_labels(path: Path) -> dict[str, str]:
+    """DCS sense id -> short English concept label (word-senses.csv, CC BY 4.0)."""
+    with open(path, encoding="utf-8", newline="") as f:
+        rows = csv.reader(f, delimiter="\t", quoting=csv.QUOTE_NONE)
+        next(rows, None)
+        return {row[0]: row[1].strip() for row in rows if len(row) > 1}
 
 
 def main() -> int:

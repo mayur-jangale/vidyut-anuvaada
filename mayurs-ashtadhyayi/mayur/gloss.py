@@ -1,6 +1,7 @@
 """Short English glosses for words.
 
-Order of sources: hand-written overrides, DCS dictionary (CC BY 4.0), vidyut dhatupatha
+Order of sources: hand-written overrides, the sense most often annotated for the lemma in
+the DCS Ramayana (CC BY 4.0, evaluation sarga held out), DCS dictionary, vidyut dhatupatha
 root gloss for verbal forms, Monier-Williams (optional, local data only, never committed).
 """
 
@@ -50,6 +51,19 @@ def _dcs_dict() -> dict[str, list[dict[str, str]]]:
         return json.loads((derived_dir() / "dcs_dict.json").read_text(encoding="utf-8"))
     except (OSError, ValueError):
         return {}
+
+
+@lru_cache(maxsize=1)
+def _dcs_senses() -> dict[str, str]:
+    try:
+        return json.loads((derived_dir() / "dcs_senses.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+def _corpus_sense(lemma: str) -> str:
+    """Most frequent DCS sense label of ``lemma``, without WordNet markers such as "(p)"."""
+    return re.sub(r"\([a-z]+\)$", "", _dcs_senses().get(lemma, "")).strip()
 
 
 def _is_verb_entry(e: dict[str, str]) -> bool:
@@ -118,9 +132,9 @@ def _mw_first(raw: str) -> str:
 
 
 def _participle_note(m: Morph) -> str:
-    if m.krt in ("kta", "ktavatu"):
+    if m.krt in ("kta", "ktavatu~"):
         return "past participle"
-    if m.krt in ("Sat", "Satf", "SAnac", "SAnan"):
+    if m.krt in ("Satf~", "SAnac", "SAnan"):
         return "present participle"
     return "participle"
 
@@ -132,6 +146,10 @@ def lookup(m: Morph) -> tuple[str, str]:
     for key in (m.lemma, m.root or ""):
         if key and key in ov and (key == m.lemma or m.is_verb):
             return ov[key], "override"
+    for key in (_verb_lemmas(m) if verbal else [m.lemma]):
+        g = _corpus_sense(key)
+        if g:
+            return g, "dcs-sense"
     if m.is_verb:
         for c in _verb_lemmas(m):
             g = _dcs_gloss(c, True)
