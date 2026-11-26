@@ -8,7 +8,7 @@ from typing import Optional
 from . import english, lipi
 from .translate_clause import ClauseMixin
 from .translate_compound import CompoundMixin
-from .translate_words import ADJ_FIRST as _ADJ_FIRST, ADJ_SENSE, WITH_LEMMAS, FINAL as _FINAL, PAIRED as _PAIRED, WITH_WORDS, is_latin_binomial, is_motion, is_question_lemma, name_plural
+from .translate_words import ADJ_FIRST as _ADJ_FIRST, ADJ_SENSE, ON_NOUNS, WITH_LEMMAS, FINAL as _FINAL, PAIRED as _PAIRED, WITH_WORDS, is_latin_binomial, is_motion, is_question_lemma, name_plural
 from .model import Alignment, Reading
 
 Piece = tuple[str, Optional[int], str]  # (text, word index or None, separator before it)
@@ -204,7 +204,7 @@ class _Renderer(CompoundMixin, ClauseMixin):
             core.append(_p(self.noun_text(i), i))
             return poss + adjs + core + std + after
         ctype = self.samasa(i)
-        if mem and not bv and ctype in ("तत्पुरुष", "कर्मधारय", "द्वन्द्व") and self.nominal(i):
+        if mem and not bv and ctype in ("तत्पुरुष", "कर्मधारय", "द्वन्द्व", "तद्धित") and self.nominal(i):
             made = self.compound_pieces(i, mem, ctype)
             if made:
                 return poss + adjs + made + std + after
@@ -229,6 +229,8 @@ class _Renderer(CompoundMixin, ClauseMixin):
         prep = _PREP.get(r)
         if r == "अधिकरण" and self.words[i].morph and self.words[i].morph.vacana == "बहुवचन":
             prep = "among"
+        elif r == "अधिकरण" and self.text(i).lower().split()[-1:] and self.text(i).lower().split()[-1] in ON_NOUNS:
+            prep = "on"
         head = [_p(prep)] if prep else []
         body = self.np(i)
         lead = 0

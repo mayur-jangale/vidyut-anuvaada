@@ -254,6 +254,7 @@ def _unmarked_elision(jn: _Jn) -> bool:
     return jn.right_head == ("अ",) and sd.AVAGRAHA not in jn.surface and "६.१.१०९" in jn.sutras
 
 SPACE_BLOCKS_MERGE = True
+CHUNK_TIER = 1  # the fallback tier from which a whole written chunk may stand as one unknown word
 
 
 class _Lattice:
@@ -322,7 +323,7 @@ class _Lattice:
                 if not jn.samasa:
                     pen += self._inner_penalty(word, i, k, j, after_samasa)
                 res.append((form, k, jn, sc[0] - pen, sc[1], nxt))
-        if self.tier >= 2:
+        if self.tier >= CHUNK_TIER:
             res.extend(self._chunk_edges(i, head))
         self._edges[state] = res
         return res

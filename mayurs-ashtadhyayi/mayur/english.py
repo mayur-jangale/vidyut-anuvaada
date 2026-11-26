@@ -229,7 +229,7 @@ def agent(verb: str) -> str:
 
 
 _PARTICIPLE_TABLE = {"listen": "heard", "hear": "heard", "see": "seen", "tell": "told", "know": "known",
-                     "say": "said", "speak": "spoken", "tell of": "told"}
+                     "say": "said", "speak": "spoken", "tell of": "told", "sleep": "sleeping"}
 
 
 def krt_form(krt: str | None, g: str) -> str:

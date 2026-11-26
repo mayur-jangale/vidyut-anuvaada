@@ -197,6 +197,9 @@ class ClauseMixin:
         for k in rest:
             if k in prior:
                 continue
+            if self.role(k) == "अधिकरण" and self.text(v).lower().split()[:1] == ["enter"]:
+                post += self.np(k)  # enters the mouth, not "enters in the mouth"
+                continue
             post += self.nonfinite(k, "to") if self.role(k) == "तुमर्थ" else self.case_phrase(k)
         post = after_verb + post + tail_adv
         if ask:  # "what did they do?": question word, auxiliary, subject, bare verb

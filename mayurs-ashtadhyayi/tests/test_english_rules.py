@@ -130,3 +130,53 @@ def test_passive_participle_is_not_a_tense_marker():
     assert fc.tense_classes("is conveyed", "convey") == {"present"}
     assert fc.tense_classes("was conveyed", "convey") == {"past"}
     assert fc.tense_classes("conveyed", "convey") == {"past"}
+
+
+# ---------------------------------------------------------------- round 3: plain sentences
+
+def test_passive_kta_with_agent_and_active_kta_motion():
+    agent = noun("Rāma", "कर्ता", 2, vib="तृतीया")
+    obj = noun("Rāvaṇa", "कर्म", 2)
+    kta = w("हतः", "subanta", "kill", "क्रिया", None, krt="क्त", vacana=SG, vibhakti="प्रथमा")
+    assert say([agent, obj, kta], anvaya=[0, 1, 2])[0] == "Rāvaṇa was killed by Rāma."
+    go = w("गतः", "subanta", "go", "क्रिया", None, krt="क्त", vacana=SG, vibhakti="प्रथमा")
+    assert say([noun("Rāma", "कर्ता", 1), go])[0] == "Rāma went."
+
+
+def test_absolutive_clause_comes_first_and_motion_object_takes_to():
+    ws = [noun("Rāma", "कर्ता", 3), noun("village", "कर्म", 2, vib="द्वितीया"),
+          w("गत्वा", "avyaya", "go", "पूर्वकालक्रिया", 3, krt="क्त्वा"), verb("eat", "लट्", "खादति")]
+    ws[2] = replace(ws[2], head=3)
+    ws[1] = replace(ws[1], head=2)
+    lit, flu = say(ws, anvaya=[0, 2, 1, 3])
+    assert lit.startswith("Having gone to village, Rāma eats") and flu.startswith("Having gone to the village, Rāma eats")
+
+
+def test_existential_and_time_and_adverb():
+    ws = [verb("be", "लट्", "अस्ति"), noun("tree", "कर्ता", 0)]
+    assert say(ws, anvaya=[0, 1])[0] == "There is tree."
+    ws = [noun("sun", "कर्ता", 2), w("प्रातः", "avyaya", "morning", "अव्यय", 2, lemma="प्रातर्"), verb("rise", "लट्", "उदेति")]
+    assert say(ws, anvaya=[0, 1, 2])[0] == "Sun rises in the morning."
+    ws = [noun("horse", "कर्ता", 2), w("शीघ्रम्", "subanta", "quick", "अव्यय", 2, vibhakti="द्वितीया", vacana=SG),
+          verb("run", "लट्", "धावति")]
+    assert say(ws, anvaya=[0, 1, 2])[0] == "Horse runs quickly."
+
+
+def test_with_dependent_instrument_and_to_for_say_and_bow():
+    ws = [noun("Rāma", "कर्ता", 2), noun("Rāvaṇa", "कर्म", 2, vib="द्वितीया"),
+          verb("kill", "लट्", "हन्ति"), noun("arrow", "करण", 2, vib="तृतीया")]
+    ws[2] = replace(ws[2], head=None)
+    lit, flu = say(ws, anvaya=[0, 3, 1, 2])
+    assert flu.endswith("with the arrow.") or " with " in flu
+    ws = [noun("pupil", "कर्ता", 2), noun("guru", "कर्म", 2, vib="द्वितीया"), verb("bow", "लट्", "नमति")]
+    assert say(ws)[0] == "Pupil bows to guru."
+
+
+def test_predicate_colour_gloss_and_ness_suffix_and_pluralless_fish():
+    ws = [noun("crow", "कर्ता", None), noun("Krishna", "विधेय", 0)]
+    assert say(ws)[1] == "The crow is black."
+    ws = [w("वीर", "stem", "hero", "समासपूर्वपद", 1, member=True, compound=0), noun("ness", "कर्ता", 2, compound=0),
+          verb("shine", "लट्", "भाति")]
+    lit = say(ws, [Compound(id=0, members=[0, 1], samasa="तद्धित")], anvaya=[0, 1, 2])[0]
+    assert "Heroness" in lit
+    assert english.plural("fish") == "fish"

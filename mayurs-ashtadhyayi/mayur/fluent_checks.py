@@ -14,6 +14,7 @@ from typing import Mapping, Sequence
 
 from . import english, lipi, terms
 from .model import Alignment, Reading, Word
+from .translate_words import ADJ_SENSE
 
 MAX_SYNONYMS = 5  # alternatives the model may offer per word
 MAX_SYNONYM_WORDS = 3
@@ -78,15 +79,20 @@ def stem(token: str) -> str:
 
 def shares_stem(a: str, b: str) -> bool:
     sa, sb = stem(a), stem(b)
+    if sa == sb:
+        return True
     p = 0
     while p < min(len(sa), len(sb)) and sa[p] == sb[p]:
         p += 1
     return (p == min(len(sa), len(sb)) and p >= 3) or p >= 5
 
 
-def is_plural_token(token: str) -> bool:
+_UNMARKED_PLURALS = frozenset({"fish", "sheep", "deer", "cattle", "folk"})
+
+
+def is_plural_token(token: str, unmarked: bool = True) -> bool:
     t = token.lower()
-    return t in _IRREGULAR_PLURALS or t.endswith("ren") or (len(t) > 3 and t.endswith("s") and not t.endswith(("ss", "us", "is")))
+    return (unmarked and t in _UNMARKED_PLURALS) or t in _IRREGULAR_PLURALS or t.endswith("ren") or (len(t) > 3 and t.endswith("s") and not t.endswith(("ss", "us", "is")))
 
 
 # ---------------------------------------------------------------- facts read from the reading
@@ -225,12 +231,14 @@ def check_content_words(reading: Reading, renderings: Sequence[Rendering],
             continue
         w, text = reading.words[i], mine[i]
         if is_proper_name(w):
+            if ADJ_SENSE.get(w.gloss) in tokens(text):
+                continue  # a name-gloss that is a colour as a predicate: "black"
             if w.gloss not in text:
                 out.append(Failure("content", f"name {w.gloss!r} (word {i}) is not kept verbatim in {text!r}"))
             continue
-        ref = [t for t in tokens(w.gloss) + tokens(spans.get(i, "")) + [t for a in syn.get(i, []) for t in tokens(a)]
-               if t not in FUNCTION_WORDS]
-        got = [t for t in tokens(text) if t not in FUNCTION_WORDS]
+        ref_all = tokens(w.gloss) + tokens(spans.get(i, "")) + [t for a in syn.get(i, []) for t in tokens(a)]
+        ref = [t for t in ref_all if t not in FUNCTION_WORDS] or ref_all  # "do" may be the content word
+        got = [t for t in tokens(text) if t not in FUNCTION_WORDS] or tokens(text)
         if not any(shares_stem(g, r) for g in got for r in ref):
             out.append(Failure("content", f"{text!r} does not render {w.gloss!r} (word {i})"))
     return out
@@ -272,7 +280,7 @@ def check_number(reading: Reading, renderings: Sequence[Rendering]) -> list[Fail
         gloss_plural = any(is_plural_token(t) for t in tokens(w.gloss))
         if m.vacana in ("बहुवचन", "द्विवचन") and not is_plural_token(head):
             out.append(Failure("number", f"word {i} is {terms.english(m.vacana)} but rendered {head!r}"))
-        elif m.vacana == "एकवचन" and is_plural_token(head) and not gloss_plural:
+        elif m.vacana == "एकवचन" and is_plural_token(head, False) and not gloss_plural:
             out.append(Failure("number", f"word {i} is singular but rendered {head!r}"))
     return out
 

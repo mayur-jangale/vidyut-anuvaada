@@ -33,7 +33,10 @@ TIME_PHRASES = {"morning": "in the morning", "evening": "in the evening", "night
                 "dawn": "at dawn", "midday": "at midday", "midnight": "at midnight"}
 TO_OBJECT = frozenset({"say", "speak", "bow", "talk"})  # take their person with "to" in English
 WITH_LEMMAS = frozenset({"सह", "सार्धम्", "साकम्", "विना", "समम्"})
-ADJ_SENSE = {"Krishna": "black"}  # a name-gloss that is the colour when it is a predicate of a common noun
+ADJ_SENSE = {"Krishna": "black", "Kṛṣṇa": "black"}  # a name-gloss that is the colour when it is a predicate of a common noun
+
+ON_NOUNS = frozenset({"bank", "shore", "top", "surface", "peak", "summit", "ground", "roof", "hill", "mountain"})
+NOMINAL_SUFFIXES = {"ness": "ness", "hood": "hood", "ship": "ship"}  # तद्धित -ता / -त्व / -त्वम्
 
 
 def adverb(adjective: str) -> str:
