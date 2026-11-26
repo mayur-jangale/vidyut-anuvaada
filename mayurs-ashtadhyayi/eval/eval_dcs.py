@@ -13,6 +13,15 @@ DCS sometimes reconstructs a different surface form than the text has (मम fo
 Lemmas and features are compared under the citation conventions documented in ``mayur/ud.py``
 (``same_lemma``, ``same_feats``): strong-stem citations (हनुमन्त् = हनुमत्), and no feature scoring
 for words the corpus classes as indeclinable.
+
+Two more conventions of the corpus are followed when its split is compared with ours:
+
+* The corpus never marks an indeclinable as a compound member: the prefixes स-, सु-, अ-, अति- and
+  adverbs standing first in a compound (पुनर्-, तथा-) are tagged as free words (0 of 166 frequent
+  indeclinables ever carry the member flag in the training chapters). Our analysis keeps them as
+  members; for scoring, such a member is counted the corpus's way (``scored_member``).
+* A pada is compared as it is written: the members are joined by sandhi (नख + आघातस् = नखाघातस्),
+  not by gluing their letters, so a compound we keep whole equals the corpus's two members.
 """
 
 from __future__ import annotations
@@ -26,7 +35,7 @@ from typing import Any, Callable, Optional, Sequence
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from mayur import gold, ud  # noqa: E402
+from mayur import freq, gold, lipi, sandhi, ud  # noqa: E402
 from mayur.model import VERIFIED  # noqa: E402
 
 FEATURES = ("Case", "Number", "Gender", "Tense", "Mood", "Person", "VerbForm")
@@ -64,7 +73,7 @@ def word_matches(form: str, gold_form: str, gold_lemma: str = "", compound_membe
     f = normalize(form)
     if f == normalize(gold_form):
         return True
-    same_lemma = bool(lemma and gold_lemma and _lexeme(lemma) == _lexeme(gold_lemma))
+    same_lemma = same_lexeme(lemma, gold_lemma)
     if compound_member and gold_lemma and (f == normalize(gold_lemma) or same_lemma):
         return True
     return lenient and same_lemma
@@ -74,13 +83,30 @@ def _lexeme(lemma: str) -> str:
     return normalize(ud.canonical_lemma(lemma))
 
 
+def same_lexeme(ours: str, gold_lemma: str) -> bool:
+    """Same lemma under the citation conventions of ``mayur.ud`` (strong stems, feminine stems)."""
+    if not ours or not gold_lemma:
+        return False
+    a, b = _lexeme(ours), _lexeme(gold_lemma)
+    return a == b or ud._feminine_of(a, b)
+
+
+def scored_member(w: Any) -> bool:
+    """Whether our word counts as a compound member when compared with the corpus, which tags
+    indeclinable members and glued prefixes as free words (see the module docstring)."""
+    if not w.in_compound:
+        return False
+    lemma = ud.lemma(w.morph) if w.morph is not None else w.form
+    return freq.lemma_class(lemma) != "indeclinable"
+
+
 def _parts(ours_word: Sequence[Any]) -> tuple[str, str]:
     """(form, lemma) of one of our words given as (form, in_compound[, lemma])."""
     return ours_word[0], (ours_word[2] if len(ours_word) > 2 else "")
 
 
 def our_word(w: Any) -> tuple[str, bool, str]:
-    return w.form, w.in_compound, (ud.lemma(w.morph) if w.morph is not None else "")
+    return w.form, scored_member(w), (ud.lemma(w.morph) if w.morph is not None else "")
 
 
 def lcs_pairs(a: Sequence[Any], b: Sequence[Any], eq: Callable[[Any, Any], bool]) -> list[tuple[int, int]]:
@@ -145,28 +171,40 @@ def add_counts(a: dict[str, int], b: dict[str, int]) -> dict[str, int]:
     return {k: a.get(k, 0) + b.get(k, 0) for k in {*a, *b}}
 
 
-def pada_units(words: Sequence[Sequence[Any]]) -> list[tuple[str, str]]:
+def pada_units(words: Sequence[Sequence[Any]]) -> list[tuple[str, str, tuple[str, ...]]]:
     """Group (form, in_compound[, lemma]) words into padas: a run of compound members plus its final
-    word is ONE unit ``(joined form, lemma of the final word)``."""
-    units, run = [], ""
+    word is ONE unit ``(glued forms, lemma of the final word, member forms)``."""
+    units, run = [], []
     for w in words:
-        run += w[0]
+        run.append(w[0])
         if not w[1]:
-            units.append((run, w[2] if len(w) > 2 else ""))
-            run = ""
+            units.append(("".join(run), w[2] if len(w) > 2 else "", tuple(run)))
+            run = []
     if run:
-        units.append((run, ""))
+        units.append(("".join(run), "", tuple(run)))
     return units
 
 
-def gold_pada_units(gold_words: Sequence[dict]) -> list[tuple[str, str]]:
+def gold_pada_units(gold_words: Sequence[dict]) -> list[tuple[str, str, tuple[str, ...]]]:
     return pada_units([(w["form"], w["compound_member"], w["lemma"]) for w in gold_words])
 
 
-def pada_match(ours: tuple[str, str], gold_unit: tuple[str, str]) -> bool:
-    """Same joined form, or failing that the same lemma of the final member."""
-    return normalize(ours[0]) == normalize(gold_unit[0]) or bool(
-        ours[1] and gold_unit[1] and _lexeme(ours[1]) == _lexeme(gold_unit[1]))
+def written(members: Sequence[str]) -> frozenset[str]:
+    """The ways a pada made of ``members`` is written: joined by compound sandhi, cited in isolation."""
+    if len(members) == 1:
+        return frozenset({normalize(lipi.pausa(members[0]))})
+    try:
+        return frozenset(normalize(x) for x in sandhi.rejoin(list(members), [True] * (len(members) - 1)))
+    except Exception:  # noqa: BLE001 - a corpus form the sandhi rules cannot read
+        return frozenset()
+
+
+def pada_match(ours: Sequence[Any], gold_unit: Sequence[Any]) -> bool:
+    """Same pada: the same glued forms, the same written word after sandhi, or failing that the
+    same lemma of the final member."""
+    if normalize(ours[0]) == normalize(gold_unit[0]) or same_lexeme(ours[1], gold_unit[1]):
+        return True
+    return len(ours) > 2 and len(gold_unit) > 2 and bool(written(ours[2]) & written(gold_unit[2]))
 
 
 def pada_line_equal(ours: Sequence[Sequence[Any]], gold_words: Sequence[dict]) -> bool:

@@ -63,13 +63,26 @@ def _bad_member(w: Word) -> bool:
         return False
 
 
+def _reflag(word: Word, in_compound: bool) -> Word:
+    """``word`` with the other compound flag and the analyses that go with it: stems inside a
+    compound, padas outside. The flag stays as it was when the form has no such analysis."""
+    if word.in_compound == in_compound:
+        return word
+    from mayur import lexicon
+
+    found = lexicon.stems(word.form) if in_compound else (lexicon.padas(word.form) or lexicon.generated(word.form))
+    if not found:
+        return word
+    return replace(word, in_compound=in_compound, analyses=list(found), chosen=0, proof=None)
+
+
 def regroup(words: list[Word]) -> tuple[list[Word], list[list[int]], list[str]]:
     """(words with corrected flags, compound runs as index lists, notes)."""
     out = list(words)
     notes: list[str] = []
     for i in range(len(out)):
         if _free_bound(out, i):
-            out[i] = replace(out[i], in_compound=True)
+            out[i] = _reflag(out[i], True)
             notes.append(f"{out[i].form} is a bound prefix: joined to {out[i + 1].form} as a compound member")
     runs = _runs(out)
     kept = []
@@ -78,7 +91,7 @@ def regroup(words: list[Word]) -> tuple[list[Word], list[list[int]], list[str]]:
             last = k == len(run) - 1
             if (last and _bad_final(out[i])) or (not last and _bad_member(out[i])):
                 for j in run[: k + 1] if not last else run:
-                    out[j] = replace(out[j], in_compound=False)
+                    out[j] = _reflag(out[j], False)
                 notes.append(f"{'-'.join(out[j].form for j in run)}: {out[i].form} cannot be a compound "
                              f"{'final member' if last else 'member'}; read as free words")
                 rest = [] if last else run[k + 1:]

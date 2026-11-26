@@ -156,6 +156,8 @@ def _stem_ok(form: str, ms: tuple) -> bool:
         return True
     if form in _PARTICLES:
         return False
+    if form.endswith("न्"):
+        return False  # a stem in -न् loses the न् inside a compound (8.2.7): राज-, आत्म-, never राजन्-
     padas = [m for m in _analyses(form, False) if m.quality >= 2]
     verb = any(m.kind == "tinanta" for m in padas)
     return not verb or any(m.kind == "subanta" and m.quality >= 3 for m in padas)
@@ -163,6 +165,9 @@ def _stem_ok(form: str, ms: tuple) -> bool:
 
 # Particles that denote no thing (1.4.57 चादयोऽसत्त्वे) do not end a compound: a compound is made of
 # inflected nominals (2.1.4 सह सुपा). In 39,094 compounds of the training corpus none ends in one of these.
+# An absolutive or infinitive does not end a compound of nominals either (2.1.4): तद् दृष्ट्वा is two
+# words. (ल्यप् after a prefix or gati is one word already, not a compound final.) Corpus: 4 in 39,094.
+NONFINITE_KRT = frozenset({"क्त्वा", "ल्यप्", "तुमुन्"})
 NIPATA_NEVER_FINAL = frozenset("च वा ह एव न अपि तु हि खलु किल स्म इव उ नु वै मा चेत् ननु".split())
 
 
@@ -173,7 +178,7 @@ def _can_follow_samasa(form: str, as_stem: bool) -> bool:
         return True
     if form in NIPATA_NEVER_FINAL:
         return False
-    return any(m.kind != "tinanta" for m in _analyses(form, False))
+    return any(m.kind != "tinanta" and m.krt not in NONFINITE_KRT for m in _analyses(form, False))
 
 
 @lru_cache(maxsize=300_000)

@@ -163,7 +163,8 @@ def test_double_object():
 def test_upapada_sentences():
     r = _lex([("रामाय", False), ("नमस्", False)])
     assert (_w(r, "रामाय").role, _w(r, "रामाय").role_sutras) == ("सम्बन्ध", ("2.3.16",))
-    r = _lex([("रामेण", False), ("सह", False), ("सीता", False), ("गच्छति", False)])
+    # (सह before a noun is now joined to it as a compound prefix by compounds.annotate, so सह follows here)
+    r = _lex([("सीता", False), ("रामेण", False), ("सह", False), ("गच्छति", False)])
     w = _w(r, "रामेण")
     assert (w.role, r.words[w.head].form, w.role_sutras) == ("सम्बन्ध", "सह", ("2.3.19",))
     assert any("उपपद" in n for n in r.notes)

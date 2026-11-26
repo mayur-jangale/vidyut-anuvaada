@@ -87,8 +87,23 @@ def test_word_matches_by_lemma():
 
 def test_pada_units_group_compounds():
     ours = [("तपस्", True, ""), ("स्वाध्याय", True, ""), ("निरतम्", False, "निरम्"), ("तपस्वी", False, "तपस्विन्")]
-    assert ev.pada_units(ours) == [("तपस्स्वाध्यायनिरतम्", "निरम्"), ("तपस्वी", "तपस्विन्")]
-    assert ev.pada_units([("वाच्", True, "")]) == [("वाच्", "")]
+    assert [u[:2] for u in ev.pada_units(ours)] == [("तपस्स्वाध्यायनिरतम्", "निरम्"), ("तपस्वी", "तपस्विन्")]
+    assert [u[:2] for u in ev.pada_units([("वाच्", True, "")])] == [("वाच्", "")]
+
+
+def test_pada_compared_as_written():
+    """A compound kept whole equals the corpus's members joined by sandhi, not by gluing letters."""
+    whole = ev.pada_units([("नखाघातस्", False, "नखाघात")])[0]
+    split = ev.gold_pada_units([{"form": "नख", "compound_member": True, "lemma": "नख"},
+                                {"form": "आघातस्", "compound_member": False, "lemma": "आघात"}])[0]
+    assert ev.pada_match(whole, split)
+    other = ev.pada_units([("नखघातस्", False, "नखघात")])[0]
+    assert not ev.pada_match(other, split)
+
+
+def test_same_lexeme_conventions():
+    assert ev.same_lexeme("मानसी", "मानस") and ev.same_lexeme("हनुमत्", "हनुमन्त्")
+    assert not ev.same_lexeme("राम", "रामा") and not ev.same_lexeme("", "राम")
 
 
 def test_pada_line_equal_by_form_or_final_lemma():
