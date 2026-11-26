@@ -176,3 +176,22 @@ def test_participle_cited_under_its_own_stem_is_the_same_word():
     participle = next(m for m in lexicon.padas("भूतम्") if m.krt == "क्त" and m.root == "भू")
     assert ud.same_lemma(participle, "भूत", "NOUN") and ud.same_lemma(participle, "भू", "VERB")
     assert not ud.same_lemma(participle, "गत", "NOUN")
+
+
+@pytest.mark.parametrize("form, lemma, rule_form", [("अन्वशासत्", "अनुशास्", "अशात्"), ("हनति", "हन्", "हन्ति"),
+                                                    ("रोदति", "रुद्", "रोदिति")])
+def test_second_class_root_in_the_first_class_is_arsha(form, lemma, rule_form):
+    found = [m for m in lexicon.padas(form) if m.kind == "tinanta" and ud.lemma(m) == lemma]
+    assert found and found[0].source == "arsha"
+    proof = lexicon.prove(found[0])
+    assert not proof.derivable and "2.4.72" in proof.note and rule_form in proof.note
+
+
+def test_rule_forms_are_not_relabelled():
+    assert all(m.source != "arsha" for m in lexicon.padas("हन्ति") + lexicon.padas("गच्छति"))
+
+
+@pytest.mark.parametrize("form", ["प्रपद्येम", "गच्छेथास्", "आश्नुवन्"])
+def test_more_voice_pairs(form):
+    found = [m for m in lexicon.padas(form) if m.kind == "tinanta"]
+    assert found and found[0].source == "arsha"

@@ -20,21 +20,29 @@ _VOICED = frozenset("गघङजझञडढणदधनबभमयरलव�
 _CONSONANTS = frozenset("कखगघङचछजझञटठडढणतथदधनपफबभमयरलवशषसह")
 
 
-def sibling_form(form: str, next_form: str) -> Optional[str]:
-    """The other pada form the same surface spelling stands for before ``next_form``, or None."""
+def sibling_forms(form: str, next_form: str) -> tuple[str, ...]:
+    """The other pada forms the same surface spelling stands for before ``next_form``."""
     nxt = next_form[:1]
     if not form or not nxt:
-        return None
+        return ()
     if nxt in _VOICED and form.endswith("ा") and len(form) > 2:
-        return form + "स्"  # मूढा -> मूढास्
+        return (form + "स्",)  # मूढा -> मूढास्
     if nxt in _VOICED and form.endswith("ास्") and len(form) > 3:
-        return form[:-2]  # मूढास् -> मूढा
+        return (form[:-2],)  # मूढास् -> मूढा
     if nxt in _VOWELS and nxt != "अ":
+        # भीष्म उवाच: भीष्मस् (8.3.17, 8.3.19), भीष्मे (6.1.78, 8.3.19) or the vocative भीष्म itself
         if form.endswith("े") and len(form) > 2 and form[-2] in _CONSONANTS:
-            return form[:-1] + "स्"  # भीष्मे -> भीष्मस्
+            return (form[:-1] + "स्", form[:-1])
         if form.endswith("स्") and len(form) > 3 and form[-3] in _CONSONANTS:
-            return form[:-2] + "े"  # भीष्मस् -> भीष्मे
-    return None
+            return (form[:-2] + "े", form[:-2])
+        if form[-1] in _CONSONANTS and len(form) > 1:
+            return (form + "स्", form + "े")
+    return ()
+
+
+def sibling_form(form: str, next_form: str) -> Optional[str]:
+    """The first of :func:`sibling_forms`, or None."""
+    return next(iter(sibling_forms(form, next_form)), None)
 
 
 def surface(form: str, sibling: str) -> str:
@@ -54,7 +62,9 @@ def variant(form: str) -> str:
         return "आ"
     if form.endswith("े"):
         return "ए"
-    return "अस्"
+    if form.endswith("स्"):
+        return "अस्"
+    return "अ"  # the bare stem form: a vocative
 
 
 def extend(cands: Sequence[Sequence[Morph]], forms: Sequence[str], cpd: Sequence[bool],
@@ -67,16 +77,20 @@ def extend(cands: Sequence[Sequence[Morph]], forms: Sequence[str], cpd: Sequence
     """
     out, own, obs, var = [], [], [], []
     for i, c in enumerate(cands):
-        sib = None
+        sibs: tuple[str, ...] = ()
         if not cpd[i] and i + 1 < len(forms) and c:
-            sib = sibling_form(forms[i], forms[i + 1])
-        extra = [m for m in sibling_candidates(sib) if m not in c] if sib else []
+            sibs = sibling_forms(forms[i], forms[i + 1])
+        extra, labels = [], []
+        for sib in sibs:
+            new = [m for m in sibling_candidates(sib) if m not in c and m not in extra]
+            extra += new
+            labels += [variant(sib)] * len(new)
         out.append(list(c) + extra)
         own.append(len(c))
         if extra:
-            obs.append(surface(forms[i], sib))
-            var.append([variant(forms[i])] * len(c) + [variant(sib)] * len(extra))
+            obs.append(surface(forms[i], sibs[0]))
+            var.append([variant(forms[i])] * len(c) + labels)
         else:
             obs.append(forms[i])
-            var.append([""] * (len(c) + len(extra)))
+            var.append([""] * len(c))
     return out, own, obs, var

@@ -97,6 +97,10 @@ def test_sibling_forms_of_a_surface_spelling():
     assert sibling_form("भीष्मे", "उवाच") == "भीष्मस्"  # 6.1.78 / 8.3.19: both end in -अ with hiatus
     assert sibling_form("भीष्मस्", "उवाच") == "भीष्मे"
     assert sibling_form("रामस्", "अत्र") is None  # before अ: रामोऽत्र
+    from mayur.tagger_siblings import sibling_forms
+    assert set(sibling_forms("भीष्म", "उवाच")) == {"भीष्मस्", "भीष्मे"}  # the vocative has the same spelling too
+    assert "भीष्म" in sibling_forms("भीष्मस्", "उवाच") and "भीष्म" in sibling_forms("भीष्मे", "उवाच")
+    assert variant("भीष्म") == "अ" and variant("भीष्मस्") == "अस्"
     assert surface("मूढा", "मूढास्") == surface("मूढास्", "मूढा") == "मूढा"
     assert (variant("मूढास्"), variant("मूढा"), variant("भीष्मे"), variant("भीष्मस्")) == ("आस्", "आ", "ए", "अस्")
 

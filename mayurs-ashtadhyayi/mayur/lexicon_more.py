@@ -33,7 +33,12 @@ _PAIRS = tuple((lipi.varnas(a), lipi.varnas(p), who, n) for a, p, who, n in (
     ("महे", "मस्", _P3, _PL), ("वहे", "वस्", _P3, _DU), ("न्ताम्", "न्तु", _P1, _PL), ("न्ते", "न्ति", _P1, _PL),
     ("ध्वम्", "त", _P2, _PL), ("ध्वे", "थ", _P2, _PL), ("न्त", "न्", _P1, _PL), ("ताम्", "तु", _P1, _SG),
     ("ते", "ति", _P1, _SG), ("से", "सि", _P2, _SG), ("एत", "एत्", _P1, _SG), ("त", "त्", _P1, _SG),
-    ("ए", "आमि", _P3, _SG)))
+    ("ए", "आमि", _P3, _SG),
+    # optative and imperative of the first person, the second singular optative, and the endings
+    # without न् of the classes that have no अ before them (आश्नुवन् for आश्नुवत, प्रपद्येम for प्रपद्येमहि)
+    ("एमहि", "एम", _P3, _PL), ("एवहि", "एव", _P3, _DU), ("आमहै", "आम", _P3, _PL), ("आवहै", "आव", _P3, _DU),
+    ("एथास्", "एस्", _P2, _SG), ("एय", "एयम्", _P3, _SG), ("एरन्", "एयुस्", _P1, _PL),
+    ("अते", "अन्ति", _P1, _PL), ("अत", "अन्", _P1, _PL), ("अताम्", "अन्तु", _P1, _PL)))
 LYAP_NOTE = ("ārṣa: an absolutive in -य without a prefix (7.1.37 समासेऽनञ्पूर्वे क्त्वो ल्यप् gives ल्यप् only after a "
              "prefix; the regular form has क्त्वा); epic usage, labelled and not derived")
 _SVA, _SHVA = lipi.varnas("स्व"), lipi.varnas("ष्व")
@@ -280,9 +285,6 @@ def arsha_feminine(form: str, padas: Lookup) -> tuple[Morph, ...]:
     return tuple(dict.fromkeys(out))
 
 
-THEMATIC_NOTE = ("ārṣa: a root of the second class conjugated with the vowel अ of the first (regular form {regular}); "
-                 "epic usage, labelled and not derived")
-_THEMATIC = ((lipi.varnas("अत्"), _P1, _SG), (lipi.varnas("अन्"), _P1, _PL), (lipi.varnas("अम्"), _P3, _SG))
 OBLIQUE_NOTE = ("ārṣa: the परस्मैपद participle (शतृ) of a root that takes आत्मनेपद by 1.3.12–93 (its present is {present}); "
                 "epic usage, labelled and not derived")
 _SHATR_WEAK = tuple(lipi.varnas(e) for e in ("अतस्", "अता", "अते", "अति", "अतोस्", "अताम्", "अद्भिस्", "अद्भ्यस्",
@@ -292,22 +294,10 @@ LYAP_SIBLING_NOTE = ("ārṣa: an absolutive in -य without an upasarga (7.1.37
 
 
 def arsha_thematic(form: str) -> tuple[Morph, ...]:
-    """अहनत्, अहनन्: the imperfect of हन् with the thematic vowel; the regular third singular is अहन्."""
-    sounds = lipi.varnas(form)
-    out: list[Morph] = []
-    for ending, who, number in _THEMATIC:
-        if len(sounds) > len(ending) + 2 and sounds[-len(ending):] == ending and not sd_is_vowel(sounds[-len(ending) - 1]):
-            regular = lipi.from_varnas(sounds[: -len(ending)])
-            note = THEMATIC_NOTE.format(regular=lipi.pausa(regular))
-            out += [replace(m, form=form, purusha=who, vacana=number, source=ARSHA, quality=1, handle=("special", note))
-                    for m in _finite(regular) if m.lakara == "लङ्" and m.vacana == _SG and m.purusha == _P1]
-    return tuple(dict.fromkeys(out))
+    """अहनत्, अशासत्: a second-class root conjugated in the first class (``mayur.lexicon_thematic``)."""
+    from mayur.lexicon_thematic import thematic
 
-
-def sd_is_vowel(sound: str) -> bool:
-    from mayur import sandhi
-
-    return sandhi.is_vowel(sound)
+    return thematic(form)
 
 
 def arsha_shatr_oblique(form: str) -> tuple[Morph, ...]:
@@ -369,7 +359,7 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
         out += arsha_participle(form, lambda _f: [m for m in found if m.kind == "subanta" and m.quality >= 2], padas)
     if not any(m.root and m.quality >= 2 for m in found):
         out += arsha_feminine(form, padas)
-    if not any(m.kind == "tinanta" for m in [*found, *out]):
+    if not any(m.kind == "tinanta" for m in found):
         out += arsha_thematic(form)
     if not any(m.kind == "avyaya" and m.krt in ("ल्यप्", "क्त्वा") for m in found):
         out += arsha_lyap(form, padas)  # गृह्य, by its sibling प्रगृह्य
