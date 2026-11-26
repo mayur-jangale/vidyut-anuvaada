@@ -43,7 +43,8 @@ def _text_of(entry: dict) -> str:
 
 
 def _lines(entries: list[dict], limit: int | None = None, seed: int = 0) -> list[tuple[str, list[dict]]]:
-    return [(g["compact"], [{"form": w["form"], "lemma": w["lemma"], "compound_member": w["compound_member"]}
+    return [(g["compact"], [{"form": w["form"], "lemma": w["lemma"], "compound_member": w["compound_member"],
+                             "upos": w.get("upos", "")}
                             for w in g["words"]])
             for g in dcs.gold_lines(entries, limit=limit, seed=seed) if g["words"] and len(g["compact"]) <= MAX_CHARS]
 

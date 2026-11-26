@@ -337,14 +337,14 @@ def choose(words, candidates=None, compound_flags=None, forms=None):
 def enforce(words, chosen: list[int], force: bool = False) -> list[int]:
     """Hard constraints on a learned choice: a तृच् noun over an equally likely लुट् verb, and
     a finite verb without an agreeing nominative takes the nearest word that has one.
-    Applied only when the saved model says they help on DEV (or with ``force``)."""
-    if not force and not (load() or {}).get("enforce", True):
-        return list(chosen)
+    The second is applied only when the saved model says it helps on DEV (or with ``force``)."""
     from mayur.shabdabodha import PRATHAMA, _agent_noun_preferred, candidates, is_case, is_finite, karta_agrees
     out = list(chosen)
     for i, w in enumerate(words):
         if w.analyses and _agent_noun_preferred(w, w.analyses[out[i]]):
             out[i] = next(j for j, a in enumerate(w.analyses) if a.krt == "तृच्" and is_case(a, PRATHAMA))
+    if not force and not (load() or {}).get("enforce", True):
+        return out
     for v, wv in enumerate(words):
         vm = wv.analyses[out[v]] if wv.analyses else None
         if not is_finite(vm):

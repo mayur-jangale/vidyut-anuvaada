@@ -16,7 +16,7 @@ _R_PREFIX = ("प्र", "परा", "परि", "निर्", "निस�
 def _join(left: str, right: str) -> str:
     from mayur import sandhi
 
-    if left == "पुरस्":  # 8.3.40 नमस्पुरसोर्गत्योः
+    if left in ("पुरस्", "नमस्"):  # 8.3.40 नमस्पुरसोर्गत्योः
         return left + right
     if left[-1:] in ("ि", "ु") and right.startswith(_SHATVA_ROOTS):  # 8.3.65-8.3.70, 8.4.41
         right = "ष" + right[1:]
@@ -74,12 +74,14 @@ def _dcs_root(m: Morph) -> str:
         if short != root and short[:-1] in m.form and root[:-1] not in m.form:  # 6.4.92 मितां ह्रस्वः
             root = short
         return root[:-1] + "य्"
-    return _CITED_ROOT.get(root, root)
+    return _CITED_ROOT.get(root, root.replace("ॄ", "ृ"))  # the corpus cites कॄ, स्तॄ as कृ, स्तृ
 
 
 # How the corpus cites roots that vidyut names by their Dhatupatha form (ध्यै -> ध्या, 6.1.45)
 _CITED_ROOT = {"स्वञ्ज्": "स्वज्", "तॄ": "तृ", "ध्यै": "ध्या", "गै": "गा", "ह्वे": "ह्वा", "म्लै": "म्ला", "ग्लै": "ग्ला", "त्रै": "त्रा",
                "दै": "दा", "वे": "वा", "व्ये": "व्या", "शो": "शा", "सो": "सा", "छो": "छा", "दो": "दा"}
+# 3.1.31 आयादय आर्धधातुके वा: without आय the corpus cites the bare root (गुप्त -> गुप्)
+_AYA_ROOT = {"गोपाय": "गुप्", "धूपाय": "धूप्", "पणाय": "पण्", "पनाय": "पन्", "विच्छाय": "विच्छ्"}
 # Present-system suppletion (7.3.78 पाघ्राध्मास्थाम्नादाण्दृश्यर्तिसर्तिशदसदां पिबजिघ्र...): दृश् -> पश्य
 _PRESENT = frozenset({"लट्", "लोट्", "लङ्", "विधिलिङ्"})
 
@@ -87,6 +89,10 @@ _PRESENT = frozenset({"लट्", "लोट्", "लङ्", "विधिल
 def _suppletive_root(m: Morph, root: str) -> str:
     if root == "दृश्" and "पश्य" in m.form and (m.lakara in _PRESENT or m.krt in ("शतृ", "शानच्")):
         return "पश्"
+    if root == "हन्" and "वध" in m.form:  # 2.4.42 हनो वध लिङि, 2.4.43 लुङि च; the corpus cites वध्
+        return "वध्"
+    if root.endswith(("ाय", "ीय")):  # a sanādi stem in -आय/-ईय (3.1.28 आय, 3.1.27 यक्): गोपाय्, महीय्
+        return root + "्" if root in m.form else _AYA_ROOT.get(root, root + "्")
     if root == "इ" and m.lakara == "लुङ्" and "गा" in m.form:  # 2.4.45 इणो गा लुङि
         return "गा"
     if root == "ब्रू" and any(x in m.form for x in ("आह", "ाह", "आत्थ", "ात्थ")):  # 3.4.84 ब्रुवः पञ्चानाम् ... आहः

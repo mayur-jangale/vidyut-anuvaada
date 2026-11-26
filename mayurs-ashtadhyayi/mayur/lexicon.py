@@ -107,10 +107,26 @@ def _kosha_morphs(form: str) -> list[Morph]:
     for variant in spelling_variants(form):
         for entry in bridge.lookup(variant):
             m = replace(entry.morph, form=form, quality=_quality(entry))
+            if entry.entry == "basic" and m.lemma in _LEMMA_ALIAS:
+                m = replace(m, lemma=_LEMMA_ALIAS[m.lemma])
+            elif entry.entry == "basic" and m.linga == "स्त्रीलिङ्ग":
+                m = replace(m, lemma=feminine_stem(m.lemma, form))
             out.append(m)
             if m.krt in _ADJECTIVAL_KRT and m.stem and m.kind == "subanta":
                 out.append(_as_adjective(m))
     return out
+
+
+def feminine_stem(stem: str, form: str) -> str:
+    """The feminine stem of an a-stem that ``form`` (a feminine pada of it) shows: सुमुख -> सुमुखी
+    (ङीष्, 4.1.41ff.: सुमुखी, सुमुख्या) or शिष्य -> शिष्या (टाप्, 4.1.4: शिष्या, शिष्यया)."""
+    if not stem or not "क" <= stem[-1] <= "ह" or not form.startswith(stem):
+        return stem
+    return stem + ("ी" if form[len(stem):len(stem) + 1] in ("ी", "्") else "ा")
+
+
+# stems the corpus cites under another name (it has 593 अहर्, no अहन्); the handle is unchanged
+_LEMMA_ALIAS = {"अहन्": "अहर्"}
 
 
 # participles the corpus also cites as adjectives under their own stem (समन्वित, शक्य, उचित)
@@ -133,6 +149,7 @@ def _kosha_ranked(form: str) -> tuple[Morph, ...]:
 def padas(form: str) -> tuple[Morph, ...]:
     """All analyses of ``form`` as a complete pada, best first; () if none."""
     from mayur.lexicon_iyan import iyan_uvan
+    from mayur.lexicon_paradigm import closed_paradigms
     from mayur.lexicon_gen import (anvadesha, avyaya_compound, indefinite, looks_verbal, prefixed, sa_esha,
                                    numerals, tasi_forms)
 
@@ -142,6 +159,11 @@ def padas(form: str) -> tuple[Morph, ...]:
     found.extend(tasi_forms(form, stems))
     found.extend(numerals(form))
     found.extend(iyan_uvan(form))
+    found.extend(closed_paradigms(form))
+    if not any(m.krt == "क्त" for m in found):
+        from mayur.lexicon_kta import kta_padas
+
+        found.extend(kta_padas(form, bridge.lookup(form)))
     if not any(m.quality >= 2 for m in found) or looks_verbal(form):
         # prefixed participles/absolutives sit next to the kosha's adjective (सम्पन्नस्, विचिन्त्य)
         known = set(found)
@@ -182,7 +204,7 @@ def _as_stem(entry: bridge.Entry, form: str) -> Morph:
     q = _quality(entry)
     if entry.entry == "basic":
         q = 3 if entry.lingas or entry.is_avyaya else max(q, 2)
-    return Morph(form=form, lemma=lemma, kind="stem", stem=m.stem or lemma, root=m.root, dhatu=m.dhatu,
+    return Morph(form=form, lemma=_LEMMA_ALIAS.get(lemma, lemma), kind="stem", stem=m.stem or lemma, root=m.root, dhatu=m.dhatu,
                  gana=m.gana, prefixes=m.prefixes, krt=m.krt, root_gloss=m.root_gloss,
                  quality=q, handle=("stem", bridge.stem_handle(entry)))
 
@@ -202,6 +224,10 @@ def stems(form: str) -> tuple[Morph, ...]:
                     out.append(_as_stem(entry, form))
     known = set(out)
     out.extend(m for m in _prefixed_stems(form) if m not in known)
+    if out and not any(m.krt == "क्त" for m in out):  # a basic stem the kosha does not see as क्त
+        from mayur.lexicon_kta import kta_stems
+
+        out.extend(kta_stems(form))
     if not out:
         from mayur.lexicon_gen import nanj_stems
 

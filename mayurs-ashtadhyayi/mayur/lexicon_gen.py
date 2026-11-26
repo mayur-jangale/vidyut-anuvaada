@@ -93,6 +93,8 @@ def _unretroflex(rest: tuple[str, ...]) -> tuple[tuple[str, ...], ...]:
         out.append(("स्",) + tail)
     if rest and rest[0] == "ण्":
         out.append(("न्",) + rest[1:])
+    if len(rest) > 1 and rest[0] == "च्" and rest[1] == "छ्":  # 6.1.73 छे च: प्र + छादि -> प्रच्छाद्य
+        out.append(rest[1:])
     if len(rest) > 1 and rest[0] == "अ" and rest[1] == "ष्":  # augment: अभ्यषिञ्चत् -> असिञ्चत्
         out.append(("अ", "स्") + rest[2:])
     return tuple(out)
