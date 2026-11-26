@@ -14,7 +14,7 @@ def test_verse1_compounds_grouped():
 def test_basis_is_always_heuristic():
     for v in (verse1(), verse2()):
         for c in compounds.annotate(v).compounds:
-            assert c.basis.startswith("heuristic:")
+            assert c.basis.startswith(("heuristic:", "by rule:"))
             assert c.vigraha
 
 
@@ -55,3 +55,15 @@ def test_sama_final_is_tatpurusha_with_relation():
 
 def test_maha_epithet_is_bahuvrihi():
     assert _gold_compounds(8)["महावीर्य"].samasa == compounds.BAHUVRIHI
+
+
+def test_tva_and_ta_members_are_one_taddhita_word():
+    """पात्र-त्वात् / पात्र-ताम् (as the corpus splits them): base + -त्व / -ता by 5.1.119, not a compound."""
+    from mayur.pipeline import analyze_verse
+
+    reading = analyze_verse("पात्रत्वाद्धनमाप्नोति विनयाद्याति पात्रताम्").readings[0]
+    for c in reading.compounds:
+        final = reading.words[c.members[-1]]
+        if final.form in ("त्वात्", "ताम्"):
+            assert c.samasa == "तद्धित" and "5.1.119" in c.basis and c.vigraha.endswith("भावः")
+            assert final.morph.lemma in ("त्व", "ता")

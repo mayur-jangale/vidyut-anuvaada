@@ -25,7 +25,9 @@ _STEMS = (("पुम्स्", "पुंस्", "पुंलिङ्ग"),
 _TVA_NOTE = ("the taddhita त्व (5.1.119 तस्य भावस्त्वतलौ) cited by the corpus as its own member; its ending "
              "is that of vidyut's derivation of भवत्व in the same case, since vidyut's bare त्व is the "
              "सर्वनाम (1.1.27)")
-# kaṇḍvādi dhātus in their Dhatupatha form, with the text every form of them contains (the gate)
+_TA_NOTE = ("the taddhita तल् (5.1.119 तस्य भावस्त्वतलौ), feminine -ता, cited by the corpus as its own member; "
+            "its ending is that of vidyut's derivation of भवता in the same case")
+# कण्ड्वादि roots in their Dhatupatha form, with the text every form of them contains (the gate)
 _KANDVADI = (("महीङ्", "महीय"),)
 
 
@@ -36,12 +38,13 @@ def _nominal_table() -> dict[str, tuple[Morph, ...]]:
         for pada, template in bridge.subanta_paradigm(stem, linga):
             for text in bridge.derived_texts(pada):
                 table.setdefault(text, []).append(replace(template, form=text, lemma=lemma, quality=3))
-    for pada, template in bridge.subanta_paradigm("भव", "नपुंसकलिङ्ग", taddhita="त्व"):
-        for text in bridge.derived_texts(pada):
-            if text.startswith("भवत्"):
-                member = text[len("भव"):]
-                table.setdefault(member, []).append(replace(
-                    template, form=member, lemma="त्व", source="special", quality=2, handle=("special", _TVA_NOTE)))
+    for suffix, lemma, linga, note in (("त्व", "त्व", "नपुंसकलिङ्ग", _TVA_NOTE), ("तल्", "ता", "स्त्रीलिङ्ग", _TA_NOTE)):
+        for pada, template in bridge.subanta_paradigm("भव", linga, taddhita=suffix):
+            for text in bridge.derived_texts(pada):
+                if text.startswith("भवत"):
+                    member = text[len("भव"):]
+                    table.setdefault(member, []).append(replace(
+                        template, form=member, lemma=lemma, source="special", quality=2, handle=("special", note)))
     return {k: tuple(dict.fromkeys(v)) for k, v in table.items()}
 
 

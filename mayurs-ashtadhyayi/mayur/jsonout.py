@@ -19,7 +19,8 @@ MAX_OTHER = 5
 SAMASA = {
     "तत्पुरुष": "determinative", "कर्मधारय": "descriptive", "द्वन्द्व": "copulative",
     "बहुव्रीहि": "possessive", "अव्ययीभाव": "adverbial", "नञ्-तत्पुरुष": "negative determinative",
-    "नञ्-बहुव्रीहि": "negative possessive", "अज्ञात": "unknown", "": "unknown",
+    "नञ्-बहुव्रीहि": "negative possessive", "उपपद-तत्पुरुष": "determinative with a verbal final member",
+    "द्विगु": "numeral determinative", "तद्धित": "secondary suffix, not a compound", "अज्ञात": "unknown", "": "unknown",
 }
 KIND_EN = {"subanta": "nominal", "tinanta": "finite verb", "avyaya": "indeclinable", "stem": "stem", "unknown": "unknown"}
 

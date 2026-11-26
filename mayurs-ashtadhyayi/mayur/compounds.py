@@ -72,10 +72,40 @@ def _surface_stem(reading: Reading, members: list[int]) -> str:
 
 def _basis(d: Decision, comp: Compound, chain: str) -> str:
     bracket = f"; bracketing {d.bracket}" + (f" (inner {d.inner})" if d.inner else "") if d.bracket else ""
-    return f"heuristic: {d.samasa} by rule ({d.note.split('; classes:')[0]}){bracket}; rule chain {chain}"
+    return (f"heuristic: {d.samasa} chosen among the types the rules allow ({d.note.split('; classes:')[0]}){bracket}; "
+            f"rule chain {chain}")
+
+
+TADDHITA = "तद्धित"
+_SUFFIX_MEMBERS = {"त्व": "त्व", "ता": "तल्"}  # lemma of the member -> the suffix (5.1.119 तस्य भावस्त्वतलौ)
+
+
+def _suffix_analysis(word: Word) -> int | None:
+    """Index of the analysis of ``word`` as the suffix -त्व / -ता that the corpus writes as a member."""
+    return next((k for k, a in enumerate(word.analyses) if a.source == "special" and a.lemma in _SUFFIX_MEMBERS), None)
+
+
+def _taddhita(reading: Reading, cid: int, members: list[int]) -> Compound | None:
+    """पात्र-त्वात्, पात्र-ताम्: not a compound but one word, base + -त्व / -ता "the state of being X"."""
+    words = reading.words
+    if len(members) < 2 or _suffix_analysis(words[members[-1]]) is None:
+        return None
+    final = words[members[-1]]
+    suffix = _SUFFIX_MEMBERS[final.analyses[_suffix_analysis(final)].lemma]
+    base = words[members[-2]]
+    stem = samasa_type.stem_of(base)
+    genitive = samasa_vigraha.form(stem, samasa_vigraha.gender(base, "पुंलिङ्ग"), "षष्ठी", "एकवचन") or stem
+    return Compound(id=cid, members=list(members), stem=_surface_stem(reading, members), samasa=TADDHITA,
+                    vigraha=f"{genitive} भावः",
+                    basis=f"by rule: {stem} + {suffix} by 5.1.119 तस्य भावस्त्वतलौ (the state of being {stem}); one "
+                          f"word, which the corpus writes as two members",
+                    note="taddhita, not a compound; the suffix member is not derived on its own")
 
 
 def _build(reading: Reading, cid: int, members: list[int]) -> Compound:
+    taddhita = _taddhita(reading, cid, members)
+    if taddhita is not None:
+        return taddhita
     words = reading.words
     hyphen = "-".join(w.form if w.in_compound else samasa_type.stem_of(w) for w in (words[i] for i in members))
     d = samasa_type.decide(reading, members)
@@ -98,5 +128,9 @@ def annotate(reading: Reading) -> Reading:
     for cid, members in enumerate(runs):
         for i in members:
             words[i] = replace(words[i], compound=cid)
+    for members in runs:  # the -त्व / -ता member is the suffix, not the pronoun it looks like
+        k = _suffix_analysis(words[members[-1]]) if len(members) > 1 else None
+        if k is not None:
+            words[members[-1]] = replace(words[members[-1]], chosen=k, proof=None)
     base = replace(reading, words=words, notes=list(reading.notes) + notes)
     return replace(base, compounds=[_build(base, cid, members) for cid, members in enumerate(runs)])
