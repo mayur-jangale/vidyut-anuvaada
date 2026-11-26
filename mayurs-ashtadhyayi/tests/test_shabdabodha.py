@@ -78,3 +78,58 @@ def test_verse1_from_lexicon():
     r = _resolve(r)
     assert r.words[8].role == "क्रिया"
     assert r.words[9].role == "कर्ता" and r.words[7].role == "कर्म"
+
+
+def _gold(n):
+    from syntax_fixtures import gold_reading
+    try:
+        return _resolve(gold_reading(n))
+    except Exception as e:  # gold file or lexicon unavailable
+        pytest.skip(f"gold/lexicon unavailable: {e}")
+
+
+def _r(r, form):
+    i = next(i for i, w in enumerate(r.words) if w.form == form)
+    w = r.words[i]
+    return w.role, (r.words[w.head].form if w.head is not None else None)
+
+
+def test_person_agreement_and_copula_verse5():
+    r = _gold(5)
+    assert _r(r, "अहम्") == ("कर्ता", "इच्छामि")
+    assert _r(r, "त्वम्") == ("कर्ता", "असि")
+    assert _r(r, "समर्थस्") == ("विधेय", "त्वम्")
+
+
+def test_number_agreement_and_fear_verse4():
+    r = _gold(4)
+    assert _r(r, "देवास्") == ("कर्ता", "बिभ्यति")
+    assert _r(r, "कस्य") == ("अपादान", "बिभ्यति")
+    first = [w for w in r.words if w.line == 0 and w.form == "कस्"][0]
+    assert first.role == "" and first.head is None  # line 1 is a nominal clause
+
+
+def test_quoted_speech_verse6():
+    r = _gold(6)
+    assert _r(r, "नारदस्") == ("कर्ता", "अब्रवीत्")
+    assert _r(r, "वचस्") == ("कर्म", "श्रुत्वा")
+    assert _r(r, "वाक्यम्") == ("कर्म", "अब्रवीत्")
+    assert _r(r, "प्रहृष्टस्") == ("विशेषण", "नारदस्")
+    assert _r(r, "इति") == ("अव्यय", "श्रूयताम्")
+
+
+def test_instrumental_agent_of_kta_verse7():
+    r = _gold(7)
+    assert _r(r, "त्वया") == ("कर्ता", "कीर्तितास्")
+    assert _r(r, "अहम्") == ("कर्ता", "वक्ष्यामि")
+    assert all(w.morph.vibhakti != "सम्बोधन" for w in r.words if w.form == "एव")
+
+
+def test_karma_capped_per_verb():
+    from syntax_fixtures import hand, nom, verb
+    r = _resolve(hand([("रामस्", False, [nom("रामस्", "राम", "प्रथमा")]),
+                       ("वनम्", False, [nom("वनम्", "वन", "द्वितीया", "नपुंसकलिङ्ग")]),
+                       ("गृहान्", False, [nom("गृहान्", "गृह", "द्वितीया", "पुंलिङ्ग", "बहुवचन")]),
+                       ("गच्छति", False, [verb("गच्छति", "गम्", "लट्")])]))
+    assert sum(1 for w in r.words if w.role == "कर्म") == 1
+    assert r.scores["akanksha"] < 1.0

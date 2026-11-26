@@ -11,6 +11,7 @@ import math
 from dataclasses import replace
 from typing import Optional
 
+from mayur.anvaya import pick as _pick, quoted as _quoted, regions as _region_map
 from mayur.model import Morph, Reading, Word
 
 PRATHAMA, DVITIYA, TRITIYA = "प्रथमा", "द्वितीया", "तृतीया"
@@ -136,8 +137,10 @@ def objective(words: list[Word], chosen: list[int], active: list[int]) -> float:
             total -= W_VERBLESS * (len(noms) - max(noms.count(k) for k in set(noms)))
         total -= W_VERBLESS * len(acc_groups)  # no verb to govern it
     # a vocative needs corpus support when the word has another reading
-    total -= W_VOC * sum(1 for k, m in ms.items() if m.vibhakti == SAMBODHANA
-                         and len(words[k].analyses) > 1 and _freq("analysis_count", m) == 0)
+    total -= W_VOC * sum(1 for k, m in ms.items() if m.vibhakti == SAMBODHANA and len(words[k].analyses) > 1
+                         and (_freq("analysis_count", m) == 0 or any(a.kind == "avyaya" for a in words[k].analyses)))
+    total += W_KARTA * sum(1 for k, m in ms.items() if m.kind == "avyaya" and m.form == "इति"
+                           and k - 1 in ms and is_finite(ms[k - 1]))  # quotative इति after a verb
     return total
 
 
@@ -166,10 +169,6 @@ def _compound_final(words: list[Word], i: int) -> Optional[int]:
     return None
 
 
-def _nearest(cands: list[int], i: int) -> Optional[int]:
-    return min(cands, key=lambda j: (abs(j - i), j < i)) if cands else None
-
-
 def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     m = words[i].morph
     if m.lemma in FIRST_PERSON | SECOND_PERSON:
@@ -187,44 +186,18 @@ def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     return score
 
 
-def _quoted(words: list[Word], v: int) -> bool:
-    """A finite verb directly followed by इति is quoted speech (its own clause)."""
-    nxt = v + 1
-    return nxt < len(words) and words[nxt].form == "इति"
-
-
-def _regions(words: list[Word], verbs: list[int]) -> dict[int, int]:
-    """line → clause region: a verbless half-verse joins a neighbouring line it agrees with."""
-    lines = sorted({w.line for w in words})
-    with_verb = {words[v].line for v in verbs}
-    region = {ln: ln for ln in lines}
-    for ln in lines:
-        if ln in with_verb:
-            continue
-        mine = [w.morph for w in words if w.line == ln and not w.in_compound and w.morph and w.morph.vibhakti]
-        for other in (ln + 1, ln - 1):
-            if other not in with_verb:
-                continue
-            theirs = [w.morph for w in words if w.line == other and w.morph is not None and w.morph.kind == "subanta"]
-            if any(agrees(a, b) and a.vibhakti not in (SHASHTHI, SAMBODHANA) for a in mine for b in theirs):
-                region[ln] = other
-                break
-    return region
-
-
-def _pick(cands: list[int], words: list[Word], i: int) -> Optional[int]:
-    """Same half-verse first, then nearest."""
-    return min(cands, key=lambda j: (words[j].line != words[i].line, abs(j - i), j < i)) if cands else None
-
-
-def _groups(words: list[Word], region: dict[int, int]) -> list[list[int]]:
-    """Agreement groups (same case, number, gender) within one clause region."""
+def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> list[list[int]]:
+    """Agreement groups (same case, number, gender) per clause: the half-verse when it has a
+    verb or verbal, else its region; अस्मद्/युष्मद् never group with (qualify) other words."""
     groups: dict[tuple, list[int]] = {}
     for i, w in enumerate(words):
         m = w.morph
-        if not w.in_compound and m is not None and m.kind == "subanta" and m.vibhakti:
-            groups.setdefault((m.vibhakti, m.vacana, m.linga, region[w.line]), []).append(i)
-    return list(groups.values())
+        if not w.in_compound and not w.role and m is not None and m.kind == "subanta" and m.vibhakti:
+            clause = w.line if w.line in governed else region[w.line]
+            personal = m.lemma in FIRST_PERSON | SECOND_PERSON and m.vibhakti == PRATHAMA
+            groups.setdefault((m.vibhakti, m.vacana, m.linga, clause, i if personal else -1), []).append(i)
+    order = lambda g: (words[g[0]].morph.vibhakti != PRATHAMA, words[g[0]].morph.lemma not in FIRST_PERSON | SECOND_PERSON)
+    return sorted(groups.values(), key=order)
 
 
 def _set(words: list[Word], i: int, role: str, head: Optional[int]) -> None:
@@ -237,10 +210,10 @@ def _kta_near(words: list[Word], i: int) -> Optional[int]:
     return _pick(near, words, i)
 
 
-def _adjacent_nominal(words: list[Word], g: int, group: list[int]) -> Optional[int]:
-    """Nearest non-genitive nominal next to the genitive group (skipping particles), following first."""
+def _adjacent_nominal(words: list[Word], g: int) -> Optional[int]:
+    """Non-genitive nominal next to the genitive head (skipping particles), following first."""
     for step in (1, -1):
-        j = (max(group) if step == 1 else min(group)) + step
+        j = g + step
         while 0 <= j < len(words) and words[j].line == words[g].line and words[j].morph is not None \
                 and words[j].morph.kind == "avyaya":
             j += step
@@ -258,7 +231,7 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
     finite = [i for i, w in enumerate(words) if is_finite(w.morph)]
     verbs = [v for v in finite if not _quoted(words, v)]
     verbals = [i for i, w in enumerate(words) if is_nonfinite(w.morph)]
-    region = _regions(words, verbs)
+    region = _region_map(words, verbs, agrees)
     in_region = {r: [v for v in verbs if region[words[v].line] == r] for r in set(region.values())}
     for v in finite:
         _set(words, v, "क्रिया", None if v in verbs else _pick(verbs, words, v))
@@ -273,9 +246,10 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
         elif w.morph is None or w.morph.kind == "unknown":
             notes.append(f"{w.form}: no analysis; passed through unlinked")
     has_karma: set[int] = set()
+    kartas: dict[int, int] = {}  # verb → karta head
     genitives: list[list[int]] = []
-    groups = sorted(_groups(words, region), key=lambda g: words[g[0]].morph.vibhakti != PRATHAMA)
-    for group in groups:
+    governed = {words[v].line for v in verbs + verbals}
+    for group in _groups(words, region, governed):
         case = words[group[0]].morph.vibhakti
         rverbs = in_region[region[words[group[0]].line]]
         head = max(group, key=lambda i: _head_priority(words, i, rverbs))
@@ -284,10 +258,23 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
             agreeing = [v for v in rverbs if karta_agrees(words[head].morph, words[v].morph)]
             passive = [v for v in rverbs if words[v].morph.prayoga in ("कर्मणि", "भावे")
                        and words[v].morph.vacana == words[head].morph.vacana]
+            copular = [v for v in rverbs if v in kartas and words[v].morph.root in COPULA
+                       and words[v].morph.vacana == words[head].morph.vacana]
+            if agreeing and _pick(agreeing, words, head) in kartas:  # second phrase of the same karta
+                verb = _pick(agreeing, words, head)
+                head_k = kartas[verb]
+                for j in group:
+                    _set(words, j, "विशेषण", head_k)
+                continue
             if agreeing:
                 verb, role = _pick(agreeing, words, head), "कर्ता"
+                kartas[verb] = head
                 if words[verb].morph.root in COPULA:
                     sub_role = "विधेय"
+            elif copular:  # त्वम् समर्थस् असि: the other nominative is the predicate
+                for j in group:
+                    _set(words, j, "विधेय", kartas[_pick(copular, words, head)])
+                continue
             elif passive:
                 verb, role = _pick(passive, words, head), "कर्म"
             else:
@@ -319,7 +306,7 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
                 _set(words, j, "सम्बोधन" if case == SAMBODHANA else sub_role, head)
     for group in genitives:  # सम्बन्ध of the adjacent nominal; else an argument of the verb
         head = max(group, key=lambda i: _head_priority(words, i, []))
-        target = _adjacent_nominal(words, head, group)
+        target = _adjacent_nominal(words, head)
         if target is None:
             verb = _pick(in_region[region[words[head].line]] or verbs, words, head)
             fear = verb is not None and words[verb].morph.root in FEAR

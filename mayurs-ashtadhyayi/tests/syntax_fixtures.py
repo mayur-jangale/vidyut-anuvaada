@@ -97,3 +97,16 @@ def shveta() -> tuple[Reading, Reading]:
     b = hand([("श्वा", False, [nom("श्वा", "श्वन्", "प्रथमा")]), ("इतस्", False, [avyaya("इतस्")]),
               ("धावति", False, [dhav])])
     return a, b
+
+
+def gold_reading(number: int) -> Reading:
+    """Verse ``number`` of the sarga split as in the gold file, analysed by the lexicon."""
+    from mayur import gold, lexicon
+
+    words = []
+    for li, line in enumerate(gold.load()["verses"][number - 1]["lines"]):
+        for k, g in enumerate(line["words"]):
+            c = g["compound_member"]
+            words.append(Word(form=g["form"], line=li, start=k, end=k + 1, in_compound=c,
+                              analyses=list(lexicon.stems(g["form"]) if c else lexicon.padas(g["form"]))))
+    return Reading(words=words)

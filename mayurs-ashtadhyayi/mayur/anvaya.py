@@ -9,7 +9,7 @@ joins. Compound members stay together in their original order. Clauses follow te
 from __future__ import annotations
 
 from dataclasses import replace
-from typing import Optional
+from typing import Any, Callable, Optional
 
 from mayur.model import Reading, Word
 
@@ -19,7 +19,44 @@ PRIORITY = {
 }
 NEGATION = "न"
 CONJUNCTION = "च"
+QUOTE = "इति"
 _LAST = 12
+
+
+# Clause segmentation, shared with shabdabodha.resolve.
+
+def quoted(words: list[Word], v: int) -> bool:
+    """A finite verb directly followed by इति is quoted speech (its own clause)."""
+    nxt = v + 1
+    return nxt < len(words) and words[nxt].form == "इति"
+
+
+def regions(words: list[Word], verbs: list[int], agrees: Callable[[Any, Any], bool]) -> dict[int, int]:
+    """line → clause region: a verbless half-verse joins a neighbouring line it agrees with."""
+    lines = sorted({w.line for w in words})
+    with_verb = {words[v].line for v in verbs}
+    region = {ln: ln for ln in lines}
+    for ln in lines:
+        if ln in with_verb:
+            continue
+        mine = [w.morph for w in words if w.line == ln and not w.in_compound and w.morph and w.morph.vibhakti]
+        for other in (ln + 1, ln - 1, -1):
+            if other == -1:  # no verb line agrees: join the preceding verbless line if it agrees
+                other = ln - 1
+                if other not in region or other in with_verb:
+                    break
+            elif other not in with_verb:
+                continue
+            theirs = [w.morph for w in words if w.line == other and w.morph is not None and w.morph.kind == "subanta"]
+            if any(agrees(a, b) and a.vibhakti not in ("षष्ठी", "सम्बोधन") for a in mine for b in theirs):
+                region[ln] = region[other]
+                break
+    return region
+
+
+def pick(cands: list[int], words: list[Word], i: int) -> Optional[int]:
+    """Same half-verse first, then nearest."""
+    return min(cands, key=lambda j: (words[j].line != words[i].line, abs(j - i), j < i)) if cands else None
 
 
 def _priority(word: Word) -> int:
@@ -50,7 +87,7 @@ def _emit(words: list[Word], i: int, deps: dict[int, list[int]], out: list[int],
     done.add(i)
     children = [d for d in deps.get(i, []) if not words[d].in_compound]
     trailing = [d for d in children if words[d].role == "विधेय"
-                or (words[d].role == "अव्यय" and words[d].form == CONJUNCTION and d > i)]
+                or (words[d].role == "अव्यय" and words[d].form in (CONJUNCTION, QUOTE) and d > i)]
     before = sorted((d for d in children if d not in trailing), key=lambda d: (_priority(words[d]), d))
     for d in before:
         _emit(words, d, deps, out, done)

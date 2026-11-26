@@ -22,6 +22,7 @@ from mayur.lipi import from_varnas
 Varnas = tuple[str, ...]
 MAX_WORD = 30  # varnas
 _END = ("<END>",)
+_START = (0, (), False)  # (position, pending initial sounds, previous junction compound-internal)
 
 
 @dataclass(frozen=True)
@@ -123,6 +124,9 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
             jn = _Jn(ctx, tail, (), surf, frozenset(), ("८.३.१५",) if ctx[-1] in ("स्", "र्") else (), False)
             if jn not in index.get(surf, []):
                 index.setdefault(surf, []).append(jn)
+    # A half-verse may end inside a sandhi with the next half-verse: अस् before a voiced sound → ओ.
+    jn = _Jn(("अ", "स्"), ("अ", "स्"), (), ("ओ",), frozenset(), ("६.१.११४", "६.१.८७"), False)
+    index.setdefault(("ओ",), []).append(jn)
     return {k: tuple(v) for k, v in index.items()}
 
 
@@ -131,8 +135,34 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 # Weights tuned on Bala-kanda 1.21-79 (see module docstring); log-probability units.
 # Seen corpus counts dominate: an unseen whole form gets only a tiny lemma pseudo-count, while
 # compound members back off generously to their lemma counts (which include member uses).
-W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -0.5, "stem": 0.0, "samasa": 0.0,
-     "elide": 3.0, "vocative": 1.5, "unseen": 0.05}
+W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -1.0, "stem": 0.0, "samasa": 0.0,
+     "elide": 3.0, "vocative": 1.5, "unseen": 0.0005, "aas": 0.5}
+
+
+# Particles that never stand as the first member of a compound.
+_PARTICLES = frozenset(("हि", "च", "वा", "तु", "इव", "एव", "नु", "ह", "अपि", "इति", "न", "स्म", "खलु", "किल"))
+
+
+def _stem_ok(form: str, ms: tuple) -> bool:
+    """A finite verb or a particle is never a compound member, even if the kosha lists the form as a stem.
+
+    Forms that are also nominal padas (सर्व, राम, वन ...) stay allowed.
+    """
+    if any(m.source == "special" for m in ms):
+        return True
+    if form in _PARTICLES:
+        return False
+    padas = [m for m in _analyses(form, False) if m.quality >= 2]
+    verb = any(m.kind == "tinanta" for m in padas)
+    return not verb or any(m.kind == "subanta" and m.quality >= 3 for m in padas)
+
+
+@lru_cache(maxsize=300_000)
+def _can_follow_samasa(form: str, as_stem: bool) -> bool:
+    """The word after a compound-internal junction must be able to be nominal (not only a finite verb)."""
+    if as_stem:
+        return True
+    return any(m.kind != "tinanta" and m.quality >= 2 for m in _analyses(form, False))
 
 
 @lru_cache(maxsize=300_000)
@@ -162,6 +192,8 @@ def word_score(form: str, stem: bool, tier_used: int = 0) -> Optional[tuple[floa
     from mayur import freq
 
     ms = _analyses(form, stem)
+    if stem and not _stem_ok(form, ms):
+        return None
     penalty = 0.0
     if not ms and tier_used >= 1 and not stem and len(sd.varnas(form)) >= 4:
         from mayur import lexicon
@@ -228,7 +260,7 @@ class _Lattice:
     def edges(self, state) -> list:
         if state in self._edges:
             return self._edges[state]
-        i, head = state
+        i, head, after_samasa = state
         res = []
         nxt_space = min((s for s in self.sp if s > i), default=self.n)
         for k in range(i, min(nxt_space, self.n, i + MAX_WORD) + 1):
@@ -245,8 +277,12 @@ class _Lattice:
                 sc = word_score(form, jn.samasa, self.tier)
                 if sc is None:
                     continue
-                nxt = _END if j < 0 else (j, jn.right_head)
+                if after_samasa and not _can_follow_samasa(form, jn.samasa):
+                    continue
+                nxt = _END if j < 0 else (j, jn.right_head, jn.samasa)
                 pen = (W["samasa"] if jn.samasa else 0.0) + (W["elide"] if _unmarked_elision(jn) else 0.0)
+                if "८.३.२२" in jn.sutras:
+                    pen += W["aas"]
                 res.append((form, k, jn, sc[0] - pen, sc[1], nxt))
         if self.tier >= 2:
             res.extend(self._chunk_edges(i, head))
@@ -259,7 +295,7 @@ class _Lattice:
             if a == i and b > i:
                 form = from_varnas(head + self.t[a:b])
                 jn = _Jn((), (), (), (), frozenset(), (), False)
-                nxt = _END if b == self.n else (b, ())
+                nxt = _END if b == self.n else (b, (), False)
                 res.append((form, b, jn, -40.0, False, nxt))
         return res
 
@@ -280,7 +316,7 @@ class _Lattice:
         return self._count[key]
 
     def iter_paths(self) -> Iterator[Split]:
-        start = (0, ())
+        start = _START
         if self.best(start) == -math.inf:
             return
         tie = itertools.count()
@@ -299,7 +335,7 @@ class _Lattice:
 
     def _split(self, path, score: float) -> Split:
         words, juncs = [], []
-        for idx, ((i, head), (form, k, jn, _, _, nxt)) in enumerate(path):
+        for idx, ((i, head, _), (form, k, jn, _, _, nxt)) in enumerate(path):
             start = max(i - len(head), 0) if head else i
             words.append(SegWord(form, start, k + len(jn.surface) if jn.surface else k, jn.samasa))
             if nxt != _END:
@@ -328,9 +364,9 @@ def segment_line(line: str, top_k: int = 12) -> Segmentation:
     tier = 0
     for tier in (0, 1, 2):
         lat = _Lattice(text, spaces, tier)
-        if lat.best((0, ())) > -math.inf:
+        if lat.best(_START) > -math.inf:
             break
-    start = (0, ())
+    start = _START
     splits = list(itertools.islice(lat.iter_paths(), top_k))
     return Segmentation(line=line, count=lat.count(start, False), count_plain=lat.count(start, True),
                         splits=splits, tier=tier, _iter=lat.iter_paths)

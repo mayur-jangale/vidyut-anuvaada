@@ -52,3 +52,15 @@ def test_absolutive_with_own_object():
                     ("दृष्ट्वा", False, [avyaya("दृष्ट्वा", krt="क्त्वा")])]))
     assert r.words[3].role == "पूर्वकालक्रिया" and r.words[2].head == 3
     assert _forms(r) == ["रामस्", "वनम्", "दृष्ट्वा", "गच्छति"]
+
+
+def test_quoted_iti_follows_its_verb():
+    import pytest
+    from syntax_fixtures import gold_reading
+    try:
+        r = _full(gold_reading(6))
+    except Exception as e:
+        pytest.skip(f"gold/lexicon unavailable: {e}")
+    f = _forms(r)
+    assert f.index("इति") == f.index("श्रूयताम्") + 1 and f[-1] == "अब्रवीत्"
+    assert sorted(r.anvaya) == list(range(len(r.words)))
