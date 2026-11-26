@@ -80,8 +80,19 @@ def rule_text(source: str, code: str) -> str:
     return hit
 
 
+_TO_DEVA_DIGITS = str.maketrans("0123456789", "०१२३४५६७८९")
+
+
+def rule_number(code: str) -> dict[str, str]:
+    """A rule number in both numeral systems: {"devanagari": "६.१.८७", "arabic": "6.1.87"}."""
+    arabic = code.translate(_DIGITS)
+    return {"devanagari": arabic.translate(_TO_DEVA_DIGITS), "arabic": arabic}
+
+
 def rule_entry(source: str, code: str) -> dict[str, Any]:
-    return {"code": code, "source": sk(source), "text": sk(rule_text(source, code))}
+    number = rule_number(code)
+    return {"code": number["devanagari"], "number": number, "source": sk(source),
+            "text": sk(rule_text(source, code))}
 
 
 # ---------------------------------------------------------------- words
@@ -128,7 +139,8 @@ def _trace(word: Word) -> list[dict[str, Any]]:
     if word.proof is None:
         return []
     return [
-        {"code": s.code, "source": sk(s.source), "sutra": sk(rule_text(s.source, s.code)), "result": sk(s.result)}
+        {"code": rule_number(s.code)["devanagari"], "number": rule_number(s.code), "source": sk(s.source),
+         "sutra": sk(rule_text(s.source, s.code)), "result": sk(s.result)}
         for s in word.proof.trace
     ]
 

@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import replace
 from functools import lru_cache
 
-from mayur import bridge, lipi
+from mayur import bridge
 from mayur.model import Morph, SutraStep, WordProof
 from mayur.terms import NONFINITE_KRT, PARTICIPLE_KRT
 
@@ -203,6 +203,23 @@ def _matching(handle, target: str) -> tuple[bool, str, list[SutraStep]]:
     return False, "", []
 
 
+def _prove_with_particle(m: Morph, base: Morph, particle: str) -> WordProof:
+    """किम्-form + चित्/चन: the base is derived by vidyut and the junction is re-run forward."""
+    from mayur import sandhi
+
+    proof = prove(base)
+    wanted = {sandhi.canon(m.form), sandhi.canon(m.form[:-2] + "त्") if m.form.endswith("द्") else ""}
+    joined = [o for o in sandhi.outcomes(base.form, "चन" if particle == "चन" else "चित्")
+              if sandhi.canon(o.text) in wanted]
+    if not proof.derivable or not joined:
+        return WordProof(derivable=False, method="vidyut-prakriya + sandhi", trace=proof.trace,
+                         note=f"{base.form} + {particle} does not re-join to {m.form} by the sandhi rules")
+    junction = SutraStep("अष्टाध्यायी", ", ".join(joined[0].sutras) or "—", f"{base.form} + {particle} → {m.form}")
+    return WordProof(derivable=True, method="vidyut-prakriya + sandhi", derived_form=m.form,
+                     trace=[*proof.trace, junction],
+                     note=f"{base.form} is derived by vidyut; {particle} is a particle (अव्यय) joined by sandhi")
+
+
 def prove(m: Morph) -> WordProof:
     """Forward derivation of ``m``; derivable only if vidyut yields exactly the expected text."""
     h = m.handle
@@ -211,11 +228,7 @@ def prove(m: Morph) -> WordProof:
     if isinstance(h, tuple) and h and h[0] == "special":
         return WordProof(derivable=False, method="special", note=h[1])
     if isinstance(h, tuple) and h and h[0] == "particle":
-        base = prove(h[1])
-        return WordProof(derivable=base.derivable, method="vidyut-prakriya (base) + अव्यय",
-                         derived_form=base.derived_form, trace=base.trace,
-                         note=(f"{h[2]} is a particle (अव्यय) added to the derived form {h[1].form}; the "
-                               f"junction sandhi (e.g. 8.4.40) was not run through vidyut. {base.note}").strip())
+        return _prove_with_particle(m, h[1], h[2])
     if isinstance(h, tuple) and h and h[0] == "stem":
         if h[1] is None:
             return WordProof(derivable=False, method="stem", note="no stem derivation available")

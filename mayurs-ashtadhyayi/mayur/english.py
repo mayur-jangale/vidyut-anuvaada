@@ -21,12 +21,13 @@ _IRREGULAR: dict[str, tuple[str, str]] = {
     "wear": ("wore", "worn"), "keep": ("kept", "kept"), "meet": ("met", "met"),
     "swim": ("swam", "swum"), "fly": ("flew", "flown"), "beat": ("beat", "beaten"),
     "bind": ("bound", "bound"), "buy": ("bought", "bought"), "pay": ("paid", "paid"),
-    "stay": ("stayed", "stayed"), "weep": ("wept", "wept"), "hide": ("hid", "hidden"), "extol": ("extolled", "extolled"),
+    "stay": ("stayed", "stayed"), "weep": ("wept", "wept"), "hide": ("hid", "hidden"), "beg": ("begged", "begged"), "extol": ("extolled", "extolled"),
     "control": ("controlled", "controlled"), "compel": ("compelled", "compelled"),
 }
 _PLURALS = {"man": "men", "woman": "women", "child": "children", "foot": "feet", "tooth": "teeth",
             "mouse": "mice", "person": "people", "ox": "oxen", "wife": "wives", "life": "lives",
-            "knife": "knives", "leaf": "leaves", "wolf": "wolves", "deer": "deer", "sheep": "sheep"}
+            "knife": "knives", "leaf": "leaves", "wolf": "wolves", "deer": "deer", "sheep": "sheep", "people": "people",
+            "folk": "folk", "cattle": "cattle", "police": "police"}
 _VOWELS = "aeiou"
 
 
@@ -51,17 +52,37 @@ def _ed(v: str) -> str:
     return v + "ed"
 
 
+_ING_KEEP = {"bring", "sing", "ring", "swing", "cling", "fling", "string", "spring", "hang", "king"}
+
+
+def base(verb: str) -> str:
+    """Bare verb from a gloss that is already an -ing form ("seeing" -> "see")."""
+    pre, v = _head(verb)
+    if not v.endswith("ing") or len(v) < 5 or v in _ING_KEEP or v in _IRREGULAR:
+        return verb
+    stem = v[:-3]
+    if len(stem) > 2 and stem[-1] == stem[-2] and stem[-1] not in "lsfz":
+        stem = stem[:-1]
+    elif stem[-1] in "vcz" or (stem[-1] == "s" and not stem.endswith("ss")) or \
+            (stem.endswith("ng") and stem not in _IRREGULAR):
+        stem += "e"
+    return pre + stem
+
+
 def past(verb: str) -> str:
+    verb = base(verb)
     pre, v = _head(verb)
     return pre + (_IRREGULAR[v][0] if v in _IRREGULAR else _ed(v))
 
 
 def participle(verb: str) -> str:
+    verb = base(verb)
     pre, v = _head(verb)
     return pre + (_IRREGULAR[v][1] if v in _IRREGULAR else _ed(v))
 
 
 def third_singular(verb: str) -> str:
+    verb = base(verb)
     pre, v = _head(verb)
     irregular = {"be": "is", "have": "has", "do": "does", "go": "goes"}
     if v in irregular:
@@ -85,6 +106,7 @@ def plural(noun: str) -> str:
 
 
 def present_participle(verb: str) -> str:
+    verb = base(verb)
     pre, v = _head(verb)
     if v.endswith("ie"):
         return pre + v[:-2] + "ying"
@@ -158,3 +180,36 @@ def supplied_subject(purusha: str | None, vacana: str | None, accusative: bool =
     else:
         w = ("them" if accusative else "they") if plural_ else ("him" if accusative else "he")
     return f"[{w}]"
+
+
+_AGENT = {"protect": "protector", "act": "actor", "create": "creator", "govern": "governor",
+          "direct": "director", "instruct": "instructor", "conduct": "conductor", "rule": "ruler"}
+
+
+def agent(verb: str) -> str:
+    """Agent noun of a verb gloss ("protect" -> "protector", "teach" -> "teacher")."""
+    pre, v = _head(base(verb))
+    if v in _AGENT:
+        return pre + _AGENT[v]
+    if v.endswith("e"):
+        return pre + v + "r"
+    if v.endswith("y") and len(v) > 1 and v[-2] not in _VOWELS:
+        return pre + v[:-1] + "ier"
+    return pre + (v + v[-1] if _doubles(v) else v) + "er"
+
+
+def krt_form(krt: str | None, g: str) -> str:
+    """English for a krdanta suffix applied to a verb gloss."""
+    if krt == "क्त":
+        return participle(g)
+    if krt == "क्तवतु":
+        return past(g)
+    if krt in ("शतृ", "शानच्"):
+        return present_participle(g)
+    if krt in ("तृच्", "तृन्", "तृ"):
+        return agent(g)
+    if krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्"):
+        return "to be " + participle(g)
+    if krt in ("क्वसु", "कानच्"):
+        return "having " + participle(g)
+    return g

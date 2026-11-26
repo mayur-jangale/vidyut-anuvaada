@@ -22,6 +22,8 @@ FIRST_PERSON = {"अस्मद्"}
 SECOND_PERSON = {"युष्मद्"}
 COPULA = {"अस्", "भू"}
 FEAR = {"भी", "त्रस्", "उद्विज्"}
+POSSESSIVE = ("वत्", "मत्", "इन्")
+LOCAL = {"करण", "अधिकरण", "सम्प्रदान", "अपादान"}
 PRONOUNS = {"किम्", "तद्", "यद्", "इदम्", "एतद्", "अदस्", "अस्मद्", "युष्मद्"}
 
 # Weights grid-searched on gold morphology of Bala-kanda 1.21-79 (never 1-20): case+number+gender
@@ -31,6 +33,7 @@ W_PHRASE = 3.0  # same case+number+gender nominals, divided by distance
 W_KARTA = 2.5  # nominative agreeing with a कर्तरि finite verb
 W_KARMA = 0.6  # per accusative when a verb or verbal is present
 W_STRAY = 0.5  # nominative not agreeing with any karta of a कर्तरि verb
+W_LUT = 4.0  # लुट् reading where a तृच् agent noun is as likely
 W_VOC = 3.0  # vocative without corpus support
 W_VERBLESS = 1.5  # verbless: nominative outside the subject group, or ungoverned accusative
 SWEEPS = 4
@@ -139,9 +142,18 @@ def objective(words: list[Word], chosen: list[int], active: list[int]) -> float:
     # a vocative needs corpus support when the word has another reading
     total -= W_VOC * sum(1 for k, m in ms.items() if m.vibhakti == SAMBODHANA and len(words[k].analyses) > 1
                          and (_freq("analysis_count", m) == 0 or any(a.kind == "avyaya" for a in words[k].analyses)))
+    total -= W_LUT * sum(1 for k, m in ms.items() if _agent_noun_preferred(words[k], m))
     total += W_KARTA * sum(1 for k, m in ms.items() if m.kind == "avyaya" and m.form == "इति"
                            and k - 1 in ms and is_finite(ms[k - 1]))  # quotative इति after a verb
     return total
+
+
+def _agent_noun_preferred(word: Word, m: Morph) -> bool:
+    """रक्षिता: a लुट् verb with a तृच् nominative alternative the corpus does not disfavour."""
+    if not (is_finite(m) and m.lakara == "लुट्"):
+        return False
+    agents = [a for a in word.analyses if a.krt == "तृच्" and is_case(a, PRATHAMA)]
+    return bool(agents) and _freq("analysis_count", m) <= max(_freq("analysis_count", a) for a in agents)
 
 
 def choose(words: list[Word]) -> list[int]:
@@ -319,25 +331,47 @@ def assign_roles(words_in: list[Word]) -> tuple[list[Word], list[str]]:
     for i, w in enumerate(words):
         if w.morph is not None and w.morph.kind == "avyaya" and not w.role:
             line_verbs = [v for v in verbs if words[v].line == w.line]
-            head = i - 1 if w.form == "च" and i > 0 else _pick(line_verbs or in_region[region[w.line]], words, i)
+            head = i - 1 if w.form in ("च", "इव") and i > 0 else _pick(line_verbs or in_region[region[w.line]], words, i)
             _set(words, i, "अव्यय", head)
-    _attach_verbless(words, region, in_region)
+    _attach_verbless(words, region, in_region, notes)
     return words, notes
 
 
-def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[int, list[int]]) -> None:
-    """Nominal clauses: in a verbless region one subject; dangling words attach to it."""
+def can_be_subject(words: list[Word], i: int) -> bool:
+    """Pronoun, or a noun that is not a participle, possessive (-वत्/-मत्/-इन्) or compound final."""
+    m = words[i].morph
+    if m.lemma in PRONOUNS:
+        return True
+    if m.krt or m.lemma.endswith(POSSESSIVE) or (i > 0 and words[i - 1].in_compound):
+        return False
+    return lemma_class(m.lemma) == "noun"
+
+
+def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[int, list[int]],
+                     notes: list[str]) -> None:
+    """Nominal clauses: one expressed subject or none; dependents attach to the nearest predicate."""
     for r, rverbs in in_region.items():
         idx = [i for i, w in enumerate(words) if region[w.line] == r]
         subjects = [i for i in idx if words[i].role == "" and is_case(words[i].morph, PRATHAMA)]
         if not subjects:
             continue
         if not rverbs:
-            main = max(subjects, key=lambda i: (_head_priority(words, i, []), -i))
-            for i in subjects:
-                if i != main:
+            able = [i for i in subjects if can_be_subject(words, i)]
+            main = max(able, key=lambda i: (_head_priority(words, i, []), -i)) if able else None
+            for i in idx:  # every nominative, including qualifiers of a non-subject, is विधेय
+                if is_case(words[i].morph, PRATHAMA) and i != main and (i in subjects or words[i].role == "विधेय"):
                     _set(words, i, "विधेय", main)
-            subjects = [main]
+            if main is None:
+                notes.append("nominal clause: subject not expressed; all nominatives are विधेय")
+            predicates = [i for i in idx if is_case(words[i].morph, PRATHAMA) and not words[i].in_compound]
+            for i in idx:  # epithet lists: local attachment to the nearest predicate in the line
+                if words[i].role in LOCAL and words[i].role != "सम्बन्ध" or (words[i].role == "सम्बन्ध" and
+                                                                           words[i].head is None):
+                    same = [j for j in predicates if words[j].line == words[i].line] or predicates
+                    _set(words, i, words[i].role, _pick(same, words, i))
+            subjects = [main] if main is not None else []
+        if not subjects:
+            continue
         for i in idx:
             if words[i].role and words[i].head is None and i not in subjects and words[i].role != "क्रिया":
                 _set(words, i, words[i].role, _pick(subjects, words, i))

@@ -136,7 +136,8 @@ def pausa_index() -> dict[Varnas, tuple[_Jn, ...]]:
 # Seen corpus counts dominate: an unseen whole form gets only a tiny lemma pseudo-count, while
 # compound members back off generously to their lemma counts (which include member uses).
 W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -1.0, "stem": 0.0, "samasa": 0.0,
-     "elide": 3.0, "vocative": 1.5, "unseen": 0.0005, "aas": 1.5}
+     "elide": 3.0, "vocative": 1.5, "unseen": 0.0005, "aas": 1.5,
+     "inner": 0.0, "short": 0.0}
 
 
 # Particles that never stand as the first member of a compound.
@@ -283,11 +284,27 @@ class _Lattice:
                 pen = (W["samasa"] if jn.samasa else 0.0) + (W["elide"] if _unmarked_elision(jn) else 0.0)
                 if "८.३.२२" in jn.sutras:
                     pen += W["aas"]
+                if not jn.samasa:
+                    pen += self._inner_penalty(word, i, k, j, after_samasa)
                 res.append((form, k, jn, sc[0] - pen, sc[1], nxt))
         if self.tier >= 2:
             res.extend(self._chunk_edges(i, head))
         self._edges[state] = res
         return res
+
+    def _inner_penalty(self, word: Varnas, i: int, k: int, j: int, after_samasa: bool) -> float:
+        """Opening a pada boundary inside a chunk the text writes solid needs evidence.
+
+        A boundary inside a written chunk costs ``inner``; a short pada (≤ 2 syllables) carved out
+        next to such a boundary costs ``short`` more, so particles and pronouns are not cut out of
+        the middle of a rare but well-formed word.
+        """
+        left_inner = i > 0 and i not in self.sp and not after_samasa
+        right_inner = j >= 0 and not any(k <= s <= j for s in self.sp)
+        pen = W["inner"] if right_inner else 0.0
+        if (left_inner or right_inner) and sum(1 for v in word if sd.is_vowel(v)) <= 2:
+            pen += W["short"]
+        return pen
 
     def _chunk_edges(self, i: int, head: Varnas) -> list:
         res = []

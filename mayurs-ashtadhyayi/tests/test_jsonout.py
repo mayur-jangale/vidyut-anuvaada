@@ -44,7 +44,8 @@ def test_word_grammar_and_description():
 def test_trace_and_junction_rule_texts():
     d = jsonout.to_json(make_analysis())
     step = d["words"][7]["sutra_trace"][0]
-    assert set(step) == {"code", "source", "sutra", "result"}
+    assert set(step) == {"code", "number", "source", "sutra", "result"}
+    assert step["number"]["arabic"].translate(str.maketrans("0123456789", "०१२३४५६७८९")) == step["code"]
     j = next(x for x in d["junctions"] if x["left"] == 4)
     assert j["sutras"][0]["text"]["devanagari"] == "मोऽनुस्वारः"
     assert j["surface"]["devanagari"] == "वाग्विदां"
