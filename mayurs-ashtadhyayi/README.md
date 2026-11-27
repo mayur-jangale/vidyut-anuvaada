@@ -82,35 +82,51 @@ dictionaries, and words where the corpus's own lemma or tag is the odd one (ह�
 plural). This is the part that is "all formula", and its target is 100%. Which of several valid
 readings is meant is not decided by the rules; that is the next table.
 
-### Word level, first choice (development sample: 300 random verses from 13 books)
+### Word level, first choice
 
-`python eval/eval_dcs.py --sample eval/samples/dev300b.json` — full output in `eval/results/`.
+`python eval/eval_dcs.py --sample <file>` — full output in `eval/results/`.
 
-| Measure | Result |
-|---|---|
-| Padas identified (a compound is one pada, compared as written) | F1 0.970 |
-| Words identified, compound members counted separately | F1 0.954 |
-| Lemma (aligned words) | 3762/3823 = 98.4% |
-| All grammar features | 3574/3823 = 93.5% |
-| Full analysis: lemma and every feature | 3551/3823 = 92.9% |
-| Words proof-verified by vidyut-prakriya | 4573/4696 = 97.4% |
-| Verses with status `verified` | 203/300 = 67.7% |
+| Measure | Sealed test: 200 verses, 16 books, never seen before, run once | Development: 300 verses, 13 books |
+|---|---|---|
+| Padas identified (a compound is one pada, compared as written) | F1 0.961 | F1 0.975 |
+| Words identified, compound members counted separately | F1 0.951 | F1 0.959 |
+| Lemma (aligned words) | 2422/2442 = 99.2% | 3878/3908 = 99.2% |
+| All grammar features | 2344/2442 = 96.0% | 3716/3908 = 95.1% |
+| Full analysis: lemma and every feature | 2340/2442 = 95.8% | 3706/3908 = 94.8% |
+| End to end: the word found and fully analysed, of all corpus words | 2760/3066 = 90.0% | 4249/4735 = 89.7% |
+| Words proof-verified by vidyut-prakriya | 2949/3046 = 96.8% | 4554/4682 = 97.3% |
+| Verses with status `verified` | 123/200 = 61.5% | 205/300 = 68.3% |
 
-**Sealed test:** not yet run for the current models. The target is 95% for padas identified and for full
-analysis; the development numbers above say the first is met and the second is not yet (92.9%).
+The sealed sample was drawn by `python scripts/sample_test.py --pool sealed_test --n 200 --label run1`
+after all tuning was finished, and evaluated once (`eval/results/sealed_run1.txt`); its verses are
+logged in `eval/sealed_ledger.json` and will not be drawn again. The target was 95% for padas
+identified, words identified and full analysis; all three are met on the sealed sample. On the
+development sample full analysis is 94.8%, just under the target. The end-to-end figure multiplies
+the two steps: a word counts only if it was both found and fully analysed.
+
+By book on the sealed sample (words identified F1): Bhāgavatapurāṇa, Buddhacarita, Manusmṛti and
+Kathāsaritsāgara 0.95 to 0.96; Mahābhārata (97 verses) 0.94; Rāmāyaṇa 0.90; Liṅgapurāṇa and
+Ṛtusaṃhāra 0.88; Kirātārjunīya (2 verses) 0.68. Court poetry is the weakest genre. With 1 to 18
+verses per book outside the Mahābhārata, the per-book numbers are indications only.
+
+What the word-level errors are (development sample, `python scripts/error_words.py`): of the words
+with a wrong feature, the largest groups are gender where the masculine and neuter forms are the same
+(the corpus itself tags the neuter इन्द्रिय as masculine 375 times and as neuter 359 times), nominative against accusative of neuters
+(which only the sentence decides), and a participle against the adjective it has become (भूत).
 
 The comparison conventions are documented and tested in `eval/eval_match.py` and `mayur/ud.py`
-(for example: the corpus tags glued prefixes such as स-, सु-, अ- as free words, and reconstructs
-some forms the text does not have). Compound members are scored separately because the corpus
-itself is not consistent about splitting lexicalised compounds.
+(for example: the corpus tags glued prefixes such as स-, सु-, अ- as free words, reconstructs
+some forms the text does not have, cites causatives now under the root and now under the stem in
+-अय्, and cites a participle now under its root and now under its own stem). Compound members are
+scored separately because the corpus itself is not consistent about splitting lexicalised compounds.
 
 ### Everyday Sanskrit (regression sets written by hand for this project)
 
 | Set | Result | Command |
 |---|---|---|
-| 44 well-known lines (subhāṣitas, mottoes, simple prose): pada split | 41/44 chosen split right; 44/44 right split among the kept readings | `python eval/eval_wellknown.py` |
-| 40 plain prose sentences: roles and heads of the listed words | 39/40 sentences, 104/106 words | `python eval/eval_simple.py` |
-| The same 40 sentences: readable English equal to the hand-written one (articles ignored) | 26/40 | `python eval/eval_simple.py` |
+| 44 well-known lines (subhāṣitas, mottoes, simple prose): pada split | 42/44 chosen split right; 44/44 right split among the kept readings | `python eval/eval_wellknown.py` |
+| 46 plain prose sentences: roles and heads of the listed words | 45/46 sentences, 119/121 words | `python eval/eval_simple.py` |
+| The same 46 sentences: readable English equal to the hand-written one (articles ignored) | 32/46 | `python eval/eval_simple.py` |
 | `श्वेतो धावति` | both `श्वेतः धावति` and `श्वा इतः धावति` are returned, each proof-verified | `mayur analyze "श्वेतो धावति"` |
 
 ### Sentence structure and compounds on verse (reference annotated by Claude, not human-verified)
@@ -121,10 +137,11 @@ types, prose order and English written by Claude on top of the corpus's word spl
 
 | Measure (development verses) | Rāmāyaṇa 1.41–79 | 60 verses, other books |
 |---|---|---|
-| Role right, whole pipeline from raw text | 76.4% | 72.5% |
-| Head right, whole pipeline | 66.0% | 57.2% |
-| Role right when the corpus's split and grammar are given | 78.7% | 74.3% |
-| Compound type right when the split is given | 98.3% | 84.7% |
+| Role right, whole pipeline from raw text | 345/434 = 79.5% | 565/765 = 73.9% |
+| Head right, whole pipeline | 305/434 = 70.3% | 434/765 = 56.7% |
+| Role right when the corpus's split and grammar are given | 361/451 = 80.0% | 589/795 = 74.1% |
+| Head right when the corpus's split and grammar are given | 331/451 = 73.4% | 493/795 = 62.0% |
+| Compound type right when the split is given | 59/60 = 98.3% | 94/111 = 84.7% |
 | Agreement of two annotation passes with each other (roles / heads) | 98% / 99% | 89% / 87% |
 
 `python eval/eval_roles.py --claude <file> [--gold-words]`, `python eval/eval_compounds.py --claude <file> [--gold-words]`.
@@ -133,8 +150,13 @@ types, prose order and English written by Claude on top of the corpus's word spl
 
 - **Sentence structure on verse is the weakest layer** (numbers above). Plain prose is handled
   well; long verse sentences with several clauses, relative clauses and ellipsis are not.
-- **The English is rough.** It is built by rule from the analysis; it is right on plain
-  sentences about half the time word for word, and stiff or wrong on complex verse.
+- **The English is rough.** It is built by rule from the analysis; on plain sentences it equals
+  the hand-written English two times in three (32 of 46), and it is stiff or wrong on complex verse.
+- **Court poetry** (long compounds, rare words) is the weakest genre at word level.
+- **Epic and usage forms** are analysed only where a rule here covers them (see the table above);
+  others stay unknown words, e.g. ब्रवीहि for ब्रूहि.
+- A compound printed with spaces is recognised only after a stem the corpus knows almost solely as
+  a compound member; `वेद फलम्` stays two words.
 - Compounds are not derived by vidyut's Python API; our own rule chain covers the type rule,
   the elision of case endings (2.4.71), sandhi and the final inflection.
 - Words vidyut lists but cannot derive (the enclitics मे, ते; महा- in compounds) leave a verse
