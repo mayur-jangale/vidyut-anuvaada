@@ -33,7 +33,7 @@ reproduces the text.
 | Compounds | Type by rule (2.1–2.2) with the deciding sūtra, vigraha from real inflected forms, rule chain. | `mayur/compounds.py`, `mayur/samasa*.py` |
 | Sentence | Kāraka roles and heads; a link is kept only if the forward rule (role + what the verb form expresses → case) gives the word's actual case (1.4.23–55, 2.3, 3.4.67–72). Clauses: relative and quoted clauses, participle predicates, the two objects of a double-object verb or of a causative (1.4.51, 1.4.52). The particle मा is told from the enclitic for माम् by position and tense (8.1.18, 8.1.23, 3.3.175). | `mayur/vakya*.py`, `mayur/karaka*.py`, `mayur/particle_ma.py` |
 | Meaning | Dictionary gloss; a root's meaning by its class where the classes differ (पाति protects, पिबति drinks); sense in context; meaning read off the derivation (which suffix rule gives which sense). | `mayur/gloss.py`, `mayur/senses.py`, `mayur/artha.py` |
-| English | A literal aligned rendering, then fixed rewriting rules with checks that no word, number, tense or negation changed. | `mayur/translate*.py`, `mayur/fluent*.py` |
+| English | A literal aligned rendering, then fixed rewriting rules with checks that no word, number, tense or negation changed. A बहुव्रीहि is placed after its noun ("Arjuna, his mind agitated by grief"). An optional trained translator can add a third line; it is off by default (see below). | `mayur/translate*.py`, `mayur/fluent*.py`, `mayur/translator*.py` |
 
 Statistics (corpus counts, the two trained rankers) only **choose among readings the rules
 allow**. Alternatives are kept with their scores and never dropped silently.
@@ -44,6 +44,7 @@ allow**. Alternatives are kept with their scores and never dropped silently.
 pip install -e ".[dev]"                 # add ".[neural]" for the optional torch-based ranker features
 python scripts/fetch_data.py            # vidyut data + DCS corpus at a pinned revision; builds data/derived/
 mayur analyze "श्वेतो धावति"              # JSON for one verse (Devanagari or IAST input)
+mayur analyze "रामः वनं गच्छति" --translator   # also the experimental trained translator (needs torch)
 mayur verse 1                           # Rāmāyaṇa, Bālakāṇḍa 1.1 from the bundled text
 mayur html --verses 1-20 --out docs/index.html
 python -m pytest                        # test suite
@@ -135,30 +136,79 @@ scored separately because the corpus itself is not consistent about splitting le
 | 46 plain prose sentences: roles and heads of the listed words | 45/46 sentences, 119/121 words | `python eval/eval_simple.py` |
 | The same 46 sentences: readable English equal to the hand-written one (articles ignored). The English rules were tuned on these sentences, so this is not an independent score | 45/46 | `python eval/eval_simple.py` |
 | 120 everyday lines the rules were not tuned on (40 prose sentences, 40 well-known verse lines, 40 sandhi-heavy lines; written by Claude, not human-verified): split right as first choice / right split among the kept readings | 110/120, 118/120 | `python eval/eval_everyday.py` |
-| The same 120: every lemma right / every grammar tag right (per line) | 97/120, 92/120 | `python eval/eval_everyday.py` |
-| The same: every listed role and head right (prose 26/40, verse lines 7/35, sandhi-heavy 17/34) | 50/109 | `python eval/eval_everyday.py` |
-| The same: status `verified` | 116/120 | `python eval/eval_everyday.py` |
+| The same 120: every lemma right / every grammar tag right (per line) | 97/120, 93/120 | `python eval/eval_everyday.py` |
+| The same: every listed role and head right (prose 29/40, verse lines 11/35, sandhi-heavy 18/34) | 58/109 | `python eval/eval_everyday.py` |
+| The same: status `verified` | 115/120 | `python eval/eval_everyday.py` |
 | `श्वेतो धावति` | both `श्वेतः धावति` and `श्वा इतः धावति` are returned, each proof-verified | `mayur analyze "श्वेतो धावति"` |
 
 ### Sentence structure and compounds on verse (reference annotated by Claude, not human-verified)
 
-139 verses (Rāmāyaṇa Bāla 1.1–79 and 60 verses from 13 other books) carry roles, heads, compound
+179 verses (Rāmāyaṇa Bāla 1.1–79 and 100 verses from other books) carry roles, heads, compound
 types, prose order and English written by Claude on top of the corpus's word split
-(`eval/review/claude/`). Verses 1–20 and a second annotation pass were kept out of tuning.
+(`eval/review/claude/`). Rules were tuned on Rāmāyaṇa 1.41–79 and on 60 of the other verses. 40
+further verses (`dev_pool_061_100_V.json`) are a validation set: used only to accept or reject a
+finished rule, never read for writing one. Rāmāyaṇa 1.1–20 and a second annotation pass were kept
+out of tuning altogether.
 
-| Measure (development verses) | Rāmāyaṇa 1.41–79 | 60 verses, other books |
-|---|---|---|
-| Role right, whole pipeline from raw text | 345/434 = 79.5% | 570/764 = 74.6% |
-| Head right, whole pipeline | 305/434 = 70.3% | 447/764 = 58.5% |
-| Role right when the corpus's split and grammar are given | 362/451 = 80.3% | 598/795 = 75.2% |
-| Head right when the corpus's split and grammar are given | 332/451 = 73.6% | 509/795 = 64.0% |
-| Compound type right when the split is given | 59/60 = 98.3% | 94/111 = 84.7% |
-| Agreement of two annotation passes with each other (roles / heads) | 98% / 99% | 89% / 87% |
+| Measure | Rāmāyaṇa 1.41–79 (tuning) | 60 verses, other books (tuning) | 40 verses, other books (validation) |
+|---|---|---|---|
+| Role right, whole pipeline from raw text | 353/435 = 81.1% | 586/763 = 76.8% | 384/510 = 75.3% |
+| Head right, whole pipeline | 323/435 = 74.3% | 480/763 = 62.9% | 302/510 = 59.2% |
+| Role right when the corpus's split and grammar are given | 372/451 = 82.5% | 612/795 = 77.0% | 411/523 = 78.6% |
+| Head right when the corpus's split and grammar are given | 351/451 = 77.8% | 538/795 = 67.7% | 325/523 = 62.1% |
+| Compound type right when the split is given | 59/60 = 98.3% | 95/111 = 85.6% | 56/71 = 78.9% |
+| Agreement of two annotation passes with each other (roles / heads) | 98% / 99% | 89% / 87% | not annotated twice |
 
-On Rāmāyaṇa 1.1–20, which no rule was tuned on: roles 182/215 = 84.7% and heads 158/215 = 73.5% for the
-whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
+On Rāmāyaṇa 1.1–20, which no rule was tuned on: roles 181/216 = 83.8% and heads 154/216 = 71.3% for the
+whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`). Before the clause rules of the
+last round these read 182/215 = 84.7% and 158/215 = 73.5%: those rules raised every tuning and
+validation number and the everyday set, and lowered this held-out set by about one point on roles
+and two on heads. They were kept on the strength of the validation set; which of them costs the
+held-out links was not examined, so that these verses stay unseen.
 
 `python eval/eval_roles.py --claude <file> [--gold-words]`, `python eval/eval_compounds.py --claude <file> [--gold-words]`.
+
+### English
+
+Two English lines are always produced by fixed rules, with no model: a literal line aligned word by
+word, and a readable line rewritten from it under checks (no word, number, tense or negation may
+change; supplied words are bracketed in the literal line).
+
+| Check | Result |
+|---|---|
+| 46 plain prose sentences: readable line equal to a hand-written one (articles ignored; the rules were tuned on these) | 45/46 |
+| 99 annotated verses, structure given (`eval/eval_english.py`, gold mode): chrF of the readable line against Claude's English | 38.4 (60 verses, other books), 41.2 (Rāmāyaṇa 1.41–79). Before the compound and absolutive rewriting these read 38.5 and 42.0: joining a chain of absolutives under one "having" reads better and scores slightly lower |
+
+Bhagavadgītā 1.46–47, checked by hand at the user's request (whole pipeline):
+
+- 1.46 — "If the Dhārtarāṣṭras, with weapon in hand, should kill me, without resistance and without weapon, in battle; it should be my greater safety."
+- 1.47 — "Having said thus and released the bow with arrow, Arjuna, his mind agitated by grief, sat in battle in the chariot seat."
+
+Both are understandable and stiff. Before the last round of rules they read "If weapon-the hand
+Dhārtarāṣṭras should kill me, without resistance, without weapon in battle; …" and "Having said thus
+having released with-arrow bow, grief-be agitated-mind Arjuna sat in the battle chariot seat."
+
+### Trained translator (experimental, off by default)
+
+A small sequence-to-sequence model (7.6 M parameters, 15 MB, CPU) trained in this repository on the
+Itihāsa corpus (Apache-2.0), fed with the engine's simplified Sanskrit (stems, grammar tags, glosses)
+rather than the raw verse. `mayur analyze "…" --translator` adds its line as `machine_translation`.
+
+| System | 30 Itihāsa dev verses: BLEU / chrF | 46 plain sentences |
+|---|---|---|
+| Trained translator (6,749 training verses, 75 minutes on one CPU thread) | 5.5 / 22.4 | 0 of 46 right (repeats words) |
+| The engine's rule-built readable line | 1.1 / 24.2 | 45 of 46 |
+
+It is **not good enough to use**: it invents names and events and repeats words (रामः वनं गच्छति →
+"And the forest go to Rāma, Rāma, the forest, Rāma has come to Rāma."). It was trained on under a
+tenth of the corpus for lack of time; scores were still rising with more data (BLEU 3.2 → 4.7 on 100
+dev verses as the data went from 2.2k to 6.7k verses). The test split was never scored. A second
+variant, low-rank adapters on the open flan-t5-small, is written (`mayur/translator_t5.py`,
+`scripts/train_translator_t5.py`) but was never trained. Open translators tried without training:
+opus-mt (chrF 16.0 on 60 verses) and NLLB-200 (17.2, non-commercial licence) were below the
+engine's own line (23.1); IndicTrans2 could not be fetched without a login.
+Rebuild: `python scripts/fetch_data.py --with-itihasa`, `python scripts/build_translation_data.py`,
+`python scripts/train_translator.py --form B --tag b1 --minutes 75`.
 
 ## Known limits
 
@@ -166,6 +216,14 @@ whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
   well; long verse sentences with several clauses, relative clauses and ellipsis are not.
 - **The English is rough.** It is built by rule from the analysis; it is right on the plain sentences
   its rules were tuned on, and stiff or wrong on complex verse, where it inherits every wrong role.
+  The trained translator is worse still and is off by default.
+- मा before an imperative, standing right before the verb (स मा पातु), is left to the tagger: grammar
+  alone does not tell "may he protect me" from "may he not protect".
+- Two accusative nouns alike in gender and number with a causative (शिष्यं धर्मं बोधयति) are read as one
+  phrase, not as two objects.
+- A compound that should be a बहुव्रीहि but is typed otherwise (त्यक्तराज्य as कर्मधारय) is rendered with a
+  hyphen ("abandon-kingdom Rāma"); only the shapes with a rule are rewritten (हतपुत्र "his son killed",
+  शस्त्रपाणि "with weapon in hand", सशर "with arrow", महाबाहु "great-armed").
 - **Court poetry** (long compounds, rare words) is the weakest genre at word level.
 - **Epic and usage forms** are analysed only where a rule here covers them (see the table above);
   others stay unknown words, e.g. संक्रामयामास.
@@ -195,6 +253,10 @@ whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
 - UD Sanskrit treebanks (UFAL, Vedic): CC BY-SA 4.0, fetched by script for evaluation only.
 - Monier-Williams (Cologne): licence unclear; optional (`fetch_data.py --with-mw`), local only,
   never committed, not used by the gloss lookup.
+- Itihāsa corpus (Aralikatte et al. 2021): Apache-2.0, fetched by script at a pinned revision
+  (`fetch_data.py --with-itihasa`), never committed. The experimental translator weights in
+  `mayur/models/translator*` were trained on part of it and carry its attribution; Rāmāyaṇa
+  Bālakāṇḍa 1 was removed from the training data.
 - No gloss or translation was copied from valmiki.iitk.ac.in or valmikiramayan.net.
 
 See `NOTICE` for full credits and `docs/ROADMAP.md` for the milestones.
