@@ -43,7 +43,7 @@ def qualify_personal(words: list[Word], qualifying: set[int], notes: list[str]) 
         taken = []
         from mayur.karaka import two_objects
 
-        second = w.head is not None and bool(two_objects(words[w.head].morph))  # मा ज्योतिस् गमय: the verb takes
+        second = w.head is not None and two_objects(words[w.head].morph) == "1.4.52"  # मा ज्योतिस् गमय: the verb takes
         for step in (1, -1):                                                   # the noun as its other कर्म
             j = p + step
             while 0 <= j < len(words) and words[j].line == w.line:
