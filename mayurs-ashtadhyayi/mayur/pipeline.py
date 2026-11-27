@@ -173,10 +173,36 @@ def candidate_readings(lines: Sequence[str]) -> tuple[list[segmenter.Segmentatio
     return segmentations, candidates, notes
 
 
+# A short free word (at most SCRAP_SYLLABLES syllables) that the corpus never has as a word, whose chosen
+# analysis is of a stem or root the corpus never shows (in its masculine citation either), is a dictionary
+# scrap: पुनस् of a stem पुन beside the indeclinable पुनर्, the vocative म beside the enclitic मा. A reading
+# pays SCRAP_PENALTY for each. A frequency judgement, not a grammar rule.
+SCRAP_SYLLABLES = 2
+SCRAP_PENALTY = 0.08
+
+
+def _scrap(w: Word) -> bool:
+    from mayur import freq, sandhi, segmenter
+
+    m = w.morph
+    if w.in_compound or m is None or m.source != "kosha" or freq.analysis_count(m) or segmenter._form_count(w.form):
+        return False
+    if sum(map(sandhi.is_vowel, sandhi.varnas(w.form))) > SCRAP_SYLLABLES:
+        return False
+    lemma = m.root or m.lemma
+    cited = (lemma, lemma[:-1]) if lemma.endswith(("ा", "ी")) else (lemma,)  # वंशी / वंश (4.1.4, 4.1.41)
+    return not any(freq.lemma_count(x) for x in cited)
+
+
+def _rank_key(r: Reading) -> tuple[float, int]:
+    total = r.scores.get("total", 0.0) + VERIFIED_BONUS * (r.status == VERIFIED)
+    return -(total - SCRAP_PENALTY * sum(map(_scrap, r.words))), len(r.words)
+
+
 def choose(candidates: list[Reading]) -> list[Reading]:
-    """Candidates best first by total score; proof-verified readings win near ties. Nothing is dropped."""
-    return sorted(candidates, key=lambda r: (-(r.scores.get("total", 0.0) + VERIFIED_BONUS * (r.status == VERIFIED)),
-                                             len(r.words)))
+    """Candidates best first by total score; proof-verified readings win near ties; dictionary scraps
+    cost a little. Nothing is dropped."""
+    return sorted(candidates, key=_rank_key)
 
 
 def analyze_verse(text: str, verse_id: str = "", script: str | None = None,

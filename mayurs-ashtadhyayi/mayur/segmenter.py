@@ -143,8 +143,34 @@ W = {"lemma_w": 0.005, "lemma_w_stem": 1.0, "q0": 9.0, "q1": 2.0, "word": -1.0, 
      "inner": 1.0, "short": 1.5, "q3len": 0.0}
 
 
-# Particles that never stand as the first member of a compound.
-_PARTICLES = frozenset(("हि", "च", "वा", "तु", "इव", "एव", "नु", "ह", "अपि", "इति", "न", "स्म", "खलु", "किल"))
+# Particles that never stand as the first member of a compound (nipātas, 1.4.57 चादयोऽसत्त्वे; the
+# interrogative स्वित् of कस्य स्वित् is in the चादि list too).
+_PARTICLES = frozenset(("हि", "च", "वा", "तु", "इव", "एव", "नु", "ह", "अपि", "इति", "न", "स्म", "खलु", "किल",
+                        "स्वित्", "स्विद्"))
+
+# A form the corpus has at least FREE_WORD_MIN times as a word of its own and never as a compound member
+# is read as that word, not as a member: मा (the enclitic of अस्मद्, 8.1.23, or the particle), ततस्, ते.
+# The prefixes the compound rules themselves name stay members: नञ् (2.2.6), कु-गति-प्रादि (2.2.18),
+# सह (2.2.28), the first members of an अव्ययीभाव (2.1.6 ff.) and स्वयम् (2.1.25).
+FREE_WORD_MIN = 300
+
+
+@lru_cache(maxsize=1)
+def _rule_prefixes() -> frozenset:
+    from mayur import samasa_tables as tables
+
+    return frozenset(tables.SAHA | tables.NAN | tables.PRADI | set(tables.AVYAYIBHAVA_FIRST) | {"स्वयम्"})
+
+
+@lru_cache(maxsize=100_000)
+def _only_free_word(form: str) -> bool:
+    from mayur.lexicon import nasal_variants
+
+    if form in _rule_prefixes():
+        return False
+    table = resources_derived("member_counts.json")
+    members = sum(int(table.get(f, 0)) for f in nasal_variants(form))
+    return members == 0 and _form_count(form) >= FREE_WORD_MIN
 
 
 def resources_derived(name: str):
@@ -182,7 +208,7 @@ def _stem_ok(form: str, ms: tuple) -> bool:
     """
     if any(m.source == "special" for m in ms):
         return True
-    if form in _PARTICLES:
+    if form in _PARTICLES or _only_free_word(form):
         return False
     if form.endswith("न्") and form != "अन्":  # (अन् is नञ् before a vowel, 6.3.74)
         return False  # a stem in -न् loses the न् inside a compound (8.2.7): राज-, आत्म-, never राजन्-

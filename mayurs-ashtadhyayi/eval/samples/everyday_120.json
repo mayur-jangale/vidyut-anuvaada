@@ -1,0 +1,7243 @@
+{
+ "about": "Everyday check set: 120 Sanskrit sentences and verse lines a learner or reader meets, in three groups: (a) plain prose of rising difficulty, (b) well-known verse lines and sayings with full sandhi as printed, (c) sandhi-heavy lines (long compounds, sandhi between words, avagraha present and absent, the same text with and without spaces). For each item: the pada split (pausa form; compound members joined by '-', non-final members in stem form), lemma and grammar per pada, roles and heads of the main words, and a plain English rendering. Written by Claude (an LLM), not human-verified; CC BY-SA 4.0. None of the lines is in simple_sentences.json or wellknown.json, and none is from Rāmāyaṇa Bālakāṇḍa sarga 1.",
+ "conventions": {
+  "lemma": "prātipadika for nominals (pronouns: तद्, यद्, किम्, इदम्, एतद्, अदस्, अस्मद्, युष्मद्); for finite verbs the dhātu with its upasargas (आगम्, उत्था); a causative is its णिजन्त stem (पायि); a participle or gerundive its kṛdanta stem (गत, आचरणीय); an absolutive or infinitive its dhātu; an avyaya itself; a compound its members' lemmas joined by '-'. Alternatives that are equally right are separated by ' | '.",
+  "grammar": "terms as in the pipeline's JSON: gender case number for a nominal (no gender for अस्मद्, युष्मद् and the numerals from पञ्चन् on, which have none); lakāra person number for a finite verb, with कर्मणि for a passive (active is not written); क्त्वा / ल्यप् / तुमुन् for an absolutive or infinitive; अव्यय for an indeclinable. Alternatives separated by ' | '.",
+  "roles": "role names of mayur.terms.ROLES; 'at' / 'head_at' are pada indices (null head: the sentence root)."
+ },
+ "groups": {
+  "a": 40,
+  "b": 40,
+  "c": 40
+ },
+ "items": [
+  {
+   "id": "a01",
+   "group": "a",
+   "text": "देवाः स्वर्गे वसन्ति",
+   "padas": [
+    "देवाः",
+    "स्वर्गे",
+    "वसन्ति"
+   ],
+   "words": [
+    {
+     "pada": "देवाः",
+     "lemma": "देव",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "स्वर्गे",
+     "lemma": "स्वर्ग",
+     "grammar": "पुंलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "वसन्ति",
+     "lemma": "वस्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "देवाः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "वसन्ति",
+     "head_at": 2
+    },
+    {
+     "pada": "स्वर्गे",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "वसन्ति",
+     "head_at": 2
+    },
+    {
+     "pada": "वसन्ति",
+     "at": 2,
+     "role": "क्रिया",
+     "head": null,
+     "head_at": null
+    }
+   ],
+   "english": "The gods live in heaven."
+  },
+  {
+   "id": "a02",
+   "group": "a",
+   "text": "सूर्ये उदिते पक्षिणः कूजन्ति",
+   "padas": [
+    "सूर्ये",
+    "उदिते",
+    "पक्षिणः",
+    "कूजन्ति"
+   ],
+   "words": [
+    {
+     "pada": "सूर्ये",
+     "lemma": "सूर्य",
+     "grammar": "पुंलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "उदिते",
+     "lemma": "उदित",
+     "grammar": "पुंलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "पक्षिणः",
+     "lemma": "पक्षिन्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "कूजन्ति",
+     "lemma": "कूज्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सूर्ये",
+     "at": 0,
+     "role": "भावलक्षण",
+     "head": "कूजन्ति",
+     "head_at": 3
+    },
+    {
+     "pada": "उदिते",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "सूर्ये",
+     "head_at": 0
+    },
+    {
+     "pada": "पक्षिणः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "कूजन्ति",
+     "head_at": 3
+    }
+   ],
+   "english": "When the sun has risen, the birds sing.",
+   "note": "उदित here is उद् + इ 'risen' (the same stem is also the क्त of वद् 'spoken', which does not fit)."
+  },
+  {
+   "id": "a03",
+   "group": "a",
+   "text": "छात्रः लेखन्या पत्रं लिखति",
+   "padas": [
+    "छात्रः",
+    "लेखन्या",
+    "पत्रम्",
+    "लिखति"
+   ],
+   "words": [
+    {
+     "pada": "छात्रः",
+     "lemma": "छात्र",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "लेखन्या",
+     "lemma": "लेखनी",
+     "grammar": "स्त्रीलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "पत्रम्",
+     "lemma": "पत्र",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "लिखति",
+     "lemma": "लिख्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "छात्रः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "लिखति",
+     "head_at": 3
+    },
+    {
+     "pada": "लेखन्या",
+     "at": 1,
+     "role": "करण",
+     "head": "लिखति",
+     "head_at": 3
+    },
+    {
+     "pada": "पत्रम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "लिखति",
+     "head_at": 3
+    }
+   ],
+   "english": "The student writes a letter with a pen."
+  },
+  {
+   "id": "a04",
+   "group": "a",
+   "text": "नृपः दरिद्रेभ्यः वस्त्राणि यच्छति",
+   "padas": [
+    "नृपः",
+    "दरिद्रेभ्यः",
+    "वस्त्राणि",
+    "यच्छति"
+   ],
+   "words": [
+    {
+     "pada": "नृपः",
+     "lemma": "नृप",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "दरिद्रेभ्यः",
+     "lemma": "दरिद्र",
+     "grammar": "पुंलिङ्ग चतुर्थी बहुवचन"
+    },
+    {
+     "pada": "वस्त्राणि",
+     "lemma": "वस्त्र",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "यच्छति",
+     "lemma": "दा",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नृपः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "यच्छति",
+     "head_at": 3
+    },
+    {
+     "pada": "दरिद्रेभ्यः",
+     "at": 1,
+     "role": "सम्प्रदान",
+     "head": "यच्छति",
+     "head_at": 3
+    },
+    {
+     "pada": "वस्त्राणि",
+     "at": 2,
+     "role": "कर्म",
+     "head": "यच्छति",
+     "head_at": 3
+    }
+   ],
+   "english": "The king gives clothes to the poor.",
+   "note": "दरिद्रेभ्यः is also ablative plural; the dative is meant. यच्छति is दाण् 'give' (7.3.78); the same form from यम् 'restrain' (7.3.77) does not fit."
+  },
+  {
+   "id": "a05",
+   "group": "a",
+   "text": "पर्वतात् नदी प्रवहति",
+   "padas": [
+    "पर्वतात्",
+    "नदी",
+    "प्रवहति"
+   ],
+   "words": [
+    {
+     "pada": "पर्वतात्",
+     "lemma": "पर्वत",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "नदी",
+     "lemma": "नदी",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "प्रवहति",
+     "lemma": "प्रवह्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "पर्वतात्",
+     "at": 0,
+     "role": "अपादान",
+     "head": "प्रवहति",
+     "head_at": 2
+    },
+    {
+     "pada": "नदी",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "प्रवहति",
+     "head_at": 2
+    }
+   ],
+   "english": "A river flows down from the mountain."
+  },
+  {
+   "id": "a06",
+   "group": "a",
+   "text": "शिष्याः गुरोः वचनं शृण्वन्ति",
+   "padas": [
+    "शिष्याः",
+    "गुरोः",
+    "वचनम्",
+    "शृण्वन्ति"
+   ],
+   "words": [
+    {
+     "pada": "शिष्याः",
+     "lemma": "शिष्य",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "गुरोः",
+     "lemma": "गुरु",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "वचनम्",
+     "lemma": "वचन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "शृण्वन्ति",
+     "lemma": "श्रु",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "शिष्याः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "शृण्वन्ति",
+     "head_at": 3
+    },
+    {
+     "pada": "गुरोः",
+     "at": 1,
+     "role": "सम्बन्ध",
+     "head": "वचनम्",
+     "head_at": 2
+    },
+    {
+     "pada": "वचनम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "शृण्वन्ति",
+     "head_at": 3
+    }
+   ],
+   "english": "The pupils listen to the teacher's words."
+  },
+  {
+   "id": "a07",
+   "group": "a",
+   "text": "मम माता गृहे भोजनं पचति",
+   "padas": [
+    "मम",
+    "माता",
+    "गृहे",
+    "भोजनम्",
+    "पचति"
+   ],
+   "words": [
+    {
+     "pada": "मम",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "माता",
+     "lemma": "मातृ",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "गृहे",
+     "lemma": "गृह",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "भोजनम्",
+     "lemma": "भोजन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "पचति",
+     "lemma": "पच्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "मम",
+     "at": 0,
+     "role": "सम्बन्ध",
+     "head": "माता",
+     "head_at": 1
+    },
+    {
+     "pada": "माता",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "पचति",
+     "head_at": 4
+    },
+    {
+     "pada": "गृहे",
+     "at": 2,
+     "role": "अधिकरण",
+     "head": "पचति",
+     "head_at": 4
+    },
+    {
+     "pada": "भोजनम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "पचति",
+     "head_at": 4
+    }
+   ],
+   "english": "My mother cooks food at home."
+  },
+  {
+   "id": "a08",
+   "group": "a",
+   "text": "हे बालक अत्र आगच्छ",
+   "padas": [
+    "हे",
+    "बालक",
+    "अत्र",
+    "आगच्छ"
+   ],
+   "words": [
+    {
+     "pada": "हे",
+     "lemma": "हे",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "बालक",
+     "lemma": "बालक",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "अत्र",
+     "lemma": "अत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "आगच्छ",
+     "lemma": "आगम्",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "बालक",
+     "at": 1,
+     "role": "सम्बोधन",
+     "head": "आगच्छ",
+     "head_at": 3
+    },
+    {
+     "pada": "अत्र",
+     "at": 2,
+     "role": "अव्यय",
+     "head": "आगच्छ",
+     "head_at": 3
+    },
+    {
+     "pada": "आगच्छ",
+     "at": 3,
+     "role": "क्रिया",
+     "head": null,
+     "head_at": null
+    }
+   ],
+   "english": "Boy, come here."
+  },
+  {
+   "id": "a09",
+   "group": "a",
+   "text": "यूयं कुत्र गच्छथ",
+   "padas": [
+    "यूयम्",
+    "कुत्र",
+    "गच्छथ"
+   ],
+   "words": [
+    {
+     "pada": "यूयम्",
+     "lemma": "युष्मद्",
+     "grammar": "प्रथमा बहुवचन"
+    },
+    {
+     "pada": "कुत्र",
+     "lemma": "कुत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "गच्छथ",
+     "lemma": "गम्",
+     "grammar": "लट् मध्यमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "यूयम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "गच्छथ",
+     "head_at": 2
+    },
+    {
+     "pada": "कुत्र",
+     "at": 1,
+     "role": "अव्यय",
+     "head": "गच्छथ",
+     "head_at": 2
+    }
+   ],
+   "english": "Where are you all going?"
+  },
+  {
+   "id": "a10",
+   "group": "a",
+   "text": "अहं प्रतिदिनं प्रातः उत्तिष्ठामि",
+   "padas": [
+    "अहम्",
+    "प्रति-दिनम्",
+    "प्रातः",
+    "उत्तिष्ठामि"
+   ],
+   "words": [
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "प्रति-दिनम्",
+     "lemma": "प्रति-दिन | प्रतिदिनम् | प्रतिदिन",
+     "grammar": "अव्यय | नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "प्रातः",
+     "lemma": "प्रातर्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "उत्तिष्ठामि",
+     "lemma": "उत्था",
+     "grammar": "लट् उत्तमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अहम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "उत्तिष्ठामि",
+     "head_at": 3
+    },
+    {
+     "pada": "प्रातः",
+     "at": 2,
+     "role": "अव्यय",
+     "head": "उत्तिष्ठामि",
+     "head_at": 3
+    }
+   ],
+   "english": "I get up early every day.",
+   "note": "प्रतिदिनम् is an avyayībhāva (2.1.6), an indeclinable by 1.1.41, whose final member takes अम् by 2.4.83; either description is accepted."
+  },
+  {
+   "id": "a11",
+   "group": "a",
+   "text": "बालकेन चन्द्रः दृश्यते",
+   "padas": [
+    "बालकेन",
+    "चन्द्रः",
+    "दृश्यते"
+   ],
+   "words": [
+    {
+     "pada": "बालकेन",
+     "lemma": "बालक",
+     "grammar": "पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "चन्द्रः",
+     "lemma": "चन्द्र",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "दृश्यते",
+     "lemma": "दृश्",
+     "grammar": "लट् प्रथमपुरुष एकवचन कर्मणि"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "बालकेन",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "दृश्यते",
+     "head_at": 2
+    },
+    {
+     "pada": "चन्द्रः",
+     "at": 1,
+     "role": "कर्म",
+     "head": "दृश्यते",
+     "head_at": 2
+    },
+    {
+     "pada": "दृश्यते",
+     "at": 2,
+     "role": "क्रिया",
+     "head": null,
+     "head_at": null
+    }
+   ],
+   "english": "The moon is seen by the boy."
+  },
+  {
+   "id": "a12",
+   "group": "a",
+   "text": "सर्वैः जनैः धर्मः आचरणीयः",
+   "padas": [
+    "सर्वैः",
+    "जनैः",
+    "धर्मः",
+    "आचरणीयः"
+   ],
+   "words": [
+    {
+     "pada": "सर्वैः",
+     "lemma": "सर्व",
+     "grammar": "पुंलिङ्ग तृतीया बहुवचन"
+    },
+    {
+     "pada": "जनैः",
+     "lemma": "जन",
+     "grammar": "पुंलिङ्ग तृतीया बहुवचन"
+    },
+    {
+     "pada": "धर्मः",
+     "lemma": "धर्म",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "आचरणीयः",
+     "lemma": "आचरणीय",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सर्वैः",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "जनैः",
+     "head_at": 1
+    },
+    {
+     "pada": "जनैः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "आचरणीयः",
+     "head_at": 3
+    },
+    {
+     "pada": "धर्मः",
+     "at": 2,
+     "role": "कर्म",
+     "head": "आचरणीयः",
+     "head_at": 3
+    }
+   ],
+   "english": "Dharma should be practised by everyone."
+  },
+  {
+   "id": "a13",
+   "group": "a",
+   "text": "माता बालं दुग्धं पाययति",
+   "padas": [
+    "माता",
+    "बालम्",
+    "दुग्धम्",
+    "पाययति"
+   ],
+   "words": [
+    {
+     "pada": "माता",
+     "lemma": "मातृ",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "बालम्",
+     "lemma": "बाल",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "दुग्धम्",
+     "lemma": "दुग्ध",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "पाययति",
+     "lemma": "पायि",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "माता",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "पाययति",
+     "head_at": 3
+    },
+    {
+     "pada": "बालम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "पाययति",
+     "head_at": 3
+    },
+    {
+     "pada": "दुग्धम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "पाययति",
+     "head_at": 3
+    }
+   ],
+   "english": "The mother makes the child drink milk."
+  },
+  {
+   "id": "a14",
+   "group": "a",
+   "text": "आचार्यः शिष्यान् वेदान् अध्यापयति",
+   "padas": [
+    "आचार्यः",
+    "शिष्यान्",
+    "वेदान्",
+    "अध्यापयति"
+   ],
+   "words": [
+    {
+     "pada": "आचार्यः",
+     "lemma": "आचार्य",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "शिष्यान्",
+     "lemma": "शिष्य",
+     "grammar": "पुंलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "वेदान्",
+     "lemma": "वेद",
+     "grammar": "पुंलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "अध्यापयति",
+     "lemma": "अध्यापि",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "आचार्यः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "अध्यापयति",
+     "head_at": 3
+    },
+    {
+     "pada": "शिष्यान्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "अध्यापयति",
+     "head_at": 3
+    },
+    {
+     "pada": "वेदान्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "अध्यापयति",
+     "head_at": 3
+    }
+   ],
+   "english": "The teacher teaches the pupils the Vedas."
+  },
+  {
+   "id": "a15",
+   "group": "a",
+   "text": "स स्नात्वा भोजनं करोति",
+   "padas": [
+    "सः",
+    "स्नात्वा",
+    "भोजनम्",
+    "करोति"
+   ],
+   "words": [
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "स्नात्वा",
+     "lemma": "स्ना",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "भोजनम्",
+     "lemma": "भोजन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "करोति",
+     "lemma": "कृ",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "करोति",
+     "head_at": 3
+    },
+    {
+     "pada": "स्नात्वा",
+     "at": 1,
+     "role": "पूर्वकालक्रिया",
+     "head": "करोति",
+     "head_at": 3
+    },
+    {
+     "pada": "भोजनम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "करोति",
+     "head_at": 3
+    }
+   ],
+   "english": "After bathing he has his meal."
+  },
+  {
+   "id": "a16",
+   "group": "a",
+   "text": "बालिका पुस्तकम् आनीय पठति",
+   "padas": [
+    "बालिका",
+    "पुस्तकम्",
+    "आनीय",
+    "पठति"
+   ],
+   "words": [
+    {
+     "pada": "बालिका",
+     "lemma": "बालिका",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पुस्तकम्",
+     "lemma": "पुस्तक",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "आनीय",
+     "lemma": "आनी",
+     "grammar": "ल्यप्"
+    },
+    {
+     "pada": "पठति",
+     "lemma": "पठ्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "बालिका",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "पठति",
+     "head_at": 3
+    },
+    {
+     "pada": "पुस्तकम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "आनीय",
+     "head_at": 2
+    },
+    {
+     "pada": "आनीय",
+     "at": 2,
+     "role": "पूर्वकालक्रिया",
+     "head": "पठति",
+     "head_at": 3
+    }
+   ],
+   "english": "The girl fetches the book and reads it.",
+   "note": "पुस्तकम् is the object of both verbs; it is attached to the nearer one, आनीय."
+  },
+  {
+   "id": "a17",
+   "group": "a",
+   "text": "ते जलं पातुं नदीं गच्छन्ति",
+   "padas": [
+    "ते",
+    "जलम्",
+    "पातुम्",
+    "नदीम्",
+    "गच्छन्ति"
+   ],
+   "words": [
+    {
+     "pada": "ते",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "जलम्",
+     "lemma": "जल",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "पातुम्",
+     "lemma": "पा",
+     "grammar": "तुमुन्"
+    },
+    {
+     "pada": "नदीम्",
+     "lemma": "नदी",
+     "grammar": "स्त्रीलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "गच्छन्ति",
+     "lemma": "गम्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "ते",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "गच्छन्ति",
+     "head_at": 4
+    },
+    {
+     "pada": "जलम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "पातुम्",
+     "head_at": 2
+    },
+    {
+     "pada": "पातुम्",
+     "at": 2,
+     "role": "तुमर्थ",
+     "head": "गच्छन्ति",
+     "head_at": 4
+    },
+    {
+     "pada": "नदीम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "गच्छन्ति",
+     "head_at": 4
+    }
+   ],
+   "english": "They go to the river to drink water."
+  },
+  {
+   "id": "a18",
+   "group": "a",
+   "text": "यः परिश्रमं करोति स सफलो भवति",
+   "padas": [
+    "यः",
+    "परिश्रमम्",
+    "करोति",
+    "सः",
+    "सफलः",
+    "भवति"
+   ],
+   "words": [
+    {
+     "pada": "यः",
+     "lemma": "यद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "परिश्रमम्",
+     "lemma": "परिश्रम",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "करोति",
+     "lemma": "कृ",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सफलः",
+     "lemma": "सफल | स-फल",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भवति",
+     "lemma": "भू",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "यः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "करोति",
+     "head_at": 2
+    },
+    {
+     "pada": "परिश्रमम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "करोति",
+     "head_at": 2
+    },
+    {
+     "pada": "सः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "भवति",
+     "head_at": 5
+    },
+    {
+     "pada": "सफलः",
+     "at": 4,
+     "role": "विधेय",
+     "head": "सः",
+     "head_at": 3
+    }
+   ],
+   "english": "Whoever works hard becomes successful."
+  },
+  {
+   "id": "a19",
+   "group": "a",
+   "text": "यं ग्रामं त्वं गच्छसि तं ग्रामम् अहम् अपि गच्छामि",
+   "padas": [
+    "यम्",
+    "ग्रामम्",
+    "त्वम्",
+    "गच्छसि",
+    "तम्",
+    "ग्रामम्",
+    "अहम्",
+    "अपि",
+    "गच्छामि"
+   ],
+   "words": [
+    {
+     "pada": "यम्",
+     "lemma": "यद्",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "ग्रामम्",
+     "lemma": "ग्राम",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "त्वम्",
+     "lemma": "युष्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "गच्छसि",
+     "lemma": "गम्",
+     "grammar": "लट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "तम्",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "ग्रामम्",
+     "lemma": "ग्राम",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "अपि",
+     "lemma": "अपि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "गच्छामि",
+     "lemma": "गम्",
+     "grammar": "लट् उत्तमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "यम्",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "ग्रामम्",
+     "head_at": 1
+    },
+    {
+     "pada": "ग्रामम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "गच्छसि",
+     "head_at": 3
+    },
+    {
+     "pada": "त्वम्",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "गच्छसि",
+     "head_at": 3
+    },
+    {
+     "pada": "तम्",
+     "at": 4,
+     "role": "विशेषण",
+     "head": "ग्रामम्",
+     "head_at": 5
+    },
+    {
+     "pada": "ग्रामम्",
+     "at": 5,
+     "role": "कर्म",
+     "head": "गच्छामि",
+     "head_at": 8
+    },
+    {
+     "pada": "अहम्",
+     "at": 6,
+     "role": "कर्ता",
+     "head": "गच्छामि",
+     "head_at": 8
+    }
+   ],
+   "english": "I too am going to the village you are going to."
+  },
+  {
+   "id": "a20",
+   "group": "a",
+   "text": "यदि त्वं परिश्रमं करिष्यसि तर्हि सफलो भविष्यसि",
+   "padas": [
+    "यदि",
+    "त्वम्",
+    "परिश्रमम्",
+    "करिष्यसि",
+    "तर्हि",
+    "सफलः",
+    "भविष्यसि"
+   ],
+   "words": [
+    {
+     "pada": "यदि",
+     "lemma": "यदि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "त्वम्",
+     "lemma": "युष्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "परिश्रमम्",
+     "lemma": "परिश्रम",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "करिष्यसि",
+     "lemma": "कृ",
+     "grammar": "लृट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "तर्हि",
+     "lemma": "तर्हि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "सफलः",
+     "lemma": "सफल | स-फल",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भविष्यसि",
+     "lemma": "भू",
+     "grammar": "लृट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "त्वम्",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "करिष्यसि",
+     "head_at": 3
+    },
+    {
+     "pada": "परिश्रमम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "करिष्यसि",
+     "head_at": 3
+    }
+   ],
+   "english": "If you work hard, you will succeed."
+  },
+  {
+   "id": "a21",
+   "group": "a",
+   "text": "वृष्टिर्न भवति चेत् कृषका दुःखिता भवन्ति",
+   "padas": [
+    "वृष्टिः",
+    "न",
+    "भवति",
+    "चेत्",
+    "कृषकाः",
+    "दुःखिताः",
+    "भवन्ति"
+   ],
+   "words": [
+    {
+     "pada": "वृष्टिः",
+     "lemma": "वृष्टि",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "भवति",
+     "lemma": "भू",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "चेत्",
+     "lemma": "चेद् | चेत्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "कृषकाः",
+     "lemma": "कृषक",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "दुःखिताः",
+     "lemma": "दुःखित",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "भवन्ति",
+     "lemma": "भू",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "वृष्टिः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "भवति",
+     "head_at": 2
+    },
+    {
+     "pada": "न",
+     "at": 1,
+     "role": "अव्यय",
+     "head": "भवति",
+     "head_at": 2
+    },
+    {
+     "pada": "कृषकाः",
+     "at": 4,
+     "role": "कर्ता",
+     "head": "भवन्ति",
+     "head_at": 6
+    },
+    {
+     "pada": "दुःखिताः",
+     "at": 5,
+     "role": "विधेय",
+     "head": "कृषकाः",
+     "head_at": 4
+    }
+   ],
+   "english": "If there is no rain, the farmers are miserable."
+  },
+  {
+   "id": "a22",
+   "group": "a",
+   "text": "कस्माद् ग्रामाद् भवान् आगतः",
+   "padas": [
+    "कस्मात्",
+    "ग्रामात्",
+    "भवान्",
+    "आगतः"
+   ],
+   "words": [
+    {
+     "pada": "कस्मात्",
+     "lemma": "किम्",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "ग्रामात्",
+     "lemma": "ग्राम",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "भवान्",
+     "lemma": "भवत्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "आगतः",
+     "lemma": "आगत",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "कस्मात्",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "ग्रामात्",
+     "head_at": 1
+    },
+    {
+     "pada": "ग्रामात्",
+     "at": 1,
+     "role": "अपादान",
+     "head": "आगतः",
+     "head_at": 3
+    },
+    {
+     "pada": "भवान्",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "आगतः",
+     "head_at": 3
+    }
+   ],
+   "english": "Which village have you come from, sir?"
+  },
+  {
+   "id": "a23",
+   "group": "a",
+   "text": "मा गच्छ अत्रैव तिष्ठ",
+   "padas": [
+    "मा",
+    "गच्छ",
+    "अत्र",
+    "एव",
+    "तिष्ठ"
+   ],
+   "words": [
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "गच्छ",
+     "lemma": "गम्",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "अत्र",
+     "lemma": "अत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "एव",
+     "lemma": "एव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "तिष्ठ",
+     "lemma": "स्था",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "मा",
+     "at": 0,
+     "role": "अव्यय",
+     "head": "गच्छ",
+     "head_at": 1
+    },
+    {
+     "pada": "अत्र",
+     "at": 2,
+     "role": "अव्यय",
+     "head": "तिष्ठ",
+     "head_at": 4
+    }
+   ],
+   "english": "Don't go; stay right here."
+  },
+  {
+   "id": "a24",
+   "group": "a",
+   "text": "स न खादति न पिबति",
+   "padas": [
+    "सः",
+    "न",
+    "खादति",
+    "न",
+    "पिबति"
+   ],
+   "words": [
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "खादति",
+     "lemma": "खाद्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "पिबति",
+     "lemma": "पा",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "खादति",
+     "head_at": 2
+    },
+    {
+     "pada": "न",
+     "at": 1,
+     "role": "अव्यय",
+     "head": "खादति",
+     "head_at": 2
+    },
+    {
+     "pada": "न",
+     "at": 3,
+     "role": "अव्यय",
+     "head": "पिबति",
+     "head_at": 4
+    }
+   ],
+   "english": "He neither eats nor drinks."
+  },
+  {
+   "id": "a25",
+   "group": "a",
+   "text": "मम द्वौ भ्रातरौ एका भगिनी च सन्ति",
+   "padas": [
+    "मम",
+    "द्वौ",
+    "भ्रातरौ",
+    "एका",
+    "भगिनी",
+    "च",
+    "सन्ति"
+   ],
+   "words": [
+    {
+     "pada": "मम",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "द्वौ",
+     "lemma": "द्वि",
+     "grammar": "पुंलिङ्ग प्रथमा द्विवचन"
+    },
+    {
+     "pada": "भ्रातरौ",
+     "lemma": "भ्रातृ",
+     "grammar": "पुंलिङ्ग प्रथमा द्विवचन"
+    },
+    {
+     "pada": "एका",
+     "lemma": "एक",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भगिनी",
+     "lemma": "भगिनी",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "च",
+     "lemma": "च",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "सन्ति",
+     "lemma": "अस्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "द्वौ",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "भ्रातरौ",
+     "head_at": 2
+    },
+    {
+     "pada": "भ्रातरौ",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "सन्ति",
+     "head_at": 6
+    },
+    {
+     "pada": "एका",
+     "at": 3,
+     "role": "विशेषण",
+     "head": "भगिनी",
+     "head_at": 4
+    },
+    {
+     "pada": "भगिनी",
+     "at": 4,
+     "role": "कर्ता",
+     "head": "सन्ति",
+     "head_at": 6
+    },
+    {
+     "pada": "च",
+     "at": 5,
+     "role": "अव्यय",
+     "head": "भगिनी",
+     "head_at": 4
+    }
+   ],
+   "english": "I have two brothers and one sister."
+  },
+  {
+   "id": "a26",
+   "group": "a",
+   "text": "पञ्च बालकाः क्रीडाङ्गणे क्रीडन्ति",
+   "padas": [
+    "पञ्च",
+    "बालकाः",
+    "क्रीडा-अङ्गणे",
+    "क्रीडन्ति"
+   ],
+   "words": [
+    {
+     "pada": "पञ्च",
+     "lemma": "पञ्चन्",
+     "grammar": "प्रथमा बहुवचन"
+    },
+    {
+     "pada": "बालकाः",
+     "lemma": "बालक",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "क्रीडा-अङ्गणे",
+     "lemma": "क्रीडा-अङ्गण",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "क्रीडन्ति",
+     "lemma": "क्रीड्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "पञ्च",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "बालकाः",
+     "head_at": 1
+    },
+    {
+     "pada": "बालकाः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "क्रीडन्ति",
+     "head_at": 3
+    },
+    {
+     "pada": "क्रीडा-अङ्गणे",
+     "at": 2,
+     "role": "अधिकरण",
+     "head": "क्रीडन्ति",
+     "head_at": 3
+    }
+   ],
+   "english": "Five boys are playing in the playground."
+  },
+  {
+   "id": "a27",
+   "group": "a",
+   "text": "विंशतिः छात्राः कक्षायाम् उपविशन्ति",
+   "padas": [
+    "विंशतिः",
+    "छात्राः",
+    "कक्षायाम्",
+    "उपविशन्ति"
+   ],
+   "words": [
+    {
+     "pada": "विंशतिः",
+     "lemma": "विंशति",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "छात्राः",
+     "lemma": "छात्र",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "कक्षायाम्",
+     "lemma": "कक्षा",
+     "grammar": "स्त्रीलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "उपविशन्ति",
+     "lemma": "उपविश्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "विंशतिः",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "छात्राः",
+     "head_at": 1
+    },
+    {
+     "pada": "छात्राः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "उपविशन्ति",
+     "head_at": 3
+    },
+    {
+     "pada": "कक्षायाम्",
+     "at": 2,
+     "role": "अधिकरण",
+     "head": "उपविशन्ति",
+     "head_at": 3
+    }
+   ],
+   "english": "Twenty students sit in the classroom."
+  },
+  {
+   "id": "a28",
+   "group": "a",
+   "text": "राजपुरुषः चौरं गृहीत्वा नगरं नयति",
+   "padas": [
+    "राज-पुरुषः",
+    "चौरम्",
+    "गृहीत्वा",
+    "नगरम्",
+    "नयति"
+   ],
+   "words": [
+    {
+     "pada": "राज-पुरुषः",
+     "lemma": "राजन्-पुरुष",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "चौरम्",
+     "lemma": "चौर",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "गृहीत्वा",
+     "lemma": "ग्रह्",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "नगरम्",
+     "lemma": "नगर",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "नयति",
+     "lemma": "नी",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "राज-पुरुषः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "नयति",
+     "head_at": 4
+    },
+    {
+     "pada": "चौरम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "गृहीत्वा",
+     "head_at": 2
+    },
+    {
+     "pada": "गृहीत्वा",
+     "at": 2,
+     "role": "पूर्वकालक्रिया",
+     "head": "नयति",
+     "head_at": 4
+    },
+    {
+     "pada": "नगरम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "नयति",
+     "head_at": 4
+    }
+   ],
+   "english": "The king's officer seizes the thief and takes him to the city."
+  },
+  {
+   "id": "a29",
+   "group": "a",
+   "text": "पीताम्बरः कृष्णो वंशीं वादयति",
+   "padas": [
+    "पीत-अम्बरः",
+    "कृष्णः",
+    "वंशीम्",
+    "वादयति"
+   ],
+   "words": [
+    {
+     "pada": "पीत-अम्बरः",
+     "lemma": "पीत-अम्बर",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कृष्णः",
+     "lemma": "कृष्ण",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वंशीम्",
+     "lemma": "वंशी",
+     "grammar": "स्त्रीलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "वादयति",
+     "lemma": "वादि | वद्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "पीत-अम्बरः",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "कृष्णः",
+     "head_at": 1
+    },
+    {
+     "pada": "कृष्णः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "वादयति",
+     "head_at": 3
+    },
+    {
+     "pada": "वंशीम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "वादयति",
+     "head_at": 3
+    }
+   ],
+   "english": "Kṛṣṇa, dressed in yellow, plays the flute.",
+   "note": "पीताम्बर is a bahuvrīhi 'whose garment is yellow'. वादयति is the causative of वद्; the चुरादि वद् gives the same form, so either lemma is accepted."
+  },
+  {
+   "id": "a30",
+   "group": "a",
+   "text": "रामलक्ष्मणौ वनं गतौ",
+   "padas": [
+    "राम-लक्ष्मणौ",
+    "वनम्",
+    "गतौ"
+   ],
+   "words": [
+    {
+     "pada": "राम-लक्ष्मणौ",
+     "lemma": "राम-लक्ष्मण",
+     "grammar": "पुंलिङ्ग प्रथमा द्विवचन"
+    },
+    {
+     "pada": "वनम्",
+     "lemma": "वन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "गतौ",
+     "lemma": "गत",
+     "grammar": "पुंलिङ्ग प्रथमा द्विवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "राम-लक्ष्मणौ",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "गतौ",
+     "head_at": 2
+    },
+    {
+     "pada": "वनम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "गतौ",
+     "head_at": 2
+    },
+    {
+     "pada": "गतौ",
+     "at": 2,
+     "role": "क्रिया",
+     "head": null,
+     "head_at": null
+    }
+   ],
+   "english": "Rāma and Lakṣmaṇa went to the forest."
+  },
+  {
+   "id": "a31",
+   "group": "a",
+   "text": "महाराजः सिंहासने उपविष्टः",
+   "padas": [
+    "महा-राजः",
+    "सिंह-आसने",
+    "उपविष्टः"
+   ],
+   "words": [
+    {
+     "pada": "महा-राजः",
+     "lemma": "महत्-राजन् | महत्-राज | महा-राजन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सिंह-आसने",
+     "lemma": "सिंह-आसन",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "उपविष्टः",
+     "lemma": "उपविष्ट",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "महा-राजः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "उपविष्टः",
+     "head_at": 2
+    },
+    {
+     "pada": "सिंह-आसने",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "उपविष्टः",
+     "head_at": 2
+    },
+    {
+     "pada": "उपविष्टः",
+     "at": 2,
+     "role": "क्रिया",
+     "head": null,
+     "head_at": null
+    }
+   ],
+   "english": "The great king is seated on the throne.",
+   "note": "महत् becomes महा before a member in the same case (6.3.46); राजन् takes the samāsānta टच् (5.4.91)."
+  },
+  {
+   "id": "a32",
+   "group": "a",
+   "text": "नीलोत्पलं सरसि शोभते",
+   "padas": [
+    "नील-उत्पलम्",
+    "सरसि",
+    "शोभते"
+   ],
+   "words": [
+    {
+     "pada": "नील-उत्पलम्",
+     "lemma": "नील-उत्पल",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सरसि",
+     "lemma": "सरस्",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "शोभते",
+     "lemma": "शुभ्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नील-उत्पलम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "शोभते",
+     "head_at": 2
+    },
+    {
+     "pada": "सरसि",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "शोभते",
+     "head_at": 2
+    }
+   ],
+   "english": "A blue lotus shines in the lake."
+  },
+  {
+   "id": "a33",
+   "group": "a",
+   "text": "यथाशक्ति दानं देयम्",
+   "padas": [
+    "यथा-शक्ति",
+    "दानम्",
+    "देयम्"
+   ],
+   "words": [
+    {
+     "pada": "यथा-शक्ति",
+     "lemma": "यथा-शक्ति | यथाशक्ति",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "दानम्",
+     "lemma": "दान",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "देयम्",
+     "lemma": "देय",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "दानम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "देयम्",
+     "head_at": 2
+    },
+    {
+     "pada": "यथा-शक्ति",
+     "at": 0,
+     "role": "अव्यय",
+     "head": "देयम्",
+     "head_at": 2
+    }
+   ],
+   "english": "One should give according to one's means."
+  },
+  {
+   "id": "a34",
+   "group": "a",
+   "text": "रामः पञ्चवट्यां न्यवसत्",
+   "padas": [
+    "रामः",
+    "पञ्च-वट्याम्",
+    "न्यवसत्"
+   ],
+   "words": [
+    {
+     "pada": "रामः",
+     "lemma": "राम",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पञ्च-वट्याम्",
+     "lemma": "पञ्चन्-वटी | पञ्चवटी",
+     "grammar": "स्त्रीलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "न्यवसत्",
+     "lemma": "निवस्",
+     "grammar": "लङ् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "रामः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "न्यवसत्",
+     "head_at": 2
+    },
+    {
+     "pada": "पञ्च-वट्याम्",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "न्यवसत्",
+     "head_at": 2
+    }
+   ],
+   "english": "Rāma lived at Pañcavaṭī.",
+   "note": "पञ्चवटी 'the five banyans' is a dvigu (2.1.52) used as a place name."
+  },
+  {
+   "id": "a35",
+   "group": "a",
+   "text": "मुनिः ध्यानमग्नः तिष्ठति",
+   "padas": [
+    "मुनिः",
+    "ध्यान-मग्नः",
+    "तिष्ठति"
+   ],
+   "words": [
+    {
+     "pada": "मुनिः",
+     "lemma": "मुनि",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "ध्यान-मग्नः",
+     "lemma": "ध्यान-मग्न",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तिष्ठति",
+     "lemma": "स्था",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "मुनिः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "तिष्ठति",
+     "head_at": 2
+    }
+   ],
+   "english": "The sage remains absorbed in meditation."
+  },
+  {
+   "id": "a36",
+   "group": "a",
+   "text": "एष मम मित्रस्य पुत्रोऽस्ति",
+   "padas": [
+    "एषः",
+    "मम",
+    "मित्रस्य",
+    "पुत्रः",
+    "अस्ति"
+   ],
+   "words": [
+    {
+     "pada": "एषः",
+     "lemma": "एतद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "मम",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "मित्रस्य",
+     "lemma": "मित्र",
+     "grammar": "नपुंसकलिङ्ग षष्ठी एकवचन | पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "पुत्रः",
+     "lemma": "पुत्र",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अस्ति",
+     "lemma": "अस्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "एषः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "अस्ति",
+     "head_at": 4
+    },
+    {
+     "pada": "पुत्रः",
+     "at": 3,
+     "role": "विधेय",
+     "head": "एषः",
+     "head_at": 0
+    },
+    {
+     "pada": "मित्रस्य",
+     "at": 2,
+     "role": "सम्बन्ध",
+     "head": "पुत्रः",
+     "head_at": 3
+    },
+    {
+     "pada": "मम",
+     "at": 1,
+     "role": "सम्बन्ध",
+     "head": "मित्रस्य",
+     "head_at": 2
+    }
+   ],
+   "english": "This is my friend's son.",
+   "note": "मित्र 'friend' is neuter in classical usage and masculine in later usage; both genders are accepted."
+  },
+  {
+   "id": "a37",
+   "group": "a",
+   "text": "अपि त्वं कुशली असि",
+   "padas": [
+    "अपि",
+    "त्वम्",
+    "कुशली",
+    "असि"
+   ],
+   "words": [
+    {
+     "pada": "अपि",
+     "lemma": "अपि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "त्वम्",
+     "lemma": "युष्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "कुशली",
+     "lemma": "कुशलिन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "असि",
+     "lemma": "अस्",
+     "grammar": "लट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "त्वम्",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "असि",
+     "head_at": 3
+    },
+    {
+     "pada": "कुशली",
+     "at": 2,
+     "role": "विधेय",
+     "head": "त्वम्",
+     "head_at": 1
+    }
+   ],
+   "english": "Are you well?"
+  },
+  {
+   "id": "a38",
+   "group": "a",
+   "text": "पुरा अयोध्यायां दशरथो नाम राजा बभूव",
+   "padas": [
+    "पुरा",
+    "अयोध्यायाम्",
+    "दशरथः",
+    "नाम",
+    "राजा",
+    "बभूव"
+   ],
+   "words": [
+    {
+     "pada": "पुरा",
+     "lemma": "पुरा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "अयोध्यायाम्",
+     "lemma": "अयोध्या",
+     "grammar": "स्त्रीलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "दशरथः",
+     "lemma": "दशरथ",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "नाम",
+     "lemma": "नाम",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "राजा",
+     "lemma": "राजन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "बभूव",
+     "lemma": "भू",
+     "grammar": "लिट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अयोध्यायाम्",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "बभूव",
+     "head_at": 5
+    },
+    {
+     "pada": "दशरथः",
+     "at": 2,
+     "role": "विशेषण",
+     "head": "राजा",
+     "head_at": 4
+    },
+    {
+     "pada": "नाम",
+     "at": 3,
+     "role": "अव्यय",
+     "head": "दशरथः",
+     "head_at": 2
+    },
+    {
+     "pada": "राजा",
+     "at": 4,
+     "role": "कर्ता",
+     "head": "बभूव",
+     "head_at": 5
+    }
+   ],
+   "english": "Long ago there was a king in Ayodhyā named Daśaratha."
+  },
+  {
+   "id": "a39",
+   "group": "a",
+   "text": "मम गृहे त्रयः पुत्राश्चतस्रः पुत्र्यश्च सन्ति",
+   "padas": [
+    "मम",
+    "गृहे",
+    "त्रयः",
+    "पुत्राः",
+    "चतस्रः",
+    "पुत्र्यः",
+    "च",
+    "सन्ति"
+   ],
+   "words": [
+    {
+     "pada": "मम",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "गृहे",
+     "lemma": "गृह",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "त्रयः",
+     "lemma": "त्रि",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "पुत्राः",
+     "lemma": "पुत्र",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "चतस्रः",
+     "lemma": "चतुर् | चतसृ",
+     "grammar": "स्त्रीलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "पुत्र्यः",
+     "lemma": "पुत्री",
+     "grammar": "स्त्रीलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "च",
+     "lemma": "च",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "सन्ति",
+     "lemma": "अस्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "गृहे",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "सन्ति",
+     "head_at": 7
+    },
+    {
+     "pada": "त्रयः",
+     "at": 2,
+     "role": "विशेषण",
+     "head": "पुत्राः",
+     "head_at": 3
+    },
+    {
+     "pada": "पुत्राः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "सन्ति",
+     "head_at": 7
+    },
+    {
+     "pada": "चतस्रः",
+     "at": 4,
+     "role": "विशेषण",
+     "head": "पुत्र्यः",
+     "head_at": 5
+    },
+    {
+     "pada": "पुत्र्यः",
+     "at": 5,
+     "role": "कर्ता",
+     "head": "सन्ति",
+     "head_at": 7
+    },
+    {
+     "pada": "च",
+     "at": 6,
+     "role": "अव्यय",
+     "head": "पुत्र्यः",
+     "head_at": 5
+    }
+   ],
+   "english": "There are three sons and four daughters in my house.",
+   "note": "चतुर् takes the feminine stem चतसृ (7.2.99)."
+  },
+  {
+   "id": "a40",
+   "group": "a",
+   "text": "अयं मे पुत्रः स त्वा द्रष्टुम् इच्छति",
+   "padas": [
+    "अयम्",
+    "मे",
+    "पुत्रः",
+    "सः",
+    "त्वा",
+    "द्रष्टुम्",
+    "इच्छति"
+   ],
+   "words": [
+    {
+     "pada": "अयम्",
+     "lemma": "इदम्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "मे",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "पुत्रः",
+     "lemma": "पुत्र",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "त्वा",
+     "lemma": "युष्मद्",
+     "grammar": "द्वितीया एकवचन"
+    },
+    {
+     "pada": "द्रष्टुम्",
+     "lemma": "दृश्",
+     "grammar": "तुमुन्"
+    },
+    {
+     "pada": "इच्छति",
+     "lemma": "इष्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अयम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "मे",
+     "at": 1,
+     "role": "सम्बन्ध",
+     "head": "पुत्रः",
+     "head_at": 2
+    },
+    {
+     "pada": "पुत्रः",
+     "at": 2,
+     "role": "विधेय",
+     "head": "अयम्",
+     "head_at": 0
+    },
+    {
+     "pada": "सः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "इच्छति",
+     "head_at": 6
+    },
+    {
+     "pada": "त्वा",
+     "at": 4,
+     "role": "कर्म",
+     "head": "द्रष्टुम्",
+     "head_at": 5
+    },
+    {
+     "pada": "द्रष्टुम्",
+     "at": 5,
+     "role": "तुमर्थ",
+     "head": "इच्छति",
+     "head_at": 6
+    }
+   ],
+   "english": "This is my son; he wants to see you.",
+   "note": "अयम् could also qualify पुत्रः ('this son of mine'); with स starting a new clause the nominal sentence is meant. मे and त्वा are the enclitics of 8.1.22 and 8.1.23."
+  },
+  {
+   "id": "b01",
+   "group": "b",
+   "text": "कर्मण्येवाधिकारस्ते मा फलेषु कदाचन",
+   "padas": [
+    "कर्मणि",
+    "एव",
+    "अधिकारः",
+    "ते",
+    "मा",
+    "फलेषु",
+    "कदाचन"
+   ],
+   "words": [
+    {
+     "pada": "कर्मणि",
+     "lemma": "कर्मन्",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "एव",
+     "lemma": "एव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "अधिकारः",
+     "lemma": "अधिकार",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "ते",
+     "lemma": "युष्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "फलेषु",
+     "lemma": "फल",
+     "grammar": "नपुंसकलिङ्ग सप्तमी बहुवचन"
+    },
+    {
+     "pada": "कदाचन",
+     "lemma": "कदाचन",
+     "grammar": "अव्यय"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "ते",
+     "at": 3,
+     "role": "सम्बन्ध",
+     "head": "अधिकारः",
+     "head_at": 2
+    }
+   ],
+   "english": "Your right is to the work alone, never to its fruits."
+  },
+  {
+   "id": "b02",
+   "group": "b",
+   "text": "मा कर्मफलहेतुर्भूर्मा ते सङ्गोऽस्त्वकर्मणि",
+   "padas": [
+    "मा",
+    "कर्म-फल-हेतुः",
+    "भूः",
+    "मा",
+    "ते",
+    "सङ्गः",
+    "अस्तु",
+    "अकर्मणि"
+   ],
+   "words": [
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "कर्म-फल-हेतुः",
+     "lemma": "कर्मन्-फल-हेतु",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भूः",
+     "lemma": "भू",
+     "grammar": "लुङ् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "ते",
+     "lemma": "युष्मद्",
+     "grammar": "षष्ठी एकवचन"
+    },
+    {
+     "pada": "सङ्गः",
+     "lemma": "सङ्ग",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अस्तु",
+     "lemma": "अस्",
+     "grammar": "लोट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "अकर्मणि",
+     "lemma": "अकर्मन् | अ-कर्मन्",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "मा",
+     "at": 0,
+     "role": "अव्यय",
+     "head": "भूः",
+     "head_at": 2
+    },
+    {
+     "pada": "सङ्गः",
+     "at": 5,
+     "role": "कर्ता",
+     "head": "अस्तु",
+     "head_at": 6
+    },
+    {
+     "pada": "ते",
+     "at": 4,
+     "role": "सम्बन्ध",
+     "head": "सङ्गः",
+     "head_at": 5
+    }
+   ],
+   "english": "Do not let the fruit of work be your motive, and do not cling to doing nothing.",
+   "note": "भूः is लुङ् without the augment after मा (6.4.74); अकर्मन् is a नञ्-compound (2.2.6)."
+  },
+  {
+   "id": "b03",
+   "group": "b",
+   "text": "योगस्थः कुरु कर्माणि सङ्गं त्यक्त्वा धनञ्जय",
+   "padas": [
+    "योग-स्थः",
+    "कुरु",
+    "कर्माणि",
+    "सङ्गम्",
+    "त्यक्त्वा",
+    "धनञ्जय"
+   ],
+   "words": [
+    {
+     "pada": "योग-स्थः",
+     "lemma": "योग-स्थ",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कुरु",
+     "lemma": "कृ",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "कर्माणि",
+     "lemma": "कर्मन्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "सङ्गम्",
+     "lemma": "सङ्ग",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "त्यक्त्वा",
+     "lemma": "त्यज्",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "धनञ्जय",
+     "lemma": "धनञ्जय",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "कर्माणि",
+     "at": 2,
+     "role": "कर्म",
+     "head": "कुरु",
+     "head_at": 1
+    },
+    {
+     "pada": "सङ्गम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "त्यक्त्वा",
+     "head_at": 4
+    },
+    {
+     "pada": "त्यक्त्वा",
+     "at": 4,
+     "role": "पूर्वकालक्रिया",
+     "head": "कुरु",
+     "head_at": 1
+    },
+    {
+     "pada": "धनञ्जय",
+     "at": 5,
+     "role": "सम्बोधन",
+     "head": "कुरु",
+     "head_at": 1
+    }
+   ],
+   "english": "Established in yoga, do your work, Dhanañjaya, letting go of attachment.",
+   "note": "धनञ्जय is an epithet of Arjuna, taken as one word (an aluk compound by 6.3.70 ff.)."
+  },
+  {
+   "id": "b04",
+   "group": "b",
+   "text": "वासांसि जीर्णानि यथा विहाय",
+   "padas": [
+    "वासांसि",
+    "जीर्णानि",
+    "यथा",
+    "विहाय"
+   ],
+   "words": [
+    {
+     "pada": "वासांसि",
+     "lemma": "वासस्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "जीर्णानि",
+     "lemma": "जीर्ण",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "यथा",
+     "lemma": "यथा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "विहाय",
+     "lemma": "विहा",
+     "grammar": "ल्यप्"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "वासांसि",
+     "at": 0,
+     "role": "कर्म",
+     "head": "विहाय",
+     "head_at": 3
+    },
+    {
+     "pada": "जीर्णानि",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "वासांसि",
+     "head_at": 0
+    }
+   ],
+   "english": "Just as one casts off worn-out clothes..."
+  },
+  {
+   "id": "b05",
+   "group": "b",
+   "text": "नवानि गृह्णाति नरोऽपराणि",
+   "padas": [
+    "नवानि",
+    "गृह्णाति",
+    "नरः",
+    "अपराणि"
+   ],
+   "words": [
+    {
+     "pada": "नवानि",
+     "lemma": "नव",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "गृह्णाति",
+     "lemma": "ग्रह्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "नरः",
+     "lemma": "नर",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अपराणि",
+     "lemma": "अपर",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नरः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "गृह्णाति",
+     "head_at": 1
+    },
+    {
+     "pada": "अपराणि",
+     "at": 3,
+     "role": "कर्म",
+     "head": "गृह्णाति",
+     "head_at": 1
+    },
+    {
+     "pada": "नवानि",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "अपराणि",
+     "head_at": 3
+    }
+   ],
+   "english": "...and a man puts on other, new ones."
+  },
+  {
+   "id": "b06",
+   "group": "b",
+   "text": "नैनं छिन्दन्ति शस्त्राणि नैनं दहति पावकः",
+   "padas": [
+    "न",
+    "एनम्",
+    "छिन्दन्ति",
+    "शस्त्राणि",
+    "न",
+    "एनम्",
+    "दहति",
+    "पावकः"
+   ],
+   "words": [
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "एनम्",
+     "lemma": "एनद् | एतद् | इदम्",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "छिन्दन्ति",
+     "lemma": "छिद्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    },
+    {
+     "pada": "शस्त्राणि",
+     "lemma": "शस्त्र",
+     "grammar": "नपुंसकलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "एनम्",
+     "lemma": "एनद् | एतद् | इदम्",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "दहति",
+     "lemma": "दह्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "पावकः",
+     "lemma": "पावक",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "न",
+     "at": 0,
+     "role": "अव्यय",
+     "head": "छिन्दन्ति",
+     "head_at": 2
+    },
+    {
+     "pada": "एनम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "छिन्दन्ति",
+     "head_at": 2
+    },
+    {
+     "pada": "शस्त्राणि",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "छिन्दन्ति",
+     "head_at": 2
+    },
+    {
+     "pada": "न",
+     "at": 4,
+     "role": "अव्यय",
+     "head": "दहति",
+     "head_at": 6
+    },
+    {
+     "pada": "एनम्",
+     "at": 5,
+     "role": "कर्म",
+     "head": "दहति",
+     "head_at": 6
+    },
+    {
+     "pada": "पावकः",
+     "at": 7,
+     "role": "कर्ता",
+     "head": "दहति",
+     "head_at": 6
+    }
+   ],
+   "english": "Weapons do not cut it, fire does not burn it.",
+   "note": "एनद् is the substitute of इदम् / एतद् in a renewed mention (2.4.32, 2.4.34)."
+  },
+  {
+   "id": "b07",
+   "group": "b",
+   "text": "यदा यदा हि धर्मस्य ग्लानिर्भवति भारत",
+   "padas": [
+    "यदा",
+    "यदा",
+    "हि",
+    "धर्मस्य",
+    "ग्लानिः",
+    "भवति",
+    "भारत"
+   ],
+   "words": [
+    {
+     "pada": "यदा",
+     "lemma": "यदा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "यदा",
+     "lemma": "यदा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "हि",
+     "lemma": "हि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "धर्मस्य",
+     "lemma": "धर्म",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "ग्लानिः",
+     "lemma": "ग्लानि",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भवति",
+     "lemma": "भू",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "भारत",
+     "lemma": "भारत",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "धर्मस्य",
+     "at": 3,
+     "role": "सम्बन्ध",
+     "head": "ग्लानिः",
+     "head_at": 4
+    },
+    {
+     "pada": "ग्लानिः",
+     "at": 4,
+     "role": "कर्ता",
+     "head": "भवति",
+     "head_at": 5
+    },
+    {
+     "pada": "भारत",
+     "at": 6,
+     "role": "सम्बोधन",
+     "head": "भवति",
+     "head_at": 5
+    }
+   ],
+   "english": "Whenever dharma declines, Bhārata..."
+  },
+  {
+   "id": "b08",
+   "group": "b",
+   "text": "धर्मक्षेत्रे कुरुक्षेत्रे समवेता युयुत्सवः",
+   "padas": [
+    "धर्म-क्षेत्रे",
+    "कुरु-क्षेत्रे",
+    "समवेताः",
+    "युयुत्सवः"
+   ],
+   "words": [
+    {
+     "pada": "धर्म-क्षेत्रे",
+     "lemma": "धर्म-क्षेत्र",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "कुरु-क्षेत्रे",
+     "lemma": "कुरु-क्षेत्र | कुरुक्षेत्र",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "समवेताः",
+     "lemma": "समवेत",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "युयुत्सवः",
+     "lemma": "युयुत्सु",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "समवेताः",
+     "at": 2,
+     "role": "विशेषण",
+     "head": "युयुत्सवः",
+     "head_at": 3
+    }
+   ],
+   "english": "Gathered on the field of dharma, the field of the Kurus, eager to fight..."
+  },
+  {
+   "id": "b09",
+   "group": "b",
+   "text": "श्रद्धावाँल्लभते ज्ञानम्",
+   "padas": [
+    "श्रद्धावान्",
+    "लभते",
+    "ज्ञानम्"
+   ],
+   "words": [
+    {
+     "pada": "श्रद्धावान्",
+     "lemma": "श्रद्धावत्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "लभते",
+     "lemma": "लभ्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "ज्ञानम्",
+     "lemma": "ज्ञान",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "श्रद्धावान्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "लभते",
+     "head_at": 1
+    },
+    {
+     "pada": "ज्ञानम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "लभते",
+     "head_at": 1
+    }
+   ],
+   "english": "The man of faith gains knowledge.",
+   "note": "न् before ल् becomes nasalised ल् (8.4.60 तोर्लि with the nasal kept, 8.3.4 ff.)."
+  },
+  {
+   "id": "b10",
+   "group": "b",
+   "text": "ईशा वास्यमिदं सर्वम्",
+   "padas": [
+    "ईशा",
+    "वास्यम्",
+    "इदम्",
+    "सर्वम्"
+   ],
+   "words": [
+    {
+     "pada": "ईशा",
+     "lemma": "ईश्",
+     "grammar": "पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "वास्यम्",
+     "lemma": "वास्य",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "इदम्",
+     "lemma": "इदम्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सर्वम्",
+     "lemma": "सर्व",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "ईशा",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "वास्यम्",
+     "head_at": 1
+    }
+   ],
+   "english": "All this is to be dwelt in by the Lord.",
+   "note": "ईश् m. 'lord'; the line is also printed ईशावास्यम् as one word (the Upaniṣad's title)."
+  },
+  {
+   "id": "b11",
+   "group": "b",
+   "text": "तत्त्वमसि",
+   "padas": [
+    "तत्",
+    "त्वम्",
+    "असि"
+   ],
+   "words": [
+    {
+     "pada": "तत्",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "त्वम्",
+     "lemma": "युष्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "असि",
+     "lemma": "अस्",
+     "grammar": "लट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "त्वम्",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "असि",
+     "head_at": 2
+    },
+    {
+     "pada": "तत्",
+     "at": 0,
+     "role": "विधेय",
+     "head": "त्वम्",
+     "head_at": 1
+    }
+   ],
+   "english": "You are that.",
+   "note": "तत्त्वम् 'reality' + असि is a second split; the mahāvākya is तत् त्वम् असि."
+  },
+  {
+   "id": "b12",
+   "group": "b",
+   "text": "अहं ब्रह्मास्मि",
+   "padas": [
+    "अहम्",
+    "ब्रह्म",
+    "अस्मि"
+   ],
+   "words": [
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "ब्रह्म",
+     "lemma": "ब्रह्मन्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अस्मि",
+     "lemma": "अस्",
+     "grammar": "लट् उत्तमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अहम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "अस्मि",
+     "head_at": 2
+    },
+    {
+     "pada": "ब्रह्म",
+     "at": 1,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 0
+    }
+   ],
+   "english": "I am Brahman."
+  },
+  {
+   "id": "b13",
+   "group": "b",
+   "text": "अयमात्मा ब्रह्म",
+   "padas": [
+    "अयम्",
+    "आत्मा",
+    "ब्रह्म"
+   ],
+   "words": [
+    {
+     "pada": "अयम्",
+     "lemma": "इदम्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "आत्मा",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "ब्रह्म",
+     "lemma": "ब्रह्मन्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अयम्",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "आत्मा",
+     "head_at": 1
+    },
+    {
+     "pada": "आत्मा",
+     "at": 1,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "ब्रह्म",
+     "at": 2,
+     "role": "विधेय",
+     "head": "आत्मा",
+     "head_at": 1
+    }
+   ],
+   "english": "This Self is Brahman."
+  },
+  {
+   "id": "b14",
+   "group": "b",
+   "text": "प्रज्ञानं ब्रह्म",
+   "padas": [
+    "प्रज्ञानम्",
+    "ब्रह्म"
+   ],
+   "words": [
+    {
+     "pada": "प्रज्ञानम्",
+     "lemma": "प्रज्ञान",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "ब्रह्म",
+     "lemma": "ब्रह्मन्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "Consciousness is Brahman."
+  },
+  {
+   "id": "b15",
+   "group": "b",
+   "text": "सत्यं वद धर्मं चर",
+   "padas": [
+    "सत्यम्",
+    "वद",
+    "धर्मम्",
+    "चर"
+   ],
+   "words": [
+    {
+     "pada": "सत्यम्",
+     "lemma": "सत्य",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "वद",
+     "lemma": "वद्",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "धर्मम्",
+     "lemma": "धर्म",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "चर",
+     "lemma": "चर्",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सत्यम्",
+     "at": 0,
+     "role": "कर्म",
+     "head": "वद",
+     "head_at": 1
+    },
+    {
+     "pada": "धर्मम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "चर",
+     "head_at": 3
+    }
+   ],
+   "english": "Speak the truth; practise dharma."
+  },
+  {
+   "id": "b16",
+   "group": "b",
+   "text": "मातृदेवो भव पितृदेवो भव",
+   "padas": [
+    "मातृ-देवः",
+    "भव",
+    "पितृ-देवः",
+    "भव"
+   ],
+   "words": [
+    {
+     "pada": "मातृ-देवः",
+     "lemma": "मातृ-देव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भव",
+     "lemma": "भू",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "पितृ-देवः",
+     "lemma": "पितृ-देव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भव",
+     "lemma": "भू",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "Treat your mother as a god; treat your father as a god.",
+   "note": "मातृदेव is a bahuvrīhi 'one for whom the mother is a god'."
+  },
+  {
+   "id": "b17",
+   "group": "b",
+   "text": "सह नाववतु सह नौ भुनक्तु",
+   "padas": [
+    "सह",
+    "नौ",
+    "अवतु",
+    "सह",
+    "नौ",
+    "भुनक्तु"
+   ],
+   "words": [
+    {
+     "pada": "सह",
+     "lemma": "सह",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "नौ",
+     "lemma": "अस्मद्",
+     "grammar": "द्वितीया द्विवचन"
+    },
+    {
+     "pada": "अवतु",
+     "lemma": "अव्",
+     "grammar": "लोट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "सह",
+     "lemma": "सह",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "नौ",
+     "lemma": "अस्मद्",
+     "grammar": "द्वितीया द्विवचन"
+    },
+    {
+     "pada": "भुनक्तु",
+     "lemma": "भुज्",
+     "grammar": "लोट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नौ",
+     "at": 1,
+     "role": "कर्म",
+     "head": "अवतु",
+     "head_at": 2
+    },
+    {
+     "pada": "नौ",
+     "at": 4,
+     "role": "कर्म",
+     "head": "भुनक्तु",
+     "head_at": 5
+    }
+   ],
+   "english": "May he protect the two of us together; may he nourish the two of us together."
+  },
+  {
+   "id": "b18",
+   "group": "b",
+   "text": "तेजस्वि नावधीतमस्तु मा विद्विषावहै",
+   "padas": [
+    "तेजस्वि",
+    "नौ",
+    "अधीतम्",
+    "अस्तु",
+    "मा",
+    "विद्विषावहै"
+   ],
+   "words": [
+    {
+     "pada": "तेजस्वि",
+     "lemma": "तेजस्विन्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "नौ",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी द्विवचन"
+    },
+    {
+     "pada": "अधीतम्",
+     "lemma": "अधीत",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अस्तु",
+     "lemma": "अस्",
+     "grammar": "लोट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "विद्विषावहै",
+     "lemma": "विद्विष्",
+     "grammar": "लोट् उत्तमपुरुष द्विवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नौ",
+     "at": 1,
+     "role": "सम्बन्ध",
+     "head": "अधीतम्",
+     "head_at": 2
+    },
+    {
+     "pada": "अधीतम्",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "अस्तु",
+     "head_at": 3
+    },
+    {
+     "pada": "तेजस्वि",
+     "at": 0,
+     "role": "विधेय",
+     "head": "अधीतम्",
+     "head_at": 2
+    }
+   ],
+   "english": "May what we two study be full of light; may we never hate each other."
+  },
+  {
+   "id": "b19",
+   "group": "b",
+   "text": "उत्तिष्ठत जाग्रत प्राप्य वरान्निबोधत",
+   "padas": [
+    "उत्तिष्ठत",
+    "जाग्रत",
+    "प्राप्य",
+    "वरान्",
+    "निबोधत"
+   ],
+   "words": [
+    {
+     "pada": "उत्तिष्ठत",
+     "lemma": "उत्था",
+     "grammar": "लोट् मध्यमपुरुष बहुवचन"
+    },
+    {
+     "pada": "जाग्रत",
+     "lemma": "जागृ",
+     "grammar": "लोट् मध्यमपुरुष बहुवचन"
+    },
+    {
+     "pada": "प्राप्य",
+     "lemma": "प्राप्",
+     "grammar": "ल्यप्"
+    },
+    {
+     "pada": "वरान्",
+     "lemma": "वर",
+     "grammar": "पुंलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "निबोधत",
+     "lemma": "निबुध्",
+     "grammar": "लोट् मध्यमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "वरान्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "प्राप्य",
+     "head_at": 2
+    },
+    {
+     "pada": "प्राप्य",
+     "at": 2,
+     "role": "पूर्वकालक्रिया",
+     "head": "निबोधत",
+     "head_at": 4
+    }
+   ],
+   "english": "Arise, awake; go to the great teachers and learn."
+  },
+  {
+   "id": "b20",
+   "group": "b",
+   "text": "यत्र नार्यस्तु पूज्यन्ते रमन्ते तत्र देवताः",
+   "padas": [
+    "यत्र",
+    "नार्यः",
+    "तु",
+    "पूज्यन्ते",
+    "रमन्ते",
+    "तत्र",
+    "देवताः"
+   ],
+   "words": [
+    {
+     "pada": "यत्र",
+     "lemma": "यत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "नार्यः",
+     "lemma": "नारी",
+     "grammar": "स्त्रीलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "तु",
+     "lemma": "तु",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "पूज्यन्ते",
+     "lemma": "पूज् | पूजि",
+     "grammar": "लट् प्रथमपुरुष बहुवचन कर्मणि"
+    },
+    {
+     "pada": "रमन्ते",
+     "lemma": "रम्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    },
+    {
+     "pada": "तत्र",
+     "lemma": "तत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "देवताः",
+     "lemma": "देवता",
+     "grammar": "स्त्रीलिङ्ग प्रथमा बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नार्यः",
+     "at": 1,
+     "role": "कर्म",
+     "head": "पूज्यन्ते",
+     "head_at": 3
+    },
+    {
+     "pada": "तत्र",
+     "at": 5,
+     "role": "अव्यय",
+     "head": "रमन्ते",
+     "head_at": 4
+    },
+    {
+     "pada": "देवताः",
+     "at": 6,
+     "role": "कर्ता",
+     "head": "रमन्ते",
+     "head_at": 4
+    }
+   ],
+   "english": "Where women are honoured, there the gods are pleased."
+  },
+  {
+   "id": "b21",
+   "group": "b",
+   "text": "बुद्धिर्यस्य बलं तस्य",
+   "padas": [
+    "बुद्धिः",
+    "यस्य",
+    "बलम्",
+    "तस्य"
+   ],
+   "words": [
+    {
+     "pada": "बुद्धिः",
+     "lemma": "बुद्धि",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "यस्य",
+     "lemma": "यद्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "बलम्",
+     "lemma": "बल",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तस्य",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "यस्य",
+     "at": 1,
+     "role": "सम्बन्ध",
+     "head": "बुद्धिः",
+     "head_at": 0
+    },
+    {
+     "pada": "तस्य",
+     "at": 3,
+     "role": "सम्बन्ध",
+     "head": "बलम्",
+     "head_at": 2
+    }
+   ],
+   "english": "Whoever has intelligence has strength."
+  },
+  {
+   "id": "b22",
+   "group": "b",
+   "text": "आचारः परमो धर्मः",
+   "padas": [
+    "आचारः",
+    "परमः",
+    "धर्मः"
+   ],
+   "words": [
+    {
+     "pada": "आचारः",
+     "lemma": "आचार",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "परमः",
+     "lemma": "परम",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "धर्मः",
+     "lemma": "धर्म",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "आचारः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "परमः",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "धर्मः",
+     "head_at": 2
+    },
+    {
+     "pada": "धर्मः",
+     "at": 2,
+     "role": "विधेय",
+     "head": "आचारः",
+     "head_at": 0
+    }
+   ],
+   "english": "Right conduct is the highest dharma."
+  },
+  {
+   "id": "b23",
+   "group": "b",
+   "text": "विद्याधनं सर्वधनप्रधानम्",
+   "padas": [
+    "विद्या-धनम्",
+    "सर्व-धन-प्रधानम्"
+   ],
+   "words": [
+    {
+     "pada": "विद्या-धनम्",
+     "lemma": "विद्या-धन",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सर्व-धन-प्रधानम्",
+     "lemma": "सर्व-धन-प्रधान",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "विद्या-धनम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "सर्व-धन-प्रधानम्",
+     "at": 1,
+     "role": "विधेय",
+     "head": "विद्या-धनम्",
+     "head_at": 0
+    }
+   ],
+   "english": "The wealth of learning is the chief of all wealth."
+  },
+  {
+   "id": "b24",
+   "group": "b",
+   "text": "क्लैब्यं मा स्म गमः पार्थ नैतत्त्वय्युपपद्यते",
+   "padas": [
+    "क्लैब्यम्",
+    "मा",
+    "स्म",
+    "गमः",
+    "पार्थ",
+    "न",
+    "एतत्",
+    "त्वयि",
+    "उपपद्यते"
+   ],
+   "words": [
+    {
+     "pada": "क्लैब्यम्",
+     "lemma": "क्लैब्य",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "स्म",
+     "lemma": "स्म",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "गमः",
+     "lemma": "गम्",
+     "grammar": "लुङ् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "पार्थ",
+     "lemma": "पार्थ",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "एतत्",
+     "lemma": "एतद्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "त्वयि",
+     "lemma": "युष्मद्",
+     "grammar": "सप्तमी एकवचन"
+    },
+    {
+     "pada": "उपपद्यते",
+     "lemma": "उपपद्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "क्लैब्यम्",
+     "at": 0,
+     "role": "कर्म",
+     "head": "गमः",
+     "head_at": 3
+    },
+    {
+     "pada": "पार्थ",
+     "at": 4,
+     "role": "सम्बोधन",
+     "head": "गमः",
+     "head_at": 3
+    },
+    {
+     "pada": "एतत्",
+     "at": 6,
+     "role": "कर्ता",
+     "head": "उपपद्यते",
+     "head_at": 8
+    },
+    {
+     "pada": "त्वयि",
+     "at": 7,
+     "role": "अधिकरण",
+     "head": "उपपद्यते",
+     "head_at": 8
+    }
+   ],
+   "english": "Do not give way to unmanliness, Pārtha; it does not suit you.",
+   "note": "गमः is लुङ् without the augment after मा स्म (6.4.74)."
+  },
+  {
+   "id": "b25",
+   "group": "b",
+   "text": "षडेते यत्र वर्तन्ते तत्र देवः सहायकृत्",
+   "padas": [
+    "षट्",
+    "एते",
+    "यत्र",
+    "वर्तन्ते",
+    "तत्र",
+    "देवः",
+    "सहाय-कृत्"
+   ],
+   "words": [
+    {
+     "pada": "षट्",
+     "lemma": "षष्",
+     "grammar": "प्रथमा बहुवचन"
+    },
+    {
+     "pada": "एते",
+     "lemma": "एतद्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "यत्र",
+     "lemma": "यत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "वर्तन्ते",
+     "lemma": "वृत्",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    },
+    {
+     "pada": "तत्र",
+     "lemma": "तत्र",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "देवः",
+     "lemma": "देव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सहाय-कृत्",
+     "lemma": "सहाय-कृत्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "षट्",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "एते",
+     "head_at": 1
+    },
+    {
+     "pada": "एते",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "वर्तन्ते",
+     "head_at": 3
+    },
+    {
+     "pada": "देवः",
+     "at": 5,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "सहाय-कृत्",
+     "at": 6,
+     "role": "विधेय",
+     "head": "देवः",
+     "head_at": 5
+    }
+   ],
+   "english": "Where these six are found, there God lends his help."
+  },
+  {
+   "id": "b26",
+   "group": "b",
+   "text": "मित्रलाभः सुहृद्भेदो विग्रहः सन्धिरेव च",
+   "padas": [
+    "मित्र-लाभः",
+    "सुहृद्-भेदः",
+    "विग्रहः",
+    "सन्धिः",
+    "एव",
+    "च"
+   ],
+   "words": [
+    {
+     "pada": "मित्र-लाभः",
+     "lemma": "मित्र-लाभ",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सुहृद्-भेदः",
+     "lemma": "सुहृद्-भेद",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "विग्रहः",
+     "lemma": "विग्रह",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सन्धिः",
+     "lemma": "सन्धि",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "एव",
+     "lemma": "एव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "च",
+     "lemma": "च",
+     "grammar": "अव्यय"
+    }
+   ],
+   "roles": [],
+   "english": "Gaining friends, parting friends, war, and peace too."
+  },
+  {
+   "id": "b27",
+   "group": "b",
+   "text": "शास्त्राण्यधीत्यापि भवन्ति मूर्खा",
+   "padas": [
+    "शास्त्राणि",
+    "अधीत्य",
+    "अपि",
+    "भवन्ति",
+    "मूर्खाः"
+   ],
+   "words": [
+    {
+     "pada": "शास्त्राणि",
+     "lemma": "शास्त्र",
+     "grammar": "नपुंसकलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "अधीत्य",
+     "lemma": "अधी",
+     "grammar": "ल्यप्"
+    },
+    {
+     "pada": "अपि",
+     "lemma": "अपि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "भवन्ति",
+     "lemma": "भू",
+     "grammar": "लट् प्रथमपुरुष बहुवचन"
+    },
+    {
+     "pada": "मूर्खाः",
+     "lemma": "मूर्ख",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "शास्त्राणि",
+     "at": 0,
+     "role": "कर्म",
+     "head": "अधीत्य",
+     "head_at": 1
+    },
+    {
+     "pada": "अधीत्य",
+     "at": 1,
+     "role": "पूर्वकालक्रिया",
+     "head": "भवन्ति",
+     "head_at": 3
+    }
+   ],
+   "english": "Even after studying the sciences people remain fools;"
+  },
+  {
+   "id": "b28",
+   "group": "b",
+   "text": "यस्तु क्रियावान्पुरुषः स विद्वान्",
+   "padas": [
+    "यः",
+    "तु",
+    "क्रियावान्",
+    "पुरुषः",
+    "सः",
+    "विद्वान्"
+   ],
+   "words": [
+    {
+     "pada": "यः",
+     "lemma": "यद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तु",
+     "lemma": "तु",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "क्रियावान्",
+     "lemma": "क्रियावत्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पुरुषः",
+     "lemma": "पुरुष",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "विद्वान्",
+     "lemma": "विद्वस्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "क्रियावान्",
+     "at": 2,
+     "role": "विशेषण",
+     "head": "पुरुषः",
+     "head_at": 3
+    },
+    {
+     "pada": "सः",
+     "at": 4,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "विद्वान्",
+     "at": 5,
+     "role": "विधेय",
+     "head": "सः",
+     "head_at": 4
+    }
+   ],
+   "english": "but the man who puts it into practice is the learned one."
+  },
+  {
+   "id": "b29",
+   "group": "b",
+   "text": "गृहीत इव केशेषु मृत्युना धर्ममाचरेत्",
+   "padas": [
+    "गृहीतः",
+    "इव",
+    "केशेषु",
+    "मृत्युना",
+    "धर्मम्",
+    "आचरेत्"
+   ],
+   "words": [
+    {
+     "pada": "गृहीतः",
+     "lemma": "गृहीत",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "इव",
+     "lemma": "इव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "केशेषु",
+     "lemma": "केश",
+     "grammar": "पुंलिङ्ग सप्तमी बहुवचन"
+    },
+    {
+     "pada": "मृत्युना",
+     "lemma": "मृत्यु",
+     "grammar": "पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "धर्मम्",
+     "lemma": "धर्म",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "आचरेत्",
+     "lemma": "आचर्",
+     "grammar": "विधिलिङ् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "केशेषु",
+     "at": 2,
+     "role": "अधिकरण",
+     "head": "गृहीतः",
+     "head_at": 0
+    },
+    {
+     "pada": "मृत्युना",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "गृहीतः",
+     "head_at": 0
+    },
+    {
+     "pada": "धर्मम्",
+     "at": 4,
+     "role": "कर्म",
+     "head": "आचरेत्",
+     "head_at": 5
+    }
+   ],
+   "english": "One should practise dharma as though Death already had one by the hair."
+  },
+  {
+   "id": "b30",
+   "group": "b",
+   "text": "अजापुत्रं बलिं दद्याद्देवो दुर्बलघातकः",
+   "padas": [
+    "अजा-पुत्रम्",
+    "बलिम्",
+    "दद्यात्",
+    "देवः",
+    "दुर्बल-घातकः"
+   ],
+   "words": [
+    {
+     "pada": "अजा-पुत्रम्",
+     "lemma": "अजा-पुत्र",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "बलिम्",
+     "lemma": "बलि",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "दद्यात्",
+     "lemma": "दा",
+     "grammar": "विधिलिङ् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "देवः",
+     "lemma": "देव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "दुर्बल-घातकः",
+     "lemma": "दुर्बल-घातक",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अजा-पुत्रम्",
+     "at": 0,
+     "role": "कर्म",
+     "head": "दद्यात्",
+     "head_at": 2
+    },
+    {
+     "pada": "देवः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "दुर्बल-घातकः",
+     "at": 4,
+     "role": "विधेय",
+     "head": "देवः",
+     "head_at": 3
+    }
+   ],
+   "english": "One offers a young goat as the sacrifice: even a god destroys the weak."
+  },
+  {
+   "id": "b31",
+   "group": "b",
+   "text": "काव्यशास्त्रविनोदेन कालो गच्छति धीमताम्",
+   "padas": [
+    "काव्य-शास्त्र-विनोदेन",
+    "कालः",
+    "गच्छति",
+    "धीमताम्"
+   ],
+   "words": [
+    {
+     "pada": "काव्य-शास्त्र-विनोदेन",
+     "lemma": "काव्य-शास्त्र-विनोद",
+     "grammar": "पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "कालः",
+     "lemma": "काल",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "गच्छति",
+     "lemma": "गम्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "धीमताम्",
+     "lemma": "धीमत्",
+     "grammar": "पुंलिङ्ग षष्ठी बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "काव्य-शास्त्र-विनोदेन",
+     "at": 0,
+     "role": "करण",
+     "head": "गच्छति",
+     "head_at": 2
+    },
+    {
+     "pada": "कालः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "गच्छति",
+     "head_at": 2
+    },
+    {
+     "pada": "धीमताम्",
+     "at": 3,
+     "role": "सम्बन्ध",
+     "head": "कालः",
+     "head_at": 1
+    }
+   ],
+   "english": "The wise pass their time in the pleasures of poetry and learning,"
+  },
+  {
+   "id": "b32",
+   "group": "b",
+   "text": "पुनरपि जननं पुनरपि मरणं पुनरपि जननीजठरे शयनम्",
+   "padas": [
+    "पुनः",
+    "अपि",
+    "जननम्",
+    "पुनः",
+    "अपि",
+    "मरणम्",
+    "पुनः",
+    "अपि",
+    "जननी-जठरे",
+    "शयनम्"
+   ],
+   "words": [
+    {
+     "pada": "पुनः",
+     "lemma": "पुनर्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "अपि",
+     "lemma": "अपि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "जननम्",
+     "lemma": "जनन",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पुनः",
+     "lemma": "पुनर्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "अपि",
+     "lemma": "अपि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "मरणम्",
+     "lemma": "मरण",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पुनः",
+     "lemma": "पुनर्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "अपि",
+     "lemma": "अपि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "जननी-जठरे",
+     "lemma": "जननी-जठर",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "शयनम्",
+     "lemma": "शयन",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "Birth again, death again, and again lying in a mother's womb."
+  },
+  {
+   "id": "b33",
+   "group": "b",
+   "text": "अस्ति दाक्षिणात्ये जनपदे महिलारोप्यं नाम नगरम्",
+   "padas": [
+    "अस्ति",
+    "दाक्षिणात्ये",
+    "जनपदे",
+    "महिलारोप्यम्",
+    "नाम",
+    "नगरम्"
+   ],
+   "words": [
+    {
+     "pada": "अस्ति",
+     "lemma": "अस्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "दाक्षिणात्ये",
+     "lemma": "दाक्षिणात्य",
+     "grammar": "पुंलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "जनपदे",
+     "lemma": "जनपद",
+     "grammar": "पुंलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "महिलारोप्यम्",
+     "lemma": "महिलारोप्य",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "नाम",
+     "lemma": "नाम",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "नगरम्",
+     "lemma": "नगर",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "दाक्षिणात्ये",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "जनपदे",
+     "head_at": 2
+    },
+    {
+     "pada": "जनपदे",
+     "at": 2,
+     "role": "अधिकरण",
+     "head": "अस्ति",
+     "head_at": 0
+    },
+    {
+     "pada": "महिलारोप्यम्",
+     "at": 3,
+     "role": "विशेषण",
+     "head": "नगरम्",
+     "head_at": 5
+    },
+    {
+     "pada": "नगरम्",
+     "at": 5,
+     "role": "कर्ता",
+     "head": "अस्ति",
+     "head_at": 0
+    }
+   ],
+   "english": "In the southern country there is a city called Mahilāropya."
+  },
+  {
+   "id": "b34",
+   "group": "b",
+   "text": "उपदेशो हि मूर्खाणां प्रकोपाय न शान्तये",
+   "padas": [
+    "उपदेशः",
+    "हि",
+    "मूर्खाणाम्",
+    "प्रकोपाय",
+    "न",
+    "शान्तये"
+   ],
+   "words": [
+    {
+     "pada": "उपदेशः",
+     "lemma": "उपदेश",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "हि",
+     "lemma": "हि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "मूर्खाणाम्",
+     "lemma": "मूर्ख",
+     "grammar": "पुंलिङ्ग षष्ठी बहुवचन"
+    },
+    {
+     "pada": "प्रकोपाय",
+     "lemma": "प्रकोप",
+     "grammar": "पुंलिङ्ग चतुर्थी एकवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "शान्तये",
+     "lemma": "शान्ति",
+     "grammar": "स्त्रीलिङ्ग चतुर्थी एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "मूर्खाणाम्",
+     "at": 2,
+     "role": "सम्बन्ध",
+     "head": "उपदेशः",
+     "head_at": 0
+    }
+   ],
+   "english": "Advice only angers fools; it does not calm them."
+  },
+  {
+   "id": "b35",
+   "group": "b",
+   "text": "पयःपानं भुजङ्गानां केवलं विषवर्धनम्",
+   "padas": [
+    "पयस्-पानम्",
+    "भुजङ्गानाम्",
+    "केवलम्",
+    "विष-वर्धनम्"
+   ],
+   "words": [
+    {
+     "pada": "पयस्-पानम्",
+     "lemma": "पयस्-पान",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भुजङ्गानाम्",
+     "lemma": "भुजङ्ग",
+     "grammar": "पुंलिङ्ग षष्ठी बहुवचन"
+    },
+    {
+     "pada": "केवलम्",
+     "lemma": "केवल",
+     "grammar": "अव्यय | नपुंसकलिङ्ग द्वितीया एकवचन | नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "विष-वर्धनम्",
+     "lemma": "विष-वर्धन",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "पयस्-पानम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "भुजङ्गानाम्",
+     "at": 1,
+     "role": "सम्बन्ध",
+     "head": "पयस्-पानम्",
+     "head_at": 0
+    },
+    {
+     "pada": "विष-वर्धनम्",
+     "at": 3,
+     "role": "विधेय",
+     "head": "पयस्-पानम्",
+     "head_at": 0
+    }
+   ],
+   "english": "Giving milk to snakes only adds to their venom."
+  },
+  {
+   "id": "b36",
+   "group": "b",
+   "text": "वक्रतुण्ड महाकाय सूर्यकोटिसमप्रभ",
+   "padas": [
+    "वक्र-तुण्ड",
+    "महा-काय",
+    "सूर्य-कोटि-सम-प्रभ"
+   ],
+   "words": [
+    {
+     "pada": "वक्र-तुण्ड",
+     "lemma": "वक्र-तुण्ड",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "महा-काय",
+     "lemma": "महत्-काय | महा-काय",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "सूर्य-कोटि-सम-प्रभ",
+     "lemma": "सूर्य-कोटि-सम-प्रभा | सूर्य-कोटि-सम-प्रभ",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "O god of the curved trunk and mighty body, bright as ten million suns,",
+   "note": "the feminine प्रभा is shortened as the last member of a bahuvrīhi (1.2.48)."
+  },
+  {
+   "id": "b37",
+   "group": "b",
+   "text": "निर्विघ्नं कुरु मे देव सर्वकार्येषु सर्वदा",
+   "padas": [
+    "निर्विघ्नम्",
+    "कुरु",
+    "मे",
+    "देव",
+    "सर्व-कार्येषु",
+    "सर्वदा"
+   ],
+   "words": [
+    {
+     "pada": "निर्विघ्नम्",
+     "lemma": "निर्विघ्न | निस्-विघ्न",
+     "grammar": "अव्यय | नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "कुरु",
+     "lemma": "कृ",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "मे",
+     "lemma": "अस्मद्",
+     "grammar": "षष्ठी एकवचन | चतुर्थी एकवचन"
+    },
+    {
+     "pada": "देव",
+     "lemma": "देव",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "सर्व-कार्येषु",
+     "lemma": "सर्व-कार्य",
+     "grammar": "नपुंसकलिङ्ग सप्तमी बहुवचन"
+    },
+    {
+     "pada": "सर्वदा",
+     "lemma": "सर्वदा",
+     "grammar": "अव्यय"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "देव",
+     "at": 3,
+     "role": "सम्बोधन",
+     "head": "कुरु",
+     "head_at": 1
+    },
+    {
+     "pada": "सर्व-कार्येषु",
+     "at": 4,
+     "role": "अधिकरण",
+     "head": "कुरु",
+     "head_at": 1
+    },
+    {
+     "pada": "सर्वदा",
+     "at": 5,
+     "role": "अव्यय",
+     "head": "कुरु",
+     "head_at": 1
+    }
+   ],
+   "english": "keep all my undertakings free of obstacles, O god, always.",
+   "note": "मे may be read as genitive (with कार्येषु) or dative; निर्विघ्नम् as an adverb or as the object complement."
+  },
+  {
+   "id": "b38",
+   "group": "b",
+   "text": "कराग्रे वसते लक्ष्मीः करमध्ये सरस्वती",
+   "padas": [
+    "कर-अग्रे",
+    "वसते",
+    "लक्ष्मीः",
+    "कर-मध्ये",
+    "सरस्वती"
+   ],
+   "words": [
+    {
+     "pada": "कर-अग्रे",
+     "lemma": "कर-अग्र",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "वसते",
+     "lemma": "वस्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "लक्ष्मीः",
+     "lemma": "लक्ष्मी",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कर-मध्ये",
+     "lemma": "कर-मध्य",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "सरस्वती",
+     "lemma": "सरस्वती",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "कर-अग्रे",
+     "at": 0,
+     "role": "अधिकरण",
+     "head": "वसते",
+     "head_at": 1
+    },
+    {
+     "pada": "लक्ष्मीः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "वसते",
+     "head_at": 1
+    }
+   ],
+   "english": "Lakṣmī lives at the fingertips, Sarasvatī in the middle of the hand.",
+   "note": "वसते is ātmanepada of a parasmaipada root (an irregular, ārṣa form); it is not to be forced to a regular derivation."
+  },
+  {
+   "id": "b39",
+   "group": "b",
+   "text": "तेन त्यक्तेन भुञ्जीथा मा गृधः कस्यस्विद्धनम्",
+   "padas": [
+    "तेन",
+    "त्यक्तेन",
+    "भुञ्जीथाः",
+    "मा",
+    "गृधः",
+    "कस्य",
+    "स्वित्",
+    "धनम्"
+   ],
+   "words": [
+    {
+     "pada": "तेन",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग तृतीया एकवचन | पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "त्यक्तेन",
+     "lemma": "त्यक्त",
+     "grammar": "नपुंसकलिङ्ग तृतीया एकवचन | पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "भुञ्जीथाः",
+     "lemma": "भुज्",
+     "grammar": "विधिलिङ् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "मा",
+     "lemma": "मा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "गृधः",
+     "lemma": "गृध्",
+     "grammar": "लुङ् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "कस्य",
+     "lemma": "किम्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "स्वित्",
+     "lemma": "स्विद् | स्वित्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "धनम्",
+     "lemma": "धन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "तेन",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "त्यक्तेन",
+     "head_at": 1
+    },
+    {
+     "pada": "त्यक्तेन",
+     "at": 1,
+     "role": "करण",
+     "head": "भुञ्जीथाः",
+     "head_at": 2
+    },
+    {
+     "pada": "कस्य",
+     "at": 5,
+     "role": "सम्बन्ध",
+     "head": "धनम्",
+     "head_at": 7
+    },
+    {
+     "pada": "धनम्",
+     "at": 7,
+     "role": "कर्म",
+     "head": "गृधः",
+     "head_at": 4
+    }
+   ],
+   "english": "Enjoy it by letting it go; do not covet anyone's wealth.",
+   "note": "तेन त्यक्तेन is also read 'with what he has left you'; कस्य स्वित् may also be a question ('whose is wealth?')."
+  },
+  {
+   "id": "b40",
+   "group": "b",
+   "text": "पूर्णमदः पूर्णमिदं पूर्णात्पूर्णमुदच्यते",
+   "padas": [
+    "पूर्णम्",
+    "अदः",
+    "पूर्णम्",
+    "इदम्",
+    "पूर्णात्",
+    "पूर्णम्",
+    "उदच्यते"
+   ],
+   "words": [
+    {
+     "pada": "पूर्णम्",
+     "lemma": "पूर्ण",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अदः",
+     "lemma": "अदस्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पूर्णम्",
+     "lemma": "पूर्ण",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "इदम्",
+     "lemma": "इदम्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पूर्णात्",
+     "lemma": "पूर्ण",
+     "grammar": "नपुंसकलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "पूर्णम्",
+     "lemma": "पूर्ण",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "उदच्यते",
+     "lemma": "उदञ्च्",
+     "grammar": "लट् प्रथमपुरुष एकवचन कर्मणि"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "पूर्णात्",
+     "at": 4,
+     "role": "अपादान",
+     "head": "उदच्यते",
+     "head_at": 6
+    },
+    {
+     "pada": "पूर्णम्",
+     "at": 5,
+     "role": "कर्म",
+     "head": "उदच्यते",
+     "head_at": 6
+    }
+   ],
+   "english": "That is whole, this is whole; from the whole the whole is drawn out."
+  },
+  {
+   "id": "c01",
+   "group": "c",
+   "text": "या कुन्देन्दुतुषारहारधवला या शुभ्रवस्त्रावृता",
+   "padas": [
+    "या",
+    "कुन्द-इन्दु-तुषार-हार-धवला",
+    "या",
+    "शुभ्र-वस्त्र-आवृता"
+   ],
+   "words": [
+    {
+     "pada": "या",
+     "lemma": "यद्",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कुन्द-इन्दु-तुषार-हार-धवला",
+     "lemma": "कुन्द-इन्दु-तुषार-हार-धवल",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "या",
+     "lemma": "यद्",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "शुभ्र-वस्त्र-आवृता",
+     "lemma": "शुभ्र-वस्त्र-आवृत",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "She who is white as jasmine, the moon, frost and a string of pearls, who is clothed in white,"
+  },
+  {
+   "id": "c02",
+   "group": "c",
+   "text": "या वीणावरदण्डमण्डितकरा या श्वेतपद्मासना",
+   "padas": [
+    "या",
+    "वीणा-वर-दण्ड-मण्डित-करा",
+    "या",
+    "श्वेत-पद्म-आसना"
+   ],
+   "words": [
+    {
+     "pada": "या",
+     "lemma": "यद्",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वीणा-वर-दण्ड-मण्डित-करा",
+     "lemma": "वीणा-वर-दण्ड-मण्डित-कर",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "या",
+     "lemma": "यद्",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "श्वेत-पद्म-आसना",
+     "lemma": "श्वेत-पद्म-आसन",
+     "grammar": "स्त्रीलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "whose hand is graced by the fine staff of the vīṇā, who sits on a white lotus,",
+   "note": "both compounds are bahuvrīhis with the feminine stem in -आ (4.1.4)."
+  },
+  {
+   "id": "c03",
+   "group": "c",
+   "text": "शान्ताकारं भुजगशयनं पद्मनाभं सुरेशम्",
+   "padas": [
+    "शान्त-आकारम्",
+    "भुजग-शयनम्",
+    "पद्म-नाभम्",
+    "सुर-ईशम्"
+   ],
+   "words": [
+    {
+     "pada": "शान्त-आकारम्",
+     "lemma": "शान्त-आकार",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "भुजग-शयनम्",
+     "lemma": "भुजग-शयन",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "पद्म-नाभम्",
+     "lemma": "पद्म-नाभ | पद्म-नाभि",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "सुर-ईशम्",
+     "lemma": "सुर-ईश",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "(I bow to) the one of peaceful form, who rests on the serpent, with a lotus at his navel, the lord of the gods,",
+   "note": "the accusatives depend on वन्दे two lines on; नाभि becomes नाभ at the end of a compound with the samāsānta अच् (5.4.75 ff.)."
+  },
+  {
+   "id": "c04",
+   "group": "c",
+   "text": "लक्ष्मीकान्तं कमलनयनं योगिभिर्ध्यानगम्यम्",
+   "padas": [
+    "लक्ष्मी-कान्तम्",
+    "कमल-नयनम्",
+    "योगिभिः",
+    "ध्यान-गम्यम्"
+   ],
+   "words": [
+    {
+     "pada": "लक्ष्मी-कान्तम्",
+     "lemma": "लक्ष्मी-कान्त",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "कमल-नयनम्",
+     "lemma": "कमल-नयन",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "योगिभिः",
+     "lemma": "योगिन्",
+     "grammar": "पुंलिङ्ग तृतीया बहुवचन"
+    },
+    {
+     "pada": "ध्यान-गम्यम्",
+     "lemma": "ध्यान-गम्य",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "योगिभिः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "ध्यान-गम्यम्",
+     "head_at": 3
+    }
+   ],
+   "english": "Lakṣmī's beloved, lotus-eyed, reached by yogis through meditation,",
+   "note": "the accusatives depend on वन्दे in the next line of the verse; the line alone also reads as neuter nominatives."
+  },
+  {
+   "id": "c05",
+   "group": "c",
+   "text": "वन्दे विष्णुं भवभयहरं सर्वलोकैकनाथम्",
+   "padas": [
+    "वन्दे",
+    "विष्णुम्",
+    "भव-भय-हरम्",
+    "सर्व-लोक-एक-नाथम्"
+   ],
+   "words": [
+    {
+     "pada": "वन्दे",
+     "lemma": "वन्द्",
+     "grammar": "लट् उत्तमपुरुष एकवचन"
+    },
+    {
+     "pada": "विष्णुम्",
+     "lemma": "विष्णु",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "भव-भय-हरम्",
+     "lemma": "भव-भय-हर",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "सर्व-लोक-एक-नाथम्",
+     "lemma": "सर्व-लोक-एक-नाथ",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "विष्णुम्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "वन्दे",
+     "head_at": 0
+    },
+    {
+     "pada": "भव-भय-हरम्",
+     "at": 2,
+     "role": "विशेषण",
+     "head": "विष्णुम्",
+     "head_at": 1
+    },
+    {
+     "pada": "सर्व-लोक-एक-नाथम्",
+     "at": 3,
+     "role": "विशेषण",
+     "head": "विष्णुम्",
+     "head_at": 1
+    }
+   ],
+   "english": "I bow to Viṣṇu, who removes the fear of worldly life, the one lord of all the worlds."
+  },
+  {
+   "id": "c06",
+   "group": "c",
+   "text": "गजाननं भूतगणादिसेवितं कपित्थजम्बूफलचारुभक्षणम्",
+   "padas": [
+    "गज-आननम्",
+    "भूत-गण-आदि-सेवितम्",
+    "कपित्थ-जम्बू-फल-चारु-भक्षणम्"
+   ],
+   "words": [
+    {
+     "pada": "गज-आननम्",
+     "lemma": "गज-आनन",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "भूत-गण-आदि-सेवितम्",
+     "lemma": "भूत-गण-आदि-सेवित",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "कपित्थ-जम्बू-फल-चारु-भक्षणम्",
+     "lemma": "कपित्थ-जम्बू-फल-चारु-भक्षण",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "The elephant-faced one, attended by the hosts of spirits and others, who relishes wood-apple and rose-apple fruit,",
+   "note": "the accusatives depend on नमामि in the next line of the verse; the line alone also reads as neuter nominatives."
+  },
+  {
+   "id": "c07",
+   "group": "c",
+   "text": "उमासुतं शोकविनाशकारकं नमामि विघ्नेश्वरपादपङ्कजम्",
+   "padas": [
+    "उमा-सुतम्",
+    "शोक-विनाश-कारकम्",
+    "नमामि",
+    "विघ्न-ईश्वर-पाद-पङ्कजम्"
+   ],
+   "words": [
+    {
+     "pada": "उमा-सुतम्",
+     "lemma": "उमा-सुत",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "शोक-विनाश-कारकम्",
+     "lemma": "शोक-विनाश-कारक",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "नमामि",
+     "lemma": "नम्",
+     "grammar": "लट् उत्तमपुरुष एकवचन"
+    },
+    {
+     "pada": "विघ्न-ईश्वर-पाद-पङ्कजम्",
+     "lemma": "विघ्न-ईश्वर-पाद-पङ्कज | विघ्न-ईश्वर-पाद-पङ्क-ज",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "विघ्न-ईश्वर-पाद-पङ्कजम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "नमामि",
+     "head_at": 2
+    }
+   ],
+   "english": "the son of Umā who ends sorrow: I bow to the lotus feet of the lord of obstacles."
+  },
+  {
+   "id": "c08",
+   "group": "c",
+   "text": "वागर्थाविव संपृक्तौ वागर्थप्रतिपत्तये",
+   "padas": [
+    "वाक्-अर्थौ",
+    "इव",
+    "संपृक्तौ",
+    "वाक्-अर्थ-प्रतिपत्तये"
+   ],
+   "words": [
+    {
+     "pada": "वाक्-अर्थौ",
+     "lemma": "वाच्-अर्थ",
+     "grammar": "पुंलिङ्ग प्रथमा द्विवचन"
+    },
+    {
+     "pada": "इव",
+     "lemma": "इव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "संपृक्तौ",
+     "lemma": "सम्पृक्त",
+     "grammar": "पुंलिङ्ग प्रथमा द्विवचन"
+    },
+    {
+     "pada": "वाक्-अर्थ-प्रतिपत्तये",
+     "lemma": "वाच्-अर्थ-प्रतिपत्ति",
+     "grammar": "स्त्रीलिङ्ग चतुर्थी एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "For a true grasp of word and meaning, (I bow to the two) joined like word and meaning,",
+   "note": "वाच् is वाक् in a compound by 8.2.30 and वाग् before a vowel by 8.2.39."
+  },
+  {
+   "id": "c09",
+   "group": "c",
+   "text": "जगतः पितरौ वन्दे पार्वतीपरमेश्वरौ",
+   "padas": [
+    "जगतः",
+    "पितरौ",
+    "वन्दे",
+    "पार्वती-परमेश्वरौ"
+   ],
+   "words": [
+    {
+     "pada": "जगतः",
+     "lemma": "जगत्",
+     "grammar": "नपुंसकलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "पितरौ",
+     "lemma": "पितृ",
+     "grammar": "पुंलिङ्ग द्वितीया द्विवचन"
+    },
+    {
+     "pada": "वन्दे",
+     "lemma": "वन्द्",
+     "grammar": "लट् उत्तमपुरुष एकवचन"
+    },
+    {
+     "pada": "पार्वती-परमेश्वरौ",
+     "lemma": "पार्वती-परमेश्वर | पार्वती-परम-ईश्वर",
+     "grammar": "पुंलिङ्ग द्वितीया द्विवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "जगतः",
+     "at": 0,
+     "role": "सम्बन्ध",
+     "head": "पितरौ",
+     "head_at": 1
+    },
+    {
+     "pada": "पितरौ",
+     "at": 1,
+     "role": "कर्म",
+     "head": "वन्दे",
+     "head_at": 2
+    }
+   ],
+   "english": "I bow to Pārvatī and Parameśvara, the parents of the world."
+  },
+  {
+   "id": "c10",
+   "group": "c",
+   "text": "उद्धरेदात्मनात्मानं नात्मानमवसादयेत्",
+   "padas": [
+    "उद्धरेत्",
+    "आत्मना",
+    "आत्मानम्",
+    "न",
+    "आत्मानम्",
+    "अवसादयेत्"
+   ],
+   "words": [
+    {
+     "pada": "उद्धरेत्",
+     "lemma": "उद्धृ",
+     "grammar": "विधिलिङ् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "आत्मना",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग तृतीया एकवचन"
+    },
+    {
+     "pada": "आत्मानम्",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "आत्मानम्",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "अवसादयेत्",
+     "lemma": "अवसादि",
+     "grammar": "विधिलिङ् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "आत्मना",
+     "at": 1,
+     "role": "करण",
+     "head": "उद्धरेत्",
+     "head_at": 0
+    },
+    {
+     "pada": "आत्मानम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "उद्धरेत्",
+     "head_at": 0
+    },
+    {
+     "pada": "न",
+     "at": 3,
+     "role": "अव्यय",
+     "head": "अवसादयेत्",
+     "head_at": 5
+    },
+    {
+     "pada": "आत्मानम्",
+     "at": 4,
+     "role": "कर्म",
+     "head": "अवसादयेत्",
+     "head_at": 5
+    }
+   ],
+   "english": "One should raise oneself by oneself and not let oneself sink."
+  },
+  {
+   "id": "c11",
+   "group": "c",
+   "text": "आत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः",
+   "padas": [
+    "आत्मा",
+    "एव",
+    "हि",
+    "आत्मनः",
+    "बन्धुः",
+    "आत्मा",
+    "एव",
+    "रिपुः",
+    "आत्मनः"
+   ],
+   "words": [
+    {
+     "pada": "आत्मा",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "एव",
+     "lemma": "एव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "हि",
+     "lemma": "हि",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "आत्मनः",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "बन्धुः",
+     "lemma": "बन्धु",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "आत्मा",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "एव",
+     "lemma": "एव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "रिपुः",
+     "lemma": "रिपु",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "आत्मनः",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "आत्मनः",
+     "at": 3,
+     "role": "सम्बन्ध",
+     "head": "बन्धुः",
+     "head_at": 4
+    },
+    {
+     "pada": "बन्धुः",
+     "at": 4,
+     "role": "विधेय",
+     "head": "आत्मा",
+     "head_at": 0
+    },
+    {
+     "pada": "रिपुः",
+     "at": 7,
+     "role": "विधेय",
+     "head": "आत्मा",
+     "head_at": 5
+    },
+    {
+     "pada": "आत्मनः",
+     "at": 8,
+     "role": "सम्बन्ध",
+     "head": "रिपुः",
+     "head_at": 7
+    }
+   ],
+   "english": "For the self alone is the self's friend, and the self alone its enemy."
+  },
+  {
+   "id": "c12",
+   "group": "c",
+   "text": "यद्यदाचरति श्रेष्ठस्तत्तदेवेतरो जनः",
+   "padas": [
+    "यत्",
+    "यत्",
+    "आचरति",
+    "श्रेष्ठः",
+    "तत्",
+    "तत्",
+    "एव",
+    "इतरः",
+    "जनः"
+   ],
+   "words": [
+    {
+     "pada": "यत्",
+     "lemma": "यद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "यत्",
+     "lemma": "यद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "आचरति",
+     "lemma": "आचर्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "श्रेष्ठः",
+     "lemma": "श्रेष्ठ",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तत्",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "तत्",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "एव",
+     "lemma": "एव",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "इतरः",
+     "lemma": "इतर",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "जनः",
+     "lemma": "जन",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "श्रेष्ठः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "आचरति",
+     "head_at": 2
+    },
+    {
+     "pada": "इतरः",
+     "at": 7,
+     "role": "विशेषण",
+     "head": "जनः",
+     "head_at": 8
+    }
+   ],
+   "english": "Whatever the best man does, other people do just the same."
+  },
+  {
+   "id": "c13",
+   "group": "c",
+   "text": "स यत्प्रमाणं कुरुते लोकस्तदनुवर्तते",
+   "padas": [
+    "सः",
+    "यत्",
+    "प्रमाणम्",
+    "कुरुते",
+    "लोकः",
+    "तत्",
+    "अनुवर्तते"
+   ],
+   "words": [
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "यत्",
+     "lemma": "यद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "प्रमाणम्",
+     "lemma": "प्रमाण",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "कुरुते",
+     "lemma": "कृ",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "लोकः",
+     "lemma": "लोक",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तत्",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "अनुवर्तते",
+     "lemma": "अनुवृत्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "कुरुते",
+     "head_at": 3
+    },
+    {
+     "pada": "प्रमाणम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "कुरुते",
+     "head_at": 3
+    },
+    {
+     "pada": "लोकः",
+     "at": 4,
+     "role": "कर्ता",
+     "head": "अनुवर्तते",
+     "head_at": 6
+    },
+    {
+     "pada": "तत्",
+     "at": 5,
+     "role": "कर्म",
+     "head": "अनुवर्तते",
+     "head_at": 6
+    }
+   ],
+   "english": "Whatever standard he sets, the world follows."
+  },
+  {
+   "id": "c14",
+   "group": "c",
+   "text": "श्रेयान्स्वधर्मो विगुणः परधर्मात्स्वनुष्ठितात्",
+   "padas": [
+    "श्रेयान्",
+    "स्व-धर्मः",
+    "विगुणः",
+    "पर-धर्मात्",
+    "सु-अनुष्ठितात्"
+   ],
+   "words": [
+    {
+     "pada": "श्रेयान्",
+     "lemma": "श्रेयस्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "स्व-धर्मः",
+     "lemma": "स्व-धर्म",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "विगुणः",
+     "lemma": "विगुण | वि-गुण",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पर-धर्मात्",
+     "lemma": "पर-धर्म",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "सु-अनुष्ठितात्",
+     "lemma": "सु-अनुष्ठित",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "स्व-धर्मः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "श्रेयान्",
+     "at": 0,
+     "role": "विधेय",
+     "head": "स्व-धर्मः",
+     "head_at": 1
+    },
+    {
+     "pada": "विगुणः",
+     "at": 2,
+     "role": "विशेषण",
+     "head": "स्व-धर्मः",
+     "head_at": 1
+    }
+   ],
+   "english": "Better one's own duty done imperfectly than another's done well."
+  },
+  {
+   "id": "c15",
+   "group": "c",
+   "text": "स्वधर्मे निधनं श्रेयः परधर्मो भयावहः",
+   "padas": [
+    "स्व-धर्मे",
+    "निधनम्",
+    "श्रेयः",
+    "पर-धर्मः",
+    "भय-आवहः"
+   ],
+   "words": [
+    {
+     "pada": "स्व-धर्मे",
+     "lemma": "स्व-धर्म",
+     "grammar": "पुंलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "निधनम्",
+     "lemma": "निधन",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "श्रेयः",
+     "lemma": "श्रेयस्",
+     "grammar": "नपुंसकलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "पर-धर्मः",
+     "lemma": "पर-धर्म",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "भय-आवहः",
+     "lemma": "भय-आवह",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "निधनम्",
+     "at": 1,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "श्रेयः",
+     "at": 2,
+     "role": "विधेय",
+     "head": "निधनम्",
+     "head_at": 1
+    },
+    {
+     "pada": "पर-धर्मः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "भय-आवहः",
+     "at": 4,
+     "role": "विधेय",
+     "head": "पर-धर्मः",
+     "head_at": 3
+    }
+   ],
+   "english": "Death in one's own duty is better; another's duty is fraught with danger."
+  },
+  {
+   "id": "c16",
+   "group": "c",
+   "text": "हतो वा प्राप्स्यसि स्वर्गं जित्वा वा भोक्ष्यसे महीम्",
+   "padas": [
+    "हतः",
+    "वा",
+    "प्राप्स्यसि",
+    "स्वर्गम्",
+    "जित्वा",
+    "वा",
+    "भोक्ष्यसे",
+    "महीम्"
+   ],
+   "words": [
+    {
+     "pada": "हतः",
+     "lemma": "हत",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वा",
+     "lemma": "वा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "प्राप्स्यसि",
+     "lemma": "प्राप्",
+     "grammar": "लृट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "स्वर्गम्",
+     "lemma": "स्वर्ग",
+     "grammar": "पुंलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "जित्वा",
+     "lemma": "जि",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "वा",
+     "lemma": "वा",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "भोक्ष्यसे",
+     "lemma": "भुज्",
+     "grammar": "लृट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "महीम्",
+     "lemma": "मही",
+     "grammar": "स्त्रीलिङ्ग द्वितीया एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "स्वर्गम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "प्राप्स्यसि",
+     "head_at": 2
+    },
+    {
+     "pada": "जित्वा",
+     "at": 4,
+     "role": "पूर्वकालक्रिया",
+     "head": "भोक्ष्यसे",
+     "head_at": 6
+    },
+    {
+     "pada": "महीम्",
+     "at": 7,
+     "role": "कर्म",
+     "head": "भोक्ष्यसे",
+     "head_at": 6
+    }
+   ],
+   "english": "If you are killed you will reach heaven; if you win you will enjoy the earth."
+  },
+  {
+   "id": "c17",
+   "group": "c",
+   "text": "ध्यायतो विषयान्पुंसः सङ्गस्तेषूपजायते",
+   "padas": [
+    "ध्यायतः",
+    "विषयान्",
+    "पुंसः",
+    "सङ्गः",
+    "तेषु",
+    "उपजायते"
+   ],
+   "words": [
+    {
+     "pada": "ध्यायतः",
+     "lemma": "ध्यायत्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "विषयान्",
+     "lemma": "विषय",
+     "grammar": "पुंलिङ्ग द्वितीया बहुवचन"
+    },
+    {
+     "pada": "पुंसः",
+     "lemma": "पुंस्",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "सङ्गः",
+     "lemma": "सङ्ग",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तेषु",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग सप्तमी बहुवचन"
+    },
+    {
+     "pada": "उपजायते",
+     "lemma": "उपजन्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "विषयान्",
+     "at": 1,
+     "role": "कर्म",
+     "head": "ध्यायतः",
+     "head_at": 0
+    },
+    {
+     "pada": "ध्यायतः",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "पुंसः",
+     "head_at": 2
+    },
+    {
+     "pada": "पुंसः",
+     "at": 2,
+     "role": "सम्बन्ध",
+     "head": "सङ्गः",
+     "head_at": 3
+    },
+    {
+     "pada": "सङ्गः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "उपजायते",
+     "head_at": 5
+    },
+    {
+     "pada": "तेषु",
+     "at": 4,
+     "role": "अधिकरण",
+     "head": "उपजायते",
+     "head_at": 5
+    }
+   ],
+   "english": "When a man dwells on the objects of the senses, attachment to them is born."
+  },
+  {
+   "id": "c18",
+   "group": "c",
+   "text": "सङ्गात्सञ्जायते कामः कामात्क्रोधोऽभिजायते",
+   "padas": [
+    "सङ्गात्",
+    "सञ्जायते",
+    "कामः",
+    "कामात्",
+    "क्रोधः",
+    "अभिजायते"
+   ],
+   "words": [
+    {
+     "pada": "सङ्गात्",
+     "lemma": "सङ्ग",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "सञ्जायते",
+     "lemma": "सञ्जन्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "कामः",
+     "lemma": "काम",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कामात्",
+     "lemma": "काम",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "क्रोधः",
+     "lemma": "क्रोध",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अभिजायते",
+     "lemma": "अभिजन्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "सङ्गात्",
+     "at": 0,
+     "role": "अपादान",
+     "head": "सञ्जायते",
+     "head_at": 1
+    },
+    {
+     "pada": "कामः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "सञ्जायते",
+     "head_at": 1
+    },
+    {
+     "pada": "कामात्",
+     "at": 3,
+     "role": "अपादान",
+     "head": "अभिजायते",
+     "head_at": 5
+    },
+    {
+     "pada": "क्रोधः",
+     "at": 4,
+     "role": "कर्ता",
+     "head": "अभिजायते",
+     "head_at": 5
+    }
+   ],
+   "english": "From attachment desire is born, and from desire anger arises."
+  },
+  {
+   "id": "c19",
+   "group": "c",
+   "text": "क्रोधाद्भवति सम्मोहः सम्मोहात्स्मृतिविभ्रमः",
+   "padas": [
+    "क्रोधात्",
+    "भवति",
+    "सम्मोहः",
+    "सम्मोहात्",
+    "स्मृति-विभ्रमः"
+   ],
+   "words": [
+    {
+     "pada": "क्रोधात्",
+     "lemma": "क्रोध",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "भवति",
+     "lemma": "भू",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    },
+    {
+     "pada": "सम्मोहः",
+     "lemma": "सम्मोह",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सम्मोहात्",
+     "lemma": "सम्मोह",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "स्मृति-विभ्रमः",
+     "lemma": "स्मृति-विभ्रम",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "क्रोधात्",
+     "at": 0,
+     "role": "अपादान",
+     "head": "भवति",
+     "head_at": 1
+    },
+    {
+     "pada": "सम्मोहः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "भवति",
+     "head_at": 1
+    }
+   ],
+   "english": "From anger comes delusion; from delusion, a confused memory."
+  },
+  {
+   "id": "c20",
+   "group": "c",
+   "text": "स्मृतिभ्रंशाद्बुद्धिनाशो बुद्धिनाशात्प्रणश्यति",
+   "padas": [
+    "स्मृति-भ्रंशात्",
+    "बुद्धि-नाशः",
+    "बुद्धि-नाशात्",
+    "प्रणश्यति"
+   ],
+   "words": [
+    {
+     "pada": "स्मृति-भ्रंशात्",
+     "lemma": "स्मृति-भ्रंश",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "बुद्धि-नाशः",
+     "lemma": "बुद्धि-नाश",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "बुद्धि-नाशात्",
+     "lemma": "बुद्धि-नाश",
+     "grammar": "पुंलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "प्रणश्यति",
+     "lemma": "प्रणश्",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "बुद्धि-नाशात्",
+     "at": 2,
+     "role": "अपादान",
+     "head": "प्रणश्यति",
+     "head_at": 3
+    }
+   ],
+   "english": "From a lapse of memory comes the loss of reason, and with reason lost he perishes."
+  },
+  {
+   "id": "c21",
+   "group": "c",
+   "text": "तच्छ्रुत्वा राजा प्रहृष्टोऽभवत्",
+   "padas": [
+    "तत्",
+    "श्रुत्वा",
+    "राजा",
+    "प्रहृष्टः",
+    "अभवत्"
+   ],
+   "words": [
+    {
+     "pada": "तत्",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "श्रुत्वा",
+     "lemma": "श्रु",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "राजा",
+     "lemma": "राजन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "प्रहृष्टः",
+     "lemma": "प्रहृष्ट",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अभवत्",
+     "lemma": "भू",
+     "grammar": "लङ् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "तत्",
+     "at": 0,
+     "role": "कर्म",
+     "head": "श्रुत्वा",
+     "head_at": 1
+    },
+    {
+     "pada": "श्रुत्वा",
+     "at": 1,
+     "role": "पूर्वकालक्रिया",
+     "head": "अभवत्",
+     "head_at": 4
+    },
+    {
+     "pada": "राजा",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "अभवत्",
+     "head_at": 4
+    },
+    {
+     "pada": "प्रहृष्टः",
+     "at": 3,
+     "role": "विधेय",
+     "head": "राजा",
+     "head_at": 2
+    }
+   ],
+   "english": "On hearing that, the king was delighted.",
+   "note": "the same text as c22, written without the spaces."
+  },
+  {
+   "id": "c22",
+   "group": "c",
+   "text": "तच् छ्रुत्वा राजा प्रहृष्टो ऽभवत्",
+   "padas": [
+    "तत्",
+    "श्रुत्वा",
+    "राजा",
+    "प्रहृष्टः",
+    "अभवत्"
+   ],
+   "words": [
+    {
+     "pada": "तत्",
+     "lemma": "तद्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "श्रुत्वा",
+     "lemma": "श्रु",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "राजा",
+     "lemma": "राजन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "प्रहृष्टः",
+     "lemma": "प्रहृष्ट",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अभवत्",
+     "lemma": "भू",
+     "grammar": "लङ् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "तत्",
+     "at": 0,
+     "role": "कर्म",
+     "head": "श्रुत्वा",
+     "head_at": 1
+    },
+    {
+     "pada": "श्रुत्वा",
+     "at": 1,
+     "role": "पूर्वकालक्रिया",
+     "head": "अभवत्",
+     "head_at": 4
+    },
+    {
+     "pada": "राजा",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "अभवत्",
+     "head_at": 4
+    },
+    {
+     "pada": "प्रहृष्टः",
+     "at": 3,
+     "role": "विधेय",
+     "head": "राजा",
+     "head_at": 2
+    }
+   ],
+   "english": "On hearing that, the king was delighted.",
+   "note": "c21 with a space wherever the sandhi allows one (त् + श् = च्छ् by 8.4.40 and 8.4.63)."
+  },
+  {
+   "id": "c23",
+   "group": "c",
+   "text": "नद्यास्तीरे मुनिरेकस्तपश्चचार",
+   "padas": [
+    "नद्याः",
+    "तीरे",
+    "मुनिः",
+    "एकः",
+    "तपः",
+    "चचार"
+   ],
+   "words": [
+    {
+     "pada": "नद्याः",
+     "lemma": "नदी",
+     "grammar": "स्त्रीलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "तीरे",
+     "lemma": "तीर",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "मुनिः",
+     "lemma": "मुनि",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "एकः",
+     "lemma": "एक",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तपः",
+     "lemma": "तपस्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "चचार",
+     "lemma": "चर्",
+     "grammar": "लिट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नद्याः",
+     "at": 0,
+     "role": "सम्बन्ध",
+     "head": "तीरे",
+     "head_at": 1
+    },
+    {
+     "pada": "तीरे",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "चचार",
+     "head_at": 5
+    },
+    {
+     "pada": "मुनिः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "चचार",
+     "head_at": 5
+    },
+    {
+     "pada": "एकः",
+     "at": 3,
+     "role": "विशेषण",
+     "head": "मुनिः",
+     "head_at": 2
+    },
+    {
+     "pada": "तपः",
+     "at": 4,
+     "role": "कर्म",
+     "head": "चचार",
+     "head_at": 5
+    }
+   ],
+   "english": "On the bank of a river a certain sage practised austerities."
+  },
+  {
+   "id": "c24",
+   "group": "c",
+   "text": "नद्यास्तीरेमुनिरेकस्तपश्चचार",
+   "padas": [
+    "नद्याः",
+    "तीरे",
+    "मुनिः",
+    "एकः",
+    "तपः",
+    "चचार"
+   ],
+   "words": [
+    {
+     "pada": "नद्याः",
+     "lemma": "नदी",
+     "grammar": "स्त्रीलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "तीरे",
+     "lemma": "तीर",
+     "grammar": "नपुंसकलिङ्ग सप्तमी एकवचन"
+    },
+    {
+     "pada": "मुनिः",
+     "lemma": "मुनि",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "एकः",
+     "lemma": "एक",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "तपः",
+     "lemma": "तपस्",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "चचार",
+     "lemma": "चर्",
+     "grammar": "लिट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "नद्याः",
+     "at": 0,
+     "role": "सम्बन्ध",
+     "head": "तीरे",
+     "head_at": 1
+    },
+    {
+     "pada": "तीरे",
+     "at": 1,
+     "role": "अधिकरण",
+     "head": "चचार",
+     "head_at": 5
+    },
+    {
+     "pada": "मुनिः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "चचार",
+     "head_at": 5
+    },
+    {
+     "pada": "एकः",
+     "at": 3,
+     "role": "विशेषण",
+     "head": "मुनिः",
+     "head_at": 2
+    },
+    {
+     "pada": "तपः",
+     "at": 4,
+     "role": "कर्म",
+     "head": "चचार",
+     "head_at": 5
+    }
+   ],
+   "english": "On the bank of a river a certain sage practised austerities.",
+   "note": "c23 with no spaces at all."
+  },
+  {
+   "id": "c25",
+   "group": "c",
+   "text": "बालकाश्चत्वारो वृक्षस्याधस्तादुपाविशन्",
+   "padas": [
+    "बालकाः",
+    "चत्वारः",
+    "वृक्षस्य",
+    "अधस्तात्",
+    "उपाविशन्"
+   ],
+   "words": [
+    {
+     "pada": "बालकाः",
+     "lemma": "बालक",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "चत्वारः",
+     "lemma": "चतुर्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "वृक्षस्य",
+     "lemma": "वृक्ष",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "अधस्तात्",
+     "lemma": "अधस्तात्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "उपाविशन्",
+     "lemma": "उपविश्",
+     "grammar": "लङ् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "बालकाः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "उपाविशन्",
+     "head_at": 4
+    },
+    {
+     "pada": "चत्वारः",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "बालकाः",
+     "head_at": 0
+    },
+    {
+     "pada": "वृक्षस्य",
+     "at": 2,
+     "role": "सम्बन्ध",
+     "head": "अधस्तात्",
+     "head_at": 3
+    },
+    {
+     "pada": "अधस्तात्",
+     "at": 3,
+     "role": "अव्यय",
+     "head": "उपाविशन्",
+     "head_at": 4
+    }
+   ],
+   "english": "Four boys sat down under the tree.",
+   "note": "the genitive with अधस्तात् is by 2.3.30."
+  },
+  {
+   "id": "c26",
+   "group": "c",
+   "text": "बालकाश् चत्वारो वृक्षस्याधस्ताद् उपाविशन्",
+   "padas": [
+    "बालकाः",
+    "चत्वारः",
+    "वृक्षस्य",
+    "अधस्तात्",
+    "उपाविशन्"
+   ],
+   "words": [
+    {
+     "pada": "बालकाः",
+     "lemma": "बालक",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "चत्वारः",
+     "lemma": "चतुर्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "वृक्षस्य",
+     "lemma": "वृक्ष",
+     "grammar": "पुंलिङ्ग षष्ठी एकवचन"
+    },
+    {
+     "pada": "अधस्तात्",
+     "lemma": "अधस्तात्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "उपाविशन्",
+     "lemma": "उपविश्",
+     "grammar": "लङ् प्रथमपुरुष बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "बालकाः",
+     "at": 0,
+     "role": "कर्ता",
+     "head": "उपाविशन्",
+     "head_at": 4
+    },
+    {
+     "pada": "चत्वारः",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "बालकाः",
+     "head_at": 0
+    },
+    {
+     "pada": "वृक्षस्य",
+     "at": 2,
+     "role": "सम्बन्ध",
+     "head": "अधस्तात्",
+     "head_at": 3
+    },
+    {
+     "pada": "अधस्तात्",
+     "at": 3,
+     "role": "अव्यय",
+     "head": "उपाविशन्",
+     "head_at": 4
+    }
+   ],
+   "english": "Four boys sat down under the tree.",
+   "note": "c25 with a space wherever the sandhi allows one."
+  },
+  {
+   "id": "c27",
+   "group": "c",
+   "text": "इत्युक्त्वा सोऽन्तरधीयत",
+   "padas": [
+    "इति",
+    "उक्त्वा",
+    "सः",
+    "अन्तरधीयत"
+   ],
+   "words": [
+    {
+     "pada": "इति",
+     "lemma": "इति",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "उक्त्वा",
+     "lemma": "वच्",
+     "grammar": "क्त्वा"
+    },
+    {
+     "pada": "सः",
+     "lemma": "तद्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अन्तरधीयत",
+     "lemma": "अन्तर्धा",
+     "grammar": "लङ् प्रथमपुरुष एकवचन कर्मणि"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "उक्त्वा",
+     "at": 1,
+     "role": "पूर्वकालक्रिया",
+     "head": "अन्तरधीयत",
+     "head_at": 3
+    }
+   ],
+   "english": "With these words he vanished.",
+   "note": "अन्तर्धीयते 'disappears' has the passive form with the agent as subject (कर्मकर्तरि, 3.1.87)."
+  },
+  {
+   "id": "c28",
+   "group": "c",
+   "text": "चिदानन्दरूपः शिवोऽहं शिवोऽहम्",
+   "padas": [
+    "चित्-आनन्द-रूपः",
+    "शिवः",
+    "अहम्",
+    "शिवः",
+    "अहम्"
+   ],
+   "words": [
+    {
+     "pada": "चित्-आनन्द-रूपः",
+     "lemma": "चित्-आनन्द-रूप",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "शिवः",
+     "lemma": "शिव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "शिवः",
+     "lemma": "शिव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "शिवः",
+     "at": 1,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 2
+    },
+    {
+     "pada": "शिवः",
+     "at": 3,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 4
+    }
+   ],
+   "english": "My nature is consciousness and bliss: I am Śiva, I am Śiva.",
+   "note": "member चित् (चिद् before a vowel, 8.2.39)."
+  },
+  {
+   "id": "c29",
+   "group": "c",
+   "text": "चिदानन्दरूपः शिवोहं शिवोहम्",
+   "padas": [
+    "चित्-आनन्द-रूपः",
+    "शिवः",
+    "अहम्",
+    "शिवः",
+    "अहम्"
+   ],
+   "words": [
+    {
+     "pada": "चित्-आनन्द-रूपः",
+     "lemma": "चित्-आनन्द-रूप",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "शिवः",
+     "lemma": "शिव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "शिवः",
+     "lemma": "शिव",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "शिवः",
+     "at": 1,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 2
+    },
+    {
+     "pada": "शिवः",
+     "at": 3,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 4
+    }
+   ],
+   "english": "My nature is consciousness and bliss: I am Śiva, I am Śiva.",
+   "note": "c28 printed without the avagraha."
+  },
+  {
+   "id": "c30",
+   "group": "c",
+   "text": "मनोबुद्ध्यहङ्कारचित्तानि नाहम्",
+   "padas": [
+    "मनस्-बुद्धि-अहङ्कार-चित्तानि",
+    "न",
+    "अहम्"
+   ],
+   "words": [
+    {
+     "pada": "मनस्-बुद्धि-अहङ्कार-चित्तानि",
+     "lemma": "मनस्-बुद्धि-अहङ्कार-चित्त",
+     "grammar": "नपुंसकलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "न",
+     "lemma": "न",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    }
+   ],
+   "roles": [],
+   "english": "I am not mind, intellect, ego or thought."
+  },
+  {
+   "id": "c31",
+   "group": "c",
+   "text": "ततोऽसौ वानरः कथयति",
+   "padas": [
+    "ततः",
+    "असौ",
+    "वानरः",
+    "कथयति"
+   ],
+   "words": [
+    {
+     "pada": "ततः",
+     "lemma": "ततस् | तद्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "असौ",
+     "lemma": "अदस्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वानरः",
+     "lemma": "वानर",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कथयति",
+     "lemma": "कथ् | कथि | कथ",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "असौ",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "वानरः",
+     "head_at": 2
+    },
+    {
+     "pada": "वानरः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "कथयति",
+     "head_at": 3
+    }
+   ],
+   "english": "Then the monkey says:"
+  },
+  {
+   "id": "c32",
+   "group": "c",
+   "text": "ततोसौ वानरः कथयति",
+   "padas": [
+    "ततः",
+    "असौ",
+    "वानरः",
+    "कथयति"
+   ],
+   "words": [
+    {
+     "pada": "ततः",
+     "lemma": "ततस् | तद्",
+     "grammar": "अव्यय"
+    },
+    {
+     "pada": "असौ",
+     "lemma": "अदस्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वानरः",
+     "lemma": "वानर",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "कथयति",
+     "lemma": "कथ् | कथि | कथ",
+     "grammar": "लट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "असौ",
+     "at": 1,
+     "role": "विशेषण",
+     "head": "वानरः",
+     "head_at": 2
+    },
+    {
+     "pada": "वानरः",
+     "at": 2,
+     "role": "कर्ता",
+     "head": "कथयति",
+     "head_at": 3
+    }
+   ],
+   "english": "Then the monkey says:",
+   "note": "c31 printed without the avagraha."
+  },
+  {
+   "id": "c33",
+   "group": "c",
+   "text": "तस्मादुत्तिष्ठ कौन्तेय युद्धाय कृतनिश्चयः",
+   "padas": [
+    "तस्मात्",
+    "उत्तिष्ठ",
+    "कौन्तेय",
+    "युद्धाय",
+    "कृत-निश्चयः"
+   ],
+   "words": [
+    {
+     "pada": "तस्मात्",
+     "lemma": "तस्मात् | तद्",
+     "grammar": "अव्यय | नपुंसकलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "उत्तिष्ठ",
+     "lemma": "उत्था",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "कौन्तेय",
+     "lemma": "कौन्तेय",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "युद्धाय",
+     "lemma": "युद्ध",
+     "grammar": "नपुंसकलिङ्ग चतुर्थी एकवचन"
+    },
+    {
+     "pada": "कृत-निश्चयः",
+     "lemma": "कृत-निश्चय",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "कौन्तेय",
+     "at": 2,
+     "role": "सम्बोधन",
+     "head": "उत्तिष्ठ",
+     "head_at": 1
+    }
+   ],
+   "english": "So rise, son of Kuntī, resolved to fight."
+  },
+  {
+   "id": "c34",
+   "group": "c",
+   "text": "तस्माद् उत्तिष्ठ कौन्तेय युद्धाय कृतनिश्चयः",
+   "padas": [
+    "तस्मात्",
+    "उत्तिष्ठ",
+    "कौन्तेय",
+    "युद्धाय",
+    "कृत-निश्चयः"
+   ],
+   "words": [
+    {
+     "pada": "तस्मात्",
+     "lemma": "तस्मात् | तद्",
+     "grammar": "अव्यय | नपुंसकलिङ्ग पञ्चमी एकवचन"
+    },
+    {
+     "pada": "उत्तिष्ठ",
+     "lemma": "उत्था",
+     "grammar": "लोट् मध्यमपुरुष एकवचन"
+    },
+    {
+     "pada": "कौन्तेय",
+     "lemma": "कौन्तेय",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "युद्धाय",
+     "lemma": "युद्ध",
+     "grammar": "नपुंसकलिङ्ग चतुर्थी एकवचन"
+    },
+    {
+     "pada": "कृत-निश्चयः",
+     "lemma": "कृत-निश्चय",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "कौन्तेय",
+     "at": 2,
+     "role": "सम्बोधन",
+     "head": "उत्तिष्ठ",
+     "head_at": 1
+    }
+   ],
+   "english": "So rise, son of Kuntī, resolved to fight.",
+   "note": "c33 with a space wherever the sandhi allows one."
+  },
+  {
+   "id": "c35",
+   "group": "c",
+   "text": "उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस्तत्त्वदर्शिनः",
+   "padas": [
+    "उपदेक्ष्यन्ति",
+    "ते",
+    "ज्ञानम्",
+    "ज्ञानिनः",
+    "तत्त्व-दर्शिनः"
+   ],
+   "words": [
+    {
+     "pada": "उपदेक्ष्यन्ति",
+     "lemma": "उपदिश्",
+     "grammar": "लृट् प्रथमपुरुष बहुवचन"
+    },
+    {
+     "pada": "ते",
+     "lemma": "युष्मद्",
+     "grammar": "चतुर्थी एकवचन"
+    },
+    {
+     "pada": "ज्ञानम्",
+     "lemma": "ज्ञान",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "ज्ञानिनः",
+     "lemma": "ज्ञानिन्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "तत्त्व-दर्शिनः",
+     "lemma": "तत्त्व-दर्शिन्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "ते",
+     "at": 1,
+     "role": "सम्प्रदान",
+     "head": "उपदेक्ष्यन्ति",
+     "head_at": 0
+    },
+    {
+     "pada": "ज्ञानम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "उपदेक्ष्यन्ति",
+     "head_at": 0
+    },
+    {
+     "pada": "ज्ञानिनः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "उपदेक्ष्यन्ति",
+     "head_at": 0
+    }
+   ],
+   "english": "The wise who have seen the truth will teach you that knowledge.",
+   "note": "ते could be तद् nominative plural; here it is the dative enclitic of युष्मद् (8.1.22)."
+  },
+  {
+   "id": "c36",
+   "group": "c",
+   "text": "उपदेक्ष्यन्ति ते ज्ञानं ज्ञानिनस् तत्त्वदर्शिनः",
+   "padas": [
+    "उपदेक्ष्यन्ति",
+    "ते",
+    "ज्ञानम्",
+    "ज्ञानिनः",
+    "तत्त्व-दर्शिनः"
+   ],
+   "words": [
+    {
+     "pada": "उपदेक्ष्यन्ति",
+     "lemma": "उपदिश्",
+     "grammar": "लृट् प्रथमपुरुष बहुवचन"
+    },
+    {
+     "pada": "ते",
+     "lemma": "युष्मद्",
+     "grammar": "चतुर्थी एकवचन"
+    },
+    {
+     "pada": "ज्ञानम्",
+     "lemma": "ज्ञान",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "ज्ञानिनः",
+     "lemma": "ज्ञानिन्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    },
+    {
+     "pada": "तत्त्व-दर्शिनः",
+     "lemma": "तत्त्व-दर्शिन्",
+     "grammar": "पुंलिङ्ग प्रथमा बहुवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "ते",
+     "at": 1,
+     "role": "सम्प्रदान",
+     "head": "उपदेक्ष्यन्ति",
+     "head_at": 0
+    },
+    {
+     "pada": "ज्ञानम्",
+     "at": 2,
+     "role": "कर्म",
+     "head": "उपदेक्ष्यन्ति",
+     "head_at": 0
+    },
+    {
+     "pada": "ज्ञानिनः",
+     "at": 3,
+     "role": "कर्ता",
+     "head": "उपदेक्ष्यन्ति",
+     "head_at": 0
+    }
+   ],
+   "english": "The wise who have seen the truth will teach you that knowledge.",
+   "note": "c35 with a space wherever the sandhi allows one."
+  },
+  {
+   "id": "c37",
+   "group": "c",
+   "text": "अहमात्मा गुडाकेश सर्वभूताशयस्थितः",
+   "padas": [
+    "अहम्",
+    "आत्मा",
+    "गुडाकेश",
+    "सर्व-भूत-आशय-स्थितः"
+   ],
+   "words": [
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "आत्मा",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "गुडाकेश",
+     "lemma": "गुडाकेश",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "सर्व-भूत-आशय-स्थितः",
+     "lemma": "सर्व-भूत-आशय-स्थित",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अहम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "आत्मा",
+     "at": 1,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 0
+    }
+   ],
+   "english": "I am the Self, Guḍākeśa, seated in the heart of every being."
+  },
+  {
+   "id": "c38",
+   "group": "c",
+   "text": "अहम् आत्मा गुडाकेश सर्वभूताशयस्थितः",
+   "padas": [
+    "अहम्",
+    "आत्मा",
+    "गुडाकेश",
+    "सर्व-भूत-आशय-स्थितः"
+   ],
+   "words": [
+    {
+     "pada": "अहम्",
+     "lemma": "अस्मद्",
+     "grammar": "प्रथमा एकवचन"
+    },
+    {
+     "pada": "आत्मा",
+     "lemma": "आत्मन्",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "गुडाकेश",
+     "lemma": "गुडाकेश",
+     "grammar": "पुंलिङ्ग सम्बोधन एकवचन"
+    },
+    {
+     "pada": "सर्व-भूत-आशय-स्थितः",
+     "lemma": "सर्व-भूत-आशय-स्थित",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "अहम्",
+     "at": 0,
+     "role": "कर्ता",
+     "head": null,
+     "head_at": null
+    },
+    {
+     "pada": "आत्मा",
+     "at": 1,
+     "role": "विधेय",
+     "head": "अहम्",
+     "head_at": 0
+    }
+   ],
+   "english": "I am the Self, Guḍākeśa, seated in the heart of every being.",
+   "note": "c37 with a space wherever the sandhi allows one."
+  },
+  {
+   "id": "c39",
+   "group": "c",
+   "text": "दशरथपुत्रो रामः सीतालक्ष्मणसहितो वनं जगाम",
+   "padas": [
+    "दशरथ-पुत्रः",
+    "रामः",
+    "सीता-लक्ष्मण-सहितः",
+    "वनम्",
+    "जगाम"
+   ],
+   "words": [
+    {
+     "pada": "दशरथ-पुत्रः",
+     "lemma": "दशरथ-पुत्र",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "रामः",
+     "lemma": "राम",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सीता-लक्ष्मण-सहितः",
+     "lemma": "सीता-लक्ष्मण-सहित",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वनम्",
+     "lemma": "वन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "जगाम",
+     "lemma": "गम्",
+     "grammar": "लिट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "दशरथ-पुत्रः",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "रामः",
+     "head_at": 1
+    },
+    {
+     "pada": "रामः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "जगाम",
+     "head_at": 4
+    },
+    {
+     "pada": "वनम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "जगाम",
+     "head_at": 4
+    }
+   ],
+   "english": "Rāma, Daśaratha's son, went to the forest with Sītā and Lakṣmaṇa."
+  },
+  {
+   "id": "c40",
+   "group": "c",
+   "text": "दशरथपुत्रोरामःसीतालक्ष्मणसहितोवनंजगाम",
+   "padas": [
+    "दशरथ-पुत्रः",
+    "रामः",
+    "सीता-लक्ष्मण-सहितः",
+    "वनम्",
+    "जगाम"
+   ],
+   "words": [
+    {
+     "pada": "दशरथ-पुत्रः",
+     "lemma": "दशरथ-पुत्र",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "रामः",
+     "lemma": "राम",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "सीता-लक्ष्मण-सहितः",
+     "lemma": "सीता-लक्ष्मण-सहित",
+     "grammar": "पुंलिङ्ग प्रथमा एकवचन"
+    },
+    {
+     "pada": "वनम्",
+     "lemma": "वन",
+     "grammar": "नपुंसकलिङ्ग द्वितीया एकवचन"
+    },
+    {
+     "pada": "जगाम",
+     "lemma": "गम्",
+     "grammar": "लिट् प्रथमपुरुष एकवचन"
+    }
+   ],
+   "roles": [
+    {
+     "pada": "दशरथ-पुत्रः",
+     "at": 0,
+     "role": "विशेषण",
+     "head": "रामः",
+     "head_at": 1
+    },
+    {
+     "pada": "रामः",
+     "at": 1,
+     "role": "कर्ता",
+     "head": "जगाम",
+     "head_at": 4
+    },
+    {
+     "pada": "वनम्",
+     "at": 3,
+     "role": "कर्म",
+     "head": "जगाम",
+     "head_at": 4
+    }
+   ],
+   "english": "Rāma, Daśaratha's son, went to the forest with Sītā and Lakṣmaṇa.",
+   "note": "c39 with no spaces at all."
+  }
+ ]
+}

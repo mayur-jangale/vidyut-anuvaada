@@ -56,9 +56,40 @@ def _freq(lemma: str) -> int:
         return 0
 
 
+def _mit_causative(root: str, form: str) -> str:
+    """गामि -> गमि: a मित् root shortens its vowel before णिच् (6.4.92 मितां ह्रस्वः); the kosha names the
+    stem before the shortening. Read off the form: गमयति has गम, not गाम."""
+    if not root.endswith("ि") or "ा" not in root:
+        return root
+    short = root.replace("ा", "", 1)
+    return short if short[:-1] in form and root[:-1] not in form else root
+
+
+def verbal_lemma_of(m: Morph) -> str:
+    """The lemma of a verbal form: its dhātu (a मित् causative shortened, 6.4.92) with the upasargas and
+    gatis joined to it by forward sandhi (6.1.77 इको यणचि, 6.1.87 आद्गुणः, 6.1.101 अकः सवर्णे दीर्घः ...):
+    प्र + आप् = प्राप्, अधि + आपि = अध्यापि, अन्तर् + धा = अन्तर्धा. Other lemmas are returned unchanged."""
+    if not m.root or (m.kind != "tinanta" and not m.krt):
+        return m.lemma
+    root = _mit_causative(m.root, m.form) if m.kind == "tinanta" else m.root
+    naive = "".join(m.prefixes) + m.root
+    if m.lemma not in (naive, m.root):
+        return m.lemma  # the kosha's own citation (आगम्, उत्था) is kept
+    if not m.prefixes:
+        return root
+    from mayur.lexicon_cite import _verbal_lemma
+
+    return _verbal_lemma(tuple(m.prefixes), root)
+
+
+def _with_verbal_lemma(m: Morph) -> Morph:
+    lemma = verbal_lemma_of(m)
+    return m if lemma == m.lemma else replace(m, lemma=lemma)
+
+
 def _rank(morphs: list[Morph]) -> tuple[Morph, ...]:
     seen: list[Morph] = []
-    for m in morphs:
+    for m in map(_with_verbal_lemma, morphs):
         if m not in seen:
             seen.append(m)
     return tuple(sorted(seen, key=lambda m: (-m.quality, -_freq(m.lemma), _KIND_ORDER.get(_kind_key(m), 3))))
@@ -244,7 +275,26 @@ def _padas(form: str) -> tuple[Morph, ...]:
 
     base = _base_padas(form)
     extra = more(form, base, _base_padas, generated)
-    return _rank(list(base) + list(extra)) if extra else base
+    found = _rank(list(base) + list(extra)) if extra else base
+    return _below_r_sibling(form, found)
+
+
+# a pada in -र् the corpus shows this often as an indeclinable outranks unseen stems spelled like it
+R_SIBLING_MIN = 100
+
+
+def _below_r_sibling(form: str, found: tuple[Morph, ...]) -> tuple[Morph, ...]:
+    """पुनस् (of a kosha stem पुन) beside the indeclinable पुनर्: by 8.2.66 ससजुषो रुः a final स् becomes रु,
+    so a pada in -स् and the same pada in -र् are written alike in every context. When the -र् pada is an
+    indeclinable the corpus has at least R_SIBLING_MIN times and the -स् pada's analyses are of stems
+    and roots the corpus never shows, those analyses are ranked as kosha over-generation (quality 1);
+    they are kept, never dropped."""
+    if not form.endswith("स्") or not found or any(_freq(m.lemma) for m in found):
+        return found
+    sibling = form[: -len("स्")] + "र्"
+    if not any(m.kind == "avyaya" and _freq(m.lemma) >= R_SIBLING_MIN for m in _base_padas(sibling)):
+        return found
+    return _rank([replace(m, quality=min(m.quality, 1)) for m in found])
 
 
 @lru_cache(maxsize=200_000)
