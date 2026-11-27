@@ -55,6 +55,8 @@ def regions(words: list[Word], verbs: list[int], agrees: Callable[[Any, Any], bo
     return region
 
 
+from mayur.karaka_rules import GATI_AKARMAKA  # noqa: E402
+
 KRT_PREDICATE = ("क्त", "क्तवतु", "तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्")
 OBLIQUE = ("तृतीया", "चतुर्थी", "पञ्चमी", "सप्तमी")
 
@@ -68,8 +70,13 @@ def _krt_clause_lines(words: list[Word]) -> set[int]:
         if m is None or w.in_compound or m.kind != "subanta" or m.vibhakti != "प्रथमा" or m.krt not in KRT_PREDICATE \
                 or (i > 0 and words[i - 1].in_compound):
             continue
-        if any(o.line == w.line and not o.in_compound and o.morph is not None and o.morph.vibhakti in OBLIQUE
-               for o in words):
+        mates = [o.morph for o in words if o.line == w.line and not o.in_compound and o.morph is not None and o is not w]
+        own_karaka = any(o.vibhakti in OBLIQUE for o in mates)
+        # एताम् दशाम् गतस्: the object of a participle of motion or of क्तवतु (3.4.72, 3.4.67) …
+        own_object = (m.krt == "क्तवतु" or (m.root or "") in GATI_AKARMAKA) and any(o.vibhakti == "द्वितीया" for o in mates)
+        # … or अहम् / त्वम् as its subject in the same half-verse (सस् अहम् … गतस्)
+        own_subject = any(o.lemma in ("अस्मद्", "युष्मद्") and o.vibhakti == "प्रथमा" and o.vacana == m.vacana for o in mates)
+        if own_karaka or own_object or own_subject:
             out.add(w.line)
     return out
 
