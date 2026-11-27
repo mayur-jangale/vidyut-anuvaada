@@ -123,6 +123,22 @@ def _apart_from_personal(words: list[Word], group: list[int]) -> list[list[int]]
     return [g for g in (rest, nouns) if g]
 
 
+def _apart_locatives(words: list[Word], group: list[int]) -> list[list[int]]:
+    """सङ्ख्ये रथोपस्थे उपाविशत्: two nouns in the locative are two settings of the action (1.4.45 आधारोऽधिकरणम्:
+    "in the battle, on the chariot seat"), each a phrase of its own; an adjective or participle stays with the
+    noun after it. (Measured on the reference sets: one link gained, none lost.)"""
+    nouns = [j for j in group if not words[j].morph.krt and j not in _QUALIFYING
+             and lemma_class(words[j].morph.lemma) == "noun"]
+    if len(nouns) < 2:
+        return [group]
+    parts: list[list[int]] = [[]]
+    for j in group:
+        parts[-1].append(j)
+        if j in nouns and j != nouns[-1]:
+            parts.append([])
+    return [part for part in parts if part]
+
+
 def _joined_segment(words: list[Word], line: int, anchor: int) -> Optional[int]:
     """A verbless half-verse joined to one with two finite verbs belongs to the nearer clause of that line:
     शस्त्रपाणयस् | धार्तराष्ट्रास् रणे हन्युस् तत् … भवेत् goes with हन्युस्, the first verb after it."""
@@ -158,6 +174,8 @@ def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> li
     parts = [part for g in groups.values() for part in _apart_from_personal(words, g)]
     parts = [part for g in parts
              for part in (_split_at_absolutive(words, g) if words[g[0]].morph.vibhakti == DVITIYA else [g])]
+    parts = [part for g in parts
+             for part in (_apart_locatives(words, g) if words[g[0]].morph.vibhakti == "सप्तमी" else [g])]
     return sorted(parts, key=order)
 
 

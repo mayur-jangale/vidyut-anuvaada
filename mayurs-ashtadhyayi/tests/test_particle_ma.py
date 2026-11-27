@@ -103,3 +103,11 @@ def test_epic_imperative_of_bru_is_labelled_with_its_rule_form():
 ])
 def test_english_of_the_new_readings(text, english):
     assert _reading(text).translation == english
+
+
+def test_two_locative_nouns_are_two_settings():
+    """सङ्ख्ये रथोपस्थे (Gītā 1.47): "in battle, on the chariot seat", not one phrase; an adjective stays with its noun."""
+    words = _reading("एवमुक्त्वार्जुनः सङ्ख्ये रथोपस्थ उपाविशत् । विसृज्य सशरं चापं शोकसंविग्नमानसः").words
+    verb = next(i for i, w in enumerate(words) if w.form == "उपाविशत्")
+    assert [(w.role, w.head) for w in words if w.form in ("सङ्ख्ये", "रथोपस्थे")] == [("अधिकरण", verb)] * 2
+    assert _roles("रम्ये वने मृगः चरति")[0][2:] == ("विशेषण", 1)
