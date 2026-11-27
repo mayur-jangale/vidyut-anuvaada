@@ -102,6 +102,10 @@ KRUDHA_ARTHA = frozenset({"क्रुध्", "द्रुह्", "ईर्
 ADHI_SHI = frozenset({"शी", "स्था", "आस्"})  # 1.4.46 with अधि
 DVIKARMAKA = frozenset({"दुह्", "याच्", "पच्", "दण्ड्", "रुध्", "प्रच्छ्", "चि", "ब्रू", "शास्", "जि", "मथ्",
                         "मुष्", "नी", "हृ", "कृष्", "वह्"})  # 1.4.51 (the traditional list)
+# 1.4.52: roots of going, knowing, eating, of sound as object, and intransitives, whose agent is कर्म in the causative
+# (दृश् by the vārttika दृशेश्च). The list names the roots; whether a form is causative is read from its lemma.
+NAU_KARMA = frozenset({"गम्", "या", "इ", "चर्", "सृ", "धाव्", "व्रज्", "पत्", "क्रम्", "आप्", "बुध्", "विद्", "ज्ञा", "भुज्",
+                       "अश्", "पा", "पठ्", "श्रु", "वच्", "दृश्", "स्था", "आस्", "शी", "भू", "वस्", "जीव्", "नश्", "रुह्"})
 # 3.4.72: गत्यर्थ and the named akarmaka roots whose क्त may express the agent.
 GATI_AKARMAKA = frozenset({"गम्", "या", "इ", "चर्", "सृ", "धाव्", "व्रज्", "पत्", "श्लिष्", "शी", "स्था", "आस्",
                            "वस्", "जन्", "रुह्", "जॄ", "भू", "अस्", "वृत्", "जीव्", "मृ", "सद्", "प्लु", "क्रम्",

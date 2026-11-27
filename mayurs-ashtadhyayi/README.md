@@ -26,13 +26,13 @@ reproduces the text.
 | Sandhi | Forward rules, each with its sūtra number; a reverse index is built from their outcomes. | `mayur/sandhi.py` |
 | Split | A lattice of **all** rule-valid splits of a line. Hard rules cut impossible paths (a merged vowel cannot be followed by a written space; particles, absolutives and finite verbs do not end a compound; a stem in -न् is not a member). A compound printed with spaces (रत्न भाजः) is read as one after a stem the corpus knows almost only as a member. | `mayur/segmenter.py` |
 | Words | vidyut-kosha lookup plus forward generation: prefixed verbs and participles, denominatives (नमस्यति, पुत्रीयति), feminines, closed paradigms, stems from the corpus dictionary, common spellings (पत्र for पत्त्र). | `mayur/lexicon*.py` |
-| Epic and usage forms | Forms the rules do not give are analysed and **labelled**, never forced: epic voice endings (त्यजामहे, शृणुष्व), second-class roots conjugated as first-class (अहनत्), upasarga + participle where the rule form differs (प्रदत्त for प्रत्त), ready-made participles (छन्न, क्षुब्ध). Each names the rule form; the word stays unverified. | `mayur/lexicon_more.py`, `lexicon_usage.py`, `lexicon_thematic.py` |
+| Epic and usage forms | Forms the rules do not give are analysed and **labelled**, never forced: epic voice endings (त्यजामहे, शृणुष्व), second-class roots conjugated as first-class (अहनत्), upasarga + participle where the rule form differs (प्रदत्त for प्रत्त), ready-made participles (छन्न, क्षुब्ध), older imperatives (विद्विषावहै for विद्वेषावहै, ब्रवीहि for ब्रूहि). Each names the rule form; the word stays unverified. | `mayur/lexicon_more.py`, `lexicon_usage.py`, `lexicon_thematic.py`, `lexicon_guna.py` |
 | Choice of split | A trained ranker picks among the valid splits only. | `mayur/decoder.py` |
 | Choice of analysis | A trained tagger picks among the lexicon's analyses only. Where one spelling stands for two or three padas by sandhi (भीष्म उवाच: भीष्मः, भीष्मे or the vocative), it weighs all of them; the pada not taken is named in the notes. | `mayur/tagger*.py`, `mayur/siblings.py` |
 | Proof gate | The chosen words must re-join to the input by sandhi, and each word must be re-derived by vidyut-prakriya; otherwise the verse is `unverified` and the reason is given per word. A word whose stem no dictionary lists is never verified. Two word classes are proved in two vidyut steps where the Python API cannot do it in one: passive present participles (क्रियमाण: the passive present, then शानच् by 3.2.124, 7.2.82) and neuter plurals in -ईनि as accusative (through the identical nominative, 7.1.20). | `mayur/proof.py`, `mayur/lexicon.py`, `mayur/lexicon_passive.py` |
 | Compounds | Type by rule (2.1–2.2) with the deciding sūtra, vigraha from real inflected forms, rule chain. | `mayur/compounds.py`, `mayur/samasa*.py` |
-| Sentence | Kāraka roles and heads; a link is kept only if the forward rule (role + what the verb form expresses → case) gives the word's actual case (1.4.23–55, 2.3, 3.4.67–72). | `mayur/vakya.py`, `mayur/karaka*.py` |
-| Meaning | Dictionary gloss; sense in context; meaning read off the derivation (which suffix rule gives which sense). | `mayur/gloss.py`, `mayur/senses.py`, `mayur/artha.py` |
+| Sentence | Kāraka roles and heads; a link is kept only if the forward rule (role + what the verb form expresses → case) gives the word's actual case (1.4.23–55, 2.3, 3.4.67–72). Clauses: relative and quoted clauses, participle predicates, the two objects of a double-object verb or of a causative (1.4.51, 1.4.52). The particle मा is told from the enclitic for माम् by position and tense (8.1.18, 8.1.23, 3.3.175). | `mayur/vakya*.py`, `mayur/karaka*.py`, `mayur/particle_ma.py` |
+| Meaning | Dictionary gloss; a root's meaning by its class where the classes differ (पाति protects, पिबति drinks); sense in context; meaning read off the derivation (which suffix rule gives which sense). | `mayur/gloss.py`, `mayur/senses.py`, `mayur/artha.py` |
 | English | A literal aligned rendering, then fixed rewriting rules with checks that no word, number, tense or negation changed. | `mayur/translate*.py`, `mayur/fluent*.py` |
 
 Statistics (corpus counts, the two trained rankers) only **choose among readings the rules
@@ -77,7 +77,7 @@ those first measurements read 97.0% / 98.7%, 99.2% / 99.0%, 99.5% / 99.4%, 99.2%
 99.5% / 99.5% and 99.3% / 99.6% (split / analysis).
 
 What the untouched sample still misses (6 lines, 40 words): epic forms no rule here covers yet
-(ब्रवीहि for ब्रूहि, संक्रामयामास), words written with the sign ॐ, a few stems unknown to both
+(ब्रवीहि for ब्रूहि, since added; संक्रामयामास), words written with the sign ॐ, a few stems unknown to both
 dictionaries, and words where the corpus's own lemma or tag is the odd one (हृदि as accusative
 plural). This is the part that is "all formula", and its target is 100%. Which of several valid
 readings is meant is not decided by the rules; that is the next table.
@@ -168,7 +168,7 @@ whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
   its rules were tuned on, and stiff or wrong on complex verse, where it inherits every wrong role.
 - **Court poetry** (long compounds, rare words) is the weakest genre at word level.
 - **Epic and usage forms** are analysed only where a rule here covers them (see the table above);
-  others stay unknown words, e.g. ब्रवीहि for ब्रूहि.
+  others stay unknown words, e.g. संक्रामयामास.
 - A compound printed with spaces is recognised only after a stem the corpus knows almost solely as
   a compound member; `वेद फलम्` stays two words.
 - Compounds are not derived by vidyut's Python API; our own rule chain covers the type rule,

@@ -28,7 +28,8 @@ redistributed in this repository.
 
 Annotations written by Claude (a large language model by Anthropic) during development, not
 human-verified, licensed CC BY-SA 4.0: the gloss draft table mayur/annotations/gloss_draft.json,
-the suffix-sense table mayur/annotations/suffix_senses.json, and the roles, compound types,
+the suffix-sense table mayur/annotations/suffix_senses.json, the table of root meanings by class
+mayur/annotations/gloss_roots.json, and the roles, compound types,
 prose order and English in eval/review/claude/. The interpreter itself uses no language model
 at run time.
 

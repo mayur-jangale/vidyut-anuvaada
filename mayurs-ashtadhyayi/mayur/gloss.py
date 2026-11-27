@@ -6,6 +6,7 @@ import json
 import re
 from functools import lru_cache
 from pathlib import Path
+from typing import Sequence
 
 from . import lipi, resources, ud
 from .model import Morph, Reading
@@ -35,6 +36,36 @@ def _draft() -> dict[str, list[str]]:
         return json.loads(_DRAFT.read_text(encoding="utf-8"))["glosses"]
     except (OSError, ValueError, KeyError):
         return {}
+
+
+_ROOTS = Path(__file__).parent / "annotations" / "gloss_roots.json"
+_CELL = ("kind", "prayoga", "lakara", "purusha", "vacana", "krt", "vibhakti", "linga", "prefixes")
+
+
+@lru_cache(maxsize=1)
+def _roots() -> dict[str, list[str]]:
+    """root|gaṇa (or the root as taught) -> [gloss, Dhātupāṭha sense]: roots whose classes differ in meaning."""
+    try:
+        return json.loads(_ROOTS.read_text(encoding="utf-8"))["roots"]
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
+def _by_class(m: Morph, rivals: Sequence[Morph]) -> str:
+    """The gloss of the root in the class this form belongs to (पाति "protect", पिबति "drink"), or ''.
+
+    Where the same form in the same cell also comes from the root's other class (पास्यति, कीर्ण) the form
+    does not decide the class: the root's usual sense in the table, else nothing (the lemma's gloss stands)."""
+    if m.root is None or not m.gana:
+        return ""
+    hit = _roots().get(m.dhatu or "") or _roots().get(f"{m.root}|{m.gana}")
+    if not hit:
+        return ""
+    cell = tuple(getattr(m, f) for f in _CELL)
+    if any(r.root == m.root and (r.gana, r.dhatu) != (m.gana, m.dhatu) and tuple(getattr(r, f) for f in _CELL) == cell
+           for r in rivals):
+        return _roots().get(m.root, [""])[0]  # the root's usual sense, where the table gives one
+    return hit[0]
 
 
 def _from_draft(m: Morph, keys: list[str]) -> str:
@@ -153,19 +184,27 @@ def _composed(m: Morph, keys: list[str]) -> str:
     return ""
 
 
-def lookup(m: Morph) -> tuple[str, str]:
-    """(gloss, source) for one analysis; ("", "none") when nothing is known."""
+def lookup(m: Morph, rivals: Sequence[Morph] = ()) -> tuple[str, str]:
+    """(gloss, source) for one analysis; ("", "none") when nothing is known.
+
+    ``rivals``: the word's other analyses, so that a root is glossed by its class only where the form decides it."""
     keys = _keys(m)
     verb = m.root is not None
     own = _own()
+    by_class = _by_class(m, rivals)
     if m.krt in ("ण्यत्", "यत्", "क्यप्", "तव्य", "अनीयर्") and m.stem in own:
         return own[m.stem], "own"  # a noun that only looks like a gerundive: वाक्य "speech"
     for k in keys:
+        if k == m.root and by_class and not m.prefixes:
+            return (_from_draft(m, [m.stem]) if m.stem and m.stem != k else "") or by_class, "own-draft"
         if k in own and not (verb and k == m.root and _draft().get(k, ["", ""])[1] == "verb"):
             return own[k], "own"  # (an agent noun of the table, हन् "slayer", is not the gloss of the verb हन्)
     cited = ud.lemma(m)  # the corpus's citation form: समवे for सम् + अव + इ
     senses = resources.derived("dcs_senses.json") or {}
     dictionary = resources.derived("dcs_dict.json") or {}
+    if by_class and m.prefixes and cited != keys[0]:
+        # the corpus cites विकॄ "scatter" as विकृ: the entry of another verb (विकृ "change") is not its gloss
+        return _from_draft(m, keys[:1]) or by_class, "own-draft"
     drafted = _from_draft(m, [cited])
     if drafted:
         return drafted, "own-draft"
@@ -175,6 +214,8 @@ def lookup(m: Morph) -> tuple[str, str]:
         g = _common(dictionary.get(cited, []), verb)
         if g:
             return g, "dcs-dictionary"
+    if by_class:  # a prefixed verb without its own entry: its root in this class (निरस् from अस् "throw")
+        return _from_draft(m, keys[:1]) or by_class, "own-draft"
     drafted = _from_draft(m, keys)
     if drafted:
         return drafted, "own-draft"
@@ -211,7 +252,7 @@ def lookup_in_context(reading: Reading, index: int) -> tuple[str, str]:
     m = reading.words[index].morph
     if m is None:
         return "", "none"
-    plain = lookup(m)
+    plain = lookup(m, reading.words[index].analyses)
     if plain[1] in ("own", "own-draft"):  # a gloss written for the lemma comes before a corpus sense label
         return plain
     from . import senses  # lazy: senses -> ud -> lexicon

@@ -50,6 +50,19 @@ def _root(m: Morph) -> str:
     return m.root or m.lemma
 
 
+def two_objects(m: Optional[Morph]) -> str:
+    """The rule by which this verbal form takes two कर्म: "1.4.51" (द्विकर्मक), "1.4.52" (a causative whose
+    base agent is कर्म), or ''."""
+    if m is None or not is_verbal(m):
+        return ""
+    if _root(m) in DVIKARMAKA:
+        return "1.4.51"
+    from mayur import bridge
+    from mayur.karaka_rules import NAU_KARMA
+
+    return "1.4.52" if bridge.is_causative(m) and bridge.base_root(m) in NAU_KARMA else ""
+
+
 def expressed(gov: Optional[Morph]) -> list[tuple[Optional[str], tuple[str, ...]]]:
     """Options for what the governor's suffix itself expresses: (role or None for भाव, rules)."""
     if gov is None or not is_verbal(gov):

@@ -66,7 +66,7 @@ class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin, SenseMix
 
     def text(self, i: int) -> str:
         w = self.words[i]
-        if w.morph is None or w.arsha:
+        if w.morph is None or (w.arsha and not w.gloss):  # a labelled ārṣa form has its analysis and gloss
             return "⟨" + lipi.iast(w.form) + "⟩"
         if w.role == "विशेषण" and w.morph.lemma == "पर":
             return "supreme"

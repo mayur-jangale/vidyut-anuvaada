@@ -41,7 +41,10 @@ def qualify_personal(words: list[Word], qualifying: set[int], notes: list[str]) 
                 or m.vibhakti in (None, PRATHAMA, SHASHTHI, SAMBODHANA):
             continue
         taken = []
-        for step in (1, -1):
+        from mayur.karaka import two_objects
+
+        second = w.head is not None and bool(two_objects(words[w.head].morph))  # मा ज्योतिस् गमय: the verb takes
+        for step in (1, -1):                                                   # the noun as its other कर्म
             j = p + step
             while 0 <= j < len(words) and words[j].line == w.line:
                 x = words[j]
@@ -50,6 +53,8 @@ def qualify_personal(words: list[Word], qualifying: set[int], notes: list[str]) 
                     continue
                 xm = x.morph
                 if xm is None or xm.kind != "subanta" or (xm.vibhakti, xm.vacana) != (m.vibhakti, m.vacana):
+                    break
+                if second and m.vibhakti == "द्वितीया" and not (xm.krt in QUALIFIER_KRT or j in qualifying):
                     break
                 if not attributive(words, j, qualifying) and x.role:
                     break  # a noun with a role of its own; one left without any is the pronoun's apposition (त्वाम् राजानम्)

@@ -238,7 +238,9 @@ def _labelled(form: str, padas: Lookup, generated: Lookup) -> list[Morph]:
     if not any(m.quality >= 2 for m in found):
         out += [*arsha_participle(form, generated, padas), *arsha_shatr(form), *arsha_shatr_oblique(form)]
     if not any(m.kind == "tinanta" for m in found):
-        out += arsha_thematic(form)
+        from mayur.lexicon_guna import epic_imperative, first_imperative
+
+        out += [*arsha_thematic(form), *first_imperative(form, padas), *epic_imperative(form, padas)]
     if not any(m.kind == "tinanta" for m in found):  # प्रजायन्त: the past without its augment after an upasarga
         out += [replace(m, source=ARSHA, quality=1, handle=("special", AUGMENT_ARSHA_NOTE))
                 for m in augmentless(form, padas)]
@@ -373,7 +375,9 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
     if not any(m.root and m.quality >= 2 for m in found):
         out += arsha_feminine(form, padas)
     if not any(m.kind == "tinanta" for m in found):
-        out += arsha_thematic(form)
+        from mayur.lexicon_guna import epic_imperative, first_imperative
+
+        out += [*arsha_thematic(form), *first_imperative(form, padas), *epic_imperative(form, padas)]
     if not any(m.kind == "avyaya" and m.krt in ("ल्यप्", "क्त्वा") for m in found):
         out += arsha_lyap(form, padas)  # गृह्य, by its sibling प्रगृह्य
     if not any(m.kind == "avyaya" and m.krt in ("ल्यप्", "क्त्वा") for m in [*found, *out]):  # पीड्य "having pressed"

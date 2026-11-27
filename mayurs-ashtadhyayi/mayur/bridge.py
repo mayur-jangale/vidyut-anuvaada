@@ -110,6 +110,33 @@ def _root_code(dhatu: Any) -> str:
     return _ROOTS[key]
 
 
+@lru_cache(maxsize=4096)
+def _taught_root(dhatu: str, gana: str) -> str:
+    """Clean text of the root taught as ``dhatu`` in ``gana`` (both Devanagari), without सन्/णिच्."""
+    from vidyut.prakriya import Dhatu, Gana
+
+    name = next((k for k, v in _GANA.items() if v == gana), None)
+    member = next((g for g in Gana.choices() if str(g) == name), None)
+    if member is None:
+        return ""
+    try:
+        return lipi.from_code(_root_code(Dhatu.mula(lipi.to_code(dhatu), member)))
+    except Exception:  # noqa: BLE001 - vidyut rejects a root it does not list in this class
+        return ""
+
+
+def base_root(m: Morph) -> str:
+    """The root a form is made from: गम् for the causative गमयति, whose ``root`` is the stem गामि; else ``root``."""
+    if not m.root or not m.dhatu or not m.gana or not m.root.endswith("ि"):
+        return m.root or ""
+    return _taught_root(m.dhatu, m.gana) or m.root
+
+
+def is_causative(m: Morph) -> bool:
+    """A form of a णिच् stem made from a root of another class than चुरादि (गमयति, not चोरयति)."""
+    return bool(m.root) and m.root.endswith("ि") and m.gana != "चुरादि" and base_root(m) != m.root
+
+
 def _convert(code_form: str, form: str, e: Any) -> Optional[Entry]:
     kind = _kind_of(e)
     if kind == "tinanta":

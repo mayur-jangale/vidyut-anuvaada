@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Optional
 
+from mayur import bridge
 from mayur.karaka_rules import DVIKARMAKA
 from mayur.model import Word
 from mayur.shabdabodha import DVITIYA, PRATHAMA, PRONOUNS, is_case, is_finite, karta_agrees
@@ -55,4 +56,37 @@ def syncretic(words_in: list[Word]) -> tuple[list[Word], list[str]]:
             words[i] = replace(w, chosen=k)
             notes.append(f"{w.form}: प्रथमा, not द्वितीया: the कर्मणि verb {words[verbs[0]].form} expresses its "
                          f"कर्म (1.4.49, 3.4.69, 2.3.46)")
+    return words, notes
+
+
+PANCAMI, SHASHTHI = "पञ्चमी", "षष्ठी"
+# Roots of moving (and making move) whose clause expects a place left behind (1.4.24 ध्रुवमपायेऽपादानम्).
+APAYA = frozenset({"गम्", "या", "इ", "चर्", "सृ", "धाव्", "व्रज्", "पत्", "क्रम्", "नी", "हृ", "वह्", "मुच्", "च्यु", "भ्रंश्"})
+PERSONAL = {"अस्मद्", "युष्मद्"}
+
+
+def _is_noun(word: Word) -> bool:
+    m = word.morph
+    return m is not None and m.kind == "subanta" and m.lemma not in PERSONAL
+
+
+def ablative(words_in: list[Word]) -> tuple[list[Word], list[str]]:
+    """तमसस् मा … गमय: a form that is ablative or genitive alike is ablative where the clause has a verb of
+    moving and no noun stands next to it that it could belong to (2.3.50 षष्ठी शेषे needs a noun; 1.4.24, 2.3.28)."""
+    words, notes = list(words_in), []
+    for i, w in enumerate(words):
+        m = w.morph
+        if m is None or w.in_compound or m.kind != "subanta" or m.vibhakti != SHASHTHI or m.lemma in PRONOUNS:
+            continue
+        k = _alt(w, PANCAMI)
+        line = [j for j, x in enumerate(words) if x.line == w.line and not x.in_compound]
+        at = line.index(i)
+        near = [line[at + d] for d in (-1, 1) if 0 <= at + d < len(line)]
+        moving = [j for j in line if words[j].morph is not None and words[j].morph.root
+                  and bridge.base_root(words[j].morph) in APAYA]
+        if k is None or not moving or any(_is_noun(words[j]) for j in near):
+            continue
+        words[i] = replace(w, chosen=k)
+        notes.append(f"{w.form}: पञ्चमी, not षष्ठी: no noun stands next to it to which it could belong (2.3.50), and "
+                     f"{words[moving[0]].form} takes the place left behind as अपादान (1.4.24, 2.3.28)")
     return words, notes

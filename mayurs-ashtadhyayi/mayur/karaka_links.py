@@ -152,18 +152,24 @@ def license_words(words_in: list[Word]) -> tuple[list[Word], list[str]]:
 
 
 def _second_objects(words_in: list[Word], notes: list[str]) -> list[Word]:
-    """गाम् दोग्धि पयस्: an ungoverned accusative of a द्विकर्मक verb is its अकथित कर्म (1.4.51)."""
+    """गाम् दोग्धि पयस्: an ungoverned accusative of a द्विकर्मक verb is its अकथित कर्म (1.4.51); मा ज्योतिस् गमय:
+    of a causative of going, knowing, eating …, whose base agent is कर्म beside the object (1.4.52)."""
+    from mayur.karaka import two_objects
+
     words = list(words_in)
     for i, w in enumerate(words):
         if w.role or w.head is not None or w.in_compound or w.morph is None or w.morph.vibhakti != P2:
             continue
         verbs = [v for v, o in enumerate(words) if o.role == "क्रिया" and o.line == w.line and is_verbal(o.morph)
-                 and _root(o.morph) in DVIKARMAKA and any(d.head == v and d.role == "कर्म" for d in words)]
+                 and two_objects(o.morph) and any(d.head == v and d.role == "कर्म" for d in words)]
         if verbs:
             v = min(verbs, key=lambda v: abs(v - i))
-            words[i] = replace(w, role="कर्म", head=v, role_sutras=("1.4.51", "2.3.2"))
+            rule = two_objects(words[v].morph)
+            words[i] = replace(w, role="कर्म", head=v, role_sutras=(rule, "2.3.2"))
             notes.append(f"{w.form}: second कर्म of द्विकर्मक {words[v].form} (1.4.51, 2.3.2); which of the two "
-                         f"is अकथित is a choice (text order), not decided by rule")
+                         f"is अकथित is a choice (text order), not decided by rule" if rule == "1.4.51" else
+                         f"{w.form}: second कर्म of the causative {words[v].form} (1.4.52, 2.3.2): one is the object, "
+                         f"the other the one made to act")
     return words
 
 
