@@ -211,7 +211,7 @@ def machine_translation(reading: Reading) -> str:
     try:
         from mayur import translator
 
-        return translator.translate(reading) if translator.available() else ""
+        return (translator.translate(reading) or "") if translator.available() else ""
     except Exception:  # noqa: BLE001 - an optional extra must not break the interpreter
         return ""
 

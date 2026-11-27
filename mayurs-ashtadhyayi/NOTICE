@@ -30,8 +30,9 @@ Annotations written by Claude (a large language model by Anthropic) during devel
 human-verified, licensed CC BY-SA 4.0: the gloss draft table mayur/annotations/gloss_draft.json,
 the suffix-sense table mayur/annotations/suffix_senses.json, the table of root meanings by class
 mayur/annotations/gloss_roots.json, and the roles, compound types,
-prose order and English in eval/review/claude/. The interpreter itself uses no language model
-at run time.
+prose order and English in eval/review/claude/. The interpreter itself uses no large language
+model and no network service at run time. The optional translator (off by default) is a small
+model trained in this repository; see below.
 
 Itihāsa corpus by Rahul Aralikatte, Miryam de Lhoneux, Anoop Kunchukuttan and Anders Søgaard,
 https://huggingface.co/datasets/rahular/itihasa (revision 56645be151b61e1143597f922ccf666b43a5c02b),
