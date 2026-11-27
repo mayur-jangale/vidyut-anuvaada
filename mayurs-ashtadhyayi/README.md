@@ -137,12 +137,15 @@ types, prose order and English written by Claude on top of the corpus's word spl
 
 | Measure (development verses) | Rāmāyaṇa 1.41–79 | 60 verses, other books |
 |---|---|---|
-| Role right, whole pipeline from raw text | 345/434 = 79.5% | 565/765 = 73.9% |
-| Head right, whole pipeline | 305/434 = 70.3% | 434/765 = 56.7% |
-| Role right when the corpus's split and grammar are given | 361/451 = 80.0% | 589/795 = 74.1% |
-| Head right when the corpus's split and grammar are given | 331/451 = 73.4% | 493/795 = 62.0% |
+| Role right, whole pipeline from raw text | 345/434 = 79.5% | 570/764 = 74.6% |
+| Head right, whole pipeline | 305/434 = 70.3% | 447/764 = 58.5% |
+| Role right when the corpus's split and grammar are given | 362/451 = 80.3% | 598/795 = 75.2% |
+| Head right when the corpus's split and grammar are given | 332/451 = 73.6% | 509/795 = 64.0% |
 | Compound type right when the split is given | 59/60 = 98.3% | 94/111 = 84.7% |
 | Agreement of two annotation passes with each other (roles / heads) | 98% / 99% | 89% / 87% |
+
+On Rāmāyaṇa 1.1–20, which no rule was tuned on: roles 182/215 = 84.7% and heads 158/215 = 73.5% for the
+whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
 
 `python eval/eval_roles.py --claude <file> [--gold-words]`, `python eval/eval_compounds.py --claude <file> [--gold-words]`.
 

@@ -47,9 +47,6 @@ def _krt_predicates(words: list[Word], idx: list[int], main: Optional[int]) -> l
     return with_deps or krt[-1:]  # choice: the kṛt with its own kārakas, else the last one
 
 
-LIST_FROM = 3  # this many nominatives beside the subject, with no verb: epithets in apposition (महान् आत्मा मतिस् विष्णुस् …)
-
-
 def _qualifier(words: list[Word], i: int) -> bool:
     """Adjective, participle or pronoun: a word that qualifies rather than predicates (by lemma class)."""
     m = words[i].morph
@@ -68,16 +65,12 @@ def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[
             able = [i for i in subjects if can_be_subject(words, i)]
             main = max(able, key=lambda i: (_head_priority(words, i, []), -i)) if able else None
             preds = _krt_predicates(words, idx, main)
-            others = [i for i in idx if is_case(words[i].morph, PRATHAMA) and i != main and not words[i].in_compound]
-            # a run of names or epithets is no statement; of a pronoun (कस् गुणवान् …) they are predicated
-            listing = main is not None and len(others) >= LIST_FROM and words[main].morph.lemma not in PRONOUNS \
-                and lemma_class(words[main].morph.lemma) != "pronoun"
             for i in idx:  # nominatives: kṛt predicates are क्रिया; qualifiers of the subject विशेषण; others विधेय
                 if not (is_case(words[i].morph, PRATHAMA) and i != main and (i in subjects or words[i].role == "विधेय")):
                     continue
                 if i in preds:
                     _set(words, i, "क्रिया", None)
-                elif main is not None and (preds or listing) and (listing or agrees(words[i].morph, words[main].morph)):
+                elif main is not None and preds and agrees(words[i].morph, words[main].morph):
                     _set(words, i, "विशेषण", main)
                 else:
                     _set(words, i, "विधेय", main)
