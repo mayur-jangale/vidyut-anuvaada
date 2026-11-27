@@ -145,7 +145,10 @@ def license_words(words_in: list[Word]) -> tuple[list[Word], list[str]]:
             words[i] = replace(w, head=None)
             notes.append(f"{w.form}: no rule licenses {w.role} with "
                          f"{words[w.head].form if w.head is not None else '—'}; left unlinked")
-    return _second_objects(words, notes), notes + _expressed_notes(words)
+    from mayur.vakya_link import link_clauses
+
+    words, clause_notes = link_clauses(_second_objects(words, notes))  # relative and speech clauses
+    return words, notes + clause_notes + _expressed_notes(words)
 
 
 def _second_objects(words_in: list[Word], notes: list[str]) -> list[Word]:

@@ -21,15 +21,22 @@ def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     return vakya._head_priority(words, i, verbs)
 
 
-def can_be_subject(words: list[Word], i: int) -> bool:
-    """Pronoun, or a noun that is not a participle, possessive (-वत्/-मत्/-इन्) or compound final."""
+def can_be_subject(words: list[Word], i: int, compound: bool = False) -> bool:
+    """Pronoun, or a noun that is not a participle, possessive (-वत्/-मत्/-इन्) or compound final (with
+    ``compound``: a compound final that is not a बहुव्रीहि)."""
     m = words[i].morph
     same = [a for a in words[i].analyses if (a.vibhakti, a.vacana, a.linga) == (m.vibhakti, m.vacana, m.linga)]
     if any(a.lemma in PRONOUNS for a in same):
         return True  # also when the chosen lemma is a variant stem (क for किम्)
-    if m.krt or m.lemma.endswith(POSSESSIVE) or (i > 0 and words[i - 1].in_compound):
-        return False
-    return lemma_class(m.lemma) == "noun"
+    from mayur import vakya
+
+    if m.krt or m.lemma.endswith(POSSESSIVE) or i in vakya._QUALIFYING or (i > 0 and words[i - 1].in_compound
+                                                                          and not compound):
+        return False  # a बहुव्रीहि final qualifies (2.2.24 अनेकमन्यपदार्थे); a द्वन्द्व or तत्पुरुष final
+    return lemma_class(m.lemma) == "noun" or m.lemma in HONORIFIC  # names its own referent (रामलक्ष्मणौ)
+
+
+HONORIFIC = {"भवत्"}  # भवान्: the second person spoken of in the third (a pronoun the corpus calls a noun)
 
 
 def _krt_predicates(words: list[Word], idx: list[int], main: Optional[int]) -> list[int]:
@@ -53,6 +60,29 @@ def _qualifier(words: list[Word], i: int) -> bool:
     return bool(m.krt) or lemma_class(m.lemma) in ("adjective", "pronoun") or m.lemma in PRONOUNS
 
 
+def _determiner(words: list[Word], i: int) -> bool:
+    """A pronoun (सर्वनाम, 1.1.27: किंचित्, अन्य, सस्) agreeing with the subject delimits it — वातजम् भयम्
+    किंचित् 'any fear' — it does not say something of it, so it is its विशेषण, not a predicate."""
+    m = words[i].morph
+    return not m.krt and (m.lemma in PRONOUNS or m.lemma in NUMERAL or lemma_class(m.lemma) == "pronoun")
+
+
+# संख्या (1.1.23 बहुगणवतुडति संख्या, and the numerals proper): a number counts the noun it stands with
+NUMERAL = {"एक", "द्वि", "त्रि", "चतुर्", "पञ्चन्", "षष्", "सप्तन्", "अष्टन्", "नवन्", "दशन्", "विंशति", "त्रिंशत्"}
+
+
+def _predicate_noun_after(words: list[Word], i: int, main: Optional[int]) -> Optional[int]:
+    """आचारः परमः धर्मः: an adjective standing right before an agreeing noun that is not the subject
+    qualifies that noun (समानाधिकरण), and the noun is the predicate; it is not a second predicate."""
+    j = i + 1
+    while j < len(words) and words[j].morph is not None and words[j].morph.kind == "avyaya":
+        j += 1
+    if main is None or j >= len(words) or j == main or words[j].line != words[i].line or words[j].in_compound \
+            or words[j].morph is None or not _qualifier(words, i) or _qualifier(words, j):
+        return None
+    return j if agrees(words[i].morph, words[j].morph) and can_be_subject(words, j) else None
+
+
 def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[int, list[int]],
                      notes: list[str]) -> None:
     """Nominal clauses: one expressed subject or none; dependents attach to the nearest predicate."""
@@ -62,7 +92,12 @@ def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[
         if not subjects:
             continue
         if not rverbs:
-            able = [i for i in subjects if can_be_subject(words, i)]
+            noms = [i for i in idx if is_case(words[i].morph, PRATHAMA) and not words[i].in_compound]
+            able = [i for i in subjects if can_be_subject(words, i)] or \
+                [i for i in subjects if len(noms) == 2 and can_be_subject(words, i, compound=True)
+                 and _krt_predicates(words, idx, i)]
+            # (रामलक्ष्मणौ वनम् गतौ: a compound and its kṛt predicate alone; the compound names the subject; in
+            # a list of epithets a compound final stays an epithet)
             main = max(able, key=lambda i: (_head_priority(words, i, []), -i)) if able else None
             preds = _krt_predicates(words, idx, main)
             for i in idx:  # nominatives: kṛt predicates are क्रिया; qualifiers of the subject विशेषण; others विधेय
@@ -70,8 +105,11 @@ def _attach_verbless(words: list[Word], region: dict[int, int], in_region: dict[
                     continue
                 if i in preds:
                     _set(words, i, "क्रिया", None)
-                elif main is not None and preds and agrees(words[i].morph, words[main].morph):
+                elif main is not None and agrees(words[i].morph, words[main].morph) \
+                        and (preds or _determiner(words, i)):
                     _set(words, i, "विशेषण", main)
+                elif _predicate_noun_after(words, i, main) is not None:
+                    _set(words, i, "विशेषण", _predicate_noun_after(words, i, main))
                 else:
                     _set(words, i, "विधेय", main)
             if preds and main is not None:

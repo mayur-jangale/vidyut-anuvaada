@@ -37,8 +37,8 @@ def regions(words: list[Word], verbs: list[int], agrees: Callable[[Any, Any], bo
     with_verb = {words[v].line for v in verbs} | _krt_clause_lines(words)
     region = {ln: ln for ln in lines}
     for ln in lines:
-        if ln in with_verb:
-            continue
+        if ln in with_verb or any(w.line == ln and w.form == "न" for w in words):
+            continue  # (न भयम् किंचित्: a negated half-verse without a verb denies existence, अस्ति supplied)
         mine = [w.morph for w in words if w.line == ln and not w.in_compound and w.morph and w.morph.vibhakti]
         for other in (ln + 1, ln - 1, -1):
             if other == -1:  # no verb line agrees: join the preceding verbless line if it agrees
@@ -135,7 +135,8 @@ def evaluate(words: list[Word], incoming: dict[str, float]) -> dict[str, float]:
                 and m.linga != words[w.head].morph.linga:
             penalty += 0.2
     yogyata = max(0.0, 1.0 - penalty)
-    dists = [abs(i - w.head) for i, w in enumerate(words) if w.head is not None]
+    # sannidhi is proximity inside a clause; the link of a subordinate clause's verb (vakya_link) is not one
+    dists = [abs(i - w.head) for i, w in enumerate(words) if w.head is not None and w.role != "क्रिया"]
     sannidhi = sum(1.0 / (1.0 + 0.25 * (d - 1)) for d in dists) / len(dists) if dists else 1.0
     if "frequency" in incoming:
         frequency = incoming["frequency"]
