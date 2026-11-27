@@ -10,6 +10,7 @@ from .translate_clause import ClauseMixin
 from .translate_compound import CompoundMixin
 from .translate_join import JoinMixin
 from .translate_np import NounPhraseMixin
+from .translate_sense import SenseMixin
 from .translate_words import ADJ_FIRST as _ADJ_FIRST, ADJ_SENSE, ON_NOUNS, WITH_LEMMAS, FINAL as _FINAL, PAIRED as _PAIRED, WITH_WORDS, is_latin_binomial, is_motion, is_question_lemma, name_plural
 from .model import Alignment, Reading
 
@@ -30,7 +31,7 @@ def _p(text: str, idx: Optional[int] = None, sep: str = " ") -> Piece:
     return (text, idx, sep)
 
 
-class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin):
+class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin, SenseMixin):
     def __init__(self, reading: Reading) -> None:
         self.reading = reading
         self.words = reading.words
@@ -71,6 +72,9 @@ class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin):
             return "supreme"
         if w.role == "विधेय" and w.gloss in ADJ_SENSE:
             return ADJ_SENSE[w.gloss]
+        sense = self.context_sense(i)
+        if sense:
+            return sense
         if w.gloss and not is_latin_binomial(w.gloss):
             return w.gloss
         return lipi.iast(w.morph.stem or w.morph.lemma) or "⟨" + lipi.iast(w.form) + "⟩"
@@ -109,7 +113,13 @@ class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin):
                                demonstrative=w.role == "विशेषण", force_acc=i in self.acc)
         if pron is not None:
             return "what" if m.lemma in ("किम्", "क") and w.form == "किम्" and i not in self.acc else pron
-        if m.krt and w.gloss_source != "own":
+        noun = self.krt_noun(i)
+        if noun:
+            return noun if m.vacana not in ("बहुवचन", "द्विवचन") or noun[:1].isupper() else english.plural(noun)
+        if self.possessed_noun(i):
+            return g
+        lexical_adj = m.krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्") and g.endswith(("ful", "ous", "ble", "ive"))
+        if m.krt and w.gloss_source != "own" and not lexical_adj:  # रम्य "delightful", not "to be delighted"
             if m.krt in ("तव्य", "अनीयर्", "यत्", "ण्यत्", "क्यप्") and self.members(i):
                 return g  # a noun that merely ends like a gerundive, inside a compound
             g = english.krt_form(m.krt, g)

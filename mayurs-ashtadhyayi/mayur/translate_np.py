@@ -125,9 +125,19 @@ class NounPhraseMixin:
                     inner += possessive(self.np(k))  # "command of father's word"
                 else:
                     poss += possessive(self.np(k))  # "Rāma's wife"
+            elif r == "विशेषण" and km is not None and km.lemma == "यद्" and not pron_head and not self.members(i) \
+                    and not self.children.get(k):
+                who = self.np(k)  # "which man" -> "man who": the relative pronoun follows its noun
+                if self.is_person(i) and who and who[0][0] == "which":
+                    who[0] = ("who", who[0][1], who[0][2])
+                after += who
+            elif r == "विशेषण" and self.when_participle(k, i):
+                trail += [_p(",", None, ""), _p("when")] + self.np(k) + [_p(",", None, "")]  # "Dharma, when protected, protects"
             elif r == "विशेषण":
                 slot = self.qual_slot(k, head_name)
                 piece = self.np(k)
+                if slot == "adj":
+                    piece = self.own_prefix(k) + piece  # स्व "own": "[his] own"
                 if slot == "trail":
                     trail += [_p(",", None, "")] + piece + [_p(",", None, "")]
                 elif slot == "dem":
@@ -141,6 +151,9 @@ class NounPhraseMixin:
             else:
                 after += self.case_phrase(k)
         after = after + trail
+        owner = self.supplied_possessive(i)
+        if owner and not poss:
+            poss.append(_p(f"[{owner}]"))  # "with [his] hand": the hand of the one who acts
         front = poss + dems + adjs + titles
         core: list[Piece] = []
         pat = self.final_pattern(i)
@@ -180,4 +193,7 @@ class NounPhraseMixin:
             last = english.past(last)
             glue = "-"
         core.append(_p(last, i, glue if core and not (bv and not ed and len(core) == 1) else " "))
+        stands_for = self.possessed_noun(i)
+        if stands_for:
+            core.append(_p(f"[{stands_for}]"))  # मामकाः "my [men]": the noun an adjective of possession leaves out
         return inner + front + core + std + after

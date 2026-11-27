@@ -9,6 +9,7 @@ stays.
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import dataclass
 from typing import Mapping, Sequence
 
@@ -249,6 +250,8 @@ def check_content_words(reading: Reading, renderings: Sequence[Rendering],
         ref_all = tokens(w.gloss) + tokens(spans.get(i, "")) + [t for a in syn.get(i, []) for t in tokens(a)]
         ref = [t for t in ref_all if t not in FUNCTION_WORDS] or ref_all  # "do" may be the content word
         got = [t for t in tokens(text) if t not in FUNCTION_WORDS] or tokens(text)
+        if tokens(text) and tokens(text) == tokens(spans.get(i, "")) and not [t for t in tokens(text) if t not in FUNCTION_WORDS]:
+            continue  # the template's own function word for a verb ("what did they do?"), left as it is
         if not any(shares_stem(g, r) for g in got for r in ref):
             out.append(Failure("content", f"{text!r} does not render {w.gloss!r} (word {i})"))
     return out
@@ -343,6 +346,21 @@ def check_negation(reading: Reading, reworded: str) -> list[Failure]:
     return []
 
 
+PRONOUN_WORDS = frozenset("""i me my we us our you your he him his she her it its they them their who whom whose
+which what""".split())
+
+
+def check_pronouns(reading: Reading, reworded: str) -> list[Failure]:
+    """The rewording has exactly the pronouns of the template: none gained, none lost, none changed
+    (a supplied "[his]" or "[men]" is the template's, never the rewriter's)."""
+    want = Counter(t for t in tokens(reading.translation) if t in PRONOUN_WORDS)
+    got = Counter(t for t in tokens(reworded) if t in PRONOUN_WORDS)
+    gained, lost = got - want, want - got
+    if not gained and not lost:
+        return []
+    return [Failure("pronoun", f"pronouns differ from the template: +{sorted(gained.elements())} -{sorted(lost.elements())}")]
+
+
 def check_voice_order(reading: Reading, reworded: str, spans: Sequence[Alignment]) -> list[Failure]:
     """The agent precedes an active verb, or follows 'by' after a passive one."""
     at = {a.word: a for a in spans}
@@ -396,4 +414,5 @@ def run_checks(reading: Reading, reworded: str, renderings: Sequence[Rendering],
         fails += check_vocabulary(reading, reworded, renderings, synonyms)
         fails += check_number(reading, renderings) + check_tense(reading, renderings)
         fails += check_negation(reading, reworded) + check_voice_order(reading, reworded, spans)
+        fails += check_pronouns(reading, reworded)
     return (spans if not fails else []), fails

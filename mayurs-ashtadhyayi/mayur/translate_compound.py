@@ -8,7 +8,8 @@ from __future__ import annotations
 import re
 
 from . import english
-from .translate_words import ADJ_ENDINGS, ADJ_FIRST, NOMINAL_SUFFIXES
+from .gloss import _draft as draft_glosses
+from .translate_words import ADJ_ENDINGS, ADJ_FIRST, KIND_HEADS, NOMINAL_SUFFIXES
 
 Piece = tuple[str, "int | None", str]
 _BRACKETING = re.compile(r"bracketing ([^;]*)")
@@ -109,6 +110,15 @@ class CompoundMixin:
             return self.render_node(node[1], full)
         return self.render_node(_fold(list(range(len(mem)))), full)
 
+    def lexical_rest(self, i: int, mem: list[int], first: str) -> str:
+        """The rest of the glossary's gloss for the whole compound after its first member's gloss
+        (स्वदेश "own country" with first "own" -> "country"), or ''."""
+        stems = [(self.words[j].morph.stem or self.words[j].morph.lemma) if self.words[j].morph else "" for j in mem + [i]]
+        hit = draft_glosses().get("".join(stems))
+        if not hit or hit[1] != "noun" or not hit[0].startswith(first + " ") or hit[0][:1].isupper():
+            return ""
+        return hit[0][len(first) + 1:]
+
     def adi(self, i: int) -> bool:
         m = self.words[i].morph
         return bool(m and (m.stem or m.lemma) == "आदि" and self.members(i))
@@ -134,6 +144,16 @@ class CompoundMixin:
             self.used.update(mem)
             return out + [_p(last, i, " and ")]
         first = texts[0][1]
+        if len(mem) == 1 and first == "own":
+            self.used.update(mem)
+            head = self.lexical_rest(i, mem, first) or last
+            return self.own_prefix(mem[0]) + [_p(first, mem[0]), _p(head, i)]  # स्वदेश: "[his] own country"
+        if len(mem) == 1 and first.lower().endswith(" " + last.lower()):
+            self.used.update(mem)  # शाल्मलीतरु: "silk-cotton tree", not "tree of silk-cotton tree"
+            return [_p(first[:-len(last) - 1], mem[0]), _p(last, i)]
+        if len(mem) == 1 and last in KIND_HEADS and ctype == "तत्पुरुष" and not first[:1].isupper() and " of " not in first:
+            self.used.update(mem)  # आम्रवृक्ष: "mango tree" (the kind of tree), not "tree of mango"
+            return [_p(first, mem[0]), _p(last, i)]
         if ctype == "कर्मधारय":
             if len(mem) == 1 and (first in ADJ_FIRST or first.endswith(ADJ_ENDINGS)) and not first[:1].isupper():
                 self.used.update(mem)

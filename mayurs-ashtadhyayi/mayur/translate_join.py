@@ -55,7 +55,7 @@ class JoinMixin:
             text = ("had " if past_main else "has ") + english.participle(g)
         else:
             text = ("was " if past_main else "is ") + english.present_participle(g)
-        return [_p("when")] + self.np(k, [x for x in self.children.get(k, []) if x != c]) + [_p(text, c), _p(",", None, "")]
+        return [_p("when")] + self.np(k, [x for x in self.children.get(k, []) if x != c]) + [_p(text, c)] + self.tail(c) + [_p(",", None, "")]
 
     # ---- joins ---------------------------------------------------------------------
     def quote_of(self, v: int):
@@ -81,7 +81,10 @@ class JoinMixin:
                 rel = next((x for x, p in enumerate(prev) if self.lemma_at(p[1]) == "यद्"), None)
                 tad = next((x for x, p in enumerate(cl) if p[1] is not None and self.lemma_at(p[1]) == "तद्"
                             and not self.words[p[1]].in_compound), None)
-                if rel is not None and tad is not None:  # "he who reads, obtains ...": the correlative leads
+                adjectival = rel is not None and self.role(prev[rel][1]) == "विशेषण"  # "the man who ...": stays after its noun
+                if adjectival and tad is not None:
+                    sep = _p(",", None, "")  # "The man who gives up his body, he attains greatness"
+                elif rel is not None and tad is not None:  # "he who reads, obtains ...": the correlative leads
                     piece = cl.pop(tad)
                     out[rel:rel] = [(piece[0], piece[1], " ")]
                     sep = _p(",", None, "")

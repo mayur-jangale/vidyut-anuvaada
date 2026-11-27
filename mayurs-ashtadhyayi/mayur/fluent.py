@@ -20,6 +20,7 @@ from .fluent_checks import Failure, Rendering, run_checks, unrendered
 from .fluent_more import coordination, drop_particles, questions, unglossed  # noqa: F401  (rules of RULES)
 from .fluent_tok import PUNCT, Tok, _is_name, _pronoun, _w
 from .model import Alignment, Reading, Word
+from .translate_words import KRT_NOUNS
 
 NOTE_OK = "rule-based; checks passed"
 _PIECE = re.compile(r"\[[^\]]*\]|[^\s,;.?!:\-\[\]“”]+|[,;.?!:\-“”]")
@@ -50,7 +51,7 @@ def tokenize(reading: Reading) -> list[Tok]:
     for a in sorted(reading.alignment, key=lambda x: x.start):
         out += [Tok(m) for m in _PIECE.findall(text[pos:a.start])]
         span = text[a.start:a.end]
-        if span[:1].isupper() and not reading.words[a.word].gloss[:1].isupper() and (pos or a.start == 0):
+        if span[:1].isupper() and not reading.words[a.word].gloss[:1].isupper() and a.start == 0:
             span = span[0].lower() + span[1:]  # a capital that only marks the sentence start
         out.append(Tok(span, a.word, glue=bool(out) and a.start == pos and out[-1].word is not None))
         pos = a.end
@@ -162,7 +163,8 @@ def relative_clauses(toks, reading):
     out = []
     for i, t in enumerate(toks):
         w = _w(reading, t)
-        if w and w.morph and w.morph.lemma == "यद्" and out and out[-1].text not in PUNCT | {"and", "or", "O", "he", "she", "they", "him", "her", "them", "those", "it", "“"} \
+        restrictive = w is not None and w.role == "विशेषण" and bool(out) and out[-1].word == w.head  # "the man who gives up"
+        if w and w.morph and w.morph.lemma == "यद्" and out and not restrictive and out[-1].text not in PUNCT | {"and", "or", "O", "he", "she", "they", "him", "her", "them", "those", "it", "“"} \
                 and out[-1].text.lower() not in ("by", "to", "in", "with", "from", "of"):
             out.append(Tok(","))
         out.append(t)
@@ -181,7 +183,7 @@ def vocatives(toks, reading):
                 out.append(Tok(","))
             out.append(t)
             nxt = toks[i + 1] if i + 1 < len(toks) else None
-            if nxt and nxt.text not in PUNCT and not (nxt.word is not None and _w(reading, nxt).role == "सम्बोधन"):
+            if nxt and nxt.text not in PUNCT and not (nxt.word is None and nxt.text in ("of", "in")) and not (nxt.word is not None and _w(reading, nxt).role == "सम्बोधन"):
                 out.append(Tok(","))
             continue
         out.append(t)
@@ -193,12 +195,15 @@ def instrument_with(toks, reading):
     out = list(toks)
     for i, t in enumerate(out[1:], 1):
         w = _w(reading, t)
-        prev = out[i - 1]
+        k = i - 1
+        while k > 0 and out[k].word is None and out[k].text.lower() in _DET:  # "by his hand": the by stands before "his"
+            k -= 1
+        prev = out[k]
         if w and w.role == "करण" and prev.word is None and prev.text == "by" and w.head is not None \
                 and 0 <= w.head < len(reading.words):
             h = reading.words[w.head].morph
             if h is not None and h.kind == "tinanta" and (h.prayoga or "") not in ("कर्मणि", "भावे"):
-                out[i - 1] = Tok("with")
+                out[k] = Tok("with")
     return out
 
 
@@ -208,7 +213,7 @@ def apposition(toks, reading):
     while i < len(toks):
         t = toks[i]
         out.append(t)
-        if _is_name(_w(reading, t)) and i + 1 < len(toks):
+        if _is_name(_w(reading, t)) and i + 1 < len(toks) and _w(reading, t).role != "भावलक्षण":  # "when Rāma had gone"
             j = i + 1
             while j < len(toks) and toks[j].word is not None and reading.words[toks[j].word].role == "विशेषण" \
                     and reading.words[toks[j].word].head == t.word:
@@ -243,8 +248,8 @@ def articles(toks, reading):
         if _is_name(w) and not (m.vacana == "बहुवचन" and t.text.endswith("s") and " " not in t.text):
             continue  # a plural name takes "the" (the Pāṇḍavas); a single name never does
         g = w.gloss.lower().split()[0]
-        if m.krt or g in _ADJ_WORDS:
-            continue
+        if (m.krt and (m.lemma, m.krt) not in KRT_NOUNS) or g in _ADJ_WORDS or (i and t.text[:1].isupper() and not _is_name(w)):
+            continue  # (a participle used as a noun, गीतम् "a song", takes an article; a capital is a name: "Sanskrit")
         if w.role == "विधेय" and not t.text.lower().endswith(_AGENT_END):
             continue
         plural_name = _is_name(w) and m.vacana == "बहुवचन"
@@ -341,7 +346,8 @@ def rewrite(reading: Reading) -> tuple[Reading, list[Alignment]]:
     aligned = sorted(t.word for t in toks if t.word is not None)
     if aligned != sorted(a.word for a in reading.alignment if not unrendered(reading, a.word)):
         return replace(reading, reworded="", reworded_note="rule-based; check failed: alignment: an aligned word was lost"), []
-    already = {str(f) for f in _failures(reading, reading.translation, base, reading.alignment)}
+    template = [Rendering(a.word, reading.translation[a.start:a.end]) for a in reading.alignment]
+    already = {str(f) for f in run_checks(reading, reading.translation, template, {}, reading.alignment)[1]}
     new = [f for f in _failures(reading, text, toks, spans) if str(f) not in already]
     if new:
         return replace(reading, reworded="", reworded_note=f"rule-based; check failed: {new[0]}"), []

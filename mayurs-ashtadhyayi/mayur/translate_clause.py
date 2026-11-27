@@ -36,8 +36,9 @@ class ClauseMixin:
 
     def tail(self, v: int) -> list[Piece]:
         out: list[Piece] = []
-        for k in self.children.get(v, []):
-            r = self.role(k)
+        kids = self.children.get(v, [])
+        for k in [c for c in kids if self.role(c) in ("कर्म", "विधेय")] + [c for c in kids if self.role(c) not in ("कर्म", "विधेय")]:
+            r = self.role(k)  # the object comes first: "having killed Vālin in battle"
             if r == "अव्यय":
                 out = self.np(k) + out
             elif r == "कर्म" or r == "विधेय":
@@ -105,6 +106,8 @@ class ClauseMixin:
         """An object with the preposition its verb needs: went *to* the forest, bows *to* the guru."""
         km = self.words[k].morph
         verb = self.text(v).lower().split()
+        if verb and verb[-1] in ("to", "into", "towards", "toward"):
+            return self.np(k)  # the verb's own gloss already ends in the preposition ("come to")
         to = self.role(k) == "कर्म" and (
             (motion and not (km and english.is_pronoun(km.lemma)))
             or (bool(verb) and verb[0] in TO_OBJECT and (verb[0] == "bow" or (km and english.is_pronoun(km.lemma))

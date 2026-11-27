@@ -29,6 +29,22 @@ FINAL = {
     "विहीन": ("devoid of", " and ", False), "मय": ("full of", " and ", False),
 }
 PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thigh", "cheek"}
+# a verb whose sense follows its argument: (root, role of an argument) -> English; यच्छति with a receiver in the
+# dative "gives" (not "restrains"), तरति with the water in the locative "swims" (not "crosses")
+VERB_SENSES = {("यम्", "सम्प्रदान"): "give", ("तॄ", "अधिकरण"): "swim"}
+# a noun gloss that a verb of the listed kind turns into another sense: one enters a mouth, not a face
+NOUN_BY_VERB = {"face": (frozenset({"enter", "eat", "drink", "put", "fall", "throw", "seize", "devour", "swallow"}),
+                         "mouth")}
+# a determinative compound ending in one of these names the kind: "mango tree", not "tree of mango"
+KIND_HEADS = frozenset({"tree"})
+# a participle used as a noun: (lemma, suffix) -> (noun, verbs in whose clause it has that sense; None = any)
+KRT_NOUNS = {("गा", "क्त"): ("song", None),
+             ("संस्कृ", "क्त"): ("Sanskrit", frozenset({"read", "speak", "study", "learn", "say", "write", "teach",
+                                                       "understand", "know", "recite"}))}
+# an adjective of possession standing for a person: gloss -> noun supplied (masculine, feminine, neuter), e.g. मामकाः
+POSSESSIVES = frozenset({"my", "our", "your", "his", "her", "their"})
+POSSESSED = ("man", "woman", "thing")
+BODY_PARTS = frozenset({"hand", "foot", "eye", "ear", "head", "arm", "tongue", "tooth", "leg", "finger", "shoulder"})
 
 
 
