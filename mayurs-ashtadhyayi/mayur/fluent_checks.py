@@ -14,6 +14,7 @@ from dataclasses import dataclass
 from typing import Mapping, Sequence
 
 from . import english, lipi, terms
+from .fluent_supplied import articles_in_hyphens, unbracketed_possessives
 from .model import Alignment, Reading, Word
 from .translate_words import ADJ_SENSE
 
@@ -45,7 +46,7 @@ _FUTURE_LAKARA = frozenset({"लृट्", "लुट्"})
 
 @dataclass(frozen=True)
 class Failure:
-    code: str  # alignment | substring | overlap | synonyms | content | vocabulary | number | tense | negation | order | length | malformed
+    code: str  # alignment | substring | overlap | synonyms | content | vocabulary | number | tense | negation | order | length | hyphen | supplied | malformed
     message: str
 
     def __str__(self) -> str:
@@ -381,6 +382,15 @@ def check_voice_order(reading: Reading, reworded: str, spans: Sequence[Alignment
     return out
 
 
+def check_hyphens(reworded: str) -> list[Failure]:
+    return [Failure("hyphen", m) for m in articles_in_hyphens(reworded)]
+
+
+def check_supplied(reading: Reading) -> list[Failure]:
+    """The literal line brackets every possessive it supplies ("[his] mind"); the fluent line may unbracket it."""
+    return [Failure("supplied", m) for m in unbracketed_possessives(reading)]
+
+
 def check_length(template: str, reworded: str) -> list[Failure]:
     if not reworded.strip():
         return [Failure("length", "empty rewording")]
@@ -414,5 +424,5 @@ def run_checks(reading: Reading, reworded: str, renderings: Sequence[Rendering],
         fails += check_vocabulary(reading, reworded, renderings, synonyms)
         fails += check_number(reading, renderings) + check_tense(reading, renderings)
         fails += check_negation(reading, reworded) + check_voice_order(reading, reworded, spans)
-        fails += check_pronouns(reading, reworded)
+        fails += check_pronouns(reading, reworded) + check_hyphens(reworded)
     return (spans if not fails else []), fails

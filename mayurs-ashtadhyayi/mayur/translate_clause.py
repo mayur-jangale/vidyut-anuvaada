@@ -30,13 +30,27 @@ class ClauseMixin:
             word = g
         elif mode == "to":
             word = "to " + g
+        elif mode == "bare":
+            word = english.participle(g)  # the 2nd, 3rd... absolutive: "having said X and released Y"
         else:
             word = "having " + english.participle(g)
         return [_p(word, i)] + self.tail(i)
 
+    def absolutives(self, ks: list[int]) -> list[Piece]:
+        """Absolutives of one verb: one "having", the rest joined by "and" ("having said thus and released the bow")."""
+        out: list[Piece] = []
+        todo = [k for k in ks if k not in self.used]
+        for n, k in enumerate(todo):
+            if n:
+                last = n == len(todo) - 1
+                out.append(_p("and", None, " ") if last else _p(",", None, ""))
+            out += self.nonfinite(k, "bare" if n else "having")
+        return out
+
     def tail(self, v: int) -> list[Piece]:
         out: list[Piece] = []
         kids = self.children.get(v, [])
+        prior = [c for c in kids if self.role(c) == "पूर्वकालक्रिया"]
         for k in [c for c in kids if self.role(c) in ("कर्म", "विधेय")] + [c for c in kids if self.role(c) not in ("कर्म", "विधेय")]:
             r = self.role(k)  # the object comes first: "having killed Vālin in battle"
             if r == "अव्यय":
@@ -46,7 +60,8 @@ class ClauseMixin:
             elif r == "तुमर्थ":
                 out += self.nonfinite(k, "to")
             elif r == "पूर्वकालक्रिया":
-                out = self.nonfinite(k, "having") + out
+                if k == prior[0]:
+                    out = self.absolutives(prior) + out
             else:
                 out += self.case_phrase(k)
         return out
@@ -184,9 +199,7 @@ class ClauseMixin:
             if m.kind == "tinanta":
                 spieces = [_p(english.supplied_subject(m.purusha, m.vacana, accusative=let))]
         prior = [k for k in rest if self.role(k) == "पूर्वकालक्रिया"]
-        pre: list[Piece] = []
-        for k in prior:
-            pre += self.nonfinite(k, "having")
+        pre = self.absolutives(prior)
         post: list[Piece] = []
         wh = next((k for k in objs if self.words[k].morph and is_question_lemma(self.words[k].morph.lemma)), None)
         ask = (wh is not None and m is not None and m.kind == "tinanta" and neg is None and not let and not passive

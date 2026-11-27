@@ -16,7 +16,7 @@ from dataclasses import dataclass, replace
 from typing import Callable, Optional
 
 from . import english
-from .fluent_checks import Failure, Rendering, run_checks, unrendered
+from .fluent_checks import Failure, Rendering, check_supplied, run_checks, unrendered
 from .fluent_more import coordination, drop_particles, questions, unglossed  # noqa: F401  (rules of RULES)
 from .fluent_tok import PUNCT, Tok, _is_name, _pronoun, _w
 from .model import Alignment, Reading, Word
@@ -228,13 +228,20 @@ def apposition(toks, reading):
     return out
 
 
+def _hyphen_start(toks, j: int) -> int:
+    """Index where the hyphenated chain that token ``j`` is the tail of begins ("weapon-hand": the "weapon")."""
+    while j >= 2 and toks[j - 1].text == "-":
+        j -= 2
+    return j
+
+
 def _phrase_start(toks, i, t, reading) -> int:
     j = i
     while j > 0 and toks[j - 1].word is not None and reading.words[toks[j - 1].word].head == t.word \
             and (reading.words[toks[j - 1].word].role == "विशेषण" or reading.words[toks[j - 1].word].in_compound) \
             and toks[j - 1].text.lower() not in ("with", "without"):
         j -= 1
-    return j
+    return _hyphen_start(toks, j)
 
 
 def articles(toks, reading):
@@ -338,6 +345,9 @@ def rewrite(reading: Reading) -> tuple[Reading, list[Alignment]]:
     """
     if not reading.translation or not reading.alignment:
         return reading, []
+    unmarked = check_supplied(reading)
+    if unmarked:
+        return replace(reading, reworded="", reworded_note=f"rule-based; check failed: {unmarked[0]}"), []
     base = tokenize(reading)
     toks = base
     for rule in RULES:

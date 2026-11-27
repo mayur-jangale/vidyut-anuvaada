@@ -83,6 +83,14 @@ class NounPhraseMixin:
                 self.used.add(k)  # "he who": the correlative stands before the relative pronoun
                 dems.append(_p(english.pronoun("तद्", km.linga, km.vacana, "प्रथमा") or "he", k))
                 continue
+            if r == "विशेषण" and self.is_without(k):
+                group = [x for x in kidlist if x not in self.used and self.is_without(x)]
+                after += self.without_group(group, pron_head or head_name)  # "me, without resistance and without weapon,"
+                continue
+            made = self.bahu_qualifier(k, i) if r == "विशेषण" else None
+            if made is not None:  # बहुव्रीहि by its type: "with son", ", [his] mind agitated by grief,"
+                (adjs if made[0] == "adj" else after).extend(made[1])
+                continue
             if r == "विशेषण" and (appose or pron_head):
                 after += [_p(",", None, "")] + self.np(k)
                 continue

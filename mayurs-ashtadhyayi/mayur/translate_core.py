@@ -6,6 +6,7 @@ from dataclasses import replace
 from typing import Optional
 
 from . import english, lipi
+from .translate_bahu import BahuvrihiMixin
 from .translate_clause import ClauseMixin
 from .translate_compound import CompoundMixin
 from .translate_join import JoinMixin
@@ -31,7 +32,7 @@ def _p(text: str, idx: Optional[int] = None, sep: str = " ") -> Piece:
     return (text, idx, sep)
 
 
-class _Renderer(NounPhraseMixin, CompoundMixin, JoinMixin, ClauseMixin, SenseMixin):
+class _Renderer(NounPhraseMixin, BahuvrihiMixin, CompoundMixin, JoinMixin, ClauseMixin, SenseMixin):
     def __init__(self, reading: Reading) -> None:
         self.reading = reading
         self.words = reading.words

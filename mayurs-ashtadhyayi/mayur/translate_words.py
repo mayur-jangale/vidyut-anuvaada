@@ -12,7 +12,9 @@ _LATIN_MARKS = ("Linn", "Roxb", "Willd", "Hemandifolia", "Sp.", "L.)")
 _QUESTION = frozenset({"किम्", "क", "कः", "कस्"})
 
 ADJ_FIRST = {"great", "good", "firm", "long", "big", "small", "excellent", "best", "white", "black",
-              "red", "very", "many", "beautiful", "noble", "mighty", "strong", "high", "broad", "large"}
+              "red", "very", "many", "beautiful", "noble", "mighty", "strong", "high", "broad", "large",
+              "yellow", "golden", "dear", "brave", "swift", "bright", "fierce", "pure", "dark", "blue", "fair", "wise",
+              "handsome", "sweet", "tender", "lovely", "terrible", "heroic", "radiant"}
 # final member of a compound -> (English head placed before its members, joiner, plural members)
 FINAL = {
     "निरत": ("devoted to", " and ", False), "रत": ("delighted in", " and ", False),
@@ -29,6 +31,9 @@ FINAL = {
     "विहीन": ("devoid of", " and ", False), "मय": ("full of", " and ", False),
 }
 PAIRED = {"arm", "eye", "hand", "shoulder", "ear", "foot", "tooth", "leg", "thigh", "cheek"}
+# a बहुव्रीहि ending in one of these reads "X-Y-ed" (lotus-eyed); in the hand, what is held: "with weapon in hand"
+PARTS_ED = PAIRED | {"face", "mouth", "navel", "neck", "head", "heart", "tongue", "hair", "nose", "chest", "belly"}
+HELD_PARTS = frozenset({"hand"})
 # a verb whose sense follows its argument: (root, role of an argument) -> English; यच्छति with a receiver in the
 # dative "gives" (not "restrains"), तरति with the water in the locative "swims" (not "crosses")
 VERB_SENSES = {("यम्", "सम्प्रदान"): "give", ("तॄ", "अधिकरण"): "swim"}
