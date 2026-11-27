@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import replace
 from typing import Sequence
 
-from mayur import sandhi
+from mayur import proof_context, sandhi
 from mayur.model import UNVERIFIED, VERIFIED, Reading, Word, WordProof
 
 
@@ -34,8 +34,10 @@ def check(reading: Reading, lines: Sequence[str]) -> Reading:
     """A new Reading with word proofs, per-line re-joins, ``sandhi_ok`` and ``status`` filled in."""
     notes: list[str] = []
     words = []
-    for w in reading.words:
+    for i, w in enumerate(reading.words):
         proof = _prove(w)
+        if not proof.derivable:  # a form a rule gives only in context (मे, स, महा-): see proof_context
+            proof = proof_context.prove(reading.words, i, reading.compounds, proof) or proof
         if not proof.derivable:
             notes.append(f"word {w.form} (line {w.line + 1}) is not derivable: {proof.note or 'no matching derivation'}")
         words.append(replace(w, proof=proof))
