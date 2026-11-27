@@ -14,6 +14,7 @@ dependencies = ["vidyut==0.4.0"]
 [project.optional-dependencies]
 dev = ["pytest>=7", "pytest-cov", "jsonschema>=4"]
 neural = ["torch"]
+translate = ["torch", "transformers", "sentencepiece"]
 
 [project.scripts]
 mayur = "mayur.cli:main"

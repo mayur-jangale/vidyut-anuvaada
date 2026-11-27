@@ -1,0 +1,59 @@
+{
+ "input_form": "B",
+ "config": {
+  "vocab": 8000,
+  "d_model": 256,
+  "heads": 4,
+  "d_ff": 1024,
+  "enc_layers": 3,
+  "dec_layers": 3,
+  "dropout": 0.15,
+  "max_src": 320,
+  "max_tgt": 192
+ },
+ "state": [
+  {
+   "epoch": 21,
+   "step": 2744,
+   "minutes": 51.5,
+   "dev_loss": 4.653,
+   "bleu": 4.13,
+   "chrf": 20.51
+  },
+  {
+   "epoch": 25,
+   "step": 3751,
+   "minutes": 69.9,
+   "dev_loss": 4.484,
+   "bleu": 4.51,
+   "chrf": 20.82
+  },
+  {
+   "epoch": 26,
+   "step": 3996,
+   "minutes": 75.0,
+   "dev_loss": 4.46,
+   "bleu": 4.66,
+   "chrf": 20.43
+  }
+ ],
+ "dev_scores": {
+  "bleu": 5.53,
+  "chrf": 22.43,
+  "verses": 30
+ },
+ "data_revision": "rahular/itihasa@56645be151b61e1143597f922ccf666b43a5c02b",
+ "train_verses": 6749,
+ "parameters": "7.58M",
+ "train_minutes": 75,
+ "threads": 1,
+ "train_command": "python scripts/train_translator.py --form B --tag b1 --train-shards 60 --minutes 75 --threads 1 --dropout 0.15 --lr 1e-3 --warmup 300 --eval-minutes 15 --eval-verses 100",
+ "dev_scores_30_verses": {
+  "bleu": 5.53,
+  "chrf": 22.43
+ },
+ "dev_scores_100_verses": {
+  "bleu": 4.66,
+  "chrf": 20.43
+ }
+}

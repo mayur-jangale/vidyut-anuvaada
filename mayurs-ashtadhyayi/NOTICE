@@ -33,6 +33,22 @@ mayur/annotations/gloss_roots.json, and the roles, compound types,
 prose order and English in eval/review/claude/. The interpreter itself uses no language model
 at run time.
 
+Itihāsa corpus by Rahul Aralikatte, Miryam de Lhoneux, Anoop Kunchukuttan and Anders Søgaard,
+https://huggingface.co/datasets/rahular/itihasa (revision 56645be151b61e1143597f922ccf666b43a5c02b),
+licensed under the Apache License, Version 2.0. Citation: Aralikatte et al. (2021), "Itihasa: A
+large-scale corpus for Sanskrit to English translation", Workshop on Asian Translation. It holds
+verses of the Rāmāyaṇa and Mahābhārata with the English of M. N. Dutt. It is fetched by script
+(scripts/fetch_data.py --with-itihasa) and is never committed. The translator weights in
+mayur/models/translator*.pt and translator*.json were trained on part of its training split, so
+they are derived from it and carry the same attribution; Rāmāyaṇa Bālakāṇḍa 1 (the project's demo
+verses) was removed from the training data.
+
+google/flan-t5-small (Chung et al. 2022, "Scaling Instruction-Finetuned Language Models"; T5 by Raffel
+et al. 2020), licensed under the Apache License, Version 2.0, at revision
+0fc9ddf78a1e988dac52e2dac162b0ede4fd74ab. It is fetched by script (scripts/fetch_data.py
+--with-translator-base) and not redistributed; only the low-rank adapters trained on top of it
+(mayur/models/translator_t5_lora.pt) are committed, and they carry the Itihāsa attribution above.
+
 Monier-Williams Sanskrit-English Dictionary, Cologne Digital Sanskrit Dictionaries,
 https://www.sanskrit-lexicon.uni-koeln.de. The licence is unclear. The dictionary may optionally
 be fetched by script for local use only. It is never committed or redistributed in this
