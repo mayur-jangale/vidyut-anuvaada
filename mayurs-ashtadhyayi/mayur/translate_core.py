@@ -108,7 +108,7 @@ class _Renderer(NounPhraseMixin, BahuvrihiMixin, CompoundMixin, JoinMixin, Claus
         w = self.words[i]
         m = w.morph
         g = self.text(i)
-        if m is None or w.arsha or w.in_compound or (m.kind == "avyaya" and not m.vibhakti):
+        if m is None or (w.arsha and not w.gloss) or w.in_compound or (m.kind == "avyaya" and not m.vibhakti):
             return g
         pron = english.pronoun(m.lemma, m.linga, m.vacana, m.vibhakti,
                                demonstrative=w.role == "विशेषण", force_acc=i in self.acc)

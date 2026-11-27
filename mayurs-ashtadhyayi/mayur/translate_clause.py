@@ -5,7 +5,8 @@ from __future__ import annotations
 
 from typing import Optional
 
-from . import english
+from . import bridge, english
+from .karaka_rules import GATI_AKARMAKA
 from .translate_words import SUBORDINATORS, TIME_PHRASES, TO_OBJECT, WITH_LEMMAS, adverb, is_motion, is_question_lemma
 
 Piece = tuple[str, Optional[int], str]
@@ -26,7 +27,7 @@ class ClauseMixin:
         self.used.add(i)
         w = self.words[i]
         g = self.text(i)
-        if w.morph is None or w.arsha:
+        if w.morph is None or (w.arsha and not w.gloss):
             word = g
         elif mode == "to":
             word = "to " + g
@@ -72,8 +73,9 @@ class ClauseMixin:
         w = self.words[v]
         m = w.morph
         g = self.text(v)
-        if m is None or w.arsha or m.kind != "tinanta":
-            txt = g if (m is None or w.arsha or not m.krt) else english.krt_form(m.krt, g)
+        bare = m is None or (w.arsha and not w.gloss)  # a labelled ārṣa form with a gloss is inflected by its analysis
+        if bare or m.kind != "tinanta":
+            txt = g if (bare or not m.krt) else english.krt_form(m.krt, g)
             return ([_p(txt, v)] + ([_p("not", neg)] if neg is not None else [])), False
         p = {"उत्तमपुरुष": 1, "मध्यमपुरुष": 2}.get(m.purusha or "", 3)
         sg = m.vacana not in ("बहुवचन", "द्विवचन")
@@ -87,7 +89,7 @@ class ClauseMixin:
         isbe = g in ("be", "is", "are", "am")
         g = "be" if isbe else g
         aux, main, plain, let = "", g, "", False
-        lak = m.lakara or "लट्"
+        lak = "लोट्" if self.prohibition(v, neg) else m.lakara or "लट्"  # मा शुचस्: "do not grieve" (3.3.175)
         if lak in _MODAL:
             aux = _MODAL[lak] + (" be" if passive and not isbe else "")
             main = english.participle(g) if passive and not isbe else g
@@ -116,6 +118,24 @@ class ClauseMixin:
         out.append(_p("not", neg))
         out.append(_p(main, v))
         return out, let
+
+    def prohibition(self, v: int, neg: Optional[int]) -> bool:
+        """मा with the aorist or imperfect (3.3.175 माङि लुङ्, 3.3.176): a prohibition, not a past statement."""
+        m = self.words[v].morph
+        n = self.words[neg].morph if neg is not None else None
+        return (m is not None and n is not None and n.kind == "avyaya" and self.words[neg].form == "मा"
+                and m.lakara in ("लुङ्", "लङ्"))
+
+    def goal_object(self, v: int, objs: list[int]) -> Optional[int]:
+        """माम् ज्योतिस् गमय: of the two objects of a causative of going (1.4.52), the one that is the goal.
+        The person spoken of by अस्मद्/युष्मद् is the one made to go; else the first in the text is taken so."""
+        m = self.words[v].morph
+        if m is None or len(objs) != 2 or not m.root or not bridge.is_causative(m) \
+                or bridge.base_root(m) not in GATI_AKARMAKA:
+            return None
+        personal = [k for k in objs if self.words[k].morph and self.words[k].morph.lemma in ("अस्मद्", "युष्मद्")]
+        made_to_go = personal[0] if len(personal) == 1 else min(objs)
+        return next(k for k in objs if k != made_to_go)
 
     def _object(self, v: int, k: int, motion: bool) -> list[Piece]:
         """An object with the preposition its verb needs: went *to* the forest, bows *to* the guru."""
@@ -195,7 +215,8 @@ class ClauseMixin:
             spieces += self.np(k, [c for c in self.children.get(k, []) if c not in preds])
             for c in preds:
                 objs.append(c)
-        if not subj and m is not None and not (m.lakara == "लोट्" and m.purusha == "मध्यमपुरुष"):
+        if not subj and m is not None and not ((m.lakara == "लोट्" or self.prohibition(v, neg))
+                                               and m.purusha == "मध्यमपुरुष"):
             if m.kind == "tinanta":
                 spieces = [_p(english.supplied_subject(m.purusha, m.vacana, accusative=let))]
         prior = [k for k in rest if self.role(k) == "पूर्वकालक्रिया"]
@@ -206,8 +227,9 @@ class ClauseMixin:
                and (m.lakara or "लट्") in ("लट्", "लङ्", "लिट्", "लुङ्") and self.text(v) not in ("be", "is"))
         if ask:
             objs = [k for k in objs if k != wh]
-        for k in objs:
-            post += self._object(v, k, motion)
+        goal = self.goal_object(v, objs)
+        for k in sorted(objs, key=lambda k: k == goal):
+            post += self._object(v, k, motion or k == goal)
         for k in agent:
             post += [_p("by")] + self.np(k)
         for k in rest:

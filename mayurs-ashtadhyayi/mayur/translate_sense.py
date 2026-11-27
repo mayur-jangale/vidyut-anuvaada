@@ -36,7 +36,7 @@ class SenseMixin:
         """English that replaces the gloss of word ``i`` because of its arguments or its verb, else ''."""
         w = self.words[i]
         m = w.morph
-        if m is None or w.arsha:
+        if m is None or (w.arsha and not w.gloss):
             return ""
         if m.root and not m.prefixes and m.kind == "tinanta":
             roles = {self.role(c) for c in self.children.get(i, [])}

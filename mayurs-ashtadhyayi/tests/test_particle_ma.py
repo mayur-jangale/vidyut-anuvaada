@@ -91,5 +91,13 @@ def test_epic_imperative_of_bru_is_labelled_with_its_rule_form():
     assert [m for m in lexicon.padas("प्रब्रवीहि") if m.kind == "tinanta" and m.source == "arsha"]
 
 
-def test_labelled_form_is_translated_by_its_analysis():
-    assert "kill" in _reading("रामः रावणम् अहनत्").translation.lower()
+@pytest.mark.parametrize("text, english", [
+    ("रामः रावणम् अहनत्", "Rāma killed Rāvaṇa."),             # a labelled form, inflected by its analysis
+    ("मा शुचः", "Do not grieve."),                           # मा with the aorist: a prohibition (3.3.175)
+    ("मा मा हिंसीः", "Do not harm me."),
+    ("न सः अगच्छत्", "He did not go."),                       # the plain past stays a statement
+    ("तमसो मा ज्योतिर्गमय", "Send me to light from darkness."),  # the goal of a causative of going
+    ("रामः मां ग्रामं गमयति", "Rāma sends me to village."),
+])
+def test_english_of_the_new_readings(text, english):
+    assert _reading(text).translation == english
