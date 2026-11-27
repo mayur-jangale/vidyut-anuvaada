@@ -16,10 +16,16 @@ DEFAULT_OUT = "docs/index.html"
 
 # ---------------------------------------------------------------- seams (patched in tests)
 
-def run_pipeline(text: str, verse_id: str = "", script: str | None = None, max_readings: int = 5) -> VerseAnalysis:
+def run_pipeline(text: str, verse_id: str = "", script: str | None = None, max_readings: int = 5,
+                 translator: bool = False) -> VerseAnalysis:
     from .pipeline import analyze_verse
 
-    return analyze_verse(text, verse_id=verse_id, script=script, max_readings=max_readings)
+    return analyze_verse(text, verse_id=verse_id, script=script, max_readings=max_readings, translator=translator)
+
+
+def _extra(args: argparse.Namespace) -> dict[str, Any]:
+    """Keyword arguments for ``run_pipeline`` that are passed only when asked for."""
+    return {"translator": True} if getattr(args, "translator", False) else {}
 
 
 def gold_text(n: int) -> str:
@@ -61,10 +67,13 @@ def build_parser() -> argparse.ArgumentParser:
         s.add_argument("--max-readings", type=_positive, default=5)
         s.add_argument("--compact", action="store_true", help="single-line JSON")
         s.add_argument("--fluent", action="store_true", help="accepted for compatibility; fluent English is always included")
+        s.add_argument("--translator", action="store_true",
+                       help="add the trained translator's English (needs torch and the weights; see README)")
     h = sub.add_parser("html", help="write the static page")
     h.add_argument("--verses", default="1-20", help="range such as 1-20")
     h.add_argument("--out", default=DEFAULT_OUT)
     h.add_argument("--max-readings", type=_positive, default=5)
+    h.add_argument("--translator", action="store_true", help="add the trained translator's English to each verse")
     return p
 
 
@@ -92,7 +101,8 @@ def _write_stdout(text: str) -> None:
 def _cmd_html(args: argparse.Namespace) -> int:
     from .render_html import render
 
-    analyses = [run_pipeline(gold_text(n), verse_id=f"1.{n}", script="devanagari", max_readings=args.max_readings)
+    analyses = [run_pipeline(gold_text(n), verse_id=f"1.{n}", script="devanagari", max_readings=args.max_readings,
+                             **_extra(args))
                 for n in parse_range(args.verses)]
     path = Path(args.out)
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -105,10 +115,10 @@ def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
         if args.command == "analyze":
-            _write_stdout(_dump(run_pipeline(args.text, args.verse_id, args.script, args.max_readings), args))
+            _write_stdout(_dump(run_pipeline(args.text, args.verse_id, args.script, args.max_readings, **_extra(args)), args))
         elif args.command == "verse":
             text = gold_text(args.n)
-            _write_stdout(_dump(run_pipeline(text, f"1.{args.n}", "devanagari", args.max_readings), args))
+            _write_stdout(_dump(run_pipeline(text, f"1.{args.n}", "devanagari", args.max_readings, **_extra(args)), args))
         else:
             return _cmd_html(args)
     except lipi.AmbiguousScript as exc:

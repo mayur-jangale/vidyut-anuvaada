@@ -254,7 +254,10 @@ def _translation(data: dict[str, Any]) -> str:
     out.append(esc(text[pos:]))
     fluent = data.get("fluent", {}).get("text", "")
     readable = f'<h2>Readable English <span>by rule from the literal one</span></h2><p>{esc(fluent)}</p>' if fluent else ""
-    return f'<h2>Literal translation</h2><p>{"".join(out)}</p>{readable}'
+    machine = data.get("machine_translation", "")
+    trained = (f'<h2>Machine translation <span>by the trained translator; free, not traceable to rules</span></h2>'
+               f'<p>{esc(machine)}</p>') if machine else ""
+    return f'<h2>Literal translation</h2><p>{"".join(out)}</p>{readable}{trained}'
 
 
 MAX_ALTERNATIVES_SHOWN = 5

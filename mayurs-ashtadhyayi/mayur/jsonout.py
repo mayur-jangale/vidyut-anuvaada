@@ -276,6 +276,7 @@ def to_json(analysis: VerseAnalysis, *, full: bool = False) -> dict[str, Any]:
         "compounds": [compound_json(best, c) for c in best.compounds],
         "anvaya": anvaya_json(best), "gloss": _gloss(best), "translation": best.translation,
         "alignment": _alignment(best), "fluent": _fluent(best), "scores": dict(best.scores),
+        "machine_translation": best.machine_translation,
     })
     alts = []
     for rank, r in enumerate(analysis.readings[1:], start=2):

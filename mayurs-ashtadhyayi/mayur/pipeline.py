@@ -205,9 +205,21 @@ def choose(candidates: list[Reading]) -> list[Reading]:
     return sorted(candidates, key=_rank_key)
 
 
+def machine_translation(reading: Reading) -> str:
+    """English of ``reading`` from the optional trained translator; "" when torch, the weights or the
+    module are absent, or when it fails. It never affects the analysis."""
+    try:
+        from mayur import translator
+
+        return translator.translate(reading) if translator.available() else ""
+    except Exception:  # noqa: BLE001 - an optional extra must not break the interpreter
+        return ""
+
+
 def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
-                  max_readings: int = 5) -> VerseAnalysis:
-    """Analyse one verse. ``readings[0]`` is the chosen reading; the rest are kept alternatives."""
+                  max_readings: int = 5, translator: bool = False) -> VerseAnalysis:
+    """Analyse one verse. ``readings[0]`` is the chosen reading; the rest are kept alternatives.
+    ``translator``: also run the optional trained translator on the chosen reading."""
     if max_readings < 1:
         raise ValueError("max_readings must be at least 1")
     lines = to_lines(text, script)
@@ -218,6 +230,8 @@ def analyze_verse(text: str, verse_id: str = "", script: str | None = None,
         return VerseAnalysis(id=verse_id, input=text, lines=lines, metre=metre.identify(lines), notes=notes)
     ranked = choose(candidates)
     readings = [_finish(r) for r in ranked[:max_readings]] + ranked[max_readings:]
+    if translator and readings:
+        readings[0] = replace(readings[0], machine_translation=machine_translation(readings[0]))
     return VerseAnalysis(
         id=verse_id,
         input=text,

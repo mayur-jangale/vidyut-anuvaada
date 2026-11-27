@@ -199,6 +199,10 @@
         "$ref": "#/$defs/alternative"
       }
     },
+    "machine_translation": {
+      "type": "string",
+      "description": "English from the optional trained translator (a small model run locally on the engine's analysis; not traceable to rules). Empty when the translator is off or not installed."
+    },
     "fluent": {
       "type": "object",
       "description": "Fluent English made from the literal translation by fixed rules (no language model). Empty text when a check failed.",

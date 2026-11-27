@@ -142,6 +142,7 @@ class Reading:
     reworded: str = ""  # fluent English made from this analysis by fixed rules (mayur.fluent); no language model
     reworded_note: str = ""  # the checks the rewording passed, or the one it failed
     reworded_alignment: list[Alignment] = field(default_factory=list)  # word spans in ``reworded``
+    machine_translation: str = ""  # English from the optional trained translator (mayur.translator); "" when off
 
 
 @dataclass
