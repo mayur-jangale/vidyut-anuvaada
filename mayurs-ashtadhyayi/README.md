@@ -133,7 +133,11 @@ scored separately because the corpus itself is not consistent about splitting le
 |---|---|---|
 | 44 well-known lines (subhāṣitas, mottoes, simple prose): pada split | 42/44 chosen split right; 44/44 right split among the kept readings | `python eval/eval_wellknown.py` |
 | 46 plain prose sentences: roles and heads of the listed words | 45/46 sentences, 119/121 words | `python eval/eval_simple.py` |
-| The same 46 sentences: readable English equal to the hand-written one (articles ignored) | 32/46 | `python eval/eval_simple.py` |
+| The same 46 sentences: readable English equal to the hand-written one (articles ignored). The English rules were tuned on these sentences, so this is not an independent score | 45/46 | `python eval/eval_simple.py` |
+| 120 everyday lines the rules were not tuned on (40 prose sentences, 40 well-known verse lines, 40 sandhi-heavy lines; written by Claude, not human-verified): split right as first choice / right split among the kept readings | 110/120, 118/120 | `python eval/eval_everyday.py` |
+| The same 120: every lemma right / every grammar tag right (per line) | 97/120, 92/120 | `python eval/eval_everyday.py` |
+| The same: every listed role and head right (prose 26/40, verse lines 7/35, sandhi-heavy 17/34) | 50/109 | `python eval/eval_everyday.py` |
+| The same: status `verified` | 116/120 | `python eval/eval_everyday.py` |
 | `श्वेतो धावति` | both `श्वेतः धावति` and `श्वा इतः धावति` are returned, each proof-verified | `mayur analyze "श्वेतो धावति"` |
 
 ### Sentence structure and compounds on verse (reference annotated by Claude, not human-verified)
@@ -160,8 +164,8 @@ whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
 
 - **Sentence structure on verse is the weakest layer** (numbers above). Plain prose is handled
   well; long verse sentences with several clauses, relative clauses and ellipsis are not.
-- **The English is rough.** It is built by rule from the analysis; on plain sentences it equals
-  the hand-written English two times in three (32 of 46), and it is stiff or wrong on complex verse.
+- **The English is rough.** It is built by rule from the analysis; it is right on the plain sentences
+  its rules were tuned on, and stiff or wrong on complex verse, where it inherits every wrong role.
 - **Court poetry** (long compounds, rare words) is the weakest genre at word level.
 - **Epic and usage forms** are analysed only where a rule here covers them (see the table above);
   others stay unknown words, e.g. ब्रवीहि for ब्रूहि.
@@ -181,7 +185,8 @@ whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
 ## Data and licences
 
 - Code: Apache-2.0 (`LICENSE`). Own annotations in `mayur/annotations/` and
-  `eval/review/claude/`, `eval/samples/wellknown.json`, `eval/samples/simple_sentences.json`:
+  `eval/review/claude/`, `eval/samples/wellknown.json`, `eval/samples/simple_sentences.json`,
+  `eval/samples/everyday_120.json`:
   CC BY-SA 4.0. The gloss draft table and the reference annotations were written by Claude
   (an LLM) and are labelled so; they are not human-verified.
 - vidyut (Ambuda): MIT; its data is downloaded by `scripts/fetch_data.py`.
