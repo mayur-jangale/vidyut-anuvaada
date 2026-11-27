@@ -38,7 +38,13 @@ def _head_priority(words: list[Word], i: int, verbs: list[int]) -> float:
     score = {"noun": 2.0, "pronoun": 1.5, "": 1.0, "adjective": 0.8}.get(cls, 0.0)  # सा प्रिया: the adjective heads
     if m.lemma in DEMONSTRATIVE:
         score = 0.5  # तत् सर्वम्, सस् कपिस्: the demonstrative qualifies the other word
-    if m.krt:
+        nxt = words[i + 1] if i + 1 < len(words) else None
+        if nxt is not None and nxt.line == words[i].line and nxt.morph is not None and agrees(m, nxt.morph) \
+                and nxt.morph.lemma not in PRONOUNS:
+            score = 0.1  # सा प्रिया: right before the word it points at, it is that word's determiner
+    if m.lemma in OWN:
+        score = 0.05  # तत् स्वम्: "that, his own"
+    if m.krt and cls != "noun":  # (वित्तम्, a noun in its own right, heads यत् वित्तम्)
         score -= 0.5
     if i > 0 and words[i - 1].in_compound:
         score -= 0.5
@@ -129,11 +135,14 @@ def _kta_near(words: list[Word], i: int) -> Optional[int]:
     return _pick(near, words, i)
 
 
-def _adjacent_nominal(words: list[Word], g: int, over_verb: bool = False) -> Optional[int]:
-    """Non-genitive nominal next to the genitive head (skipping particles), following first; with
-    ``over_verb`` an oblique noun standing after the verb counts too (सिंहस्य प्रविशन्ति मुखे)."""
+def _adjacent_nominal(words: list[Word], g: int, over_verb: bool = False,
+                      span: Optional[tuple[int, int]] = None) -> Optional[int]:
+    """Non-genitive nominal next to the genitive phrase (skipping particles), following first; with
+    ``over_verb`` an oblique noun standing after the verb counts too (सिंहस्य प्रविशन्ति मुखे). ``span``:
+    first and last word of the genitive phrase (मम भोक्तुकामस्य विघ्नम्: the noun after the whole phrase)."""
+    first, last = span or (g, g)
     for step in (1, -1):
-        j = g + step
+        j = (last if step == 1 else first) + step
         crossed = False
         while 0 <= j < len(words) and words[j].line == words[g].line and words[j].morph is not None \
                 and (words[j].morph.kind == "avyaya" or (over_verb and step == 1 and is_finite(words[j].morph))):
@@ -149,6 +158,9 @@ def _adjacent_nominal(words: list[Word], g: int, over_verb: bool = False) -> Opt
 
 
 DEMONSTRATIVE = {"तद्", "एतद्", "इदम्", "अदस्"}
+OWN = {"स्व", "स्वक", "स्वीय", "निज"}
+# क्त forms that take a तृतीया of what one is furnished with or parted from, not of an agent (2.3.18 करण)
+FURNISHED = ("युक्त", "संयुक्त", "समायुक्त", "अन्वित", "समन्वित", "उपेत", "समेत", "सहित", "हीन", "विहीन", "रहित", "वर्जित")
 NEGATION = {"न", "मा"}
 CONJUNCTION = {"च", "वा"}
 NUMBER_OF = {2: "द्विवचन"}
@@ -179,10 +191,17 @@ def _particle_head(words: list[Word], i: int, verbs: list[int], verbals: list[in
                  and w.morph.kind == "subanta" and w.morph.krt in PREDICATE_KRT and w.morph.vibhakti == PRATHAMA]
         if after:
             return after[0]
+        nxt = i + 1  # न संशयस्: with no verb in its half-verse it denies the noun right after it
+        if nxt < len(words) and words[nxt].line == line and not any(j in verbs for j in range(len(words)) if words[j].line == line) \
+                and words[nxt].morph is not None and words[nxt].morph.kind == "subanta" and words[nxt].morph.vibhakti == PRATHAMA:
+            return nxt
     if _segment(words, i) is not None:
         return _segment(words, i)
+    verbal_in_line = any(words[j].line == line for j in verbs + verbals)
     near = [j for j, w in enumerate(words) if j != i and w.line == line and not w.in_compound
-            and (j in verbs or j in verbals or (w.morph is not None and w.morph.kind == "subanta" and w.morph.krt in PREDICATE_KRT))]
+            and (j in verbs or j in verbals or (w.morph is not None and w.morph.kind == "subanta" and w.morph.krt in PREDICATE_KRT
+                                                and not (verbal_in_line and lemma_class(w.morph.lemma) == "noun")))]
+    # (ददौ नित्यम् वित्तम्: beside a verb, a participle that has become a noun is no predicate)
     if near:
         return min(near, key=lambda j: (abs(j - i), j < i))
     pool = [v for v in verbs if region[words[v].line] == region[line]]
@@ -217,6 +236,14 @@ def _joint_agreement(words: list[Word], subjects: list[int], v: int) -> bool:
     singular = all(words[j].morph.vacana == "एकवचन" for j in subjects)
     want = "द्विवचन" if singular and len(subjects) == 2 else "बहुवचन"
     return verb.vacana == want
+
+
+def _qualifies(words: list[Word], i: int, adjectives: bool = False) -> bool:
+    """A participle or a बहुव्रीहि: a word that says something of another, named or not. A plain adjective
+    counts only with ``adjectives``: beside a third-person verb it may itself name the agent (श्वेतस् धावति)."""
+    m = words[i].morph
+    return m.krt in PREDICATE_KRT or i in _QUALIFYING or \
+        (adjectives and lemma_class(m.lemma) == "adjective" and m.lemma not in PRONOUNS)
 
 
 def _adverbial(word: Word) -> bool:
@@ -286,8 +313,15 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
                 if joined:
                     notes.append(f"{words[head_k].form} and {words[head].form}: joined by च/वा, both कर्ता of {words[verb].form}")
                 continue
-            if agreeing and all(words[j].morph.krt in PREDICATE_KRT for j in group):
-                verb = _pick(agreeing, words, head)  # मार्गमाणस् संददर्श: no noun names the agent
+            if not agreeing and not copular and all(_qualifies(words, j, adjectives=True) for j in group):
+                # विप्रमोहिता … बिभेषि: it qualifies the त्वम् / अहम् that the verb ending expresses (1.4.105–108)
+                agreeing = [v for v in rverbs if words[v].morph.purusha in ("मध्यमपुरुष", "उत्तमपुरुष")
+                            and words[v].morph.vacana == words[head].morph.vacana and v not in kartas
+                            and words[v].morph.prayoga in (None, "कर्तरि") and words[v].morph.root not in COPULA]
+            if agreeing and all(_qualifies(words, j) for j in group) or \
+                    (agreeing and words[agreeing[0]].morph.purusha != "प्रथमपुरुष"
+                     and all(_qualifies(words, j, adjectives=True) for j in group)):
+                verb = _pick(agreeing, words, head)  # मार्गमाणस् संददर्श, दक्षिणामुखस् प्रययौ: no noun names the agent
                 for j in group:
                     _set(words, j, "विशेषण", verb)
                 notes.append(f"{words[head].form}: qualifies the unexpressed agent of {words[verb].form} (अध्याहार)")
@@ -301,7 +335,9 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
                     if pronouns and head not in pronouns:
                         head = pronouns[0]  # सस् राजा अस्ति: "he is a king"
                     elif not pronouns and len(nouns) > 1:
-                        head = nouns[0]  # रामस् वीरस् अस्ति: what is named first is what is spoken of
+                        plain = [j for j in nouns if not (j > 0 and words[j - 1].in_compound) and j not in _QUALIFYING]
+                        head = (plain or nouns)[0]  # रामस् वीरस् अस्ति: what is named first is what is spoken of;
+                        # नित्योदकस् ब्राह्मणस् स्यात्: a compound says something of the plain noun
                 kartas[verb] = head  # रामस् वीरस् अस्ति; a qualifier standing right before its noun stays विशेषण
             elif copular:  # त्वम् समर्थस् असि: the other nominative is the predicate
                 for j in group:
@@ -342,7 +378,8 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
             near = _line_verbal(words, head, verbs, verbals + participles)
             verb = kta if kta is not None else near if near is not None else _pick(rverbs, words, head)
             passive = verb is not None and (kta is not None or words[verb].morph.prayoga in ("कर्मणि", "भावे"))
-            role = "कर्ता" if passive else "करण"
+            furnished = kta is not None and (words[kta].morph.stem or words[kta].form).startswith(FURNISHED)
+            role = "कर्ता" if passive and not furnished else "करण"  # मुदा युक्तास्: joy is no agent
         elif case == SAMBODHANA:
             role, verb = "सम्बोधन", _pick(rverbs or verbs, words, head)
         elif case == SHASHTHI:
@@ -366,7 +403,10 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
                          f"the same {role}")
     for group in genitives:  # सम्बन्ध of the adjacent nominal; else an argument of the verb
         head = max(group, key=lambda i: _head_priority(words, i, []))
-        target = _adjacent_nominal(words, head)
+        inside = range(min(group), max(group) + 1)  # one unbroken phrase (compound members and particles apart)
+        solid = all(j in group or words[j].in_compound or (words[j].morph is not None and words[j].morph.kind == "avyaya")
+                    for j in inside)
+        target = _adjacent_nominal(words, head, span=(min(group), max(group)) if solid else None)
         verb = _pick(in_region[region[words[head].line]] or verbs, words, head)
         fear = verb is not None and words[verb].morph.root in FEAR
         if target is None and not fear:
@@ -374,6 +414,11 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
         if target is None:
             _set(words, head, "अपादान" if fear else "सम्बन्ध", verb)
         else:
+            owner = words[target].head  # तस्य सा प्रिया: the genitive belongs to the noun that सा qualifies
+            if words[target].role == "विशेषण" and words[target].morph.lemma in DEMONSTRATIVE and owner is not None \
+                    and words[owner].line == words[target].line \
+                    and words[owner].morph is not None and words[owner].morph.kind == "subanta" and owner not in group:
+                target = owner
             _set(words, head, "सम्बन्ध", target)
         for j in group:
             if j != head:
@@ -382,6 +427,11 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
         if w.morph is not None and w.morph.kind == "avyaya" and not w.role:
             _set(words, i, "अव्यय", _particle_head(words, i, verbs, verbals, region))
     _attach_verbless(words, region, in_region, notes)
+    for i in range(1, len(words)):  # मासि मासि: a word said twice is one phrase (8.1.4 नित्यवीप्सयोः)
+        a, b = words[i - 1], words[i]
+        if a.form == b.form and a.line == b.line and not a.in_compound and not b.in_compound and a.role \
+                and b.morph is not None and b.morph.kind == "subanta" and a.head != i:
+            _set(words, i, a.role, a.head)
     return words, notes
 
 
