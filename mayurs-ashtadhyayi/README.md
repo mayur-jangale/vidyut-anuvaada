@@ -91,12 +91,17 @@ readings is meant is not decided by the rules; that is the next table.
 |---|---|---|---|
 | Padas identified (a compound is one pada, compared as written) | F1 0.961 | F1 0.968 | F1 0.975 |
 | Words identified, compound members counted separately | F1 0.951 | F1 0.957 | F1 0.959 |
-| Lemma (aligned words) | 2422/2442 = 99.2% | 2486/2510 = 99.0% | 3878/3909 = 99.2% |
-| All grammar features | 2344/2442 = 96.0% | 2389/2510 = 95.2% | 3717/3909 = 95.1% |
-| Full analysis: lemma and every feature | 2340/2442 = 95.8% | 2381/2510 = 94.9% | 3706/3909 = 94.8% |
-| End to end: the word found and fully analysed, of all corpus words | 2760/3066 = 90.0% | 2749/3042 = 90.4% | 4249/4735 = 89.7% |
-| Words proof-verified | 2949/3046 = 96.8% | 3017/3036 = 99.4% | 4642/4681 = 99.2% |
+| Lemma (aligned words) | 2422/2442 = 99.2% | 2486/2510 = 99.0% | 3880/3912 = 99.2% |
+| All grammar features | 2344/2442 = 96.0% | 2389/2510 = 95.2% | 3719/3912 = 95.1% |
+| Full analysis: lemma and every feature | 2340/2442 = 95.8% | 2381/2510 = 94.9% | 3707/3912 = 94.8% |
+| End to end: the word found and fully analysed, of all corpus words | 2760/3066 = 90.0% | 2749/3042 = 90.4% | 4250/4735 = 89.8% |
+| Words proof-verified | 2949/3046 = 96.8% | 3017/3036 = 99.4% | 4643/4682 = 99.2% |
 | Verses with status `verified` | 123/200 = 61.5% | 182/200 = 91.0% | 267/300 = 89.0% |
+
+The development column is the code as it stands now (`eval/results/dev300b_r15.txt`). The two sealed
+runs were measured once, before the last sentence and English rules; they are not re-run, because a
+sealed verse is tested only once. On the development verses those later rules changed the reading of
+one verse for the worse (2 words of 4,735) and nothing else.
 
 Each sealed sample was drawn by `python scripts/sample_test.py --pool sealed_test --n 200 --label runN`
 and evaluated once (`eval/results/sealed_run1.txt`, `sealed_run2.txt`); the verses are logged in
@@ -132,7 +137,7 @@ scored separately because the corpus itself is not consistent about splitting le
 
 | Set | Result | Command |
 |---|---|---|
-| 44 well-known lines (subhāṣitas, mottoes, simple prose): pada split | 42/44 chosen split right; 44/44 right split among the kept readings | `python eval/eval_wellknown.py` |
+| 44 well-known lines (subhāṣitas, mottoes, simple prose): pada split | 42/44 chosen split right; 44/44 right split among the kept readings; 40/44 verified (सत्यमेव जयते is now read rightly and therefore unverified: the middle voice of जि is not a rule form) | `python eval/eval_wellknown.py` |
 | 46 plain prose sentences: roles and heads of the listed words | 45/46 sentences, 119/121 words | `python eval/eval_simple.py` |
 | The same 46 sentences: readable English equal to the hand-written one (articles ignored). The English rules were tuned on these sentences, so this is not an independent score | 45/46 | `python eval/eval_simple.py` |
 | 120 everyday lines the rules were not tuned on (40 prose sentences, 40 well-known verse lines, 40 sandhi-heavy lines; written by Claude, not human-verified): split right as first choice / right split among the kept readings | 110/120, 118/120 | `python eval/eval_everyday.py` |
