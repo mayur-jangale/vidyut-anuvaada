@@ -185,9 +185,11 @@ def choose_rules(words: list[Word]) -> list[int]:
 
 def resolve(reading: Reading) -> Reading:
     """New Reading with ``chosen``, ``role`` and ``head`` set and shabdabodha scores."""
-    from mayur import particle_ma
+    from mayur import one_verb, particle_ma
 
     chosen, ma_notes = particle_ma.apply(reading.words, choose(reading.words))
+    chosen, verb_notes = one_verb.apply(reading.words, chosen)  # सञ्जय: the vocative, not a second finite verb
+    ma_notes = ma_notes + verb_notes
     words = [replace(w, chosen=c) if w.analyses else w for w, c in zip(reading.words, chosen)]
     from mayur.vakya import assign_roles
     from mayur.vakya_case import ablative, syncretic

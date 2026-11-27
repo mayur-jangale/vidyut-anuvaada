@@ -388,7 +388,7 @@ def more(form: str, found: Sequence[Morph], padas: Lookup, generated: Lookup) ->
     from mayur.lexicon_usage import usage_forms
 
     out += gati_verbs(form, padas, lexicon.listed_stem)
-    if not any(m.kind == "tinanta" and m.quality >= 2 for m in [*found, *out]):
+    if not any(m.kind == "tinanta" for m in [*found, *out]):  # (जयते is जि in the other voice, not a verb from जय)
         from mayur.lexicon_denom import denominatives
 
         out += denominatives(form, lambda stem: bool(lexicon.listed_stem(stem)))  # नमस्यति, पुत्रीयति
