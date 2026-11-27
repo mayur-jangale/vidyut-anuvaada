@@ -31,7 +31,7 @@ reproduces the text.
 | Choice of analysis | A trained tagger picks among the lexicon's analyses only. Where one spelling stands for two or three padas by sandhi (भीष्म उवाच: भीष्मः, भीष्मे or the vocative), it weighs all of them; the pada not taken is named in the notes. | `mayur/tagger*.py`, `mayur/siblings.py` |
 | Proof gate | The chosen words must re-join to the input by sandhi, and each word must be re-derived by vidyut-prakriya; otherwise the verse is `unverified` and the reason is given per word. A word whose stem no dictionary lists is never verified. Two word classes are proved in two vidyut steps where the Python API cannot do it in one: passive present participles (क्रियमाण: the passive present, then शानच् by 3.2.124, 7.2.82) and neuter plurals in -ईनि as accusative (through the identical nominative, 7.1.20). | `mayur/proof.py`, `mayur/lexicon.py`, `mayur/lexicon_passive.py` |
 | Compounds | Type by rule (2.1–2.2) with the deciding sūtra, vigraha from real inflected forms, rule chain. | `mayur/compounds.py`, `mayur/samasa*.py` |
-| Sentence | Kāraka roles and heads; a link is kept only if the forward rule (role + what the verb form expresses → case) gives the word's actual case (1.4.23–55, 2.3, 3.4.67–72). Clauses: relative and quoted clauses, participle predicates, the two objects of a double-object verb or of a causative (1.4.51, 1.4.52). The particle मा is told from the enclitic for माम् by position and tense (8.1.18, 8.1.23, 3.3.175). | `mayur/vakya*.py`, `mayur/karaka*.py`, `mayur/particle_ma.py` |
+| Sentence | Kāraka roles and heads; a link is kept only if the forward rule (role + what the verb form expresses → case) gives the word's actual case (1.4.23–55, 2.3, 3.4.67–72). Clauses: relative and quoted clauses, participle predicates, the two objects of a double-object verb or of a causative (1.4.51, 1.4.52). The particle मा is told from the enclitic for माम् by position and tense (8.1.18, 8.1.23, 3.3.175). A half-verse has one finite verb unless something joins two clauses: a second one that is also a known vocative is the vocative (किम् अकुर्वत सञ्जय). | `mayur/vakya*.py`, `mayur/karaka*.py`, `mayur/particle_ma.py`, `mayur/one_verb.py` |
 | Meaning | Dictionary gloss; a root's meaning by its class where the classes differ (पाति protects, पिबति drinks); sense in context; meaning read off the derivation (which suffix rule gives which sense). | `mayur/gloss.py`, `mayur/senses.py`, `mayur/artha.py` |
 | English | A literal aligned rendering, then fixed rewriting rules with checks that no word, number, tense or negation changed. A बहुव्रीहि is placed after its noun ("Arjuna, his mind agitated by grief"). An optional trained translator can add a third line; it is off by default (see below). | `mayur/translate*.py`, `mayur/fluent*.py`, `mayur/translator*.py` |
 
@@ -184,7 +184,13 @@ Bhagavadgītā 1.46–47, checked by hand at the user's request (whole pipeline)
 - 1.46 — "If the Dhārtarāṣṭras, with weapon in hand, should kill me, without resistance and without weapon, in battle; it should be my greater safety."
 - 1.47 — "Having said thus and released the bow with arrow, Arjuna, his mind agitated by grief, sat in battle in the chariot seat."
 
-Both are understandable and stiff. Before the last round of rules they read "If weapon-the hand
+Gītā 1.1 now reads "The Yuyutsus were assembled in the field of dharma in Kurukṣetra; O Sañjaya, what
+did my men and the Pāṇḍavas do?" (युयुत्सवः "eager to fight" is wrongly taken as a name), and सत्यमेव जयते
+"Truth conquers" (unverified: the middle voice of जि is labelled, not derived). Gītā 2.47 is still
+garbled ("Let your be authority ever not not be …"): four short clauses with two मा and an elided verb
+are beyond the clause rules.
+
+Both 1.46 and 1.47 are understandable and stiff. Before the last round of rules they read "If weapon-the hand
 Dhārtarāṣṭras should kill me, without resistance, without weapon in battle; …" and "Having said thus
 having released with-arrow bow, grief-be agitated-mind Arjuna sat in the battle chariot seat."
 
