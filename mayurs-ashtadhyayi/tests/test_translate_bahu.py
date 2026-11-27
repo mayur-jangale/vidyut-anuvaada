@@ -87,9 +87,7 @@ def test_qualifier_comes_after_its_noun():
 
 
 @pytest.mark.parametrize("text,keeps", [
-    ("हतपुत्रः राजा रोदिति", "Kill-son king"),   # typed तत्पुरुष by the compound analysis: never guessed
-    ("गतप्राणः नरः पतति", "Go-breath man"),
-    ("हतसैन्यः राजा रोदिति", "Kill-army king"),
+    ("त्यक्तराज्यः रामः वनं गच्छति", "Abandon-kingdom Rāma"),   # typed कर्मधारय by the compound analysis: never guessed
 ])
 def test_other_types_keep_the_hyphen_form(text, keeps):
     r = read(text)
@@ -138,3 +136,20 @@ def test_verse_two():
     r = read(VERSE_2)
     assert r.translation.startswith("Having said thus and released bow with arrow, Arjuna, [his] mind agitated by grief, sat")
     assert r.reworded.startswith("Having said thus and released the bow with arrow, Arjuna, his mind agitated by grief, sat")
+
+
+import pytest as _pytest
+
+from mayur import pipeline as _pipeline
+
+
+@_pytest.mark.parametrize("text, english", [
+    ("हतपुत्रः राजा रोदिति", "The king, his son killed, weeps."),
+    ("गतप्राणः वीरः पतति", "The hero, his breath gone, falls."),
+    ("भग्नमानसः नरः गच्छति", "The man, his mind broken, goes."),
+])
+def test_participle_first_compound_that_agrees_with_a_noun_is_a_bahuvrihi(text, english):
+    """हत, गत, भग्न are tagged as nouns by the corpus; as first members before a noun, in a compound that
+    agrees with another word, they are participles (2.2.24, 2.2.36 निष्ठा)."""
+    reading = _pipeline.analyze_verse(text).readings[0]
+    assert reading.compounds[0].samasa == "बहुव्रीहि" and reading.reworded == english

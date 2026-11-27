@@ -233,6 +233,11 @@ def _upapada(final: Word, final_stem: str) -> Optional[tuple[str, str]]:
     return None
 
 
+# क्त forms that are nouns in their own right as first members (भूतपति "lord of beings"): not participles there.
+KTA_NOUNS = frozenset({"भूत", "हित", "मत", "कृत", "वृत्त", "जात", "ऋत", "सुकृत", "दुष्कृत", "अमृत", "मृत", "गीत", "जीवित",
+                       "चरित", "सुभाषित", "व्रत", "सित", "असित", "पण्डित", "दूत", "सूत", "सुत", "युक्त", "इष्ट", "दिष्ट", "पुष्ट"})
+
+
 def _d(samasa: str, rule: str, note: str, **kw: str) -> Decision:
     return Decision(samasa=samasa, rule=rule, note=note, **kw)
 
@@ -325,16 +330,16 @@ def _main(reading: Reading, members: Sequence[int], words: Sequence[Word], fcls:
         if pcls == "noun" and sig:
             return _d(BAHUVRIHI, "उपमान-बहुव्रीहि", f"noun + part/quality noun qualifying another word ({sig}): "
                       "2.2.24 with the वार्त्तिक सप्तम्युपमानपूर्वपदस्य बहुव्रीहिरुत्तरपदलोपश्च")
+    if prev.morph is not None and prev.morph.krt == "क्त" and (pcls == "participle" or pstem not in KTA_NOUNS) \
+            and fcls in ("noun", "adjective", "") and sig and ("agrees with" in sig or sig.startswith("gender shift")):
+        return _d(BAHUVRIHI, "बहुव्रीहि", f"क्त participle + noun {fstem}, the whole qualifying another word ({sig}): "
+                  "2.2.24 अनेकमन्यपदार्थे, with the participle first by 2.2.36 निष्ठा")
     rel = _final_relation(fstem)
     if rel and pcls not in ("indeclinable", "numeral", "sarvadi"):
         nouns = all(word_class(w)[0] in ("noun", "") for w in words[:-1])
         inner = DVANDVA if len(words) > 2 and nouns and fstem in INNER_DVANDVA_FINALS else ""
         why = "; the members before it are coordinated (2.2.29 चार्थे द्वन्द्वः)" if inner else ""
         return _d(TATPURUSHA, rel[0], f"{fstem} takes the {rel[0]}: {rel[1]}{why}", relation=rel[0], inner=inner)
-    if pcls == "participle" and prev.morph is not None and prev.morph.krt == "क्त" and fcls == "noun" and sig \
-            and "agrees with" in sig:
-        return _d(BAHUVRIHI, "बहुव्रीहि", f"क्त participle + noun {fstem}, the whole qualifying another word ({sig}): "
-                  "2.2.24 अनेकमन्यपदार्थे, with the participle first by 2.2.36 निष्ठा")
     if pcls in ("adjective", "participle", "sarvadi"):
         rule = "2.1.49 पूर्वकालैकसर्वजरत्पुराणनवकेवलाः समानाधिकरणेन" if pcls == "sarvadi" else             "2.1.57 विशेषणं विशेष्येण बहुलम्"
         maha = "; महत् → महा 6.3.46 आन्महतः समानाधिकरणजातीययोः" if pstem == "महत्" else ""
