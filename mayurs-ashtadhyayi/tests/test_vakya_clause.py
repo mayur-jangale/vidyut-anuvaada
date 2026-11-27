@@ -126,3 +126,31 @@ def test_numeral_counts_its_noun():
                        ("बालकास्", False, [nom("बालकास्", "बालक", NOM, vacana="बहुवचन")]),
                        ("क्रीडन्ति", False, [replace(_v("क्रीडन्ति", "क्रीड्"), vacana="बहुवचन")])]))
     assert _r(r, "बालकास्") == ("कर्ता", "क्रीडन्ति") and _r(r, "पञ्च") == ("विशेषण", "बालकास्")
+
+
+def _roles(text):
+    from mayur import lipi, pipeline
+
+    r = pipeline.analyze_verse(text).readings[0]
+    name = lambda i: None if i is None else lipi.pausa(r.words[i].form)  # noqa: E731
+    return {lipi.pausa(w.form): (w.role, name(w.head)) for w in r.words if not w.in_compound}, r
+
+
+def test_qualifiers_of_a_personal_pronoun_gita_1_46():
+    roles, reading = _roles("यदि मामप्रतीकारमशस्त्रं शस्त्रपाणयः । धार्तराष्ट्रा रणे हन्युस्तन्मे क्षेमतरं भवेत्")
+    assert roles["माम्"] == ("कर्म", "हन्युः")
+    assert roles["अप्रतीकारम्"] == ("विशेषण", "माम्") and roles["अशस्त्रम्"] == ("विशेषण", "माम्")
+    assert roles["पाणयः"] == ("विशेषण", "धार्तराष्ट्राः")  # the verbless half-verse joins the clause of हन्युः
+    assert roles["धार्तराष्ट्राः"] == ("कर्ता", "हन्युः")
+
+
+def test_participle_first_compound_qualifying_a_noun_is_bahuvrihi_gita_1_47():
+    roles, reading = _roles("एवमुक्त्वार्जुनः सङ्ख्ये रथोपस्थ उपाविशत् । विसृज्य सशरं चापं शोकसंविग्नमानसः")
+    types = {c.stem: c.samasa for c in reading.compounds}
+    assert types["शोकसंविग्नमानस"] == "बहुव्रीहि"
+    assert roles["मानसः"] == ("विशेषण", "अर्जुनः") and roles["चापम्"] == ("कर्म", "विसृज्य")
+
+
+def test_noun_beside_a_pronoun_is_its_apposition_when_no_verb_takes_it():
+    roles, _ = _roles("त्वां राजानं नमामि")
+    assert roles["राजानम्"] == ("विशेषण", "त्वाम्")

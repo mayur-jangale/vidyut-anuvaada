@@ -123,6 +123,15 @@ def _apart_from_personal(words: list[Word], group: list[int]) -> list[list[int]]
     return [g for g in (rest, nouns) if g]
 
 
+def _joined_segment(words: list[Word], line: int, anchor: int) -> Optional[int]:
+    """A verbless half-verse joined to one with two finite verbs belongs to the nearer clause of that line:
+    शस्त्रपाणयस् | धार्तराष्ट्रास् रणे हन्युस् तत् … भवेत् goes with हन्युस्, the first verb after it."""
+    finite = [j for j, w in enumerate(words) if w.line == anchor and is_finite(w.morph)]
+    if anchor == line or len(finite) < 2:
+        return None
+    return finite[0] if line < anchor else finite[-1]
+
+
 def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> list[list[int]]:
     """Agreement groups (same case, number, gender) per clause: the half-verse when it has a
     verb or verbal, else its region; अस्मद्/युष्मद् never group with (qualify) other words."""
@@ -135,7 +144,10 @@ def _groups(words: list[Word], region: dict[int, int], governed: set[int]) -> li
             relative = m.lemma == "यद्" and sum(is_finite(x.morph) for x in words if x.line == w.line) > 1
             if m.vibhakti not in (PRATHAMA, DVITIYA):  # oblique phrases do not run across half-verses
                 clause = (clause, w.line)
-            clause = (clause, _segment(words, i), _next_governor(words, i) if m.vibhakti == DVITIYA else None)
+            segment = _segment(words, i)
+            if segment is None and w.line not in governed:
+                segment = _joined_segment(words, w.line, region[w.line])
+            clause = (clause, segment, _next_governor(words, i) if m.vibhakti == DVITIYA else None)
             own = i if personal or relative else -1
             prev = words[i - 1].morph if i > 0 and words[i - 1].line == w.line else None
             if own == -1 and prev is not None and prev.lemma == "यद्" and agrees(prev, m) \
@@ -454,6 +466,9 @@ def assign_roles(words_in: list[Word], qualifying: frozenset = frozenset()) -> t
         if w.morph is not None and w.morph.kind == "avyaya" and not w.role:
             _set(words, i, "अव्यय", _particle_head(words, i, verbs, verbals, region))
     _attach_verbless(words, region, in_region, notes)
+    from mayur.vakya_personal import qualify_personal
+
+    qualify_personal(words, _QUALIFYING, notes)
     for i in range(1, len(words)):  # मासि मासि: a word said twice is one phrase (8.1.4 नित्यवीप्सयोः)
         a, b = words[i - 1], words[i]
         if a.form == b.form and a.line == b.line and not a.in_compound and not b.in_compound and a.role \

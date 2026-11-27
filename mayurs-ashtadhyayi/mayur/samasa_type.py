@@ -331,6 +331,10 @@ def _main(reading: Reading, members: Sequence[int], words: Sequence[Word], fcls:
         inner = DVANDVA if len(words) > 2 and nouns and fstem in INNER_DVANDVA_FINALS else ""
         why = "; the members before it are coordinated (2.2.29 चार्थे द्वन्द्वः)" if inner else ""
         return _d(TATPURUSHA, rel[0], f"{fstem} takes the {rel[0]}: {rel[1]}{why}", relation=rel[0], inner=inner)
+    if pcls == "participle" and prev.morph is not None and prev.morph.krt == "क्त" and fcls == "noun" and sig \
+            and "agrees with" in sig:
+        return _d(BAHUVRIHI, "बहुव्रीहि", f"क्त participle + noun {fstem}, the whole qualifying another word ({sig}): "
+                  "2.2.24 अनेकमन्यपदार्थे, with the participle first by 2.2.36 निष्ठा")
     if pcls in ("adjective", "participle", "sarvadi"):
         rule = "2.1.49 पूर्वकालैकसर्वजरत्पुराणनवकेवलाः समानाधिकरणेन" if pcls == "sarvadi" else             "2.1.57 विशेषणं विशेष्येण बहुलम्"
         maha = "; महत् → महा 6.3.46 आन्महतः समानाधिकरणजातीययोः" if pstem == "महत्" else ""
