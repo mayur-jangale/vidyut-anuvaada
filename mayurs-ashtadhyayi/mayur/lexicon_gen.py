@@ -112,8 +112,9 @@ def _lyap_from_verbs(form: str, upasargas: tuple[str, ...], remainder: str) -> l
     if remainder.endswith("्य"):
         base = remainder[: -len("्य")]
         # त्यजति / चिन्तयति, and the fourth class, whose present keeps the य: इष्यति, तुष्यति
+        # ... and a root in a short vowel, which takes त् before the य (6.1.71): द्रुत्य, found through द्रुत्वा
         probes: tuple[str, ...] = (base + "ति", base + "यति", base + "ते", base + "यते", remainder + "ति",
-                                   remainder + "ते")
+                                   remainder + "ते", base + "्वा")
     elif remainder.endswith("य") and len(remainder) > 2:  # ज्ञाय: a vowel-final root, find it via ज्ञात्वा
         base = remainder[:-1]
         probes = (base + "त्वा", base + "ति", base + "यति")

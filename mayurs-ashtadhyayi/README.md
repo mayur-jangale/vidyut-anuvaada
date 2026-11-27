@@ -63,18 +63,24 @@ tested twice.
 
 ### The formula part: do the rules produce the right reading at all?
 
-`python scripts/coverage_rules.py` — no ranking involved. On 1,500 random development lines, taking
-the lines whose corpus words re-join to the text by sandhi (85.7%; in the rest the corpus has
-reconstructed a form the text does not have, e.g. ते for तव):
+`python scripts/coverage_rules.py --seed N` — no ranking involved. Each run takes 1,500 random
+development lines and keeps those whose corpus words re-join to the text by sandhi (about 86%;
+in the rest the corpus has reconstructed a form the text does not have, e.g. ते for तव).
 
-| Measure | Result |
-|---|---|
-| The corpus's split is one of the splits the rules produce | 1279/1286 lines = 99.5% |
-| The corpus's lemma and features are among the analyses the lexicon produces | 8871/8938 words = 99.3% |
+| Sample of 1,500 lines | The corpus's split is one of the splits the rules produce | The corpus's lemma and features are among the lexicon's analyses |
+|---|---|---|
+| Seed 73: measured once, never looked at before | 1280/1286 = 99.5% | 8987/9027 = 99.6% |
+| Six earlier samples, re-measured after their gaps were fixed | 99.5% to 99.8% | 99.5% to 99.8% |
 
-The 7 lines left: 3 are printed with a space inside a compound, 1 is a corpus artefact, 3 have an
-epic or variant form (अतिक्रमेत्, सप्तविंशत्). This is the part that is "all formula", and the target
-for it is 100%. Which of several valid readings is meant is not decided by the rules.
+Each earlier sample was also measured once before anyone looked at it; as the rules were completed
+those first measurements read 97.0% / 98.7%, 99.2% / 99.0%, 99.5% / 99.4%, 99.2% / 99.5%,
+99.5% / 99.5% and 99.3% / 99.6% (split / analysis).
+
+What the untouched sample still misses (6 lines, 40 words): epic forms no rule here covers yet
+(ब्रवीहि for ब्रूहि, संक्रामयामास), words written with the sign ॐ, a few stems unknown to both
+dictionaries, and words where the corpus's own lemma or tag is the odd one (हृदि as accusative
+plural). This is the part that is "all formula", and its target is 100%. Which of several valid
+readings is meant is not decided by the rules; that is the next table.
 
 ### Word level, first choice (development sample: 300 random verses from 13 books)
 

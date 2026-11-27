@@ -363,7 +363,8 @@ def stems(form: str) -> tuple[Morph, ...]:
         out.extend(dictionary_stems(form))
     if not out:  # वशीकृत-, शेखरीकृत-: the क्त stem of a गति/च्वि + verb composite
         out.extend(replace(m, form=form, kind="stem", linga=None, vibhakti=None, vacana=None, handle=("stem", None))
-                   for m in padas(form + "स्") if m.krt == "क्त" and isinstance(m.handle, tuple) and m.handle[0] == "gati")
+                   for m in padas(form + "स्") if m.krt == "क्त" and isinstance(m.handle, tuple)
+                   and m.handle[0] in ("gati", "special"))  # (also a labelled usage participle: संनामित-)
     if not any(m.source in ("kosha", "dictionary") for m in out):  # (also beside a क्त reading: अमित)
         from mayur.lexicon_gen import nanj_stems
 
