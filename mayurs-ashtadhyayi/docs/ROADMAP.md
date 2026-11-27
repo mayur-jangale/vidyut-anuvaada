@@ -11,7 +11,7 @@ development, as a checker and as an annotator of reference sets (labelled as suc
 
 | # | Milestone | Rules it rests on | Done when | State |
 |---|---|---|---|---|
-| 1 | Reliable analysis: split, lemma, grammar on any book | Sandhi 6.1, 8.2–8.4; word formation 3.1–7.4 (via vidyut) | ≥ 95% word-level on fresh sealed samples; no genre below 90% | Sealed run 1 (200 never-seen verses, 16 books): padas identified F1 0.961, words identified F1 0.951, lemma 99.2%, full analysis 95.8% — the 95% target is met. Not met: court poetry (Kirātārjunīya, Ṛtusaṃhāra: 5 verses drawn) is below 90%. The rules produce the corpus's split for 99.5% of lines and its analysis for 99.6% of words on an untouched sample |
+| 1 | Reliable analysis: split, lemma, grammar on any book | Sandhi 6.1, 8.2–8.4; word formation 3.1–7.4 (via vidyut) | ≥ 95% word-level on fresh sealed samples; no genre below 90% | Two sealed runs of 200 never-seen verses each: padas identified F1 0.961 and 0.968, words identified F1 0.951 and 0.957, lemma 99.2% and 99.0%, full analysis 95.8% and 94.9% (together 95.3%) — at the 95% target, without margin on full analysis. Verses fully proof-verified: 91.0% on run 2. Not met: court poetry (Kirātārjunīya, Ṛtusaṃhāra: 5 verses drawn) is below 90%. The rules produce the corpus's split for 99.5% of lines and its analysis for 99.6% of words on an untouched sample |
 | 2 | Sentence structure: roles, clauses, anvaya | Kāraka definitions 1.4.23–55; case assignment 2.3.1–73; 3.4.69; 1.4.105–108 | ≥ 90% of roles and ≥ 85% of heads correct on a reference set; each link cites its rules | Rule engine built (49 rules, every link cited and forward-checked). Plain prose: 45 of 46 sentences with every listed role and head right. Verse, on the Claude-annotated dev sets: roles 74–80% (79–81% if विशेषण and विधेय are not told apart), heads 57–70%; two annotation passes agree with each other on 89–98% |
 | 3 | Meaning of words: derived sense by rule, sense in context, compounds by rule | Suffix-sense rules in 3.x, 4.x, 5.x; compounds 2.1–2.2 | ≥ 85% sense agreement with corpus sense tags; compound types scored on a reference set | Derived meaning from the trace: built (82 suffix-sense rules). Sense in context: 72.8% on ambiguous words. Compound type by rule: 85–98% when the split is given, about half through the whole pipeline (split errors); -त्व/-ता labelled as taddhita words |
 | 4 | Choosing the intended reading | Outside the grammar: compatibility of meanings, reference of तद्/यद्, supplied words | Intended reading ranked first on a set of known ambiguous verses | Not started (needs 2 and 3) |
@@ -43,6 +43,7 @@ independence). These files say "Claude (LLM), not human-verified" in their heade
 
 - A Sanskrit reader to correct the role and compound reference files, so milestones 2–4 are
   measured against human judgement and not only against Claude's.
-- A decision on whether words that vidyut lists but cannot derive (enclitics such as मे, the
-  in-compound form महा) may count as verified when our own sūtra-cited derivation is shown.
-  Today they do not.
+- Review of a decision taken here: the enclitics (मे, ते …), स / एष and महा- now count as verified when
+  vidyut derives the full form and the one rule that gives the text's form (8.1.20–23, 6.1.132, 6.3.46)
+  has its condition checked on the reading. Passive present participles and neuter plurals in -ईनि are
+  proved in two steps in the same way.

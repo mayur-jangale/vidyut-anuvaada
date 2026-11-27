@@ -86,25 +86,32 @@ readings is meant is not decided by the rules; that is the next table.
 
 `python eval/eval_dcs.py --sample <file>` — full output in `eval/results/`.
 
-| Measure | Sealed test: 200 verses, 16 books, never seen before, run once | Development: 300 verses, 13 books |
-|---|---|---|
-| Padas identified (a compound is one pada, compared as written) | F1 0.961 | F1 0.975 |
-| Words identified, compound members counted separately | F1 0.951 | F1 0.959 |
-| Lemma (aligned words) | 2422/2442 = 99.2% | 3878/3908 = 99.2% |
-| All grammar features | 2344/2442 = 96.0% | 3716/3908 = 95.1% |
-| Full analysis: lemma and every feature | 2340/2442 = 95.8% | 3706/3908 = 94.8% |
-| End to end: the word found and fully analysed, of all corpus words | 2760/3066 = 90.0% | 4249/4735 = 89.7% |
-| Words proof-verified by vidyut-prakriya | 2949/3046 = 96.8% | 4554/4682 = 97.3% |
-| Verses with status `verified` | 123/200 = 61.5% | 205/300 = 68.3% |
+| Measure | Sealed run 1: 200 unseen verses | Sealed run 2: 200 more unseen verses | Development: 300 verses |
+|---|---|---|---|
+| Padas identified (a compound is one pada, compared as written) | F1 0.961 | F1 0.968 | F1 0.975 |
+| Words identified, compound members counted separately | F1 0.951 | F1 0.957 | F1 0.959 |
+| Lemma (aligned words) | 2422/2442 = 99.2% | 2486/2510 = 99.0% | 3878/3909 = 99.2% |
+| All grammar features | 2344/2442 = 96.0% | 2389/2510 = 95.2% | 3717/3909 = 95.1% |
+| Full analysis: lemma and every feature | 2340/2442 = 95.8% | 2381/2510 = 94.9% | 3706/3909 = 94.8% |
+| End to end: the word found and fully analysed, of all corpus words | 2760/3066 = 90.0% | 2749/3042 = 90.4% | 4249/4735 = 89.7% |
+| Words proof-verified | 2949/3046 = 96.8% | 3017/3036 = 99.4% | 4642/4681 = 99.2% |
+| Verses with status `verified` | 123/200 = 61.5% | 182/200 = 91.0% | 267/300 = 89.0% |
 
-The sealed sample was drawn by `python scripts/sample_test.py --pool sealed_test --n 200 --label run1`
-after all tuning was finished, and evaluated once (`eval/results/sealed_run1.txt`); its verses are
-logged in `eval/sealed_ledger.json` and will not be drawn again. The target was 95% for padas
-identified, words identified and full analysis; all three are met on the sealed sample. On the
-development sample full analysis is 94.8%, just under the target. The end-to-end figure multiplies
-the two steps: a word counts only if it was both found and fully analysed.
+Each sealed sample was drawn by `python scripts/sample_test.py --pool sealed_test --n 200 --label runN`
+and evaluated once (`eval/results/sealed_run1.txt`, `sealed_run2.txt`); the verses are logged in
+`eval/sealed_ledger.json` and are never drawn again. Run 1 followed the end of word-level tuning. Run 2
+followed the contextual proofs (below) and the sentence rules; the word-level code was the same, so the
+difference between the two runs in the first six rows is sampling. The target was 95% for padas
+identified, words identified and full analysis. Padas and words meet it on both runs. Full analysis
+is 95.8% and 94.9%, together 4721/4952 = 95.3%: at the target, with no margin. The end-to-end figure
+multiplies the two steps: a word counts only if it was both found and fully analysed.
 
-By book on the sealed sample (words identified F1): Bhāgavatapurāṇa, Buddhacarita, Manusmṛti and
+The jump in verified verses between the runs comes from proving three word forms that a rule gives
+only in context, each with its condition checked on the reading: the enclitics मे, ते, नः … (8.1.20–23,
+never first in the half-verse), स / एष without its ending (6.1.132 before a consonant), and महा- in a
+कर्मधारय or बहुव्रीहि (6.3.46). Before, any verse with one of them was `unverified`.
+
+By book on sealed run 1 (words identified F1): Bhāgavatapurāṇa, Buddhacarita, Manusmṛti and
 Kathāsaritsāgara 0.95 to 0.96; Mahābhārata (97 verses) 0.94; Rāmāyaṇa 0.90; Liṅgapurāṇa and
 Ṛtusaṃhāra 0.88; Kirātārjunīya (2 verses) 0.68. Court poetry is the weakest genre. With 1 to 18
 verses per book outside the Mahābhārata, the per-book numbers are indications only.
@@ -162,8 +169,9 @@ whole pipeline (`--verses 1-20` of `ramayana_bala1_001_040_A.json`).
   a compound member; `वेद फलम्` stays two words.
 - Compounds are not derived by vidyut's Python API; our own rule chain covers the type rule,
   the elision of case endings (2.4.71), sandhi and the final inflection.
-- Words vidyut lists but cannot derive (the enclitics मे, ते; महा- in compounds) leave a verse
-  `unverified`, with the reason; so does any word unknown to the dictionary.
+- A verse is `unverified` when one word is: a word unknown to the dictionary, an epic form that is
+  only labelled, an enclitic standing first in its half-verse, or a strong form of महत् (महान्), which
+  vidyut lists but does not derive.
 - The reference sets for roles, compounds and English were annotated by Claude, not by a
   human Sanskritist; two annotation passes agree on 89–98% of roles.
 - No Vedic rules, no accent.
