@@ -150,6 +150,7 @@ _PARTICLES = frozenset(("हि", "च", "वा", "तु", "इव", "एव",
 
 # A form the corpus has at least FREE_WORD_MIN times as a word of its own and never as a compound member
 # is read as that word, not as a member: मा (the enclitic of अस्मद्, 8.1.23, or the particle), ततस्, ते.
+# The same holds when the form with its final consonant closed is such a word (माम for माम्, तम for तम्).
 # The prefixes the compound rules themselves name stay members: नञ् (2.2.6), कु-गति-प्रादि (2.2.18),
 # सह (2.2.28), the first members of an अव्ययीभाव (2.1.6 ff.) and स्वयम् (2.1.25).
 FREE_WORD_MIN = 300
@@ -170,7 +171,12 @@ def _only_free_word(form: str) -> bool:
         return False
     table = resources_derived("member_counts.json")
     members = sum(int(table.get(f, 0)) for f in nasal_variants(form))
-    return members == 0 and _form_count(form) >= FREE_WORD_MIN
+    if members:
+        return False
+    # मामप्रतीकारम्: the letters माम before a consonant are also माम् with the अ of the next word (माम् अप्रतीकारम्).
+    # A stem never met as a member does not displace a pada met this often.
+    closed = form + "्" if form and "क" <= form[-1] <= "ह" else ""
+    return _form_count(form) >= FREE_WORD_MIN or bool(closed and _form_count(closed) >= FREE_WORD_MIN)
 
 
 def resources_derived(name: str):

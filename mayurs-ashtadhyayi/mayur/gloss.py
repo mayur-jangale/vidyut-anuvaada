@@ -7,7 +7,7 @@ import re
 from functools import lru_cache
 from pathlib import Path
 
-from . import resources, ud
+from . import lipi, resources, ud
 from .model import Morph, Reading
 
 _OWN = Path(__file__).parent / "annotations" / "gloss.json"
@@ -120,6 +120,39 @@ def _common(entries: list, verb: bool) -> str:
     return ""
 
 
+_VOWELS = "अआइईउऊऋॠएऐओऔ"
+
+
+def _composed(m: Morph, keys: list[str]) -> str:
+    """A gloss built from the base word's own entry, for a nominal the tables lack:
+    अशस्त्र "without weapon" (नञ्, 2.2.6; of a noun, as a बहुव्रीहि 2.2.24), अप्रिय "not dear",
+    क्षेमतर "greater safety", प्रियतम "most dear" (5.3.55 अतिशायने तमबिष्ठनौ, 5.3.57 द्विवचनविभज्योपपदे तरबीयसुनौ).
+    The corpus dictionary's first sense of such a word is often a rare one."""
+    if m.root is not None:
+        return ""
+    own, draft = _own(), _draft()
+
+    def entry(word: str) -> tuple[str, str]:
+        row = draft.get(word) or ["", ""]
+        return own.get(word) or row[0], row[1]
+
+    for k in keys:
+        sounds = lipi.varnas(k)
+        rest = ""
+        if len(sounds) > 3 and sounds[0] == "अ" and sounds[1] not in _VOWELS:
+            rest = lipi.from_varnas(sounds[1:])
+        elif len(sounds) > 4 and sounds[:2] == ("अ", "न्") and sounds[2] in _VOWELS:
+            rest = lipi.from_varnas(sounds[2:])
+        base, kind = entry(rest) if rest else ("", "")
+        if base:
+            return ("not " if kind == "adj" else "without ") + base
+        for suffix, adjective, noun in (("तर", "more", "greater"), ("तम", "most", "greatest")):
+            base, kind = entry(k[: -len(suffix)]) if k.endswith(suffix) and len(k) > 3 else ("", "")
+            if base:
+                return f"{adjective if kind == 'adj' else noun} {base}"
+    return ""
+
+
 def lookup(m: Morph) -> tuple[str, str]:
     """(gloss, source) for one analysis; ("", "none") when nothing is known."""
     keys = _keys(m)
@@ -154,6 +187,9 @@ def lookup(m: Morph) -> tuple[str, str]:
             continue
         if g:
             return g, "dcs-sense"
+    composed = _composed(m, keys)
+    if composed:
+        return composed, "own-draft (composed)"
     for k in keys:
         for entry in dictionary.get(k, []) or []:
             for part in str(entry.get("meanings", "")).split(";"):
