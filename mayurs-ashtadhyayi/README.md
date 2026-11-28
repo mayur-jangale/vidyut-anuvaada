@@ -270,4 +270,5 @@ Rebuild: `python scripts/fetch_data.py --with-itihasa`, `python scripts/build_tr
   Bālakāṇḍa 1 was removed from the training data.
 - No gloss or translation was copied from valmiki.iitk.ac.in or valmikiramayan.net.
 
-See `NOTICE` for full credits and `docs/ROADMAP.md` for the milestones.
+See `NOTICE` for full credits, `docs/ROADMAP.md` for the milestones and `docs/HANDOFF.md` for the
+state of the work and how to continue it.
