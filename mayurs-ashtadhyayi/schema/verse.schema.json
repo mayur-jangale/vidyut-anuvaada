@@ -1,0 +1,741 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/mayur/verse.schema.json",
+  "title": "Mayur verse analysis",
+  "description": "Output of `mayur analyze`: one verse, Devanagari first. Every Sanskrit value is an object with devanagari and iast.",
+  "type": "object",
+  "required": [
+    "id",
+    "input",
+    "lines",
+    "metre",
+    "status",
+    "split_counts",
+    "notes",
+    "padaccheda",
+    "junctions",
+    "words",
+    "compounds",
+    "anvaya",
+    "gloss",
+    "translation",
+    "alignment",
+    "scores",
+    "alternatives",
+    "fluent"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Verse identifier."
+    },
+    "input": {
+      "$ref": "#/$defs/sanskrit",
+      "description": "The verse as given, in Devanagari."
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/sanskrit"
+      },
+      "description": "Half-verses."
+    },
+    "metre": {
+      "type": "object",
+      "description": "Metre detected by vidyut.chandas (free-form)."
+    },
+    "status": {
+      "$ref": "#/$defs/status"
+    },
+    "split_counts": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "Number of valid padaccheda splits per line, counting every dictionary word."
+    },
+    "split_counts_plain": {
+      "type": "array",
+      "items": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "description": "Number of valid splits per line using only words with an ordinary (not over-generated) analysis."
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "padaccheda": {
+      "type": "array",
+      "description": "Per line, the words in display form; compound members joined by '-'.",
+      "items": {
+        "type": "array",
+        "items": {
+          "$ref": "#/$defs/sanskrit"
+        }
+      }
+    },
+    "junctions": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/junction"
+      }
+    },
+    "words": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/word"
+      }
+    },
+    "compounds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/compound"
+      }
+    },
+    "anvaya": {
+      "type": "object",
+      "required": [
+        "order",
+        "words",
+        "text"
+      ],
+      "properties": {
+        "order": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "words": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sanskrit"
+          }
+        },
+        "text": {
+          "$ref": "#/$defs/sanskrit"
+        }
+      },
+      "additionalProperties": false
+    },
+    "gloss": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "index",
+          "word",
+          "gloss",
+          "source"
+        ],
+        "properties": {
+          "index": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "word": {
+            "$ref": "#/$defs/sanskrit"
+          },
+          "gloss": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "translation": {
+      "type": "string",
+      "description": "Literal English translation."
+    },
+    "alignment": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "word",
+          "start",
+          "end",
+          "text"
+        ],
+        "properties": {
+          "word": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "start": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "end": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "text": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "description": "Spans of the translation that render a Sanskrit word."
+    },
+    "scores": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "alternatives": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/alternative"
+      }
+    },
+    "machine_translation": {
+      "type": "string",
+      "description": "English from the optional trained translator (a small model run locally on the engine's analysis; not traceable to rules). Empty when the translator is off or not installed."
+    },
+    "fluent": {
+      "type": "object",
+      "description": "Fluent English made from the literal translation by fixed rules (no language model). Empty text when a check failed.",
+      "required": [
+        "text",
+        "note",
+        "alignment"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "note": {
+          "type": "string"
+        },
+        "alignment": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "word",
+              "start",
+              "end",
+              "text"
+            ],
+            "properties": {
+              "word": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "start": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "end": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "text": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": false
+          },
+          "description": "Spans of the translation that render a Sanskrit word."
+        }
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sanskrit": {
+      "type": "object",
+      "required": [
+        "devanagari",
+        "iast"
+      ],
+      "properties": {
+        "devanagari": {
+          "type": "string"
+        },
+        "iast": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "gterm": {
+      "type": "object",
+      "required": [
+        "devanagari",
+        "english"
+      ],
+      "properties": {
+        "devanagari": {
+          "type": "string"
+        },
+        "english": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "status": {
+      "enum": [
+        "verified",
+        "unverified"
+      ],
+      "description": "verified: sandhi re-joins exactly and the words are rule-derived."
+    },
+    "optsk": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/sanskrit"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "optterm": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/gterm"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "code",
+        "source",
+        "text"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "text": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "number": {
+          "type": "object",
+          "description": "The rule number in Devanagari and Arabic numerals.",
+          "required": [
+            "devanagari",
+            "arabic"
+          ],
+          "properties": {
+            "devanagari": {
+              "type": "string"
+            },
+            "arabic": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "junction": {
+      "type": "object",
+      "required": [
+        "left",
+        "right",
+        "between",
+        "in_compound",
+        "surface",
+        "sutras"
+      ],
+      "properties": {
+        "left": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "right": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "between": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sanskrit"
+          },
+          "minItems": 2,
+          "maxItems": 2
+        },
+        "in_compound": {
+          "type": "boolean"
+        },
+        "surface": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "sutras": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "grammar": {
+      "type": "object",
+      "required": [
+        "lemma",
+        "stem",
+        "root",
+        "prefixes",
+        "kind",
+        "gender",
+        "case",
+        "number",
+        "person",
+        "tense_mood",
+        "voice",
+        "krt"
+      ],
+      "properties": {
+        "lemma": {
+          "$ref": "#/$defs/optsk"
+        },
+        "stem": {
+          "$ref": "#/$defs/optsk"
+        },
+        "root": {
+          "$ref": "#/$defs/optsk"
+        },
+        "prefixes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sanskrit"
+          }
+        },
+        "kind": {
+          "$ref": "#/$defs/gterm"
+        },
+        "gender": {
+          "$ref": "#/$defs/optterm"
+        },
+        "case": {
+          "$ref": "#/$defs/optterm"
+        },
+        "number": {
+          "$ref": "#/$defs/optterm"
+        },
+        "person": {
+          "$ref": "#/$defs/optterm"
+        },
+        "tense_mood": {
+          "$ref": "#/$defs/optterm"
+        },
+        "voice": {
+          "$ref": "#/$defs/optterm"
+        },
+        "krt": {
+          "$ref": "#/$defs/optterm"
+        }
+      },
+      "additionalProperties": false
+    },
+    "analysis": {
+      "type": "object",
+      "required": [
+        "form",
+        "grammar",
+        "description",
+        "source"
+      ],
+      "properties": {
+        "form": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "grammar": {
+          "$ref": "#/$defs/grammar"
+        },
+        "description": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "trace_step": {
+      "type": "object",
+      "required": [
+        "code",
+        "source",
+        "sutra",
+        "result"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "source": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "sutra": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "result": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "number": {
+          "type": "object",
+          "description": "The rule number in Devanagari and Arabic numerals.",
+          "required": [
+            "devanagari",
+            "arabic"
+          ],
+          "properties": {
+            "devanagari": {
+              "type": "string"
+            },
+            "arabic": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "word": {
+      "type": "object",
+      "required": [
+        "index",
+        "form",
+        "pada_form",
+        "line",
+        "in_compound",
+        "compound",
+        "grammar",
+        "description",
+        "other_analyses",
+        "verified",
+        "verified_reason",
+        "derivation_method",
+        "sutra_trace",
+        "role",
+        "head",
+        "gloss",
+        "gloss_source",
+        "arsha",
+        "derived_meaning",
+        "role_rules"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "form": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "pada_form": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "line": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "in_compound": {
+          "type": "boolean"
+        },
+        "compound": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "grammar": {
+          "$ref": "#/$defs/grammar"
+        },
+        "description": {
+          "type": "string",
+          "description": "English one-liner built from the grammar terms."
+        },
+        "other_analyses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/analysis"
+          }
+        },
+        "verified": {
+          "type": "boolean",
+          "description": "True when the form was derived by Panini's rules."
+        },
+        "verified_reason": {
+          "type": "string"
+        },
+        "derivation_method": {
+          "type": "string"
+        },
+        "sutra_trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trace_step"
+          }
+        },
+        "role": {
+          "$ref": "#/$defs/gterm"
+        },
+        "head": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "gloss": {
+          "type": "string"
+        },
+        "gloss_source": {
+          "type": "string"
+        },
+        "arsha": {
+          "type": "boolean",
+          "description": "Labelled arsha: not derivable by the rules, never forced."
+        },
+        "derived_meaning": {
+          "type": "string",
+          "description": "Sense read off the derivation: which suffix rule gives which meaning."
+        },
+        "role_rules": {
+          "type": "array",
+          "description": "Rules that license the role: karaka definition and case rule.",
+          "items": {
+            "$ref": "#/$defs/rule"
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "compound": {
+      "type": "object",
+      "required": [
+        "id",
+        "members",
+        "member_forms",
+        "stem",
+        "type",
+        "vigraha",
+        "basis"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "member_forms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sanskrit"
+          }
+        },
+        "stem": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "type": {
+          "$ref": "#/$defs/gterm"
+        },
+        "vigraha": {
+          "$ref": "#/$defs/sanskrit"
+        },
+        "basis": {
+          "type": "string"
+        },
+        "derivable": {
+          "type": "boolean",
+          "description": "True if the compound's forward rule chain (internal sandhi, then the final inflection by vidyut) reproduces the text. The compound type itself is a heuristic choice."
+        },
+        "note": {
+          "type": "string"
+        },
+        "sutra_trace": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/trace_step"
+          },
+          "description": "Rule chain of the compound: type rule, 1.2.46, 2.4.71, internal sandhi, final inflection."
+        }
+      },
+      "additionalProperties": false
+    },
+    "alternative": {
+      "type": "object",
+      "required": [
+        "rank",
+        "padaccheda",
+        "scores",
+        "status",
+        "translation",
+        "notes"
+      ],
+      "properties": {
+        "rank": {
+          "type": "integer",
+          "minimum": 2
+        },
+        "padaccheda": {
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/sanskrit"
+            }
+          }
+        },
+        "scores": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number"
+          }
+        },
+        "status": {
+          "$ref": "#/$defs/status"
+        },
+        "translation": {
+          "type": "string"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "words": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/word"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

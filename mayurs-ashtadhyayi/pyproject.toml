@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mayur"
+version = "0.1.0"
+description = "Verifiable Sanskrit interpreter grounded in Panini's Ashtadhyayi (via vidyut)"
+requires-python = ">=3.10"
+license = { text = "Apache-2.0" }
+authors = [{ name = "Mayur Jangale" }]
+dependencies = ["vidyut==0.4.0"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7", "pytest-cov", "jsonschema>=4"]
+neural = ["torch"]
+translate = ["torch", "transformers", "sentencepiece"]
+
+[project.scripts]
+mayur = "mayur.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["mayur*"]
+
+[tool.setuptools.package-data]
+mayur = ["gold/*.json", "annotations/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

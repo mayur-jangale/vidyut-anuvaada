@@ -1,0 +1,9394 @@
+{
+ "annotator": "Claude (LLM), not human-verified",
+ "basis": "DCS gold split",
+ "source": "ramayana",
+ "verses": [
+  {
+   "key": 41,
+   "id": "रामायण १.१.४१",
+   "number": 41,
+   "book": "रामायण",
+   "text": "अनादृत्य तु तद्वाक्यं रावणः कालचोदितः । जगाम सहमरीचस्तस्याश्रमपदं तदा ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "अन्",
+     "lemma": "अन्",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "आदृत्य",
+     "lemma": "आदृ",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "तु",
+     "lemma": "तु",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "तत्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "वाक्यम्",
+     "lemma": "वाक्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "रावणस्",
+     "lemma": "रावण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "काल",
+     "lemma": "काल",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "चोदितस्",
+     "lemma": "चोदय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "जगाम",
+     "lemma": "गम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "सह",
+     "lemma": "सह",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "मरीचस्",
+     "lemma": "मरीच",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "तस्य",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "आश्रम",
+     "lemma": "आश्रम",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "पदम्",
+     "lemma": "पद",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "तदा",
+     "lemma": "तदा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      6,
+      7
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "कालेन चोदितः"
+    },
+    {
+     "members": [
+      12,
+      13
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "आश्रमस्य पदम्"
+    }
+   ],
+   "anvaya": [
+    14,
+    6,
+    7,
+    9,
+    10,
+    5,
+    2,
+    3,
+    4,
+    0,
+    1,
+    11,
+    12,
+    13,
+    8
+   ],
+   "english": "But then Rāvaṇa, impelled by Time, together with Mārīca, disregarding that speech, went to the hermitage-site of him [Rāma].",
+   "gold_issues": "DCS splits the नञ् of अनादृत्य (0) and the सह-बहुव्रीहि सहमरीचः (9,10) into separate words; 10 is treated as an epithet of रावणः (\"accompanied by Mārīca\"). तस्य (11) refers to Rāma and should be Masc, not Neut; पद (13) is neuter, not Masc."
+  },
+  {
+   "key": 42,
+   "id": "रामायण १.१.४२",
+   "number": 42,
+   "book": "रामायण",
+   "text": "तेन मायाविना दूरमपवाह्य नृपात्मजौ । जहार भार्यां रामस्य गृध्रं हत्वा जटायुषम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "तेन",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "मायाविना",
+     "lemma": "मायाविन्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "दूरम्",
+     "lemma": "दूर",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "अपवाह्य",
+     "lemma": "अपवाहय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "नृप",
+     "lemma": "नृप",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "आत्मजौ",
+     "lemma": "आत्मज",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Dual"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "जहार",
+     "lemma": "हृ",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "भार्याम्",
+     "lemma": "भार्या",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "रामस्य",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "गृध्रम्",
+     "lemma": "गृध्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "हत्वा",
+     "lemma": "हन्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "जटायुषम्",
+     "lemma": "जटायुष",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "नृपस्य आत्मजौ"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    3,
+    11,
+    9,
+    10,
+    8,
+    7,
+    6
+   ],
+   "english": "Having had the two sons of the king drawn far away by that illusionist, [and] having killed the vulture Jaṭāyus, [he] carried off the wife of Rāma.",
+   "gold_issues": "तेन मायाविना (0,1) is the प्रयोज्यकर्ता (instrumental agent) of the causative absolutive अपवाह्य, marked कर्ता>3. दूरम् (2) is an adverbial accusative (क्रियाविशेषण), marked अव्यय. DCS lemma जटायुष for जटायुस्."
+  },
+  {
+   "key": 43,
+   "id": "रामायण १.१.४३",
+   "number": 43,
+   "book": "रामायण",
+   "text": "गृध्रं च निहतं दृष्ट्वा हृतां श्रुत्वा च मैथिलीम् । राघवः शोकसंतप्तो विललापाकुलेन्द्रियः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "गृध्रम्",
+     "lemma": "गृध्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "निहतम्",
+     "lemma": "निहन्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "दृष्ट्वा",
+     "lemma": "दृश्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "हृताम्",
+     "lemma": "हृ",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "श्रुत्वा",
+     "lemma": "श्रु",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "मैथिलीम्",
+     "lemma": "मैथिली",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "राघवस्",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "शोक",
+     "lemma": "शोक",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "संतप्तस्",
+     "lemma": "संतप्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "विललाप",
+     "lemma": "विलप्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "आकुल",
+     "lemma": "आकुल",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "इन्द्रियस्",
+     "lemma": "इन्द्रिय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      9,
+      10
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "शोकेन संतप्तः"
+    },
+    {
+     "members": [
+      12,
+      13
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "आकुलानि इन्द्रियाणि यस्य सः"
+    }
+   ],
+   "anvaya": [
+    9,
+    10,
+    12,
+    13,
+    8,
+    0,
+    1,
+    2,
+    3,
+    7,
+    4,
+    5,
+    6,
+    11
+   ],
+   "english": "Having seen the vulture slain, and having heard that Maithilī [was] carried off, Rāghava, burning with grief, his senses agitated, lamented.",
+   "gold_issues": "निहतम् (2) and हृताम् (4) are predicative (object complements of दृष्ट्वा / श्रुत्वा), marked विशेषण."
+  },
+  {
+   "key": 44,
+   "id": "रामायण १.१.४४",
+   "number": 44,
+   "book": "रामायण",
+   "text": "ततस्तेनैव शोकेन गृध्रं दग्ध्वा जटायुषम् । मार्गमाणो वने सीतां राक्षसं संददर्श ह ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "तेन",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "एव",
+     "lemma": "एव",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "शोकेन",
+     "lemma": "शोक",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "गृध्रम्",
+     "lemma": "गृध्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "दग्ध्वा",
+     "lemma": "दह्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "जटायुषम्",
+     "lemma": "जटायुष",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "मार्गमाणस्",
+     "lemma": "मार्ग्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "वने",
+     "lemma": "वन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "सीताम्",
+     "lemma": "सीता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "राक्षसम्",
+     "lemma": "राक्षस",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "संददर्श",
+     "lemma": "संदृश्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "ह",
+     "lemma": "ह",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    }
+   ],
+   "compounds": [],
+   "anvaya": [
+    0,
+    1,
+    2,
+    3,
+    6,
+    4,
+    5,
+    8,
+    9,
+    7,
+    10,
+    11,
+    12
+   ],
+   "english": "Then, having burned the vulture Jaṭāyus in that very grief, [Rāma], searching for Sītā in the forest, saw a Rākṣasa.",
+   "gold_issues": "मार्गमाणः (7) qualifies the unexpressed subject of संददर्श; with no noun to attach to it is given head = the finite verb (11) as विशेषण."
+  },
+  {
+   "key": 45,
+   "id": "रामायण १.१.४५",
+   "number": 45,
+   "book": "रामायण",
+   "text": "कबन्धं नाम रूपेण विकृतं घोरदर्शनम् । तं निहत्य महाबाहुर्ददाह स्वर्गतश्च सः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "कबन्धम्",
+     "lemma": "कबन्ध",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "नाम",
+     "lemma": "नाम",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "रूपेण",
+     "lemma": "रूप",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "विकृतम्",
+     "lemma": "विकृ",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "घोर",
+     "lemma": "घोर",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "दर्शनम्",
+     "lemma": "दर्शन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "तम्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "निहत्य",
+     "lemma": "निहन्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "बाहुस्",
+     "lemma": "बाहु",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "ददाह",
+     "lemma": "दह्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "स्वर्गतस्",
+     "lemma": "स्वर्गत",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 11,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "घोरं दर्शनं यस्य सः"
+    },
+    {
+     "members": [
+      8,
+      9
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "महान्तौ बाहू यस्य सः"
+    }
+   ],
+   "anvaya": [
+    8,
+    9,
+    2,
+    3,
+    4,
+    5,
+    0,
+    1,
+    6,
+    7,
+    10,
+    13,
+    11,
+    12
+   ],
+   "english": "Having slain him, named Kabandha, deformed in form, of dreadful appearance, the mighty-armed [Rāma] burned [him]; and he went to heaven.",
+   "gold_issues": "रूपेण (2) is an instrumental of respect (इत्थंभूतलक्षण) completing विकृतम्. स्वर्गतः (11) is kept by DCS as one lexicalised word (स्वः गतः); used as the verbal predicate of the second clause. दर्शनम् (5) as a bahuvrihi member is fine as Masc."
+  },
+  {
+   "key": 46,
+   "id": "रामायण १.१.४६",
+   "number": 46,
+   "book": "रामायण",
+   "text": "स चास्य कथयामास शबरीं धर्मचारिणीम् । श्रमणीं धर्मनिपुणामभिगच्छेति राघव । सो ऽभ्यगच्छन्महातेजाः शबरीं शत्रुसूदनः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "अस्य",
+     "lemma": "इदम्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्प्रदान",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "कथयामास",
+     "lemma": "कथय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "peri",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "शबरीम्",
+     "lemma": "शबरी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "धर्मचारिणीम्",
+     "lemma": "धर्मचारिणी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "श्रमणाम्",
+     "lemma": "श्रमणा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "धर्म",
+     "lemma": "धर्म",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "निपुणाम्",
+     "lemma": "निपुण",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "अभिगच्छ",
+     "lemma": "अभिगम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Imp",
+      "Person": "2",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "इति",
+     "lemma": "इति",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "राघवैस्",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Voc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बोधन",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 2,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 2,
+     "form": "अभ्यगच्छत्",
+     "lemma": "अभिगम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 2,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 15,
+     "note": ""
+    },
+    {
+     "index": 15,
+     "line": 2,
+     "form": "तेजास्",
+     "lemma": "तेजस्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 16,
+     "line": 2,
+     "form": "शबरीम्",
+     "lemma": "शबरी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 17,
+     "line": 2,
+     "form": "शत्रु",
+     "lemma": "शत्रु",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 18,
+     "note": ""
+    },
+    {
+     "index": 18,
+     "line": 2,
+     "form": "सूदनस्",
+     "lemma": "सूदन",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 12,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      7,
+      8
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "धर्मे निपुणा"
+    },
+    {
+     "members": [
+      14,
+      15
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "महत् तेजः यस्य सः"
+    },
+    {
+     "members": [
+      17,
+      18
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "शत्रूणां सूदनः"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    2,
+    11,
+    5,
+    6,
+    7,
+    8,
+    4,
+    9,
+    10,
+    3,
+    14,
+    15,
+    17,
+    18,
+    12,
+    16,
+    13
+   ],
+   "english": "And he told him: \"Rāghava, go to Śabarī, the female ascetic who practises dharma, skilled in dharma.\" He, of great splendour, the destroyer of enemies, went to Śabarī.",
+   "gold_issues": "अस्य (2) is a genitive used for the dative of the person told (षष्ठी for चतुर्थी), marked सम्प्रदान. The quoted clause (9 with इति) is treated as a subordinate क्रिया under कथयामास. DCS gives form श्रमणाम्/lemma श्रमणा but text reads श्रमणीम्; vocative form shown as राघवैस् (should be राघव). धर्मचारिणी is kept as one word by DCS."
+  },
+  {
+   "key": 47,
+   "id": "रामायण १.१.४७",
+   "number": 47,
+   "book": "रामायण",
+   "text": "शबर्या पूजितः सम्यग्रामो दशरथात्मजः । पम्पातीरे हनुमता संगतो वानरेण ह ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "शबर्या",
+     "lemma": "शबरी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "पूजितस्",
+     "lemma": "पूजय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "सम्यक्",
+     "lemma": "सम्यक्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "रामस्",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "दशरथ",
+     "lemma": "दशरथ",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "आत्मजस्",
+     "lemma": "आत्मज",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "पम्पा",
+     "lemma": "पम्पा",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "तीरे",
+     "lemma": "तीर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "हनुमन्ता",
+     "lemma": "हनुमन्त्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "संगतस्",
+     "lemma": "संगम्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "वानरेण",
+     "lemma": "वानर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "ह",
+     "lemma": "ह",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "दशरथस्य आत्मजः"
+    },
+    {
+     "members": [
+      6,
+      7
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "पम्पायाः तीरम्"
+    }
+   ],
+   "anvaya": [
+    4,
+    5,
+    3,
+    0,
+    2,
+    1,
+    6,
+    7,
+    10,
+    8,
+    9,
+    11
+   ],
+   "english": "Rāma, son of Daśaratha, [was] duly honoured by Śabarī; on the bank of the Pampā [he] met with the monkey Hanumān.",
+   "gold_issues": "Two क्त predicates: पूजितः (passive, रामः its कर्म) and संगतः (intransitive, unexpressed subject Rāma). हनुमता (8) is an instrumental of accompaniment. DCS form/lemma हनुमन्ता/हनुमन्त् for हनुमत्."
+  },
+  {
+   "key": 48,
+   "id": "रामायण १.१.४८",
+   "number": 48,
+   "book": "रामायण",
+   "text": "हनुमद्वचनाच्चैव सुग्रीवेण समागतः । सुग्रीवाय च तत्सर्वं शंसद्रामो महाबलः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "हनुमत्",
+     "lemma": "हनुमन्त्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "वचनात्",
+     "lemma": "वचन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "एव",
+     "lemma": "एव",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सुग्रीवेण",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "समागतस्",
+     "lemma": "समागम्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "सुग्रीवाय",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Dat",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्प्रदान",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "तत्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "सर्वम्",
+     "lemma": "सर्व",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "शंसन्",
+     "lemma": "शंस्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "रामस्",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "बलस्",
+     "lemma": "बल",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 11,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      0,
+      1
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "हनुमतः वचनम्"
+    },
+    {
+     "members": [
+      12,
+      13
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "महत् बलं यस्य सः"
+    }
+   ],
+   "anvaya": [
+    12,
+    13,
+    11,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "english": "And on the very word of Hanumān, mighty Rāma met with Sugrīva, and [was] telling Sugrīva all that.",
+   "gold_issues": "DCS reads शंसत् as the present participle शंसन्; it may instead be an augmentless (ārṣa) imperfect अशंसत्, which would make line 2 a separate finite clause. Followed DCS. सुग्रीवेण (4) instrumental of accompaniment with समागतः."
+  },
+  {
+   "key": 49,
+   "id": "रामायण १.१.४९",
+   "number": 49,
+   "book": "रामायण",
+   "text": "ततो वानरराजेन वैरानुकथनं प्रति । रामायावेदितं सर्वं प्रणयाद्दुःखितेन च । वालिनश्च बलं तत्र कथयामास वानरः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "वानर",
+     "lemma": "वानर",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "राजेन",
+     "lemma": "राज",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "वैर",
+     "lemma": "वैर",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "अनुकथनम्",
+     "lemma": "अनुकथन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "प्रति",
+     "lemma": "प्रति",
+     "upos": "ADP",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "रामाय",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Dat",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्प्रदान",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "आवेदितम्",
+     "lemma": "आवेदय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "सर्वम्",
+     "lemma": "सर्व",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "प्रणयात्",
+     "lemma": "प्रणय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "दुःखितेन",
+     "lemma": "दुःखित",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 2,
+     "form": "वालिनस्",
+     "lemma": "वालिन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 2,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 2,
+     "form": "बलम्",
+     "lemma": "बल",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 16,
+     "note": ""
+    },
+    {
+     "index": 15,
+     "line": 2,
+     "form": "तत्र",
+     "lemma": "तत्र",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 16,
+     "note": ""
+    },
+    {
+     "index": 16,
+     "line": 2,
+     "form": "कथयामास",
+     "lemma": "कथय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "peri",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 17,
+     "line": 2,
+     "form": "वानरस्",
+     "lemma": "वानर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 16,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "वानराणां राजा"
+    },
+    {
+     "members": [
+      3,
+      4
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "वैरस्य अनुकथनम्"
+    }
+   ],
+   "anvaya": [
+    0,
+    10,
+    11,
+    1,
+    2,
+    6,
+    3,
+    4,
+    5,
+    9,
+    8,
+    7,
+    17,
+    15,
+    12,
+    13,
+    14,
+    16
+   ],
+   "english": "Then by the king of monkeys, distressed too, everything was told to Rāma out of affection, regarding the recounting of the enmity; and there the monkey told of Vālin's strength.",
+   "gold_issues": "Convention added: an accusative governed by the कर्मप्रवचनीय प्रति is marked कर्म>प्रति, and प्रति is अव्यय>verb. आवेदितम् is passive क्त, so सर्वम् (nom) is its कर्म."
+  },
+  {
+   "key": 50,
+   "id": "रामायण १.१.५०",
+   "number": 50,
+   "book": "रामायण",
+   "text": "प्रतिज्ञातं च रामेण तदा वालिवधं प्रति । सुग्रीवः शङ्कितश्चासीन्नित्यं वीर्येण राघवे ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "प्रतिज्ञातम्",
+     "lemma": "प्रतिज्ञा",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "रामेण",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "तदा",
+     "lemma": "तदा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "वालि",
+     "lemma": "वालिन्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "वधम्",
+     "lemma": "वध",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "प्रति",
+     "lemma": "प्रति",
+     "upos": "ADP",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "सुग्रीवस्",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "शङ्कितस्",
+     "lemma": "शङ्क्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "आसीत्",
+     "lemma": "अस्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "नित्यम्",
+     "lemma": "नित्यम्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "वीर्येण",
+     "lemma": "वीर्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "राघवे",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 8,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "वालिनः वधः"
+    }
+   ],
+   "anvaya": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    0,
+    1,
+    7,
+    11,
+    13,
+    12,
+    8,
+    9,
+    10
+   ],
+   "english": "And then it was promised by Rāma regarding the slaying of Vālin; and Sugrīva was ever doubtful about Rāghava as to [his] prowess.",
+   "gold_issues": "प्रतिज्ञातम् (0) is an impersonal (भावे) क्त, Nom Neut Sing; DCS tags it Acc Masc. वीर्येण (12) instrumental of respect with शङ्कितः."
+  },
+  {
+   "key": 51,
+   "id": "रामायण १.१.५१",
+   "number": 51,
+   "book": "रामायण",
+   "text": "राघवः प्रत्ययार्थं तु दुन्दुभेः कायमुत्तमम् । पादाङ्गुष्ठेन चिक्षेप सम्पूर्णं दशयोजनम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "राघवस्",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "प्रत्यय",
+     "lemma": "प्रत्यय",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "अर्थम्",
+     "lemma": "अर्थ",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "तु",
+     "lemma": "तु",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "दुन्दुभेस्",
+     "lemma": "दुन्दुभि",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "कायम्",
+     "lemma": "काय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "उत्तमम्",
+     "lemma": "उत्तम",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "पादाङ्गुष्ठेन",
+     "lemma": "पादाङ्गुष्ठ",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "चिक्षेप",
+     "lemma": "क्षिप्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "सम्पूर्णम्",
+     "lemma": "सम्पृ",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "दश",
+     "lemma": "दशन्",
+     "upos": "NUM",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "योजनम्",
+     "lemma": "योजन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "प्रत्ययस्य अर्थम्"
+    },
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "द्विगु",
+     "vigraha": "दशानां योजनानां समाहारः"
+    }
+   ],
+   "anvaya": [
+    0,
+    3,
+    1,
+    2,
+    4,
+    6,
+    5,
+    7,
+    9,
+    10,
+    11,
+    8
+   ],
+   "english": "But Rāghava, for the sake of proof, with his big toe flung the huge body of Dundubhi a full ten yojanas.",
+   "gold_issues": "प्रत्ययार्थम् (2) and दशयोजनम् (11, accusative of distance) are adverbial accusatives, marked अव्यय (same convention as दूरम् in v42). सम्पूर्णम् (9) tagged Masc by DCS though it qualifies neuter दशयोजनम्; it could also agree with कायम्. पादाङ्गुष्ठ kept as one word."
+  },
+  {
+   "key": 52,
+   "id": "रामायण १.१.५२",
+   "number": 52,
+   "book": "रामायण",
+   "text": "बिभेद च पुनः सालान्सप्तैकेन महेषुणा । गिरिं रसातलं चैव जनयन्प्रत्ययं तदा ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "बिभेद",
+     "lemma": "भिद्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "पुनर्",
+     "lemma": "पुनर्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "सालान्",
+     "lemma": "साल",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सप्त",
+     "lemma": "सप्तन्",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "एकेन",
+     "lemma": "एक",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "इषुणा",
+     "lemma": "इषु",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "गिरिम्",
+     "lemma": "गिरि",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "रसातलम्",
+     "lemma": "रसातल",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "एव",
+     "lemma": "एव",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "जनयन्",
+     "lemma": "जनय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "प्रत्ययम्",
+     "lemma": "प्रत्यय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "तदा",
+     "lemma": "तदा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 12,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      6,
+      7
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "महान् इषुः"
+    }
+   ],
+   "anvaya": [
+    2,
+    14,
+    13,
+    12,
+    5,
+    6,
+    7,
+    4,
+    3,
+    8,
+    9,
+    10,
+    11,
+    0,
+    1
+   ],
+   "english": "And again, then producing conviction, [he] pierced seven sāla trees with a single great arrow, and the mountain and the netherworld too.",
+   "gold_issues": "जनयन् (12) qualifies the unexpressed subject and is attached to the finite verb (as in v44). सप्त (4) tagged Neut Sing by DCS; it is an indeclinable-like numeral agreeing with सालान्."
+  },
+  {
+   "key": 53,
+   "id": "रामायण १.१.५३",
+   "number": 53,
+   "book": "रामायण",
+   "text": "ततः प्रीतमनास्तेन विश्वस्तः स महाकपिः । किष्किन्धां रामसहितो जगाम च गुहां तदा ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "प्रीत",
+     "lemma": "प्री",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Part"
+     },
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "मनास्",
+     "lemma": "मनस्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "तेन",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "विश्वस्तस्",
+     "lemma": "विश्वस्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "कपिस्",
+     "lemma": "कपि",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "किष्किन्धाम्",
+     "lemma": "किष्किन्धा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "राम",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "सहितस्",
+     "lemma": "सहित",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "जगाम",
+     "lemma": "गम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "गुहाम्",
+     "lemma": "गुहा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "तदा",
+     "lemma": "तदा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "प्रीतं मनः यस्य सः"
+    },
+    {
+     "members": [
+      6,
+      7
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "महान् कपिः"
+    },
+    {
+     "members": [
+      9,
+      10
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "रामेण सहितः"
+    }
+   ],
+   "anvaya": [
+    0,
+    3,
+    4,
+    1,
+    2,
+    9,
+    10,
+    5,
+    6,
+    7,
+    14,
+    13,
+    8,
+    11,
+    12
+   ],
+   "english": "Then he, the great monkey, glad in mind, reassured by him, accompanied by Rāma, went then to Kiṣkindhā, the cave.",
+   "gold_issues": "गुहाम् (13) taken as apposition to किष्किन्धाम्."
+  },
+  {
+   "key": 54,
+   "id": "रामायण १.१.५४",
+   "number": 54,
+   "book": "रामायण",
+   "text": "ततो ऽगर्जद्धरिवरः सुग्रीवो हेमपिङ्गलः । तेन नादेन महता निर्जगाम हरीश्वरः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "अगर्जत्",
+     "lemma": "गर्ज्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "हरिवरस्",
+     "lemma": "हरिवर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "सुग्रीवस्",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "हेम",
+     "lemma": "हेमन्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "पिङ्गलस्",
+     "lemma": "पिङ्गल",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "तेन",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "नादेन",
+     "lemma": "नाद",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "महता",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "निर्जगाम",
+     "lemma": "निर्गम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "हरि",
+     "lemma": "हरि",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "ईश्वरस्",
+     "lemma": "ईश्वर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "हेम इव पिङ्गलः"
+    },
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "हरीणाम् ईश्वरः"
+    }
+   ],
+   "anvaya": [
+    0,
+    2,
+    4,
+    5,
+    3,
+    1,
+    10,
+    11,
+    6,
+    8,
+    7,
+    9
+   ],
+   "english": "Then Sugrīva, best of monkeys, tawny like gold, roared; at that great roar the lord of monkeys [Vālin] came out.",
+   "gold_issues": "हरिवर (2) kept by DCS as one word (हरीणां वरः). नादेन (7) instrumental of cause. हेमपिङ्गलः is an उपमान-कर्मधारय."
+  },
+  {
+   "key": 55,
+   "id": "रामायण १.१.५५",
+   "number": 55,
+   "book": "रामायण",
+   "text": "ततः सुग्रीववचनाद्धत्वा वालिनमाहवे । सुग्रीवमेव तद्राज्ये राघवः प्रत्यपादयत् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "सुग्रीव",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "वचनात्",
+     "lemma": "वचन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "हत्वा",
+     "lemma": "हन्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "वालिनम्",
+     "lemma": "वालिन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "आहवे",
+     "lemma": "आहव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "सुग्रीवम्",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "एव",
+     "lemma": "एव",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "तत्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "राज्ये",
+     "lemma": "राज्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "राघवस्",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "प्रत्यपादयत्",
+     "lemma": "प्रतिपादय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "सुग्रीवस्य वचनम्"
+    }
+   ],
+   "anvaya": [
+    0,
+    10,
+    1,
+    2,
+    5,
+    4,
+    3,
+    8,
+    9,
+    6,
+    7,
+    11
+   ],
+   "english": "Then, at Sugrīva's word, having slain Vālin in battle, Rāghava installed Sugrīva himself in that kingdom.",
+   "gold_issues": "तत् (8) is tagged Acc Neut by DCS, but तद्राज्ये is a compound (तस्य राज्ये, \"in his kingdom\"); marked सम्बन्ध>9 and translated \"that kingdom\"."
+  },
+  {
+   "key": 56,
+   "id": "रामायण १.१.५६",
+   "number": 56,
+   "book": "रामायण",
+   "text": "स च सर्वान्समानीय वानरान्वानरर्षभः । दिशः प्रस्थापयामास दिदृक्षुर्जनकात्मजाम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "सर्वान्",
+     "lemma": "सर्व",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "समानीय",
+     "lemma": "समानी",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "वानरान्",
+     "lemma": "वानर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "वानर",
+     "lemma": "वानर",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "ऋषभस्",
+     "lemma": "ऋषभ",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "दिशस्",
+     "lemma": "दिश्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "प्रस्थापयामास",
+     "lemma": "प्रस्थापय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "peri",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "दिदृक्षुस्",
+     "lemma": "दिदृक्षु",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "जनकात्मजाम्",
+     "lemma": "जनकात्मजा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      5,
+      6
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "वानराणाम् ऋषभः"
+    }
+   ],
+   "anvaya": [
+    10,
+    9,
+    5,
+    6,
+    0,
+    1,
+    2,
+    4,
+    3,
+    7,
+    8
+   ],
+   "english": "And he, the bull among monkeys, desiring to see Janaka's daughter, having assembled all the monkeys, sent [them] forth to the quarters.",
+   "gold_issues": "दिशः (7) is the destination with a verb of motion (गत्यर्थ कर्म). जनकात्मजा kept as one word by DCS. जनकात्मजाम् is the object of the desiderative adjective दिदृक्षुः."
+  },
+  {
+   "key": 57,
+   "id": "रामायण १.१.५७",
+   "number": 57,
+   "book": "रामायण",
+   "text": "ततो गृध्रस्य वचनात्सम्पातेर्हनुमान्बली । शतयोजनविस्तीर्णं पुप्लुवे लवणार्णवम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "गृध्रस्य",
+     "lemma": "गृध्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "वचनात्",
+     "lemma": "वचन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "सम्पातेस्",
+     "lemma": "सम्पाति",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "हनुमन्त्",
+     "lemma": "हनुमन्त्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "बली",
+     "lemma": "बलिन्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "शत",
+     "lemma": "शत",
+     "upos": "NUM",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "योजन",
+     "lemma": "योजन",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "विस्तीर्णम्",
+     "lemma": "विस्तृ",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "पुप्लुवे",
+     "lemma": "प्लु",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "लवणार्णवम्",
+     "lemma": "लवणार्णव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      6,
+      7,
+      8
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "शतं योजनानि (शतयोजनम्) विस्तीर्णः"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    3,
+    2,
+    5,
+    4,
+    6,
+    7,
+    8,
+    10,
+    9
+   ],
+   "english": "Then, at the word of the vulture Sampāti, the mighty Hanumān leapt across the salt ocean, extending a hundred yojanas.",
+   "gold_issues": "DCS form हनुमन्त् for हनुमान्. लवणार्णव kept as one word. गृध्रस्य (1) is in apposition to सम्पातेः."
+  },
+  {
+   "key": 58,
+   "id": "रामायण १.१.५८",
+   "number": 58,
+   "book": "रामायण",
+   "text": "तत्र लङ्कां समासाद्य पुरीं रावणपालिताम् । ददर्श सीतां ध्यायन्तीमशोकवनिकां गताम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "तत्र",
+     "lemma": "तत्र",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "लङ्काम्",
+     "lemma": "लङ्का",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "समासाद्य",
+     "lemma": "समासादय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "पुरीम्",
+     "lemma": "पुरी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "रावण",
+     "lemma": "रावण",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "पालिताम्",
+     "lemma": "पालय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "ददर्श",
+     "lemma": "दृश्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "सीताम्",
+     "lemma": "सीता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "ध्यायतीम्",
+     "lemma": "ध्या",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "अशोक",
+     "lemma": "अशोक",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "वनिकाम्",
+     "lemma": "वनिका",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "गताम्",
+     "lemma": "गम्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "रावणेन पालिता"
+    },
+    {
+     "members": [
+      9,
+      10
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "अशोकानां वनिका"
+    }
+   ],
+   "anvaya": [
+    0,
+    4,
+    5,
+    3,
+    1,
+    2,
+    8,
+    9,
+    10,
+    11,
+    7,
+    6
+   ],
+   "english": "There, having reached Laṅkā, the city guarded by Rāvaṇa, [he] saw Sītā, brooding, gone into the Aśoka grove.",
+   "gold_issues": "DCS form ध्यायतीम् for text ध्यायन्तीम्."
+  },
+  {
+   "key": 59,
+   "id": "रामायण १.१.५९",
+   "number": 59,
+   "book": "रामायण",
+   "text": "निवेदयित्वाभिज्ञानं प्रवृत्तिं च निवेद्य च । समाश्वास्य च वैदेहीं मर्दयामास तोरणम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "निवेदयित्वा",
+     "lemma": "निवेदय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "अभिज्ञानम्",
+     "lemma": "अभिज्ञान",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "प्रवृत्तिम्",
+     "lemma": "प्रवृत्ति",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "निवेद्य",
+     "lemma": "निवेदय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "समाश्वास्य",
+     "lemma": "समाश्वासय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "वैदेहीम्",
+     "lemma": "वैदेही",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "मर्दयामास",
+     "lemma": "मर्दय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "peri",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "तोरणम्",
+     "lemma": "तोरण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [],
+   "anvaya": [
+    1,
+    0,
+    2,
+    3,
+    4,
+    5,
+    8,
+    6,
+    7,
+    10,
+    9
+   ],
+   "english": "Having presented the token of recognition, and having reported the news, and having comforted Vaidehī, [Hanumān] smashed the gateway.",
+   "gold_issues": ""
+  },
+  {
+   "key": 60,
+   "id": "रामायण १.१.६०",
+   "number": 60,
+   "book": "रामायण",
+   "text": "पञ्च सेनाग्रगान्हत्वा सप्त मन्त्रिसुतानपि । शूरमक्षं च निष्पिष्य ग्रहणं समुपागमत् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "पञ्च",
+     "lemma": "पञ्चन्",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "सेना",
+     "lemma": "सेना",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "अग्रगान्",
+     "lemma": "अग्रग",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "हत्वा",
+     "lemma": "हन्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सप्त",
+     "lemma": "सप्तन्",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "मन्त्रि",
+     "lemma": "मन्त्रिन्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "सुतान्",
+     "lemma": "सुत",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "अपि",
+     "lemma": "अपि",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "शूरम्",
+     "lemma": "शूर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "अक्षम्",
+     "lemma": "अक्ष",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "निष्पिष्य",
+     "lemma": "निष्पिष्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "ग्रहणम्",
+     "lemma": "ग्रहण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "समुपागमत्",
+     "lemma": "समुपागम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "them",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "सेनायाः अग्रगाः"
+    },
+    {
+     "members": [
+      5,
+      6
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "मन्त्रिणां सुताः"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    6,
+    7,
+    3,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+   ],
+   "english": "Having slain the five army-leaders and also the seven sons of ministers, and having crushed the hero Akṣa, [he] submitted to capture.",
+   "gold_issues": "पञ्च (0) is tagged Nom by DCS; it agrees with accusative सेनाग्रगान्. अग्रग is kept as one word (itself an उपपद compound अग्रे गच्छति)."
+  },
+  {
+   "key": 61,
+   "id": "रामायण १.१.६१",
+   "number": 61,
+   "book": "रामायण",
+   "text": "अस्त्रेणोन्मुहमात्मानं ज्ञात्वा पैतामहाद्वरात् । मर्षयन्राक्षसान्वीरो यन्त्रिणस्तान्यदृच्छया ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "आत्मानम्",
+     "lemma": "आत्मन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "ज्ञात्वा",
+     "lemma": "ज्ञा",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "पैतामहात्",
+     "lemma": "पैतामह",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "वरात्",
+     "lemma": "वर",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 1,
+     "form": "मर्षयन्",
+     "lemma": "मर्षय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Voc",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 1,
+     "form": "राक्षसान्",
+     "lemma": "राक्षस",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "वीरस्",
+     "lemma": "वीर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "यन्त्रिणस्",
+     "lemma": "यन्त्रिन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "तान्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "यदृच्छया",
+     "lemma": "यदृच्छा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 4,
+     "note": ""
+    }
+   ],
+   "compounds": [],
+   "anvaya": [
+    6,
+    2,
+    3,
+    0,
+    1,
+    9,
+    8,
+    7,
+    5,
+    4
+   ],
+   "english": "The hero, knowing himself [released from the weapon] by virtue of the boon of the Grandfather, [was] willingly bearing with those Rākṣasas who had bound [him].",
+   "gold_issues": "DCS word list omits अस्त्रेण उन्मुहम् (text अस्त्रेणोन्मुहम्, probably a corruption of उन्मुक्तम्); supplied in brackets in English only. मर्षयन् (4) is tagged Voc; it is Nom, and as the only verbal form it is the predicate. वरात् (3) \"boon\" is a noun, not ADJ; पैतामहात् (2) is adjectival (\"of Brahmā\"). यदृच्छया instrumental of manner."
+  },
+  {
+   "key": 62,
+   "id": "रामायण १.१.६२",
+   "number": 62,
+   "book": "रामायण",
+   "text": "ततो दग्ध्वा पुरीं लङ्कामृते सीतां च मैथिलीम् । रामाय प्रियमाख्यातुं पुनरायान्महाकपिः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "दग्ध्वा",
+     "lemma": "दह्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "पुरीम्",
+     "lemma": "पुरी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "लङ्काम्",
+     "lemma": "लङ्का",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "ऋते",
+     "lemma": "ऋते",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "सीताम्",
+     "lemma": "सीता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "मैथिलीम्",
+     "lemma": "मैथिली",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "रामाय",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Dat",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्प्रदान",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "प्रियम्",
+     "lemma": "प्रिय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "आख्यातुम्",
+     "lemma": "आख्या",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Inf"
+     },
+     "compound_member": false,
+     "role": "तुमर्थ",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "पुनर्",
+     "lemma": "पुनर्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "आयात्",
+     "lemma": "आया",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "कपिस्",
+     "lemma": "कपि",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 12,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      13,
+      14
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "महान् कपिः"
+    }
+   ],
+   "anvaya": [
+    13,
+    14,
+    0,
+    7,
+    5,
+    6,
+    4,
+    2,
+    3,
+    1,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "english": "Then, having burned the city Laṅkā except Maithilī Sītā, the great monkey came back to tell Rāma the pleasing [news].",
+   "gold_issues": "सीताम् (5) is an (ārṣa) accusative with ऋते, which normally takes the ablative; marked कर्म>ऋते like the प्रति construction (v49)."
+  },
+  {
+   "key": 63,
+   "id": "रामायण १.१.६३",
+   "number": 63,
+   "book": "रामायण",
+   "text": "सो ऽभिगम्य महात्मानं कृत्वा रामं प्रदक्षिणम् । न्यवेदयदमेयात्मा दृष्टा सीतेति तत्त्वतः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "अभिगम्य",
+     "lemma": "अभिगम्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "महात्मानम्",
+     "lemma": "महात्मन्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "कृत्वा",
+     "lemma": "कृ",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "रामम्",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "प्रदक्षिणम्",
+     "lemma": "प्रदक्षिण",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "न्यवेदयत्",
+     "lemma": "निवेदय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "अमेय",
+     "lemma": "अमेय",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "आत्मा",
+     "lemma": "आत्मन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "दृष्टा",
+     "lemma": "दृश्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Fem",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "सीता",
+     "lemma": "सीता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "इति",
+     "lemma": "इति",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "तत्त्वात्",
+     "lemma": "तत्त्व",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 6,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      7,
+      8
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "अमेयः आत्मा यस्य सः"
+    }
+   ],
+   "anvaya": [
+    7,
+    8,
+    0,
+    1,
+    2,
+    4,
+    5,
+    3,
+    10,
+    9,
+    11,
+    12,
+    6
+   ],
+   "english": "He, of immeasurable spirit, having approached the great-souled Rāma and having made [him] the object of circumambulation, reported truly: \"Sītā has been seen.\"",
+   "gold_issues": "Text reads तत्त्वतः (adverb, तसिल्), DCS gives तत्त्वात् Abl; marked अव्यय. महात्मानम् (2) is the object of अभिगम्य as well; attached to रामम्. प्रदक्षिणम् (5) is predicative. The quote दृष्टा सीता is a passive क्त clause (सीता = कर्म) under न्यवेदयत्."
+  },
+  {
+   "key": 64,
+   "id": "रामायण १.१.६४",
+   "number": 64,
+   "book": "रामायण",
+   "text": "ततः सुग्रीवसहितो गत्वा तीरं महोदधेः । समुद्रं क्षोभयामास शरैरादित्यसंनिभैः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "ततस्",
+     "lemma": "ततस्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "सुग्रीव",
+     "lemma": "सुग्रीव",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "सहितस्",
+     "lemma": "सहित",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "गत्वा",
+     "lemma": "गम्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "तीरम्",
+     "lemma": "तीर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "महा",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "उदधेस्",
+     "lemma": "उदधि",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "समुद्रम्",
+     "lemma": "समुद्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "क्षोभयामास",
+     "lemma": "क्षोभय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "peri",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "शरैस्",
+     "lemma": "शर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "आदित्य",
+     "lemma": "आदित्य",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "संनिभैस्",
+     "lemma": "संनिभ",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "सुग्रीवेण सहितः"
+    },
+    {
+     "members": [
+      5,
+      6
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "महान् उदधिः"
+    },
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "आदित्येन संनिभाः"
+    }
+   ],
+   "anvaya": [
+    1,
+    2,
+    0,
+    5,
+    6,
+    4,
+    3,
+    10,
+    11,
+    9,
+    7,
+    8
+   ],
+   "english": "Then, accompanied by Sugrīva, having gone to the shore of the great ocean, [Rāma] agitated the sea with arrows resembling the sun.",
+   "gold_issues": "सुग्रीवसहितः (2) qualifies the unexpressed subject; attached to the finite verb (as v44)."
+  },
+  {
+   "key": 65,
+   "id": "रामायण १.१.६५",
+   "number": 65,
+   "book": "रामायण",
+   "text": "दर्शयामास चात्मानं समुद्रः सरितां पतिः । समुद्रवचनाच्चैव नलं सेतुमकारयत् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "दर्शयामास",
+     "lemma": "दर्शय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Formation": "peri",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "आत्मानम्",
+     "lemma": "आत्मन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "समुद्रस्",
+     "lemma": "समुद्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सरिताम्",
+     "lemma": "सरित्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "पतिस्",
+     "lemma": "पति",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "समुद्र",
+     "lemma": "समुद्र",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "वचनात्",
+     "lemma": "वचन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Abl",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "एव",
+     "lemma": "एव",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "नलम्",
+     "lemma": "नल",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "सेतुम्",
+     "lemma": "सेतु",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "अकारयत्",
+     "lemma": "कारय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      6,
+      7
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "समुद्रस्य वचनम्"
+    }
+   ],
+   "anvaya": [
+    4,
+    5,
+    3,
+    2,
+    0,
+    1,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "english": "And the ocean, lord of rivers, showed himself; and on the very word of the ocean [Rāma] had Nala build a bridge.",
+   "gold_issues": "नलम् (10) is the प्रयोज्यकर्ता of causative अकारयत् in the accusative (हृक्रोरन्यतरस्याम्), marked कर्म."
+  },
+  {
+   "key": 66,
+   "id": "रामायण १.१.६६",
+   "number": 66,
+   "book": "रामायण",
+   "text": "तेन गत्वा पुरीं लङ्कां हत्वा रावणमाहवे । अभ्यषिञ्चत्स लङ्कायां राक्षसेन्द्रं विभीषणम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "तेन",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "गत्वा",
+     "lemma": "गम्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "पुरीम्",
+     "lemma": "पुरी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "लङ्काम्",
+     "lemma": "लङ्का",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "हत्वा",
+     "lemma": "हन्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "रावणम्",
+     "lemma": "रावण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "आहवे",
+     "lemma": "आहव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "अभ्यषिञ्चत्",
+     "lemma": "अभिषिच्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Impf",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "सस्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "लङ्कायाम्",
+     "lemma": "लङ्का",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "राक्षस",
+     "lemma": "राक्षस",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "इन्द्रम्",
+     "lemma": "इन्द्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "विभीषणम्",
+     "lemma": "विभीषण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 7,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "राक्षसानाम् इन्द्रः"
+    }
+   ],
+   "anvaya": [
+    8,
+    0,
+    2,
+    3,
+    1,
+    6,
+    5,
+    4,
+    9,
+    10,
+    11,
+    12,
+    7
+   ],
+   "english": "Having gone by that [bridge] to the city Laṅkā, having slain Rāvaṇa in battle, he consecrated Vibhīṣaṇa in Laṅkā as lord of the Rākṣasas.",
+   "gold_issues": "तेन (0) refers to the bridge (सेतु) of v65. राक्षसेन्द्रम् (11) is a predicative complement of अभ्यषिञ्चत्."
+  },
+  {
+   "key": 67,
+   "id": "रामायण १.१.६७",
+   "number": 67,
+   "book": "रामायण",
+   "text": "कर्मणा तेन महता त्रैलोक्यं सचराचरम् । सदेवर्षिगणं तुष्टं राघवस्य महात्मनः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "कर्मणा",
+     "lemma": "कर्मन्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "तेन",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "महता",
+     "lemma": "महत्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "त्रैलोक्यम्",
+     "lemma": "त्रैलोक्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सचराचरम्",
+     "lemma": "सचराचर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 1,
+     "form": "स",
+     "lemma": "स",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "देवर्षि",
+     "lemma": "देवर्षि",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "गणम्",
+     "lemma": "गण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "तुष्टम्",
+     "lemma": "तुष्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "राघवस्य",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "महात्मनस्",
+     "lemma": "महात्मन्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Gen",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      6,
+      7
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "देवानाम् ऋषीणां च गणः"
+    }
+   ],
+   "anvaya": [
+    4,
+    5,
+    6,
+    7,
+    3,
+    10,
+    9,
+    1,
+    2,
+    0,
+    8
+   ],
+   "english": "The three worlds, with [all] moving and unmoving beings, together with the hosts of gods and seers, [were] pleased by that great deed of the great-souled Rāghava.",
+   "gold_issues": "DCS splits the सह-बहुव्रीहि सदेवर्षिगणम् (स + देवर्षिगणम्) and tags गणम् Acc Masc; it is Nom Neut, agreeing with त्रैलोक्यम्. सचराचरम् is kept as one word. तुष्टम् is a कर्तरि क्त predicate."
+  },
+  {
+   "key": 68,
+   "id": "रामायण १.१.६८",
+   "number": 68,
+   "book": "रामायण",
+   "text": "तथा परमसंतुष्टैः पूजितः सर्वदैवतैः । कृतकृत्यस्तदा रामो विज्वरः प्रमुमोद ह ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "तथा",
+     "lemma": "तथा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "परम",
+     "lemma": "परम",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "संतुष्टैस्",
+     "lemma": "संतुष्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Plur",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "पूजितस्",
+     "lemma": "पूजय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सर्व",
+     "lemma": "सर्व",
+     "upos": "PRON",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "दैवतैस्",
+     "lemma": "दैवत",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "कृतकृत्यस्",
+     "lemma": "कृतकृत्य",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "तदा",
+     "lemma": "तदा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "रामस्",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "विज्वरस्",
+     "lemma": "विज्वर",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "प्रमुमोद",
+     "lemma": "प्रमुद्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "ह",
+     "lemma": "ह",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "परमं संतुष्टाः"
+    },
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "सर्वाणि दैवतानि"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    2,
+    4,
+    5,
+    3,
+    6,
+    9,
+    8,
+    7,
+    10,
+    11
+   ],
+   "english": "Thus honoured by all the deities, supremely pleased, Rāma, his task accomplished, free from distress, then rejoiced.",
+   "gold_issues": "कृतकृत्य (6) is a lexicalised bahuvrihi (कृतं कृत्यं येन सः) kept as one word. सर्वदैवतैः (5) is the instrumental agent of the passive participle पूजितः."
+  },
+  {
+   "key": 69,
+   "id": "रामायण १.१.६९",
+   "number": 69,
+   "book": "रामायण",
+   "text": "देवताभ्यो वरान्प्राप्य समुत्थाप्य च वानरान् । पुष्पकं तत्समारुह्य नन्दिग्रामं ययौ तदा ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "देवताभ्यस्",
+     "lemma": "देवता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Dat",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "अपादान",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "वरान्",
+     "lemma": "वर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "प्राप्य",
+     "lemma": "प्रापय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "समुत्थाप्य",
+     "lemma": "समुत्थापय्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "वानरान्",
+     "lemma": "वानर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "पुष्पकम्",
+     "lemma": "पुष्पक",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "तत्",
+     "lemma": "तद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "समारुह्य",
+     "lemma": "समारुह्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "नन्दिग्रामम्",
+     "lemma": "नन्दिग्राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "ययौ",
+     "lemma": "या",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Past",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "तदा",
+     "lemma": "तदा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    }
+   ],
+   "compounds": [],
+   "anvaya": [
+    11,
+    0,
+    1,
+    2,
+    5,
+    3,
+    4,
+    7,
+    6,
+    8,
+    9,
+    10
+   ],
+   "english": "Having obtained boons from the deities, and having raised up the monkeys, having mounted that Puṣpaka, [he] then went to Nandigrāma.",
+   "gold_issues": "देवताभ्यः (0) is ablative (source with प्र-आप्), DCS tags Dat. प्राप्य lemma should be प्राप्, not causative प्रापय्. तत् (7) tagged Neut against Masc पुष्पकम्."
+  },
+  {
+   "key": 70,
+   "id": "रामायण १.१.७०",
+   "number": 70,
+   "book": "रामायण",
+   "text": "नन्दिग्रामे जटां हित्वा भ्रातृभिः सहितो ऽनघः । रामः सीतामनुप्राप्य राज्यं पुनरवाप्तवान् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "नन्दिग्रामे",
+     "lemma": "नन्दिग्राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "जटाम्",
+     "lemma": "जटा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "हित्वा",
+     "lemma": "हा",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "भ्रातृभिस्",
+     "lemma": "भ्रातृ",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "सहितस्",
+     "lemma": "सहित",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "अनघस्",
+     "lemma": "अनघ",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "रामस्",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "सीताम्",
+     "lemma": "सीता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Fem",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "अनुप्राप्य",
+     "lemma": "अनुप्राप्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "राज्यम्",
+     "lemma": "राज्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "पुनर्",
+     "lemma": "पुनर्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "अवाप्तवन्",
+     "lemma": "अवाप्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [],
+   "anvaya": [
+    3,
+    4,
+    5,
+    6,
+    0,
+    1,
+    2,
+    7,
+    8,
+    10,
+    9,
+    11
+   ],
+   "english": "In Nandigrāma, having cast off [his] matted locks, the sinless Rāma, accompanied by his brothers, having regained Sītā, obtained the kingdom again.",
+   "gold_issues": "DCS form अवाप्तवन् for अवाप्तवान् (क्तवतु predicate, marked क्रिया)."
+  },
+  {
+   "key": 71,
+   "id": "रामायण १.१.७१",
+   "number": 71,
+   "book": "रामायण",
+   "text": "प्रहृष्टमुदितो लोकस्तुष्टः पुष्टः सुधार्मिकः । निरायमो अरोगश्च दुर्भिक्षभयवर्जितः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "प्रहृष्ट",
+     "lemma": "प्रहृष्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Part"
+     },
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "मुदितस्",
+     "lemma": "मुद्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "लोकस्",
+     "lemma": "लोक",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "तुष्टस्",
+     "lemma": "तुष्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "पुष्टस्",
+     "lemma": "पुष्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "सु",
+     "lemma": "सु",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 6,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "धार्मिकस्",
+     "lemma": "धार्मिक",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "अरोगस्",
+     "lemma": "अरोग",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "दुर्भिक्ष",
+     "lemma": "दुर्भिक्ष",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "भय",
+     "lemma": "भय",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "वर्जितस्",
+     "lemma": "वर्जय्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 2,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      0,
+      1
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "प्रहृष्टश्च असौ मुदितश्च"
+    },
+    {
+     "members": [
+      9,
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "दुर्भिक्षात् भयं (दुर्भिक्षभयम्), तेन वर्जितः"
+    }
+   ],
+   "anvaya": [
+    2,
+    0,
+    1,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11
+   ],
+   "english": "The world [will be] delighted and glad, content, well-nourished, very righteous, [free from affliction] and free from disease, devoid of the fear of famine.",
+   "gold_issues": "DCS word list omits निरायमः (text निरायमो); supplied in English in brackets only. सुधार्मिकः is split into सु + धार्मिकः. The verbless nominal clause is taken as future, in line with v72."
+  },
+  {
+   "key": 72,
+   "id": "रामायण १.१.७२",
+   "number": 72,
+   "book": "रामायण",
+   "text": "न पुत्रमरणं केचिद्द्रक्ष्यन्ति पुरुषाः क्वचित् । नार्यश्चाविधवा नित्यं भविष्यन्ति पतिव्रताः ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "न",
+     "lemma": "न",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "पुत्र",
+     "lemma": "पुत्र",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "मरणम्",
+     "lemma": "मरण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "केचिद्",
+     "lemma": "कश्चित्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "द्रक्ष्यन्ति",
+     "lemma": "दृश्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Fut",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "पुरुषास्",
+     "lemma": "पुरुष",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "क्वचिद्",
+     "lemma": "क्वचिद्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "नार्यस्",
+     "lemma": "नारी",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "अविधवास्",
+     "lemma": "अविधवा",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "नित्यम्",
+     "lemma": "नित्यम्",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "भविष्यन्ति",
+     "lemma": "भू",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Fut",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "पतिव्रतास्",
+     "lemma": "पतिव्रता",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "पुत्रस्य मरणम्"
+    }
+   ],
+   "anvaya": [
+    3,
+    5,
+    6,
+    1,
+    2,
+    0,
+    4,
+    12,
+    7,
+    8,
+    10,
+    9,
+    11
+   ],
+   "english": "No men at all will anywhere see the death of a son, and women, devoted to their husbands, will always be un-widowed.",
+   "gold_issues": "अविधवा and पतिव्रता kept as single words (नञ्-तत्पुरुष / बहुव्रीहि). पतिव्रताः taken as attributive, अविधवाः as the complement of भविष्यन्ति."
+  },
+  {
+   "key": 73,
+   "id": "रामायण १.१.७३",
+   "number": 73,
+   "book": "रामायण",
+   "text": "न वातजं भयं किंचिन्नाप्सु मज्जन्ति जन्तवः । न चाग्रिजं भयं किंचिद्यथा कृतयुगे तथा ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "न",
+     "lemma": "न",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "वात",
+     "lemma": "वात",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "जम्",
+     "lemma": "ज",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "भयम्",
+     "lemma": "भय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "किंचिद्",
+     "lemma": "कश्चित्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "न",
+     "lemma": "न",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "अप्सु",
+     "lemma": "अप्",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Fem",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "मज्जन्ति",
+     "lemma": "मज्ज्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 0,
+     "form": "जन्तवस्",
+     "lemma": "जन्तु",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "न",
+     "lemma": "न",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "भयम्",
+     "lemma": "भय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "किंचिद्",
+     "lemma": "कश्चित्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "यथा",
+     "lemma": "यथा",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 15,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "कृत",
+     "lemma": "कृत",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "युगे",
+     "lemma": "युग",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 15,
+     "line": 1,
+     "form": "तथा",
+     "lemma": "तथा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      1,
+      2
+     ],
+     "type": "उपपद-तत्पुरुष",
+     "vigraha": "वातात् जायते इति"
+    },
+    {
+     "members": [
+      13,
+      14
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "कृतं युगम्"
+    }
+   ],
+   "anvaya": [
+    0,
+    4,
+    1,
+    2,
+    3,
+    8,
+    6,
+    5,
+    7,
+    9,
+    11,
+    10,
+    12,
+    13,
+    14,
+    15
+   ],
+   "english": "There [will be] no fear at all born of wind; creatures do not drown in the waters; nor [will there be] any fear [born of fire]; as in the Kṛta age, so [it will be].",
+   "gold_issues": "DCS word list omits च and अग्निजम् (text चाग्रिजं, a misprint for चाग्निजं); supplied in brackets in English. In the verbless negative clauses न is attached to the subject. यथा … तथा: the locative कृतयुगे is attached to यथा, and तथा to the clause before it."
+  },
+  {
+   "key": 74,
+   "id": "रामायण १.१.७४",
+   "number": 74,
+   "book": "रामायण",
+   "text": "अश्वमेधशतैरिष्ट्वा तथा बहुसुवर्णकैः । गवां कोट्ययुतं दत्त्वा विद्वद्भ्यो विधिपूर्वकम् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "अश्वमेध",
+     "lemma": "अश्वमेध",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "शतैस्",
+     "lemma": "शत",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "इष्ट्वा",
+     "lemma": "यज्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "तथा",
+     "lemma": "तथा",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "बहु",
+     "lemma": "बहु",
+     "upos": "ADJ",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "सुवर्णकैस्",
+     "lemma": "सुवर्णक",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "गवाम्",
+     "lemma": "गो",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Gen",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "सम्बन्ध",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "कोटि",
+     "lemma": "कोटि",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "अयुतम्",
+     "lemma": "अयुत",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "दत्त्वा",
+     "lemma": "दा",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "विद्वोभ्यस्",
+     "lemma": "विद्वस्",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Dat",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "सम्प्रदान",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "विधि",
+     "lemma": "विधि",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "",
+     "lemma": "पूर्वक",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      0,
+      1
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "अश्वमेधानां शतानि"
+    },
+    {
+     "members": [
+      4,
+      5
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "बहु सुवर्णं येषु ते (यज्ञाः)"
+    },
+    {
+     "members": [
+      7,
+      8
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "कोटीनाम् अयुतम्"
+    },
+    {
+     "members": [
+      11,
+      12
+     ],
+     "type": "बहुव्रीहि",
+     "vigraha": "विधिः पूर्वः यस्मिन् तत् (यथा तथा)"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    3,
+    4,
+    5,
+    2,
+    11,
+    12,
+    10,
+    6,
+    7,
+    8,
+    9
+   ],
+   "english": "Having sacrificed with hundreds of horse-sacrifices, and likewise with [sacrifices] abounding in gold, having given to the learned, according to rule, ten thousand crores of cows, …",
+   "gold_issues": "The sentence's finite verb (स्थापयिष्यति) is in v75; the last absolutive दत्त्वा takes head '-' and इष्ट्वा is chained to it. DCS form of 12 is empty (should be पूर्वकम्, adverbial acc.) and 10 has form विद्वोभ्यस् for विद्वद्भ्यः. बहुसुवर्णकैः is a bahuvrihi adjective qualifying understood यज्ञैः, tagged NOUN."
+  },
+  {
+   "key": 75,
+   "id": "रामायण १.१.७५",
+   "number": 75,
+   "book": "रामायण",
+   "text": "राजवंशाञ्शतगुणान्स्थापयिष्यति राघवः । चातुर्वर्ण्यं च लोके ऽस्मिन्स्वे स्वे धर्मे नियोक्ष्यति ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "राज",
+     "lemma": "राजन्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "वंशान्",
+     "lemma": "वंश",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "शतगुणान्",
+     "lemma": "शतगुण",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "स्थापयिष्यति",
+     "lemma": "स्थापय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Fut",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "राघवस्",
+     "lemma": "राघव",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 1,
+     "form": "चातुर्वर्ण्यम्",
+     "lemma": "चातुर्वर्ण्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "लोके",
+     "lemma": "लोक",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "अस्मिन्",
+     "lemma": "इदम्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "स्वे",
+     "lemma": "स्व",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "स्वे",
+     "lemma": "स्व",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "धर्मे",
+     "lemma": "धर्म",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "नियोक्ष्यति",
+     "lemma": "नियुज्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Fut",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      0,
+      1
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "राज्ञां वंशाः"
+    }
+   ],
+   "anvaya": [
+    4,
+    2,
+    0,
+    1,
+    3,
+    8,
+    7,
+    5,
+    6,
+    9,
+    10,
+    11,
+    12
+   ],
+   "english": "Rāghava will establish royal dynasties a hundredfold, and in this world [he] will engage the four varṇas each in its own dharma.",
+   "gold_issues": "शतगुण (2) kept as one word. स्वे स्वे is a distributive repetition (वीप्सा)."
+  },
+  {
+   "key": 76,
+   "id": "रामायण १.१.७६",
+   "number": 76,
+   "book": "रामायण",
+   "text": "दशवर्षसहस्राणि दशवर्षशतानि च । रामो राज्यमुपासित्वा ब्रह्मलोकं गमिष्यति ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "दश",
+     "lemma": "दशन्",
+     "upos": "NUM",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "वर्ष",
+     "lemma": "वर्ष",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 2,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "सहस्राणि",
+     "lemma": "सहस्र",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "दश",
+     "lemma": "दशन्",
+     "upos": "NUM",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "वर्ष",
+     "lemma": "वर्ष",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "शतानि",
+     "lemma": "शत",
+     "upos": "NUM",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "रामस्",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "राज्यम्",
+     "lemma": "राज्य",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "उपासित्वा",
+     "lemma": "उपास्",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "ब्रह्म",
+     "lemma": "ब्रह्मन्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "लोकम्",
+     "lemma": "लोक",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 12,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "गमिष्यति",
+     "lemma": "गम्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Fut",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      0,
+      1,
+      2
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "दश वर्षाणां सहस्राणि"
+    },
+    {
+     "members": [
+      3,
+      4,
+      5
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "दश वर्षाणां शतानि"
+    },
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "ब्रह्मणः लोकः"
+    }
+   ],
+   "anvaya": [
+    7,
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    8,
+    9,
+    10,
+    11,
+    12
+   ],
+   "english": "Rāma, having ruled the kingdom for ten thousand years and ten hundred years, will go to the world of Brahmā.",
+   "gold_issues": "The time-duration accusatives (2, 5) are adverbial, marked अव्यय (convention as v42/v51). Outer relation of दश-वर्षसहस्राणि taken as संख्या-कर्मधारय (not a समाहार द्विगु)."
+  },
+  {
+   "key": 77,
+   "id": "रामायण १.१.७७",
+   "number": 77,
+   "book": "रामायण",
+   "text": "इदं पवित्रं पापघ्नं पुण्यं वेदैश्च संमितम् । यः पठेद्रामचरितं सर्वपापैः प्रमुच्यते ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "इदम्",
+     "lemma": "इदम्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "पवित्रम्",
+     "lemma": "पवित्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "पाप",
+     "lemma": "पाप",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "घ्नम्",
+     "lemma": "घ्न",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "पुण्यम्",
+     "lemma": "पुण्य",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "वेदैस्",
+     "lemma": "वेद",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Masc",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 7,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "संमितम्",
+     "lemma": "संमा",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Neut",
+      "Number": "Sing",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विधेय",
+     "head": 0,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "यस्",
+     "lemma": "यद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "पठेत्",
+     "lemma": "पठ्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Opt",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "राम",
+     "lemma": "राम",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "चरितम्",
+     "lemma": "चरित",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "सर्व",
+     "lemma": "सर्व",
+     "upos": "PRON",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "पापैस्",
+     "lemma": "पाप",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Ins",
+      "Gender": "Neut",
+      "Number": "Plur"
+     },
+     "compound_member": false,
+     "role": "करण",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "प्रमुच्यते",
+     "lemma": "प्रमुच्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Ind",
+      "Voice": "Pass",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      2,
+      3
+     ],
+     "type": "उपपद-तत्पुरुष",
+     "vigraha": "पापं हन्ति इति"
+    },
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "रामस्य चरितम्"
+    },
+    {
+     "members": [
+      12,
+      13
+     ],
+     "type": "कर्मधारय",
+     "vigraha": "सर्वाणि पापानि"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    10,
+    11,
+    9,
+    12,
+    13,
+    14
+   ],
+   "english": "This [is] purifying, sin-destroying, meritorious, and equal to the Vedas; whoever would read the deeds of Rāma is released from all sins.",
+   "gold_issues": "सर्वपापैः (13) is instrumental with passive प्रमुच्यते (sense \"from\"); marked करण by case. The correlative सः of the main clause is unexpressed. पवित्र is tagged NOUN; it is adjectival here."
+  },
+  {
+   "key": 78,
+   "id": "रामायण १.१.७८",
+   "number": 78,
+   "book": "रामायण",
+   "text": "एतदाख्यानमायुष्यं पठन्रामायणं नरः । सपुत्रपौत्रः सगणः प्रेत्य स्वर्गे महीयते ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "एतत्",
+     "lemma": "एतद्",
+     "upos": "PRON",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "आख्यानम्",
+     "lemma": "आख्यान",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "आयुष्यम्",
+     "lemma": "आयुष्य",
+     "upos": "ADJ",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "पठन्",
+     "lemma": "पठ्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "रामायणम्",
+     "lemma": "रामायण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "नरस्",
+     "lemma": "नर",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 1,
+     "form": "स",
+     "lemma": "स",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 1,
+     "form": "पुत्र",
+     "lemma": "पुत्र",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 1,
+     "form": "पौत्रस्",
+     "lemma": "पौत्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 1,
+     "form": "स",
+     "lemma": "स",
+     "upos": "ADV",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 10,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "गणस्",
+     "lemma": "गण",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 5,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "प्रेत्य",
+     "lemma": "प्रे",
+     "upos": "VERB",
+     "feats": {
+      "VerbForm": "Conv"
+     },
+     "compound_member": false,
+     "role": "पूर्वकालक्रिया",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "स्वर्गे",
+     "lemma": "स्वर्ग",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Loc",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "अधिकरण",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "महीयते",
+     "lemma": "महीय्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Ind",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      7,
+      8
+     ],
+     "type": "द्वन्द्व",
+     "vigraha": "पुत्राश्च पौत्राश्च"
+    }
+   ],
+   "anvaya": [
+    0,
+    2,
+    1,
+    4,
+    3,
+    6,
+    7,
+    8,
+    9,
+    10,
+    5,
+    11,
+    12,
+    13
+   ],
+   "english": "A man reading this life-giving narrative, the Rāmāyaṇa, together with sons and grandsons, together with his retinue, having departed [this life], is exalted in heaven.",
+   "gold_issues": "DCS splits the सह-बहुव्रीहि सपुत्रपौत्रः and सगणः into स + member (as v67); स (6, 9) attached as अव्यय to the following word."
+  },
+  {
+   "key": 79,
+   "id": "रामायण १.१.७९",
+   "number": 79,
+   "book": "रामायण",
+   "text": "पठन्द्विजो वागृषभत्वमीयात्स्यात्क्षत्रियो भूमिपतित्वमीयात् । वणिग्जनः पण्यफलत्वमीयाज्जनश्च शूद्रो ऽपि महत्त्वमीयात् ॥",
+   "words": [
+    {
+     "index": 0,
+     "line": 0,
+     "form": "पठन्",
+     "lemma": "पठ्",
+     "upos": "VERB",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing",
+      "Tense": "Pres",
+      "VerbForm": "Part"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 1,
+     "note": ""
+    },
+    {
+     "index": 1,
+     "line": 0,
+     "form": "द्विजस्",
+     "lemma": "द्विज",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 2,
+     "line": 0,
+     "form": "वागृषभ",
+     "lemma": "वागृषभ",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 3,
+     "note": ""
+    },
+    {
+     "index": 3,
+     "line": 0,
+     "form": "त्वम्",
+     "lemma": "त्व",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 4,
+     "note": ""
+    },
+    {
+     "index": 4,
+     "line": 0,
+     "form": "ईयात्",
+     "lemma": "इ",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Opt",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 5,
+     "line": 0,
+     "form": "स्यात्",
+     "lemma": "अस्",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Opt",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 6,
+     "line": 0,
+     "form": "क्षत्रियस्",
+     "lemma": "क्षत्रिय",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 7,
+     "line": 0,
+     "form": "भूमिपति",
+     "lemma": "भूमिपति",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 8,
+     "note": ""
+    },
+    {
+     "index": 8,
+     "line": 0,
+     "form": "त्वम्",
+     "lemma": "त्व",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 9,
+     "note": ""
+    },
+    {
+     "index": 9,
+     "line": 0,
+     "form": "ईयात्",
+     "lemma": "इ",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Opt",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 10,
+     "line": 1,
+     "form": "वणिज्",
+     "lemma": "वणिज्",
+     "upos": "NOUN",
+     "feats": {},
+     "compound_member": true,
+     "role": "समासपूर्वपद",
+     "head": 11,
+     "note": ""
+    },
+    {
+     "index": 11,
+     "line": 1,
+     "form": "जनस्",
+     "lemma": "जन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 12,
+     "line": 1,
+     "form": "पण्यफलत्वम्",
+     "lemma": "पण्यफलत्व",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 13,
+     "note": ""
+    },
+    {
+     "index": 13,
+     "line": 1,
+     "form": "ईयात्",
+     "lemma": "इ",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Opt",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    },
+    {
+     "index": 14,
+     "line": 1,
+     "form": "जनस्",
+     "lemma": "जन",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्ता",
+     "head": 19,
+     "note": ""
+    },
+    {
+     "index": 15,
+     "line": 1,
+     "form": "च",
+     "lemma": "च",
+     "upos": "CONJ",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 16,
+     "line": 1,
+     "form": "शूद्रस्",
+     "lemma": "शूद्र",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Nom",
+      "Gender": "Masc",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "विशेषण",
+     "head": 14,
+     "note": ""
+    },
+    {
+     "index": 17,
+     "line": 1,
+     "form": "अपि",
+     "lemma": "अपि",
+     "upos": "PART",
+     "feats": {},
+     "compound_member": false,
+     "role": "अव्यय",
+     "head": 16,
+     "note": ""
+    },
+    {
+     "index": 18,
+     "line": 1,
+     "form": "महत्त्वम्",
+     "lemma": "महत्त्व",
+     "upos": "NOUN",
+     "feats": {
+      "Case": "Acc",
+      "Gender": "Neut",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "कर्म",
+     "head": 19,
+     "note": ""
+    },
+    {
+     "index": 19,
+     "line": 1,
+     "form": "ईयात्",
+     "lemma": "इ",
+     "upos": "VERB",
+     "feats": {
+      "Tense": "Pres",
+      "Mood": "Opt",
+      "Person": "3",
+      "Number": "Sing"
+     },
+     "compound_member": false,
+     "role": "क्रिया",
+     "head": null,
+     "note": ""
+    }
+   ],
+   "compounds": [
+    {
+     "members": [
+      2,
+      3
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "वाचाम् ऋषभस्य भावः"
+    },
+    {
+     "members": [
+      7,
+      8
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "भूमेः पत्युः भावः"
+    },
+    {
+     "members": [
+      10,
+      11
+     ],
+     "type": "तत्पुरुष",
+     "vigraha": "वणिजां जनः"
+    }
+   ],
+   "anvaya": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    16,
+    17,
+    14,
+    15,
+    18,
+    19
+   ],
+   "english": "Reading [it], a Brahmin would attain eminence in speech; should one be a Kṣatriya, he would attain lordship of the earth; the merchant folk would attain profit from their wares; and a person, even a Śūdra, would attain greatness.",
+   "gold_issues": "DCS treats the taddhita -त्व as a separate compound member (वागृषभ+त्व, भूमिपति+त्व) yet keeps पण्यफलत्वम् and महत्त्वम् whole; vigrahas given as भाव-abstracts. स्यात् (5) read as a conditional copula (\"should he be\"), attached to ईयात् (9). Verse is in Upajāti metre (not anuṣṭubh)."
+  }
+ ]
+}

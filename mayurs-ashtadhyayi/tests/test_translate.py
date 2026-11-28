@@ -1,0 +1,306 @@
+from mayur import translate
+from mayur.model import Compound, Morph, Reading, Word
+
+SG = dict(vacana="एकवचन")
+
+
+def W(form, lemma, kind, role="", head=None, gloss="", src="own", **kw):
+    return Word(form, 0, 0, 0, role=role, head=head, gloss=gloss, gloss_source=src,
+                analyses=[Morph(form, lemma, kind, **kw)], in_compound=kw.pop("_c", False))
+
+
+def noun(form, lemma, role, head, gloss, vib="प्रथमा", vac="एकवचन", linga="पुंलिङ्ग", **kw):
+    return W(form, lemma, "subanta", role, head, gloss, linga=linga, vibhakti=vib, vacana=vac, **kw)
+
+
+def verb(form, lemma, gloss, lak="लट्", p="प्रथमपुरुष", vac="एकवचन", prayoga="कर्तरि", **kw):
+    return W(form, lemma, "tinanta", "क्रिया", None, gloss, "dcs-sense", purusha=p, vacana=vac,
+             lakara=lak, prayoga=prayoga, root=lemma, **kw)
+
+
+def check(out):
+    t = out.translation
+    spans = sorted((a.start, a.end) for a in out.alignment)
+    assert all(0 <= s < e <= len(t) for s, e in spans)
+    assert all(spans[k][1] <= spans[k + 1][0] for k in range(len(spans) - 1))
+
+
+def test_white_runs():
+    r = Reading(words=[noun("श्वेतस्", "श्वेत", "कर्ता", 1, "white"), verb("धावति", "धाव्", "run")],
+                anvaya=[0, 1])
+    out = translate.render(r)
+    assert out.translation == "White runs."
+    assert [(a.word, a.start, a.end) for a in out.alignment] == [(0, 0, 5), (1, 6, 10)]
+    assert r.translation == ""  # input untouched
+
+
+def _verse1(with_mods):
+    words = [
+        noun("तपस्", "तपस्", "समासपूर्वपद", None, "austerity"),
+        noun("स्वाध्याय", "स्वाध्याय", "समासपूर्वपद", None, "study"),
+        noun("निरतम्", "निरत", "विशेषण", 4, "devoted", vib="द्वितीया"),
+        noun("वरम्", "वर", "विशेषण", 4, "best", vib="द्वितीया"),
+        noun("नारदम्", "नारद", "कर्म", 5, "Nārada", vib="द्वितीया"),
+        verb("परिपप्रच्छ", "परिप्रच्छ्", "ask", lak="लिट्"),
+        noun("वाल्मीकिस्", "वाल्मीकि", "कर्ता", 5, "Vālmīki"),
+    ]
+    words[0].in_compound = words[1].in_compound = True
+    words[0].compound = words[1].compound = words[2].compound = 0
+    comp = [Compound(0, [0, 1, 2])]
+    if not with_mods:
+        words = [words[4], words[5], words[6]]
+        words[0].head = 1
+        words[2].head = 1
+        return Reading(words=words, anvaya=[2, 1, 0])
+    return Reading(words=words, compounds=comp, anvaya=[6, 5, 2, 3, 4])
+
+
+def test_verse_one_plain():
+    out = translate.render(_verse1(False))
+    assert out.translation == "Vālmīki asked Nārada."
+    check(out)
+
+
+def test_verse_one_compound_and_alignment():
+    out = translate.render(_verse1(True))
+    t = out.translation
+    assert t == "Vālmīki asked best Nārada, devoted to austerity and study."
+    check(out)
+    spans = {a.word: t[a.start:a.end] for a in out.alignment}
+    assert spans[0] == "austerity" and spans[1] == "study" and spans[2] == "devoted to"
+    assert spans[6] == "Vālmīki" and spans[5] == "asked" and spans[4] == "Nārada"
+    assert set(spans) == set(range(7))
+
+
+def test_plural_instrument_locative_negation():
+    r = Reading(words=[
+        noun("मुनयस्", "मुनि", "कर्ता", 3, "sage", vac="बहुवचन"),
+        noun("वनेषु", "वन", "अधिकरण", 3, "forest", vib="सप्तमी", vac="बहुवचन", linga="नपुंसकलिङ्ग"),
+        W("न", "न", "avyaya", "अव्यय", 3, "not"),
+        verb("गच्छन्ति", "गम्", "go", vac="बहुवचन"),
+    ], anvaya=[0, 1, 2, 3])
+    out = translate.render(r)
+    assert out.translation == "Sages do not go among forests."
+    check(out)
+
+
+def test_future_and_supplied_subject_and_vocative():
+    r = Reading(words=[
+        noun("राम", "राम", "सम्बोधन", 1, "Rāma", vib="सम्बोधन"),
+        verb("वदिष्यामि", "वद्", "say", lak="लृट्", p="उत्तमपुरुष"),
+    ], anvaya=[0, 1])
+    out = translate.render(r)
+    assert out.translation == "O Rāma, [I] will say."
+    assert [a.word for a in out.alignment] == [0, 1]
+
+
+def test_passive_and_verbless_and_arsha():
+    r = Reading(words=[
+        noun("रामेण", "राम", "कर्ता", 2, "Rāma", vib="तृतीया"),
+        noun("रावणस्", "रावण", "कर्ता", 2, "Rāvaṇa"),
+        verb("हन्यते", "हन्", "kill", prayoga="कर्मणि"),
+    ], anvaya=[1, 2, 0])
+    out = translate.render(r)
+    assert out.translation == "Rāvaṇa is killed by Rāma."
+    v = Reading(words=[noun("कस्", "क", "कर्ता", None, "who"),
+                       noun("गुणवान्", "गुणवत्", "विधेय", None, "virtuous")], anvaya=[0, 1])
+    o = translate.render(v)
+    assert o.translation == "Who [is] virtuous?" and len(o.alignment) == 2
+    a = Word("रामा", 0, 0, 0, role="कर्ता", arsha=True, analyses=[Morph("रामा", "राम", "subanta")])
+    o = translate.render(Reading(words=[a]))
+    assert o.translation.startswith("⟨") and len(o.alignment) == 1
+
+
+def _verse2():
+    def n(form, lemma, role, head, g, **kw):
+        return noun(form, lemma, role, head, g, **kw)
+    words = [
+        n("कस्", "क", "", None, "who"),
+        W("नु", "नु", "avyaya", "अव्यय", 0, "now"),
+        n("अस्मिन्", "इदम्", "विशेषण", 4, "this", vib="सप्तमी"),
+        W("साम्प्रतम्", "साम्प्रतम्", "avyaya", "अव्यय", 0, "currently"),
+        n("लोके", "लोक", "अधिकरण", 0, "world", vib="सप्तमी"),
+        n("गुणवान्", "गुणवत्", "विधेय", 0, "virtuous"),
+        n("कस्", "क", "विधेय", 0, "who"),
+        W("च", "च", "avyaya", "अव्यय", 6, "and"),
+        n("वीर्यवान्", "वीर्यवत्", "विधेय", 0, "valorous"),
+        n("धर्मज्ञस्", "धर्मज्ञ", "विधेय", 0, "dharma-knowing"),
+        W("च", "च", "avyaya", "अव्यय", 9, "and"),
+        n("कृतज्ञस्", "कृतज्ञ", "विधेय", 0, "grateful"),
+        W("च", "च", "avyaya", "अव्यय", 11, "and"),
+        n("सत्यवाक्यस्", "सत्यवाक्य", "विधेय", 0, "truthful"),
+        n("दृढव्रतस्", "दृढव्रत", "विधेय", 0, "firm in vows"),
+    ]
+    return Reading(words=words, anvaya=[1, 3, 2, 4, 0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14])
+
+
+def test_verse_two_no_duplication():
+    out = translate.render(_verse2())
+    print(out.translation)
+    ids = [a.word for a in out.alignment]
+    assert len(ids) == len(set(ids)) == 15
+    check(out)
+    assert out.translation == ("Who now currently in this world [is] virtuous, and who valorous, and "
+                               "dharma-knowing, and grateful, truthful, firm in vows?")
+
+
+def test_pronoun_cases_and_apposition_and_participle_agent():
+    def pr(form, lemma, role, head, vib, g="x", **kw):
+        return noun(form, lemma, role, head, g, vib=vib, **kw)
+    r = Reading(words=[pr("त्वया", "युष्मद्", "करण", 1, "तृतीया", "state"), verb("ददौ", "दा", "give", lak="लिट्")],
+                anvaya=[1, 0])
+    assert translate.render(r).translation == "[He] gave by you."
+    r = Reading(words=[pr("मे", "मा", "सम्प्रदान", 1, "चतुर्थी", "not"), verb("ददौ", "दा", "give", lak="लिट्")])
+    assert translate.render(r).translation.startswith("[He] gave to me")
+    r = Reading(words=[pr("कस्य", "क", "सम्बन्ध", 1, "षष्ठी"), noun("पुत्रस्", "पुत्र", "कर्ता", 2, "son"),
+                       verb("गच्छति", "गम्", "go")], anvaya=[0, 1, 2])
+    assert translate.render(r).translation == "Whose son goes?"
+    r = Reading(words=[pr("त्वम्", "युष्मद्", "कर्ता", 3, "प्रथमा", "you"),
+                       noun("समर्थस्", "समर्थ", "विशेषण", 0, "capable"),
+                       noun("स्तुतस्", "स्तु", "विधेय", None, "extol", krt="क्त", vib="प्रथमा", src="dcs-sense"),
+                       verb("असि", "अस्", "be", p="मध्यमपुरुष")], anvaya=[0, 1, 3])
+    r.words[0].head = 3
+    r.words[1].role = "विशेषण"
+    r.words[1].head = 0
+    r.words[2].role = "विधेय"
+    r.words[2].head = 3
+    out = translate.render(r)
+    assert out.translation.startswith("You, capable are")  # apposition then copular verb, no [is]
+    assert "[is]" not in out.translation
+
+
+def test_participle_takes_by_agent():
+    r = Reading(words=[noun("स्तुतस्", "स्तु", "कर्ता", None, "extol", krt="क्त", vib="प्रथमा", src="dcs-sense"),
+                       pr_noun("त्वया")], anvaya=[0, 1])
+    assert "Extolled by you" in translate.render(r).translation
+
+
+def pr_noun(form):
+    return noun(form, "युष्मद्", "कर्ता", 0, "x", vib="तृतीया")
+
+
+def _c(form, lemma, role, head, g, **kw):
+    return noun(form, lemma, role, head, g, **kw)
+
+
+def test_epithet_list_without_subject():
+    words = [
+        _c("सदृशस्", "सदृश", "विधेय", None, "like"),
+        _c("विष्णुना", "विष्णु", "करण", 0, "Viṣṇu", vib="तृतीया"),
+        _c("वीर्ये", "वीर्य", "अधिकरण", 0, "valour", vib="सप्तमी", linga="नपुंसकलिङ्ग"),
+        _c("समस्", "सम", "विधेय", None, "equal"),
+        _c("क्षमया", "क्षमा", "करण", 3, "patience", vib="तृतीया", linga="स्त्रीलिङ्ग"),
+    ]
+    out = translate.render(Reading(words=words, anvaya=[0, 1, 2, 3, 4]))
+    assert out.translation == "[He is] like Viṣṇu in valour, equal to patience."
+    check(out)
+    assert sorted(a.word for a in out.alignment) == [0, 1, 2, 3, 4]
+
+
+def test_iva_like():
+    words = [_c("समुद्रस्", "समुद्र", "विधेय", None, "sea"), W("इव", "इव", "avyaya", "अव्यय", 0, "like"),
+             _c("गाम्भीर्ये", "गाम्भीर्य", "अधिकरण", 0, "depth", vib="सप्तमी", linga="नपुंसकलिङ्ग")]
+    out = translate.render(Reading(words=words, anvaya=[1, 0, 2]))
+    assert out.translation == "[He is] like sea in depth."
+
+
+def test_bahuvrihi_of_phrase():
+    words = [_c("महा", "महत्", "समासपूर्वपद", None, "great"),
+             _c("बाहुस्", "बाहु", "विशेषण", 2, "arm"), _c("रामस्", "राम", "विधेय", None, "Rāma")]
+    words[0].in_compound = True
+    words[0].compound = words[1].compound = 0
+    out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="bahuvrihi")],
+                                   anvaya=[2, 0, 1]))
+    assert out.translation == "[He is] great-armed Rāma."
+    check(out)
+
+
+def test_agent_noun_participle_and_people():
+    from mayur import english
+    assert english.agent("protect") == "protector" and english.agent("teach") == "teacher"
+    assert english.plural("people") == "people"
+    assert english.participle("seeing") == "seen" and english.past("going") == "went"
+    assert english.participle("increasing") == "increased" and english.past("begging") == "begged"
+    assert english.participle("hide") == "hidden" and english.past("bind") == "bound"
+    r = Reading(words=[_c("गोप्ता", "गोप्तृ", "कर्ता", 1, "protect", krt="तृच्", src="dcs-sense"),
+                       verb("अस्ति", "अस्", "be")], anvaya=[0, 1])
+    assert translate.render(r).translation == "Protector is."
+    r = Reading(words=[_c("श्रुतस्", "श्रु", "विधेय", None, "hear", krt="क्त", src="dcs-sense"),
+                       _c("जनैस्", "जन", "कर्ता", 0, "people", vib="तृतीया", vac="बहुवचन", src="dcs-sense")],
+                anvaya=[0, 1])
+    assert translate.render(r).translation == "[He is] heard by people."
+
+
+def test_no_dangling_conjunction_and_semicolon_and():
+    r = Reading(words=[W("च", "च", "avyaya", "अव्यय", 2, "and"),
+                       noun("देवास्", "देव", "कर्ता", 2, "god", vac="बहुवचन"),
+                       verb("बिभ्यति", "भी", "fear", vac="बहुवचन"),
+                       W("च", "च", "avyaya", "अव्यय", 4, "and"),
+                       verb("नमन्ति", "नम्", "bow", vac="बहुवचन")], anvaya=[0, 1, 2, 3, 4])
+    out = translate.render(r)
+    assert not out.translation.startswith("And")
+    assert out.translation == "Gods fear; and [they] bow."
+    check(out)
+
+
+def test_and_before_whole_phrase_and_nama_and_heard():
+    r = Reading(words=[_c("तपसा", "तपस्", "करण", 3, "austerity", vib="तृतीया", linga="नपुंसकलिङ्ग"),
+                       W("च", "च", "avyaya", "अव्यय", 2, "and"),
+                       _c("चारित्रेण", "चारित्र", "करण", 3, "conduct", vib="तृतीया", linga="नपुंसकलिङ्ग"),
+                       verb("युज्यते", "युज्", "join")], anvaya=[0, 1, 2, 3])
+    out = translate.render(r).translation
+    assert "by austerity and by conduct" in out or "by austerity, and by conduct" in out or "and by conduct" in out
+    assert "by and" not in out
+    r = Reading(words=[_c("रामस्", "राम", "विधेय", None, "Rāma"),
+                       W("नाम", "नाम", "avyaya", "अव्यय", 0, "by name"),
+                       _c("श्रुतस्", "श्रु", "विधेय", None, "listen", krt="क्त", src="dcs-sense")], anvaya=[0, 1, 2])
+    assert translate.render(r).translation == "[He is] Rāma by name, heard."
+
+
+def test_copula_order_and_infinitive():
+    r = Reading(words=[_c("त्वम्", "युष्मद्", "कर्ता", 2, "you"), _c("समर्थस्", "समर्थ", "विधेय", 0, "capable"),
+                       verb("असि", "अस्", "be", p="मध्यमपुरुष"),
+                       W("ज्ञातुम्", "ज्ञा", "avyaya", "तुमर्थ", 2, "know", krt="तुमुन्")], anvaya=[0, 2, 1, 3])
+    assert translate.render(r).translation == "You are capable to know."
+
+
+def test_name_sense_prefers_common(monkeypatch):
+    from mayur import gloss
+    from mayur.model import Morph as M
+    tables = {"dcs_senses.json": {"महर्षि": "name of Śiva"},
+              "dcs_dict.json": {"महर्षि": [{"grammar": "m", "meanings": "name of a god; a great seer"}]}}
+    monkeypatch.setattr(gloss.resources, "derived", lambda n: tables.get(n, {}))
+    monkeypatch.setattr(gloss, "_own", lambda: {})
+    assert gloss.lookup(M("x", "महर्षि", "subanta")) == ("great seer", "dcs-dictionary")
+
+
+def test_apposition_when_more_than_two_qualifiers():
+    words = [_c("निरतम्", "निरत", "विशेषण", 3, "devoted", vib="द्वितीया"),
+             _c("वरम्", "वर", "विशेषण", 3, "best", vib="द्वितीया"),
+             _c("तपस्विनम्", "तपस्विन्", "विशेषण", 3, "ascetic", vib="द्वितीया"),
+             _c("नारदम्", "नारद", "कर्म", 4, "Nārada", vib="द्वितीया"),
+             verb("पप्रच्छ", "प्रच्छ्", "ask", lak="लिट्")]
+    out = translate.render(Reading(words=words, anvaya=[4, 0, 1, 2, 3]))
+    assert out.translation == "[He] asked Nārada, devoted, best, ascetic."
+    check(out)
+
+
+def test_final_member_patterns_and_equal_in():
+    words = [_c("पृथिवी", "पृथिवी", "समासपूर्वपद", None, "earth", linga="स्त्रीलिङ्ग"),
+             _c("समस्", "सम", "विधेय", None, "equal"),
+             _c("क्षमया", "क्षमा", "करण", 1, "patience", vib="तृतीया", linga="स्त्रीलिङ्ग")]
+    words[0].in_compound = True
+    out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="तत्पुरुष")],
+                                   anvaya=[1, 2]))
+    assert out.translation == "[He is] equal to earth in patience."
+    check(out)
+    words = [_c("मुनि", "मुनि", "समासपूर्वपद", None, "sage"), _c("पुङ्गवम्", "पुंगव", "कर्म", None, "best")]
+    words[0].in_compound = True
+    out = translate.render(Reading(words=words, compounds=[Compound(0, [0, 1], samasa="तत्पुरुष")], anvaya=[1]))
+    assert out.translation == "Best of sages."
+
+
+def test_gloss_sanitising():
+    from mayur import gloss
+    assert gloss.first_sense("fire that is like death") == "fire"
+    assert gloss.first_sense('ifc. "a staff"; stick') == "stick"

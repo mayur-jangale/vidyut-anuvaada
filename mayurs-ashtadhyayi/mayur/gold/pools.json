@@ -1,0 +1,1720 @@
+{
+ "seed": 20261126,
+ "presplit_texts_excluded": [],
+ "sealed_test": [
+  {
+   "text": "Aṣṭāvakragīta",
+   "chapter_id": "8841"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "777"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "781"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "957"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "5336"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "8977"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "8984"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "11055"
+  },
+  {
+   "text": "Bodhicaryāvatāra",
+   "chapter_id": "911"
+  },
+  {
+   "text": "Buddhacarita",
+   "chapter_id": "6782"
+  },
+  {
+   "text": "Gītagovinda",
+   "chapter_id": "7578"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "16149"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "16278"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17337"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17349"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17405"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17452"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17474"
+  },
+  {
+   "text": "Hitopadeśa",
+   "chapter_id": "2251"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "10020"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "17609"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "17617"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "17743"
+  },
+  {
+   "text": "Kirātārjunīya",
+   "chapter_id": "9718"
+  },
+  {
+   "text": "Kumārasaṃbhava",
+   "chapter_id": "7315"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5381"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5424"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5459"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5460"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5493"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5540"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5597"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5605"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5609"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5610"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2468"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2477"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2528"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2563"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2568"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2578"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2631"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2650"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2664"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2709"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2747"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2773"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2778"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2809"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2843"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2856"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2863"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2873"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2914"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2923"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2946"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2974"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2987"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3022"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3067"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3099"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3111"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3132"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3341"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3344"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3475"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5131"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5622"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5630"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5638"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5655"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5668"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6008"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6010"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6029"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6055"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6083"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6136"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6158"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6161"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6163"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6208"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6225"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6230"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6234"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6260"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6271"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6275"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6289"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6320"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7245"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7503"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7703"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7712"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7714"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7758"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7761"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7781"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7803"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7807"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7812"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7826"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7829"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7842"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7866"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7871"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7886"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7929"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7934"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7939"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7948"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7958"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7986"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7987"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7988"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7991"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8004"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8018"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8057"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8060"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8126"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8135"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8572"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8596"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8606"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8615"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8620"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8687"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8688"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8689"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8742"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8782"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8800"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8807"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8818"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8832"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9020"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9026"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9143"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9159"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9176"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9179"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9194"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9289"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9293"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9301"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9312"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9342"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9363"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9444"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9447"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9469"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9478"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9480"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9678"
+  },
+  {
+   "text": "Manusmṛti",
+   "chapter_id": "546"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2116"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2235"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2283"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2324"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2411"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2522"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2607"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2823"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3187"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3200"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1079"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1082"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1110"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1113"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1160"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1163"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1176"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1197"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1231"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1247"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1290"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1382"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1410"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1539"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1568"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1947"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1984"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3235"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3291"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3489"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3505"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3575"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3598"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4087"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4138"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4196"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4303"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4515"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4544"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4905"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4970"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4992"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "5061"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "5082"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "5086"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "5099"
+  },
+  {
+   "text": "Saundarānanda",
+   "chapter_id": "10629"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8447"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8475"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8486"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8508"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8512"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8528"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8532"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8564"
+  },
+  {
+   "text": "Śukasaptati",
+   "chapter_id": "9049"
+  },
+  {
+   "text": "Śukasaptati",
+   "chapter_id": "9060"
+  },
+  {
+   "text": "Ṛtusaṃhāra",
+   "chapter_id": "2261"
+  }
+ ],
+ "dev_pool": [
+  {
+   "text": "Aṣṭāvakragīta",
+   "chapter_id": "8840"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "592"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "784"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "814"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "7447"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "7450"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "8978"
+  },
+  {
+   "text": "Bhāgavatapurāṇa",
+   "chapter_id": "8979"
+  },
+  {
+   "text": "Bodhicaryāvatāra",
+   "chapter_id": "733"
+  },
+  {
+   "text": "Buddhacarita",
+   "chapter_id": "6784"
+  },
+  {
+   "text": "Gītagovinda",
+   "chapter_id": "7554"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "16168"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "16870"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17435"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17455"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17456"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17462"
+  },
+  {
+   "text": "Harivaṃśa",
+   "chapter_id": "17465"
+  },
+  {
+   "text": "Hitopadeśa",
+   "chapter_id": "8303"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "10014"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "10279"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "17497"
+  },
+  {
+   "text": "Kathāsaritsāgara",
+   "chapter_id": "17535"
+  },
+  {
+   "text": "Kirātārjunīya",
+   "chapter_id": "9700"
+  },
+  {
+   "text": "Kumārasaṃbhava",
+   "chapter_id": "8657"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "2565"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "3155"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5362"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5506"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5507"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5521"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5563"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5585"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5603"
+  },
+  {
+   "text": "Liṅgapurāṇa",
+   "chapter_id": "5604"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "1276"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2478"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2495"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2530"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2538"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2582"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2628"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2640"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2685"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2688"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2700"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2702"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2758"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2776"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2836"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2915"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2925"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2930"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2933"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2942"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2953"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2990"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "2999"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3011"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3110"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3239"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3254"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3271"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3284"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3294"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "3335"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "4522"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5616"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5641"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5645"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5647"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5680"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5682"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5683"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5687"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5706"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "5712"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6002"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6011"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6027"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6038"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6053"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6056"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6070"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6071"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6154"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6189"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6205"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6222"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6245"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6247"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6251"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6281"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6298"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6299"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6314"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6315"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "6337"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7230"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7494"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7722"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7728"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7768"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7777"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7785"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7797"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7801"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7813"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7859"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7913"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7930"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "7952"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8016"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8023"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8027"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8038"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8046"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8083"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8120"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8576"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8605"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8630"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8672"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8684"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8789"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "8844"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9012"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9137"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9141"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9166"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9167"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9235"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9238"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9240"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9244"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9246"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9250"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9251"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9277"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9278"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9299"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9310"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9330"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9344"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9348"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9349"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9360"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9400"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9411"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9412"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9415"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9417"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9424"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9476"
+  },
+  {
+   "text": "Mahābhārata",
+   "chapter_id": "9477"
+  },
+  {
+   "text": "Manusmṛti",
+   "chapter_id": "507"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2318"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2327"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2487"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2501"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "2533"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3107"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3136"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3150"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3163"
+  },
+  {
+   "text": "Matsyapurāṇa",
+   "chapter_id": "3201"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1099"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1103"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1115"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1126"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1159"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1170"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1175"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1206"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1207"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1244"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1407"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1480"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1532"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1588"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1649"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1699"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1829"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1865"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1895"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1932"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "1995"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3252"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3287"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3337"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3452"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3502"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3517"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "3526"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4250"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4255"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4285"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4514"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4584"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4597"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4875"
+  },
+  {
+   "text": "Rāmāyaṇa",
+   "chapter_id": "4922"
+  },
+  {
+   "text": "Saundarānanda",
+   "chapter_id": "10643"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8482"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8502"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8506"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8533"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8540"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8547"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8549"
+  },
+  {
+   "text": "Viṣṇupurāṇa",
+   "chapter_id": "8563"
+  },
+  {
+   "text": "Śukasaptati",
+   "chapter_id": "9062"
+  },
+  {
+   "text": "Śukasaptati",
+   "chapter_id": "9064"
+  },
+  {
+   "text": "Ṛtusaṃhāra",
+   "chapter_id": "2262"
+  }
+ ]
+}

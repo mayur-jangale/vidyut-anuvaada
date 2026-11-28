@@ -1,0 +1,206 @@
+"""Reader for the Digital Corpus of Sanskrit (CoNLL-U, IAST). Everything it returns is Devanagari.
+
+The IAST of the corpus is converted exactly once, here, with ``mayur.lipi.devanagari``.
+"""
+
+from __future__ import annotations
+
+from functools import lru_cache
+from pathlib import Path
+import random
+from typing import Any, Iterator, Optional
+
+from mayur.lipi import devanagari
+
+VIRAMA = "्"
+_VISARGA = "ः"
+_ANUSVARA = "ं"
+_R_LEMMAS = frozenset({"पुनर्", "अन्तर्", "प्रातर्"})
+
+
+# the corpus files write vocalic ḷ (कॢप्त) and, in some lemmas, long ṝ (प्रकॄ, अतितॄ) with these stray characters
+_BROKEN = str.maketrans({"\uffb1": "ḷ", "\uffde": "ṝ"})
+
+
+@lru_cache(maxsize=500_000)
+def _deva(text: str) -> str:
+    return devanagari(text.translate(_BROKEN), "iast") if text and text != "_" else ""
+
+
+_SHORTEN = str.maketrans({"ी": "ि", "ू": "ु", "ई": "इ", "ऊ": "उ"})  # 8.2.76 lengthens: गिर् -> गीर्, पुर् -> पूर्
+
+
+def _visarga_is_r(unsandhied: str, lemma: str, feats: dict[str, str]) -> bool:
+    """The final visarga stands for र्: र्-final words (पुनर्, गिर्), and of ऋ-stems the forms in
+    -उः (पितुर्, 6.1.111 with 8.2.24) and the vocative singular (पितर्)."""
+    if lemma in _R_LEMMAS:
+        return True
+    if lemma.endswith("र्"):
+        # only where the visarga is the stem's own र्: पुनः of पुनर्, गीः of गिर्. In गिरः, चत्वारः, चेरुः
+        # (lemmas गिर्, चतुर्, चर्) the visarga is the ending's स्.
+        return (unsandhied[:-1] + "र्").translate(_SHORTEN) == lemma.translate(_SHORTEN)
+    if lemma.endswith(("ऋ", "ृ")) and feats.get("Number") == "Sing":  # nominal forms only
+        case = feats.get("Case")
+        return case == "Voc" or (case in ("Gen", "Abl") and unsandhied.endswith("ु" + _VISARGA))
+    return False
+
+
+def _repair_vocative(unsandhied: str, lemma: str, feats: dict[str, str]) -> str:
+    """The corpus' machine-reconstructed form of an अ-stem vocative singular is wrong
+    (रावणैः for रावण); the vocative singular of an अ-stem is the stem itself."""
+    if feats.get("Case") == "Voc" and feats.get("Number") == "Sing" and unsandhied == lemma + "ै" + _VISARGA:
+        return lemma
+    return unsandhied
+
+
+def pada_form(unsandhied: str, lemma: str, feats: dict[str, str] | None = None) -> str:
+    """Grammatical (padapatha) form: final visarga -> स् or र् (see ``_visarga_is_r``), ं -> म्."""
+    if not unsandhied:
+        return unsandhied
+    if unsandhied.endswith(_VISARGA):
+        return unsandhied[:-1] + ("र्" if _visarga_is_r(unsandhied, lemma, feats or {}) else "स्")
+    if unsandhied.endswith(_ANUSVARA):
+        return unsandhied[:-1] + "म्"
+    return unsandhied
+
+
+_MATRA = {"अ": "", "आ": "ा", "इ": "ि", "ई": "ी", "उ": "ु", "ऊ": "ू", "ऋ": "ृ", "ॠ": "ॄ", "ए": "े",
+          "ऐ": "ै", "ओ": "ो", "औ": "ौ"}
+
+
+def compact(text: str) -> str:
+    """Conventional compact writing: no space after a chunk ending in a consonant other than ं/ः.
+
+    A final consonant meeting an initial vowel is written together (न्व् अस्मिन् -> न्वस्मिन्).
+    """
+    out = ""
+    for chunk in text.split():
+        if not out:
+            out = chunk
+        elif out.endswith(VIRAMA):
+            if chunk[0] in _MATRA:
+                out = out[:-1] + _MATRA[chunk[0]] + chunk[1:]
+            else:
+                out += chunk
+        else:
+            out += " " + chunk
+    return out
+
+
+def _int(text: str) -> int:
+    text = text.strip()
+    return int(text) if text.isdigit() else 0
+
+
+def _parse_feats(raw: str) -> dict[str, str]:
+    if not raw or raw == "_":
+        return {}
+    return dict(p.split("=", 1) for p in raw.split("|") if "=" in p)
+
+
+def _parse_token(cols: list[str]) -> dict:
+    misc = _parse_feats(cols[9]) if len(cols) > 9 else {}
+    feats = _parse_feats(cols[5])
+    lemma = _deva(cols[2])
+    unsandhied = _repair_vocative(_deva(misc.get("Unsandhied", "")) or _deva(cols[1]), lemma, feats)
+    return {
+        "form": pada_form(unsandhied, lemma, feats),
+        "lemma": lemma,
+        "upos": cols[3],
+        "feats": {k: v for k, v in feats.items() if k != "Case" or v != "Cpd"},
+        "unsandhied": unsandhied,
+        "compound_member": feats.get("Case") == "Cpd",
+        "word_sem": misc.get("WordSem", ""),
+    }
+
+
+def parse_sentences(lines: Iterator[str] | list[str]) -> Iterator[dict]:
+    """Sentences (half-verses) of CoNLL-U ``lines``."""
+    chapter, chapter_id, text_id = "", "", ""
+    cur: dict | None = None
+    for raw in list(lines) + [""]:
+        line = raw.rstrip("\n")
+        if line.startswith("## chapter_id:"):
+            chapter_id = line.split(":", 1)[1].strip()
+        elif line.startswith("## text_id:"):
+            text_id = line.split(":", 1)[1].strip()
+        elif line.startswith("## chapter:"):
+            chapter = line.split(":", 1)[1].strip()
+        elif line.startswith("# text ="):
+            cur = {"iast": line.split("=", 1)[1].strip(), "chapter": _deva(chapter.lower()), "chapter_id": chapter_id, "text_id": text_id,
+                   "sent_counter": 0, "sent_subcounter": 0, "tokens": []}
+            cur["text"] = _deva(cur["iast"])
+        elif cur is not None and line.startswith("# sent_counter ="):
+            cur["sent_counter"] = _int(line.split("=", 1)[1])
+        elif cur is not None and line.startswith("# sent_subcounter ="):
+            cur["sent_subcounter"] = _int(line.split("=", 1)[1])
+        elif cur is not None and line and not line.startswith("#"):
+            cols = line.split("\t")
+            if len(cols) >= 4 and cols[0].isdigit():
+                cur["tokens"].append(_parse_token(cols))
+        elif not line and cur is not None:
+            yield cur
+            cur = None
+
+
+def iter_sentences(path: str | Path) -> Iterator[dict]:
+    """Sentences of one CoNLL-U file: text, chapter, sent_counter, sent_subcounter, tokens."""
+    with open(path, encoding="utf-8") as fh:
+        yield from parse_sentences(fh.readlines())
+
+
+SEALED = "sealed_test"
+
+
+class SealedSplit(PermissionError):
+    """The sealed test pool was requested by code that is not the final-test sampler."""
+
+
+def split_files(name: str, final_test: bool = False) -> list[dict[str, Any]]:
+    """Entries ``{"file": absolute path, "verses": [first, last] | None}`` of the split ``name``
+    ("train" | "dev" | "test" | "dev_pool" | "sealed_test") from data/derived/splits.json.
+
+    This is the only place that decides which chapters a job may read. A missing manifest is an
+    error (no fallback to "all files"), and the sealed pool is refused unless ``final_test`` is
+    set, which only scripts/sample_test.py does."""
+    from mayur.resources import data_dir, derived, FETCH_HINT
+
+    manifest = derived("splits.json")
+    if not manifest:
+        raise FileNotFoundError(f"data/derived/splits.json is missing; {FETCH_HINT}")
+    if name == SEALED and not final_test:
+        raise SealedSplit("the sealed test pool is read only by scripts/sample_test.py")
+    root = data_dir() / "dcs" / "sanskrit" / "dcs" / "data" / "conllu"
+    return [{"file": str(root / e["file"]), "verses": e["verses"]} for e in manifest.get(name, [])]
+
+
+def is_trainable(path: str | Path) -> bool:
+    """True if the chapter file is in the train split (whole chapter)."""
+    return str(Path(path)) in _train_paths()
+
+
+@lru_cache(maxsize=1)
+def _train_paths() -> frozenset[str]:
+    return frozenset(e["file"] for e in split_files("train") if e["verses"] is None)
+
+
+def gold_lines(files: Any, limit: Optional[int] = None, seed: int = 0) -> Iterator[dict[str, Any]]:
+    """Gold half-verses in the format of ``mayur.gold`` lines (text, compact, iast, words, ...).
+
+    ``files``: paths or ``split_files`` entries. With ``limit`` a seeded random sample is yielded.
+    """
+    lines = []
+    for entry in files:
+        path, span = (entry["file"], entry.get("verses")) if isinstance(entry, dict) else (entry, None)
+        for sent in iter_sentences(path):
+            if span and not span[0] <= sent["sent_counter"] <= span[1]:
+                continue
+            lines.append({
+                "text": sent["text"], "compact": compact(sent["text"]), "iast": sent["iast"],
+                "chapter": sent["chapter"], "verse": sent["sent_counter"],
+                "words": [{"form": t["form"], "lemma": t["lemma"], "upos": t["upos"], "feats": t["feats"],
+                           "compound_member": t["compound_member"]} for t in sent["tokens"]],
+            })
+    if limit is not None and limit < len(lines):
+        lines = random.Random(seed).sample(lines, limit)
+    yield from lines
